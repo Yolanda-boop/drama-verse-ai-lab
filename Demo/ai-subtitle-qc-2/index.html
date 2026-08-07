@@ -1,896 +1,5 @@
-﻿<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="referrer" content="no-referrer">
-<meta name="robots" content="noindex,nofollow">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Drama Verse AI 字幕 QC 2.0 Demo</title>
-<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:0;background:inherit}iframe{display:block;width:100%;height:100vh;margin:0 auto;border:0}</style>
-</head>
-<body>
-<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Drama Verse AI 字幕 QC 2.0 Demo" srcdoc="&lt;!doctype html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;utf-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
-&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
-&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
-&lt;title&gt;Drama Verse Qc Prototype&lt;/title&gt;
-&lt;style&gt;:root {
-  color-scheme: light dark;
-  background-color: var(
-    --background,
-    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
-  ) !important;
-
-  /* Agent-facing contract; keep in sync with SKILL.md. */
-  --background: var(
-    --color-background-primary,
-    light-dark(rgb(255 255 255), rgb(24 24 24))
-  );
-  --foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
-  --card-foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --popover: var(
-    --color-background-secondary,
-    light-dark(rgb(255 255 255), rgb(45 45 45))
-  );
-  --popover-foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --primary: var(
-    --color-text-info,
-    light-dark(rgb(51 156 255), rgb(131 195 255))
-  );
-  --primary-foreground: var(
-    --color-text-inverse,
-    light-dark(rgb(255 255 255), rgb(13 13 13))
-  );
-  --secondary: var(
-    --color-background-secondary,
-    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
-  );
-  --secondary-foreground: var(
-    --color-text-primary,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
-  --muted-foreground: var(
-    --color-text-secondary,
-    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
-  );
-  --accent: var(
-    --color-background-info,
-    light-dark(rgb(229 242 255), rgb(13 39 63))
-  );
-  --accent-foreground: var(
-    --color-text-info,
-    light-dark(rgb(51 156 255), rgb(131 195 255))
-  );
-  --destructive: var(
-    --color-text-warning,
-    light-dark(rgb(226 85 7), rgb(255 133 73))
-  );
-  --border: var(
-    --color-border-secondary,
-    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
-  );
-  --input: var(
-    --color-border-primary,
-    light-dark(
-      rgb(26 28 31 / 11.8%),
-      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
-    )
-  );
-  --ring: var(
-    --color-ring-primary,
-    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
-  );
-  --font-size-base: var(--font-text-md-size, 14px);
-  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
-  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
-  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
-  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
-  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
-  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
-  --viz-series-1: var(--primary);
-  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
-  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
-  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
-  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
-  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
-
-  /* Internal implementation variables; not part of the agent contract. */
-  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
-  --font-mono:
-    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
-    monospace;
-  --font-size-normal: max(11px, var(--font-size-base));
-  --font-size-tooltip: calc(var(--font-size-base) - 1px);
-  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
-  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
-  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
-  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
-  --font-weight-normal: 430;
-  --font-weight-medium: 500;
-  --line-height-normal: calc(var(--font-size-normal) * 1.5);
-  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
-  --line-height-small: calc(var(--font-size-small) + 4px);
-  --radius: var(--border-radius-lg, 12.5px);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-2xl: calc(var(--radius) * 1.6);
-  --radius-full: 9999px;
-  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
-  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
-
-  /* Legacy aliases; not part of the current agent contract. */
-  --viz-bg: transparent;
-  --viz-panel: var(--card);
-  --viz-border: var(--border);
-  --viz-text: var(--foreground);
-  --viz-muted: var(--muted-foreground);
-  --viz-accent: var(--primary);
-  --viz-accent-text: var(--primary-foreground);
-  --viz-accent-bg: var(--accent);
-  --viz-font-size: var(--font-size-base);
-  --viz-warning: var(--destructive);
-}
-
-:root[data-theme=&quot;light&quot;] {
-  color-scheme: light;
-}
-
-:root[data-theme=&quot;dark&quot;] {
-  color-scheme: dark;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html &gt; body {
-  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
-  --color-background-primary: var(
-    --background,
-    light-dark(rgb(255 255 255), rgb(24 24 24))
-  );
-  --color-text-primary: var(
-    --foreground,
-    light-dark(rgb(26 28 31), rgb(255 255 255))
-  );
-  --color-border-secondary: var(
-    --border,
-    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
-  );
-
-  margin: 0;
-  padding: 5px;
-  color: var(--foreground);
-  background: transparent !important;
-  font-family: var(--font-sans);
-  font-size: var(--font-size-normal);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
-}
-
-a {
-  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
-  cursor: pointer;
-  font-weight: var(--font-weight-medium, 500);
-  text-decoration: none;
-  text-underline-offset: 2px;
-}
-
-a:is(:hover, :focus-visible) {
-  text-decoration-line: underline;
-  text-decoration-style: dashed;
-  text-decoration-thickness: 0.5px;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin-block: 0;
-}
-
-h1 {
-  font-size: var(--font-size-h1);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-h2 {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-h3,
-h4,
-h5,
-h6 {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.3;
-}
-
-b,
-strong,
-th {
-  font-weight: var(--font-weight-medium);
-}
-
-code:not(pre code) {
-  display: inline;
-  padding: 1px 6px;
-  border-radius: var(--radius-sm);
-  corner-shape: superellipse(1.5);
-  background: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.92em;
-  overflow-wrap: anywhere;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  word-break: break-word;
-}
-
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  scrollbar-width: thin;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  color: var(--foreground);
-  font: inherit;
-  text-align: start;
-}
-
-.table :is(th, td) {
-  padding-block: 10px;
-  padding-inline: 0 24px;
-  overflow-wrap: anywhere;
-  border-bottom: 1px solid var(--border);
-  text-align: start;
-  vertical-align: top;
-}
-
-.table-responsive &gt; .table :is(th, td) {
-  overflow-wrap: break-word;
-}
-
-.table :is(th, td):last-child {
-  padding-inline-end: 0;
-}
-
-.table :is(caption, thead th) {
-  font-weight: 600;
-}
-
-.table thead th {
-  padding-block: 8px;
-  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
-}
-
-.table tbody tr:last-child :is(th, td) {
-  border-bottom: 0;
-}
-
-.table.table-sm :is(th, td) {
-  padding-block: 6px;
-}
-
-.table.table-sm :is(th, td):not(:last-child) {
-  padding-inline-end: 16px;
-}
-
-.table :is(.text-end, [align=&quot;right&quot;]) {
-  text-align: end;
-  font-variant-numeric: tabular-nums;
-}
-
-.table :is(.text-center, [align=&quot;center&quot;]) {
-  text-align: center;
-}
-
-.table .text-nowrap {
-  white-space: nowrap;
-}
-
-#widget {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  padding: 0;
-  background: transparent !important;
-}
-
-.card {
-  min-width: 0;
-  padding: 12px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  border-radius: var(--radius-2xl);
-  corner-shape: superellipse(1.5);
-  color: var(--card-foreground);
-  background: var(--card);
-}
-
-#widget &gt; :not(.card) {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.tooltip {
-  position: fixed;
-  z-index: 50;
-  top: 0;
-  left: 0;
-  width: max-content;
-  max-width: min(
-    20rem,
-    var(--tooltip-available-width, calc(100vw - 10px)),
-    calc(100vw - 10px)
-  );
-  max-height: min(
-    var(--tooltip-available-height, calc(100vh - 10px)),
-    calc(100vh - 10px)
-  );
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--popover-foreground);
-  background: var(--popover);
-  box-shadow: none;
-  font-size: var(--font-size-tooltip);
-  line-height: var(--line-height-tooltip);
-  overflow-wrap: break-word;
-  white-space: normal;
-  pointer-events: none;
-  user-select: none;
-}
-
-.viz-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
-  gap: 10px;
-}
-
-.viz-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.viz-stat-value {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.25;
-}
-
-.viz-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-.viz-badge {
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  color: var(--accent-foreground);
-  background: var(--accent);
-  font-weight: var(--font-weight-medium);
-}
-
-small,
-.text-small,
-.viz-badge {
-  font-size: var(--font-size-small);
-  line-height: var(--line-height-small);
-}
-
-.text-muted {
-  color: var(--muted-foreground);
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.viz-controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-
-.viz-controls &gt; .form-label {
-  display: grid;
-  min-width: min(100%, 260px);
-  flex: 1 1 280px;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: 2px 12px;
-  margin-bottom: 0;
-}
-
-.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
-  grid-column: 1 / -1;
-}
-
-.btn,
-.form-check-input,
-.form-control,
-.form-range,
-.form-select {
-  font: inherit;
-}
-
-.btn {
-  appearance: button;
-  display: inline-flex;
-  inline-size: fit-content;
-  max-inline-size: 100%;
-  min-height: 28px;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  margin: 0;
-  padding: 0 8px;
-  -webkit-app-region: no-drag;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--secondary-foreground);
-  background: var(--secondary);
-  cursor: var(--cursor-interaction, pointer);
-  text-align: center;
-  text-decoration: none;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-font-smoothing: antialiased;
-}
-
-.btn:is(.btn-block, .viz-tile) {
-  inline-size: 100%;
-}
-
-.btn.viz-tile {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  white-space: normal;
-}
-
-a.btn {
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.btn:not(:disabled):hover {
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.btn-primary {
-  border-color: transparent;
-  color: var(--primary-foreground);
-  background: var(--foreground);
-  background-clip: padding-box;
-}
-
-.btn-primary .text-muted {
-  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
-}
-
-.btn-primary:not(:disabled):hover {
-  background: color-mix(in srgb, var(--foreground) 80%, transparent);
-  background-clip: padding-box;
-}
-
-.btn-ghost {
-  border-color: transparent;
-  color: var(--muted-foreground);
-  background: transparent;
-}
-
-.btn-ghost:not(:disabled):hover {
-  color: var(--foreground);
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-[data-lucide] {
-  stroke-width: 1.6;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--foreground);
-}
-
-.form-control {
-  display: block;
-  width: 100%;
-  min-height: 28px;
-  padding: 0 8px;
-  outline: none;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--foreground);
-  background: var(--secondary);
-}
-
-.form-control::placeholder {
-  color: var(--muted-foreground);
-}
-
-.form-control[type=&quot;file&quot;] {
-  padding: 0;
-  overflow: hidden;
-  cursor: var(--cursor-interaction, pointer);
-}
-
-.form-control[type=&quot;file&quot;]::file-selector-button {
-  min-height: 26px;
-  margin-right: 8px;
-  padding: 0 8px;
-  border: 0;
-  border-right: 1px solid var(--input);
-  color: var(--secondary-foreground);
-  background: var(--secondary);
-  cursor: inherit;
-  font: inherit;
-}
-
-.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
-  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.form-control-color[type=&quot;color&quot;] {
-  width: 40px;
-  height: 28px;
-  padding: 3px;
-  cursor: var(--cursor-interaction, pointer);
-}
-
-.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
-  border: 0;
-  border-radius: calc(var(--radius-lg) - 4px);
-  corner-shape: superellipse(1.5);
-}
-
-textarea.form-control {
-  height: auto;
-  min-height: 72px;
-  padding: 8px 10px;
-  resize: vertical;
-}
-
-.form-control:focus-visible {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-control:disabled,
-.form-select:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-.form-select {
-  appearance: none;
-  display: block;
-  width: 100%;
-  min-height: 28px;
-  margin: 0;
-  padding: 0 32px 0 8px;
-  outline: none;
-  border: 1px solid var(--input);
-  border-radius: var(--radius-lg);
-  corner-shape: superellipse(1.5);
-  color: var(--foreground);
-  background-color: var(--secondary);
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
-    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
-  background-position:
-    calc(100% - 14px) 50%,
-    calc(100% - 10px) 50%;
-  background-repeat: no-repeat;
-  background-size: 4px 4px;
-  cursor: var(--cursor-interaction, default);
-}
-
-.form-select:not(:disabled):hover {
-  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
-}
-
-.form-select:focus-visible {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-check {
-  display: flex;
-  min-height: 20px;
-  align-items: center;
-  gap: 6px;
-}
-
-.form-check-input {
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  flex: 0 0 auto;
-  margin: 0;
-  border: 1px solid var(--input);
-  color: var(--primary-foreground);
-  background-color: transparent;
-  cursor: var(--cursor-interaction, default);
-  transition:
-    background-color 150ms,
-    border-color 150ms,
-    box-shadow 150ms;
-}
-
-.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
-  border-color: var(--input);
-  border-radius: var(--radius-sm);
-  corner-shape: superellipse(1.5);
-  background-color: var(--secondary);
-  box-shadow: var(--shadow-sm);
-}
-
-.form-check:not(.form-switch)
-  .form-check-input:not(:disabled):not(:checked):hover {
-  background-color: var(--card);
-}
-
-.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
-  border-color: var(--primary);
-  background-color: var(--primary);
-}
-
-.form-check:not(.form-switch)
-  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--primary-foreground);
-  content: &quot;&quot;;
-  mask: var(--checkmark-image) center / 12px 12px no-repeat;
-}
-
-.form-check-input[type=&quot;radio&quot;] {
-  width: 14px;
-  height: 14px;
-  border-radius: var(--radius-full);
-}
-
-.form-check-input[type=&quot;radio&quot;]:checked {
-  border: 2px solid var(--primary);
-  background:
-    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
-    var(--primary);
-}
-
-.form-check:not(.form-switch) .form-check-input:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
-.form-check:not(.form-switch) .form-check-input:disabled {
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
-  cursor: not-allowed;
-}
-
-.form-switch .form-check-input:disabled,
-.form-switch .form-check-input:disabled + .form-check-label {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.form-check-label {
-  color: var(--foreground);
-  cursor: var(--cursor-interaction, default);
-}
-
-.form-switch .form-check-input {
-  position: relative;
-  width: 32px;
-  height: 20px;
-  border: 0;
-  border-radius: var(--radius-full);
-  background: var(--muted);
-  box-shadow: none;
-  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.form-switch .form-check-input::before {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 16px;
-  height: 16px;
-  box-sizing: border-box;
-  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-  box-shadow: var(--shadow-sm);
-  content: &quot;&quot;;
-  transform: translate(2px, -50%);
-  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.form-switch .form-check-input:checked {
-  background: var(--primary);
-}
-
-.form-switch .form-check-input:checked::before {
-  transform: translate(14px, -50%);
-}
-
-.form-switch .form-check-input:focus-visible {
-  box-shadow: 0 0 0 2px var(--ring);
-}
-
-.form-range {
-  appearance: none;
-  display: block;
-  width: 100%;
-  height: 28px;
-  flex: 1;
-  margin: 0;
-  padding: 0;
-  outline: none;
-  border: 0;
-  accent-color: var(--primary);
-  background: linear-gradient(
-      color-mix(in srgb, var(--foreground) 7%, transparent),
-      color-mix(in srgb, var(--foreground) 7%, transparent)
-    )
-    center / 100% 2px no-repeat;
-}
-
-.form-range::-webkit-slider-runnable-track {
-  height: 28px;
-  background: transparent;
-}
-
-.form-range::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  margin-top: 4px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-}
-
-.form-range:focus-visible::-webkit-slider-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-range::-moz-range-track {
-  height: 28px;
-  background: transparent;
-}
-
-.form-range::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: light-dark(var(--primary-foreground), var(--foreground));
-}
-
-.form-range:focus-visible::-moz-range-thumb {
-  border-color: var(--ring);
-  box-shadow: inset 0 0 0 1px var(--ring);
-}
-
-.form-range:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-.btn:not(.btn-primary, .viz-tile):is(
-    [aria-pressed=&quot;true&quot;],
-    [aria-selected=&quot;true&quot;],
-    .is-selected
-  ) {
-  border-color: var(--primary);
-  color: var(--primary-foreground);
-  background: var(--primary);
-}
-
-.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
-  border-color: var(--primary);
-  box-shadow: inset 0 0 0 1px var(--primary);
-}
-
-.btn:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
-svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-#widget &gt; svg {
-  width: 100%;
-}
-
-/* Model-authored chart rules can otherwise stretch icons after these styles load. */
-svg.lucide {
-  display: block;
-  width: 16px !important;
-  height: 16px !important;
-  flex: none;
-  margin: 0 !important;
-  stroke-width: 1.6;
-}
-
-.text-warning,
-.text-destructive {
-  color: var(--destructive);
-}
-
-html&gt;body{padding:0}&lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-锘?lt;div id=&quot;dv-real-qc-prototype&quot;&gt;
-  &lt;style&gt;
+﻿<div id="dv-real-qc-prototype">
+  <style>
     #dv-real-qc-prototype {
       --primary-color: #ffffff;
       --primary-hover: #e6e6e6;
@@ -914,7 +23,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       --danger: #ff4d4f;
       color: var(--text-primary);
       background: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
       font-size: 14px;
     }
     #dv-real-qc-prototype * { box-sizing: border-box; }
@@ -967,7 +76,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       font-weight: 400;
       margin-left: 6px;
     }
-    #dv-real-qc-prototype .titleInfo h1 span:before { content: &quot;/&quot;; margin-right: 6px; opacity: .4; }
+    #dv-real-qc-prototype .titleInfo h1 span:before { content: "/"; margin-right: 6px; opacity: .4; }
     #dv-real-qc-prototype .titleMeta { display: flex; gap: 6px; align-items: center; line-height: 1; }
     #dv-real-qc-prototype .metaItem { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; opacity: .62; white-space: nowrap; }
     #dv-real-qc-prototype .metaItemExtract { color: #69c0ff; }
@@ -1032,7 +141,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
     #dv-real-qc-prototype .videoControls { height: 92px; border-top: 1px solid #222; padding: 12px; color: var(--text-tertiary); font-size: 12px; }
     #dv-real-qc-prototype .progress { height: 4px; background: #2b2b2b; margin: 12px 0; position: relative; }
-    #dv-real-qc-prototype .progress:after { content: &quot;&quot;; position: absolute; inset: 0 auto 0 0; width: var(--progress-value, 42%); background: #fff; transition: width .18s ease; }
+    #dv-real-qc-prototype .progress:after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--progress-value, 42%); background: #fff; transition: width .18s ease; }
     #dv-real-qc-prototype .subtitlePanel {
       flex: 1;
       display: flex;
@@ -1054,7 +163,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #dv-real-qc-prototype .header {
       display: grid;
       grid-template-columns: 100px 100px 56px minmax(0,1fr) minmax(0,1fr);
-      grid-template-areas: &quot;speaker time group source target&quot;;
+      grid-template-areas: "speaker time group source target";
       background: var(--border-color);
       flex-shrink: 0;
       height: 41px;
@@ -1098,7 +207,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #dv-real-qc-prototype .errorIcon { width: 10px; height: 10px; border: 1px solid currentColor; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; line-height: 1; }
     #dv-real-qc-prototype .speakerCell { display: flex; justify-content: center; align-items: flex-start; padding: 20px 6px 6px; }
     #dv-real-qc-prototype .speakerBadge { max-width: 88px; display: inline-flex; align-items: center; gap: 5px; padding: 3px 6px; color: rgba(255,255,255,.9); font-size: 12px; font-weight: 500; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: transparent; border: 1px solid rgba(47,111,255,.42); border-radius: 4px; }
-    #dv-real-qc-prototype .speakerBadge:before { content: &quot;&quot;; width: 6px; height: 6px; border-radius: 50%; background: #2f6fff; flex-shrink: 0; }
+    #dv-real-qc-prototype .speakerBadge:before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #2f6fff; flex-shrink: 0; }
     #dv-real-qc-prototype .speakerBadge.alt { border-color: rgba(108,57,230,.45); }
     #dv-real-qc-prototype .speakerBadge.alt:before { background: #6c39e6; }
     #dv-real-qc-prototype .speakerBadge.third { border-color: rgba(12,156,175,.45); }
@@ -1151,7 +260,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #dv-real-qc-prototype .typeButton:hover { background: rgba(255,255,255,.06); color: var(--text-primary); }
     #dv-real-qc-prototype .typeButton.active { background: rgba(98,36,255,.18); color: var(--text-primary); }
     #dv-real-qc-prototype .typeName { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    #dv-real-qc-prototype .typeName:before { content: &quot;&quot;; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--warning); margin-right: 8px; vertical-align: 1px; }
+    #dv-real-qc-prototype .typeName:before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--warning); margin-right: 8px; vertical-align: 1px; }
     #dv-real-qc-prototype .typeButton.active .typeName:before { background: var(--brand-purple-soft); }
     #dv-real-qc-prototype .typeCount { color: var(--warning); font-weight: 600; }
     #dv-real-qc-prototype .typeArrow { color: var(--text-tertiary); font-size: 12px; margin-left: 2px; }
@@ -1194,376 +303,130 @@ html&gt;body{padding:0}&lt;/style&gt;
       #dv-real-qc-prototype .editorContainer.qcCollapsed .qcPanel { min-height: 42px; }
       #dv-real-qc-prototype .qcRail { writing-mode: horizontal-tb; flex-direction: row; justify-content: center; padding: 8px; }
     }
-  &lt;/style&gt;
-  &lt;div class=&quot;editorContainer&quot; id=&quot;dvContainer&quot;&gt;
-    &lt;div class=&quot;navbar&quot;&gt;
-      &lt;div class=&quot;navLeft&quot;&gt;
-        &lt;button type=&quot;button&quot; class=&quot;backButton&quot;&gt;鈫?杩斿洖&lt;/button&gt;
-        &lt;div class=&quot;titleInfo&quot;&gt;
-          &lt;h1&gt;缁撶畻缈昏瘧閰嶉煶 &lt;span&gt;绗竴闆?lt;/span&gt;&lt;/h1&gt;
-          &lt;div class=&quot;titleMeta&quot;&gt;&lt;span class=&quot;metaItem metaItemExtract&quot;&gt;瀛楀箷璧勪骇鎻愬彇&lt;/span&gt;&lt;span class=&quot;metaDivider&quot;&gt;&lt;/span&gt;&lt;span class=&quot;metaItem&quot;&gt;鑻辨枃 鈫?闃挎媺浼&lt;/span&gt;&lt;/div&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;navRight&quot;&gt;
-        &lt;button type=&quot;button&quot; class=&quot;btnText&quot;&gt;鏌ユ壘鏇挎崲&lt;/button&gt;
-        &lt;button type=&quot;button&quot; class=&quot;btnText&quot;&gt;鍙戦煶绾犳璇嶅吀&lt;/button&gt;
-        &lt;span class=&quot;saveStatus&quot;&gt;宸蹭繚瀛?lt;/span&gt;
-        &lt;button type=&quot;button&quot; class=&quot;btnPrimary&quot;&gt;瀹屾垚骞跺鍑?lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;mainContent&quot;&gt;
-      &lt;section class=&quot;videoPanel&quot; aria-label=&quot;瑙嗛棰勮&quot;&gt;
-        &lt;div class=&quot;videoStage&quot;&gt;&lt;div class=&quot;fakeVideo&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;&lt;/div&gt;
-        &lt;div class=&quot;videoControls&quot;&gt;&lt;span id=&quot;videoTime&quot;&gt;00:00:13,519&lt;/span&gt;&lt;span style=&quot;float:right&quot;&gt;00:02:34,459&lt;/span&gt;&lt;div class=&quot;progress&quot; id=&quot;videoProgress&quot;&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center&quot;&gt;鈼€锔? 鈻讹笌  鈻讹笌&lt;/div&gt;&lt;/div&gt;
-      &lt;/section&gt;
-      &lt;section class=&quot;subtitlePanel&quot;&gt;
-        &lt;div class=&quot;subtitleWithQc&quot;&gt;
-          &lt;div class=&quot;subtitleListContainer&quot;&gt;
-            &lt;div class=&quot;header&quot;&gt;&lt;div class=&quot;headerSpeaker&quot;&gt;璇磋瘽浜?lt;/div&gt;&lt;div class=&quot;headerTime&quot;&gt;鏃堕棿&lt;/div&gt;&lt;div class=&quot;headerGroup&quot;&gt;璇箟缁?lt;/div&gt;&lt;div class=&quot;headerLeft&quot;&gt;鑻辫&lt;/div&gt;&lt;div class=&quot;headerRight&quot;&gt;闃挎媺浼&lt;/div&gt;&lt;/div&gt;
-            &lt;div class=&quot;subtitleListWrapper&quot;&gt;&lt;div class=&quot;subtitleList&quot; id=&quot;subtitleRows&quot;&gt;&lt;/div&gt;&lt;/div&gt;
-          &lt;/div&gt;
-          &lt;aside class=&quot;qcPanel&quot; aria-label=&quot;璐ㄦ鎻愰啋闈㈡澘&quot;&gt;
-            &lt;div class=&quot;qcRail&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;collapseBtn&quot; id=&quot;expandQc&quot;&gt;鈥?lt;/button&gt;&lt;span&gt;璐ㄦ鎻愰啋&lt;/span&gt;&lt;span class=&quot;qcCount&quot; id=&quot;railCount&quot;&gt;8澶?lt;/span&gt;&lt;/div&gt;
-            &lt;div class=&quot;qcPanelMain&quot;&gt;
-              &lt;div class=&quot;qcPanelHeader&quot;&gt;&lt;div&gt;&lt;span class=&quot;qcTitle&quot;&gt;璐ㄦ鎻愰啋&lt;/span&gt;&lt;span class=&quot;qcCount&quot; id=&quot;totalCount&quot;&gt;鍏?8 澶?lt;/span&gt;&lt;/div&gt;&lt;button type=&quot;button&quot; class=&quot;collapseBtn&quot; id=&quot;collapseQc&quot;&gt;鈥?lt;/button&gt;&lt;/div&gt;
-              &lt;div class=&quot;qcSummary&quot;&gt;&lt;div class=&quot;qcSummaryTop&quot;&gt;&lt;span&gt;寮傚父姹囨€?lt;/span&gt;&lt;span&gt;鎸夋暟閲忓€掑簭&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;typeList&quot; id=&quot;typeList&quot;&gt;&lt;/div&gt;&lt;/div&gt;
-              &lt;div class=&quot;qcList&quot; id=&quot;qcList&quot;&gt;&lt;/div&gt;
-              &lt;div class=&quot;qcBatch&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;btnGhost&quot; id=&quot;batchAccept&quot;&gt;鎵归噺閲囩撼&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;btnGhost&quot; id=&quot;batchIgnore&quot;&gt;鎵归噺蹇界暐&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;btnPrimary wide&quot; id=&quot;acceptAll&quot;&gt;璇ラ泦鍏ㄩ儴閲囩撼&lt;/button&gt;&lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/aside&gt;
-        &lt;/div&gt;
-      &lt;/section&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;timelineContainer&quot;&gt;&lt;div class=&quot;timelineBody&quot;&gt;&lt;div class=&quot;trackLabels&quot;&gt;&lt;div class=&quot;trackLabel trackLabelSource&quot;&gt;鍘?lt;/div&gt;&lt;div class=&quot;trackLabel trackLabelTranslated&quot;&gt;璇?lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;timelineCanvas&quot;&gt;&lt;div class=&quot;ruler&quot;&gt;&lt;span&gt;0s&lt;/span&gt;&lt;span&gt;2s&lt;/span&gt;&lt;span&gt;4s&lt;/span&gt;&lt;span&gt;6s&lt;/span&gt;&lt;span&gt;8s&lt;/span&gt;&lt;span&gt;10s&lt;/span&gt;&lt;span&gt;12s&lt;/span&gt;&lt;span&gt;14s&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;track&quot;&gt;&lt;span class=&quot;clip clipSource&quot; style=&quot;left:6%; width:18%&quot;&gt;Life is like a...&lt;/span&gt;&lt;span class=&quot;clip clipSource&quot; style=&quot;left:29%; width:17%&quot;&gt;and we are...&lt;/span&gt;&lt;span class=&quot;clip clipSource&quot; style=&quot;left:52%; width:20%&quot;&gt;If we leave...&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;track&quot;&gt;&lt;span class=&quot;clip clipTranslated&quot; style=&quot;left:7%; width:16%&quot;&gt;丕賱丨賷丕丞 賲孬賱...&lt;/span&gt;&lt;span class=&quot;clip clipTranslated&quot; style=&quot;left:31%; width:15%&quot;&gt;賵賳丨賳...&lt;/span&gt;&lt;span class=&quot;clip clipTranslated&quot; style=&quot;left:55%; width:18%&quot;&gt;廿匕丕 鬲乇賰賳丕...&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
-    &lt;div class=&quot;modalMask&quot; id=&quot;modalMask&quot; role=&quot;dialog&quot; aria-modal=&quot;true&quot;&gt;&lt;div class=&quot;modalBox&quot;&gt;&lt;h3 id=&quot;modalTitle&quot;&gt;纭鎿嶄綔&lt;/h3&gt;&lt;p id=&quot;modalText&quot;&gt;&lt;/p&gt;&lt;div class=&quot;modalActions&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;btnGhost&quot; id=&quot;modalCancel&quot;&gt;杩斿洖纭&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;btnPrimary&quot; id=&quot;modalConfirm&quot;&gt;纭&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
-    &lt;div class=&quot;toast&quot; id=&quot;toast&quot; role=&quot;status&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
-  &lt;script&gt;
+  </style>
+  <div class="editorContainer" id="dvContainer">
+    <div class="navbar">
+      <div class="navLeft">
+        <button type="button" class="backButton">← 返回</button>
+        <div class="titleInfo">
+          <h1>结算翻译配音 <span>第一集</span></h1>
+          <div class="titleMeta"><span class="metaItem metaItemExtract">字幕资产提取</span><span class="metaDivider"></span><span class="metaItem">英文 → 阿拉伯语</span></div>
+        </div>
+      </div>
+      <div class="navRight">
+        <button type="button" class="btnText">查找替换</button>
+        <button type="button" class="btnText">发音纠正词典</button>
+        <span class="saveStatus">已保存</span>
+        <button type="button" class="btnPrimary">完成并导出</button>
+      </div>
+    </div>
+    <div class="mainContent">
+      <section class="videoPanel" aria-label="视频预览">
+        <div class="videoStage"><div class="fakeVideo" aria-hidden="true"></div></div>
+        <div class="videoControls"><span id="videoTime">00:00:13,519</span><span style="float:right">00:02:34,459</span><div class="progress" id="videoProgress"></div><div style="text-align:center">◀︎  ▶︎  ▶︎</div></div>
+      </section>
+      <section class="subtitlePanel">
+        <div class="subtitleWithQc">
+          <div class="subtitleListContainer">
+            <div class="header"><div class="headerSpeaker">说话人</div><div class="headerTime">时间</div><div class="headerGroup">语义组</div><div class="headerLeft">英语</div><div class="headerRight">阿拉伯语</div></div>
+            <div class="subtitleListWrapper"><div class="subtitleList" id="subtitleRows"></div></div>
+          </div>
+          <aside class="qcPanel" aria-label="质检提醒面板">
+            <div class="qcRail"><button type="button" class="collapseBtn" id="expandQc">‹</button><span>质检提醒</span><span class="qcCount" id="railCount">8处</span></div>
+            <div class="qcPanelMain">
+              <div class="qcPanelHeader"><div><span class="qcTitle">质检提醒</span><span class="qcCount" id="totalCount">共 8 处</span></div><button type="button" class="collapseBtn" id="collapseQc">›</button></div>
+              <div class="qcSummary"><div class="qcSummaryTop"><span>异常汇总</span><span>按数量倒序</span></div><div class="typeList" id="typeList"></div></div>
+              <div class="qcList" id="qcList"></div>
+              <div class="qcBatch"><button type="button" class="btnGhost" id="batchAccept">批量采纳</button><button type="button" class="btnGhost" id="batchIgnore">批量忽略</button><button type="button" class="btnPrimary wide" id="acceptAll">该集全部采纳</button></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </div>
+    <div class="timelineContainer"><div class="timelineBody"><div class="trackLabels"><div class="trackLabel trackLabelSource">原</div><div class="trackLabel trackLabelTranslated">译</div></div><div class="timelineCanvas"><div class="ruler"><span>0s</span><span>2s</span><span>4s</span><span>6s</span><span>8s</span><span>10s</span><span>12s</span><span>14s</span></div><div class="track"><span class="clip clipSource" style="left:6%; width:18%">Life is like a...</span><span class="clip clipSource" style="left:29%; width:17%">and we are...</span><span class="clip clipSource" style="left:52%; width:20%">If we leave...</span></div><div class="track"><span class="clip clipTranslated" style="left:7%; width:16%">الحياة مثل...</span><span class="clip clipTranslated" style="left:31%; width:15%">ونحن...</span><span class="clip clipTranslated" style="left:55%; width:18%">إذا تركنا...</span></div></div></div></div>
+    <div class="modalMask" id="modalMask" role="dialog" aria-modal="true"><div class="modalBox"><h3 id="modalTitle">确认操作</h3><p id="modalText"></p><div class="modalActions"><button type="button" class="btnGhost" id="modalCancel">返回确认</button><button type="button" class="btnPrimary" id="modalConfirm">确认</button></div></div></div>
+    <div class="toast" id="toast" role="status"></div>
+  </div>
+  <script>
     (function () {
-      const root = document.getElementById(&#x27;dv-real-qc-prototype&#x27;);
-      const container = root.querySelector(&#x27;#dvContainer&#x27;);
-      const rowsEl = root.querySelector(&#x27;#subtitleRows&#x27;);
-      const typeEl = root.querySelector(&#x27;#typeList&#x27;);
-      const listEl = root.querySelector(&#x27;#qcList&#x27;);
-      const totalEl = root.querySelector(&#x27;#totalCount&#x27;);
-      const railEl = root.querySelector(&#x27;#railCount&#x27;);
-      const modal = root.querySelector(&#x27;#modalMask&#x27;);
-      const toast = root.querySelector(&#x27;#toast&#x27;);
-      const videoTimeEl = root.querySelector(&#x27;#videoTime&#x27;);
-      const progressEl = root.querySelector(&#x27;#videoProgress&#x27;);
-      let selectedGroup = &#x27;瀛楀箷鏂囨湰瑙勮寖&#x27;;
-      let activeIssue = &#x27;q1&#x27;;
-      let activeSegment = &#x27;s1&#x27;;
+      const root = document.getElementById('dv-real-qc-prototype');
+      const container = root.querySelector('#dvContainer');
+      const rowsEl = root.querySelector('#subtitleRows');
+      const typeEl = root.querySelector('#typeList');
+      const listEl = root.querySelector('#qcList');
+      const totalEl = root.querySelector('#totalCount');
+      const railEl = root.querySelector('#railCount');
+      const modal = root.querySelector('#modalMask');
+      const toast = root.querySelector('#toast');
+      const videoTimeEl = root.querySelector('#videoTime');
+      const progressEl = root.querySelector('#videoProgress');
+      let selectedGroup = '字幕文本规范';
+      let activeIssue = 'q1';
+      let activeSegment = 's1';
       let pending = null;
       const segments = [
-        { id:&#x27;s1&#x27;, speaker:&#x27;Elsie&#x27;, cls:&#x27;third&#x27;, group:&#x27;1&#x27;, time:&#x27;00:00:02,240 - 00:00:03,600&#x27;, source:&#x27;Life is like a game of chess&#x27;, target:&#x27;丕賱丨賷丕丞 賲孬賱 賱毓亘丞 丕賱卮胤乇賳噩&#x27; },
-        { id:&#x27;s2&#x27;, speaker:&#x27;Elsie&#x27;, cls:&#x27;third&#x27;, group:&#x27;1&#x27;, time:&#x27;00:00:04,679 - 00:00:06,120&#x27;, source:&#x27;and we are both players in it&#x27;, target:&#x27;賵賳丨賳 丕賱賱丕毓亘丕賳 賮賷賴丕&#x27; },
-        { id:&#x27;s3&#x27;, speaker:&#x27;Claire Carter&#x27;, cls:&#x27;&#x27;, group:&#x27;2&#x27;, time:&#x27;00:00:07,040 - 00:00:08,278&#x27;, source:&#x27;If we leave the past behind,&#x27;, target:&#x27;廿匕丕 鬲乇賰賳丕 丕賱賲丕囟賷 禺賱賮賳丕貙&#x27; },
-        { id:&#x27;s4&#x27;, speaker:&#x27;Aidan Rowe&#x27;, cls:&#x27;alt&#x27;, group:&#x27;3&#x27;, time:&#x27;00:00:13,519 - 00:00:15,198&#x27;, source:&#x27;W-what... what do you want?!&#x27;, target:&#x27;賲丕匕丕 鬲乇賷丿責&#x27; },
-        { id:&#x27;s5&#x27;, speaker:&#x27;Claire Carter&#x27;, cls:&#x27;&#x27;, group:&#x27;2&#x27;, time:&#x27;00:00:18,399 - 00:00:18,879&#x27;, source:&#x27;elsie.&#x27;, target:&#x27;廿賱爻賷.&#x27; },
-        { id:&#x27;s6&#x27;, speaker:&#x27;Aidan Rowe&#x27;, cls:&#x27;alt&#x27;, group:&#x27;3&#x27;, time:&#x27;00:00:22,920 - 00:00:24,879&#x27;, source:&#x27;You went to His Majesty to complain&#x27;, target:&#x27;匕賴亘鬲 廿賱賶 噩賱丕賱鬲賴 賱鬲卮鬲賰賷&#x27; }
+        { id:'s1', speaker:'Elsie', cls:'third', group:'1', time:'00:00:02,240 - 00:00:03,600', source:'Life is like a game of chess', target:'الحياة مثل لعبة الشطرنج' },
+        { id:'s2', speaker:'Elsie', cls:'third', group:'1', time:'00:00:04,679 - 00:00:06,120', source:'and we are both players in it', target:'ونحن اللاعبان فيها' },
+        { id:'s3', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:07,040 - 00:00:08,278', source:'If we leave the past behind,', target:'إذا تركنا الماضي خلفنا،' },
+        { id:'s4', speaker:'Aidan Rowe', cls:'alt', group:'3', time:'00:00:13,519 - 00:00:15,198', source:'W-what... what do you want?!', target:'ماذا تريد؟' },
+        { id:'s5', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:18,399 - 00:00:18,879', source:'elsie.', target:'إلسي.' },
+        { id:'s6', speaker:'Aidan Rowe', cls:'alt', group:'3', time:'00:00:22,920 - 00:00:24,879', source:'You went to His Majesty to complain', target:'ذهبت إلى جلالته لتشتكي' }
       ];
       let qc = [
-        { id:&#x27;q1&#x27;, group:&#x27;瀛楀箷鏂囨湰瑙勮寖&#x27;, detail:&#x27;鍙ユ湯鏍囩偣缂哄け&#x27;, seg:&#x27;s1&#x27;, title:&#x27;绗?1 娈碉綔鍙ユ湯鏍囩偣缂哄け&#x27;, before:&#x27;Life is like a game of chess&#x27;, after:&#x27;Life is like a game of chess.&#x27;, note:&#x27;寤鸿琛ュ厖鍙ユ湯鍙ュ彿&#x27;, checked:false },
-        { id:&#x27;q2&#x27;, group:&#x27;瀛楀箷鏂囨湰瑙勮寖&#x27;, detail:&#x27;鍙ユ湯鏍囩偣璇敤&#x27;, seg:&#x27;s3&#x27;, title:&#x27;绗?3 娈碉綔鍙ユ湯鏍囩偣璇敤&#x27;, before:&#x27;If we leave the past behind,&#x27;, after:&#x27;If we leave the past behind.&#x27;, note:&#x27;鐤戜技涓嶅簲浠ラ€楀彿缁撴潫&#x27;, checked:false },
-        { id:&#x27;q3&#x27;, group:&#x27;瀛楀箷鏂囨湰瑙勮寖&#x27;, detail:&#x27;鏍囩偣缁勫悎涓嶇粺涓€&#x27;, seg:&#x27;s4&#x27;, title:&#x27;绗?4 娈碉綔鏍囩偣缁勫悎涓嶇粺涓€&#x27;, before:&#x27;W-what... what do you want?!&#x27;, after:&#x27;W-what... what do you want?&#x27;, note:&#x27;寤鸿缁熶竴鐤戦棶鍙ユ爣鐐?#x27;, checked:false },
-        { id:&#x27;q4&#x27;, group:&#x27;瀛楀箷鏂囨湰瑙勮寖&#x27;, detail:&#x27;鍙ラ澶у皬鍐欎笉瑙勮寖&#x27;, seg:&#x27;s2&#x27;, title:&#x27;绗?2 娈碉綔鍙ラ澶у皬鍐欎笉瑙勮寖&#x27;, before:&#x27;and we are both players in it&#x27;, after:&#x27;And we are both players in it.&#x27;, note:&#x27;鍙ラ瀛楁瘝鐤戜技闇€瑕佸ぇ鍐?#x27;, checked:false },
-        { id:&#x27;q5&#x27;, group:&#x27;瀛楀箷鏂囨湰瑙勮寖&#x27;, detail:&#x27;涓撴湁鍚嶈瘝澶у皬鍐欏紓甯?#x27;, seg:&#x27;s5&#x27;, title:&#x27;绗?5 娈碉綔涓撴湁鍚嶈瘝澶у皬鍐欏紓甯?#x27;, before:&#x27;elsie.&#x27;, after:&#x27;Elsie.&#x27;, note:&#x27;瑙掕壊鍚嶉瀛楁瘝搴斿ぇ鍐?#x27;, checked:false },
-        { id:&#x27;q6&#x27;, group:&#x27;鍘熸枃閿欒&#x27;, detail:&#x27;鎷煎啓/杞啓鐤戜技寮傚父&#x27;, seg:&#x27;s4&#x27;, title:&#x27;绗?4 娈碉綔鎷煎啓/杞啓鐤戜技寮傚父&#x27;, before:&#x27;W-what... what do you want?!&#x27;, after:&#x27;W-what... what do you want?&#x27;, note:&#x27;鍙ｅ悆杞啓涓庢爣鐐圭粍鍚堝彲鑳藉奖鍝嶈鑼冩€?#x27;, checked:false },
-        { id:&#x27;q7&#x27;, group:&#x27;鍘熸枃閿欒&#x27;, detail:&#x27;鐤戜技婕忚瘝/澶氳瘝&#x27;, seg:&#x27;s6&#x27;, title:&#x27;绗?6 娈碉綔鐤戜技婕忚瘝/澶氳瘝&#x27;, before:&#x27;You went to His Majesty to complain&#x27;, after:&#x27;You went to His Majesty to complain.&#x27;, note:&#x27;寤鸿浜哄伐纭鏄惁瀛樺湪婕忚瘝&#x27;, checked:false },
-        { id:&#x27;q8&#x27;, group:&#x27;鏈涓嶇粺涓€&#x27;, detail:&#x27;绉拌皳鍐欐硶涓嶇粺涓€&#x27;, seg:&#x27;s6&#x27;, title:&#x27;绗?6 娈碉綔绉拌皳鍐欐硶涓嶇粺涓€&#x27;, before:&#x27;His Majesty&#x27;, after:&#x27;Your Majesty&#x27;, note:&#x27;寤鸿涓庡叏鍓хО璋撳啓娉曚繚鎸佷竴鑷?#x27;, checked:false }
+        { id:'q1', group:'字幕文本规范', detail:'句末标点缺失', seg:'s1', title:'第 1 段｜句末标点缺失', before:'Life is like a game of chess', after:'Life is like a game of chess.', note:'建议补充句末句号', checked:false },
+        { id:'q2', group:'字幕文本规范', detail:'句末标点误用', seg:'s3', title:'第 3 段｜句末标点误用', before:'If we leave the past behind,', after:'If we leave the past behind.', note:'疑似不应以逗号结束', checked:false },
+        { id:'q3', group:'字幕文本规范', detail:'标点组合不统一', seg:'s4', title:'第 4 段｜标点组合不统一', before:'W-what... what do you want?!', after:'W-what... what do you want?', note:'建议统一疑问句标点', checked:false },
+        { id:'q4', group:'字幕文本规范', detail:'句首大小写不规范', seg:'s2', title:'第 2 段｜句首大小写不规范', before:'and we are both players in it', after:'And we are both players in it.', note:'句首字母疑似需要大写', checked:false },
+        { id:'q5', group:'字幕文本规范', detail:'专有名词大小写异常', seg:'s5', title:'第 5 段｜专有名词大小写异常', before:'elsie.', after:'Elsie.', note:'角色名首字母应大写', checked:false },
+        { id:'q6', group:'原文错误', detail:'拼写/转写疑似异常', seg:'s4', title:'第 4 段｜拼写/转写疑似异常', before:'W-what... what do you want?!', after:'W-what... what do you want?', note:'口吃转写与标点组合可能影响规范性', checked:false },
+        { id:'q7', group:'原文错误', detail:'疑似漏词/多词', seg:'s6', title:'第 6 段｜疑似漏词/多词', before:'You went to His Majesty to complain', after:'You went to His Majesty to complain.', note:'建议人工确认是否存在漏词', checked:false },
+        { id:'q8', group:'术语不统一', detail:'称谓写法不统一', seg:'s6', title:'第 6 段｜称谓写法不统一', before:'His Majesty', after:'Your Majesty', note:'建议与全剧称谓写法保持一致', checked:false }
       ];
-      function esc(text){ return String(text).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g, c =&gt; ({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[c])); }
-      function segNo(segId){ return String(segId).replace(&#x27;s&#x27;,&#x27;&#x27;); }
+      function esc(text){ return String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+      function segNo(segId){ return String(segId).replace('s',''); }
       function diffPair(before, after){
         const a = String(before), b = String(after);
         let start = 0;
         const min = Math.min(a.length, b.length);
-        while (start &lt; min &amp;&amp; a[start] === b[start]) start++;
+        while (start < min && a[start] === b[start]) start++;
         let endA = a.length - 1, endB = b.length - 1;
-        while (endA &gt;= start &amp;&amp; endB &gt;= start &amp;&amp; a[endA] === b[endB]) { endA--; endB--; }
+        while (endA >= start && endB >= start && a[endA] === b[endB]) { endA--; endB--; }
         const leftA = a.slice(0, start), midA = a.slice(start, endA + 1), rightA = a.slice(endA + 1);
         const leftB = b.slice(0, start), midB = b.slice(start, endB + 1), rightB = b.slice(endB + 1);
         return {
-          before: esc(leftA) + (midA ? &#x27;&lt;mark&gt;&#x27; + esc(midA) + &#x27;&lt;/mark&gt;&#x27; : &#x27;&#x27;) + esc(rightA),
-          after: esc(leftB) + (midB ? &#x27;&lt;mark&gt;&#x27; + esc(midB) + &#x27;&lt;/mark&gt;&#x27; : &#x27;&#x27;) + esc(rightB)
+          before: esc(leftA) + (midA ? '<mark>' + esc(midA) + '</mark>' : '') + esc(rightA),
+          after: esc(leftB) + (midB ? '<mark>' + esc(midB) + '</mark>' : '') + esc(rightB)
         };
       }
-      function counts(){ const map={}; qc.forEach(i =&gt; map[i.group]=(map[i.group]||0)+1); return Object.entries(map).sort((a,b)=&gt;b[1]-a[1]); }
+      function counts(){ const map={}; qc.forEach(i => map[i.group]=(map[i.group]||0)+1); return Object.entries(map).sort((a,b)=>b[1]-a[1]); }
       function updateVideo(segId){
-        const seg = segments.find(s =&gt; s.id === segId);
+        const seg = segments.find(s => s.id === segId);
         if(!seg) return;
-        videoTimeEl.textContent = seg.time.split(&#x27; - &#x27;)[0];
-        progressEl.style.setProperty(&#x27;--progress-value&#x27;, Math.min(86, 10 + Number(segNo(segId)) * 12) + &#x27;%&#x27;);
+        videoTimeEl.textContent = seg.time.split(' - ')[0];
+        progressEl.style.setProperty('--progress-value', Math.min(86, 10 + Number(segNo(segId)) * 12) + '%');
       }
       function renderRows(active){
-        rowsEl.innerHTML = segments.map(s =&gt; {
-          const item = qc.find(q =&gt; q.seg === s.id);
+        rowsEl.innerHTML = segments.map(s => {
+          const item = qc.find(q => q.seg === s.id);
           const source = esc(s.source);
-          const times = s.time.split(&#x27; - &#x27;);
-          const errorBadge = item ? &#x27;&lt;span class=&quot;errorBadge&quot;&gt;&lt;span class=&quot;errorIcon&quot;&gt;!&lt;/span&gt;&lt;span&gt;&#x27;+esc(item.group === &#x27;鍘熸枃閿欒&#x27; ? &#x27;鍘熸枃閿欒&#x27; : &#x27;鏂囨湰瑙勮寖&#x27;)+&#x27;&lt;/span&gt;&lt;/span&gt;&#x27; : &#x27;&#x27;;
-          return &#x27;&lt;div class=&quot;subtitleItem &#x27;+(active===s.id?&#x27;active &#x27;:&#x27;&#x27;)+(item?&#x27;hasError&#x27;:&#x27;&#x27;)+&#x27;&quot; data-seg=&quot;&#x27;+s.id+&#x27;&quot;&gt;&#x27;+errorBadge+&#x27;&lt;div class=&quot;speakerCell&quot;&gt;&lt;span class=&quot;speakerBadge &#x27;+s.cls+&#x27;&quot;&gt;&#x27;+esc(s.speaker)+&#x27;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;timeCell&quot;&gt;&lt;span class=&quot;timeLine&quot;&gt;&#x27;+esc(times[0]||&#x27;&#x27;)+&#x27;&lt;/span&gt;&lt;span class=&quot;timeLine&quot;&gt;&#x27;+esc(times[1]||&#x27;&#x27;)+&#x27;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;groupCell&quot;&gt;&#x27;+esc(s.group)+&#x27;&lt;/div&gt;&lt;div class=&quot;textCell sourceCell&quot;&gt;&lt;span class=&quot;segmentIndex&quot;&gt;&#x27;+segNo(s.id)+&#x27;&lt;/span&gt;&lt;div class=&quot;sourceText&quot;&gt;&#x27;+source+&#x27;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;textCell&quot;&gt;&lt;div class=&quot;targetText&quot;&gt;&#x27;+esc(s.target)+&#x27;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&#x27;;
-        }).join(&#x27;&#x27;);
+          const times = s.time.split(' - ');
+          const errorBadge = item ? '<span class="errorBadge"><span class="errorIcon">!</span><span>'+esc(item.group === '原文错误' ? '原文错误' : '文本规范')+'</span></span>' : '';
+          return '<div class="subtitleItem '+(active===s.id?'active ':'')+(item?'hasError':'')+'" data-seg="'+s.id+'">'+errorBadge+'<div class="speakerCell"><span class="speakerBadge '+s.cls+'">'+esc(s.speaker)+'</span></div><div class="timeCell"><span class="timeLine">'+esc(times[0]||'')+'</span><span class="timeLine">'+esc(times[1]||'')+'</span></div><div class="groupCell">'+esc(s.group)+'</div><div class="textCell sourceCell"><span class="segmentIndex">'+segNo(s.id)+'</span><div class="sourceText">'+source+'</div></div><div class="textCell"><div class="targetText">'+esc(s.target)+'</div></div></div>';
+        }).join('');
       }
-      function renderTypes(){ const c=counts(); if(!c.some(x=&gt;x[0]===selectedGroup)) selectedGroup=c[0]?.[0]||&#x27;&#x27;; totalEl.textContent=&#x27;鍏?&#x27;+qc.length+&#x27; 澶?#x27;; railEl.textContent=qc.length+&#x27;澶?#x27;; typeEl.innerHTML=c.map(([group,n])=&gt;{ const active=group===selectedGroup; const children=active?&#x27;&lt;div class=&quot;typeChildren&quot;&gt;&#x27;+qc.filter(i=&gt;i.group===group).map(i=&gt;&#x27;&lt;button type=&quot;button&quot; class=&quot;typeChild &#x27;+(i.id===activeIssue?&#x27;active &#x27;:&#x27;&#x27;)+(i.checked?&#x27;checked&#x27;:&#x27;&#x27;)+&#x27;&quot; data-jump=&quot;&#x27;+i.id+&#x27;&quot;&gt;&lt;span&gt;绗?&#x27;+segNo(i.seg)+&#x27; 娈?lt;/span&gt;&lt;span class=&quot;typeChildDetail&quot;&gt;锝?#x27;+esc(i.detail)+&#x27;&lt;/span&gt;&lt;span class=&quot;typeChildCheck&quot;&gt;鉁?lt;/span&gt;&lt;/button&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/div&gt;&#x27;:&#x27;&#x27;; return &#x27;&lt;div&gt;&lt;button type=&quot;button&quot; class=&quot;typeButton &#x27;+(active?&#x27;active&#x27;:&#x27;&#x27;)+&#x27;&quot; data-group=&quot;&#x27;+esc(group)+&#x27;&quot;&gt;&lt;span class=&quot;typeName&quot;&gt;&#x27;+esc(group)+&#x27;&lt;/span&gt;&lt;span class=&quot;typeCount&quot;&gt;&#x27;+n+&#x27;&lt;/span&gt;&lt;span class=&quot;typeArrow&quot;&gt;&#x27;+(active?&#x27;鈻?#x27;:&#x27;鈻?#x27;)+&#x27;&lt;/span&gt;&lt;/button&gt;&#x27;+children+&#x27;&lt;/div&gt;&#x27;; }).join(&#x27;&#x27;); }
-      function renderQc(){ const items=qc.filter(i=&gt;i.group===selectedGroup); const sel=qc.filter(i=&gt;i.checked).length; root.querySelector(&#x27;#batchAccept&#x27;).disabled=sel===0; root.querySelector(&#x27;#batchIgnore&#x27;).disabled=sel===0; root.querySelector(&#x27;#acceptAll&#x27;).disabled=qc.length===0; listEl.innerHTML=items.length?items.map(i=&gt;{ const d=diffPair(i.before,i.after); return &#x27;&lt;article class=&quot;qcCard &#x27;+(i.id===activeIssue?&#x27;active&#x27;:&#x27;&#x27;)+&#x27;&quot; data-qc=&quot;&#x27;+i.id+&#x27;&quot;&gt;&lt;div class=&quot;qcCardHeader&quot;&gt;&lt;label&gt;&lt;input type=&quot;checkbox&quot; class=&quot;qcCheck&quot; &#x27;+(i.checked?&#x27;checked&#x27;:&#x27;&#x27;)+&#x27;&gt; &lt;span class=&quot;qcCardTitle&quot;&gt;&#x27;+esc(i.title)+&#x27;&lt;/span&gt;&lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;qcCompare&quot;&gt;&lt;div&gt;&lt;strong&gt;褰撳墠&lt;/strong&gt;&#x27;+d.before+&#x27;&lt;/div&gt;&lt;div&gt;&lt;strong&gt;寤鸿&lt;/strong&gt;&#x27;+d.after+&#x27;&lt;/div&gt;&lt;div class=&quot;qcNote&quot;&gt;&#x27;+esc(i.note)+&#x27;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;qcActions&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;btnGhost qcIgnore&quot;&gt;蹇界暐&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;btnPrimary qcAccept&quot;&gt;閲囩撼&lt;/button&gt;&lt;/div&gt;&lt;/article&gt;&#x27;; }).join(&#x27;&#x27;):&#x27;&lt;article class=&quot;qcCard&quot;&gt;&lt;div class=&quot;qcNote&quot;&gt;褰撳墠鍒嗙被鏆傛棤璐ㄦ鎻愰啋&lt;/div&gt;&lt;/article&gt;&#x27;; }
+      function renderTypes(){ const c=counts(); if(!c.some(x=>x[0]===selectedGroup)) selectedGroup=c[0]?.[0]||''; totalEl.textContent='共 '+qc.length+' 处'; railEl.textContent=qc.length+'处'; typeEl.innerHTML=c.map(([group,n])=>{ const active=group===selectedGroup; const children=active?'<div class="typeChildren">'+qc.filter(i=>i.group===group).map(i=>'<button type="button" class="typeChild '+(i.id===activeIssue?'active ':'')+(i.checked?'checked':'')+'" data-jump="'+i.id+'"><span>第 '+segNo(i.seg)+' 段</span><span class="typeChildDetail">｜'+esc(i.detail)+'</span><span class="typeChildCheck">✓</span></button>').join('')+'</div>':''; return '<div><button type="button" class="typeButton '+(active?'active':'')+'" data-group="'+esc(group)+'"><span class="typeName">'+esc(group)+'</span><span class="typeCount">'+n+'</span><span class="typeArrow">'+(active?'▼':'▶')+'</span></button>'+children+'</div>'; }).join(''); }
+      function renderQc(){ const items=qc.filter(i=>i.group===selectedGroup); const sel=qc.filter(i=>i.checked).length; root.querySelector('#batchAccept').disabled=sel===0; root.querySelector('#batchIgnore').disabled=sel===0; root.querySelector('#acceptAll').disabled=qc.length===0; listEl.innerHTML=items.length?items.map(i=>{ const d=diffPair(i.before,i.after); return '<article class="qcCard '+(i.id===activeIssue?'active':'')+'" data-qc="'+i.id+'"><div class="qcCardHeader"><label><input type="checkbox" class="qcCheck" '+(i.checked?'checked':'')+'> <span class="qcCardTitle">'+esc(i.title)+'</span></label></div><div class="qcCompare"><div><strong>当前</strong>'+d.before+'</div><div><strong>建议</strong>'+d.after+'</div><div class="qcNote">'+esc(i.note)+'</div></div><div class="qcActions"><button type="button" class="btnGhost qcIgnore">忽略</button><button type="button" class="btnPrimary qcAccept">采纳</button></div></article>'; }).join(''):'<article class="qcCard"><div class="qcNote">当前分类暂无质检提醒</div></article>'; }
       function render(){ renderRows(activeSegment); renderTypes(); renderQc(); }
-      function showToast(text){ toast.textContent=text; toast.style.display=&#x27;block&#x27;; setTimeout(()=&gt;toast.style.display=&#x27;none&#x27;,1700); }
-      function jumpToIssue(id){ const item=qc.find(q=&gt;q.id===id); if(!item) return; selectedGroup=item.group; activeIssue=item.id; activeSegment=item.seg; updateVideo(item.seg); render(); requestAnimationFrame(()=&gt;{ const row=rowsEl.querySelector(&#x27;[data-seg=&quot;&#x27;+item.seg+&#x27;&quot;]&#x27;); if(row) row.scrollIntoView({block:&#x27;center&#x27;}); const card=listEl.querySelector(&#x27;[data-qc=&quot;&#x27;+item.id+&#x27;&quot;]&#x27;); if(card) card.scrollIntoView({block:&#x27;nearest&#x27;}); }); }
-      function remove(ids, mode){ ids.forEach(id=&gt;{ const item=qc.find(q=&gt;q.id===id); if(mode===&#x27;accept&#x27;&amp;&amp;item){ const seg=segments.find(s=&gt;s.id===item.seg); if(seg&amp;&amp;seg.source===item.before) seg.source=item.after; }}); qc=qc.filter(q=&gt;!ids.includes(q.id)); if(!qc.find(q=&gt;q.id===activeIssue)) activeIssue=qc[0]?.id||&#x27;&#x27;; if(activeIssue){ const item=qc.find(q=&gt;q.id===activeIssue); selectedGroup=item.group; activeSegment=item.seg; } render(); showToast(mode===&#x27;accept&#x27;?&#x27;宸查噰绾宠川妫€寤鸿&#x27;:&#x27;宸插拷鐣ヨ川妫€鎻愰啋&#x27;); }
-      function openModal(title,text,confirm,fn){ root.querySelector(&#x27;#modalTitle&#x27;).textContent=title; root.querySelector(&#x27;#modalText&#x27;).textContent=text; root.querySelector(&#x27;#modalConfirm&#x27;).textContent=confirm; pending=fn; modal.style.display=&#x27;flex&#x27;; }
-      function closeModal(){ pending=null; modal.style.display=&#x27;none&#x27;; }
-      root.addEventListener(&#x27;click&#x27;, e=&gt;{ const jump=e.target.closest(&#x27;[data-jump]&#x27;); if(jump){ jumpToIssue(jump.dataset.jump); return; } const group=e.target.closest(&#x27;[data-group]&#x27;); if(group){ selectedGroup=group.dataset.group; const first=qc.find(i=&gt;i.group===selectedGroup); if(first) activeIssue=first.id; render(); return; } const row=e.target.closest(&#x27;.subtitleItem&#x27;); if(row){ activeSegment=row.dataset.seg; updateVideo(activeSegment); renderRows(activeSegment); return; } const card=e.target.closest(&#x27;.qcCard&#x27;); if(e.target.classList.contains(&#x27;qcCheck&#x27;)&amp;&amp;card){ const item=qc.find(q=&gt;q.id===card.dataset.qc); if(item)item.checked=e.target.checked; renderTypes(); renderQc(); return; } if(e.target.classList.contains(&#x27;qcAccept&#x27;)&amp;&amp;card){ remove([card.dataset.qc],&#x27;accept&#x27;); return; } if(e.target.classList.contains(&#x27;qcIgnore&#x27;)&amp;&amp;card){ remove([card.dataset.qc],&#x27;ignore&#x27;); return; } if(card &amp;&amp; card.dataset.qc &amp;&amp; !e.target.closest(&#x27;button&#x27;)){ jumpToIssue(card.dataset.qc); return; } if(e.target.id===&#x27;batchAccept&#x27;){ remove(qc.filter(i=&gt;i.checked).map(i=&gt;i.id),&#x27;accept&#x27;); return; } if(e.target.id===&#x27;batchIgnore&#x27;){ const ids=qc.filter(i=&gt;i.checked).map(i=&gt;i.id); openModal(&#x27;纭蹇界暐&#x27;,&#x27;灏嗗拷鐣ュ凡閫夋嫨鐨?&#x27;+ids.length+&#x27; 鏉¤川妫€鎻愰啋锛屽拷鐣ュ悗鏈涓嶅啀灞曠ず銆?#x27;,&#x27;纭蹇界暐&#x27;,()=&gt;remove(ids,&#x27;ignore&#x27;)); return; } if(e.target.id===&#x27;acceptAll&#x27;){ const ids=qc.map(i=&gt;i.id); openModal(&#x27;璇ラ泦鍏ㄩ儴閲囩撼&#x27;,&#x27;灏嗛噰绾冲綋鍓嶉泦鍏ㄩ儴 &#x27;+ids.length+&#x27; 鏉¤川妫€寤鸿锛屽苟淇敼瀵瑰簲鍘熷瓧骞曟枃鏈€傝纭鍚庣户缁€?#x27;,&#x27;纭閲囩撼&#x27;,()=&gt;remove(ids,&#x27;accept&#x27;)); return; } if(e.target.id===&#x27;collapseQc&#x27;){ container.classList.add(&#x27;qcCollapsed&#x27;); return; } if(e.target.id===&#x27;expandQc&#x27;){ container.classList.remove(&#x27;qcCollapsed&#x27;); return; } });
-      root.querySelector(&#x27;#modalCancel&#x27;).addEventListener(&#x27;click&#x27;,closeModal); root.querySelector(&#x27;#modalConfirm&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{ const fn=pending; closeModal(); if(fn)fn(); }); updateVideo(activeSegment); render();
+      function showToast(text){ toast.textContent=text; toast.style.display='block'; setTimeout(()=>toast.style.display='none',1700); }
+      function jumpToIssue(id){ const item=qc.find(q=>q.id===id); if(!item) return; selectedGroup=item.group; activeIssue=item.id; activeSegment=item.seg; updateVideo(item.seg); render(); requestAnimationFrame(()=>{ const row=rowsEl.querySelector('[data-seg="'+item.seg+'"]'); if(row) row.scrollIntoView({block:'center'}); const card=listEl.querySelector('[data-qc="'+item.id+'"]'); if(card) card.scrollIntoView({block:'nearest'}); }); }
+      function remove(ids, mode){ ids.forEach(id=>{ const item=qc.find(q=>q.id===id); if(mode==='accept'&&item){ const seg=segments.find(s=>s.id===item.seg); if(seg&&seg.source===item.before) seg.source=item.after; }}); qc=qc.filter(q=>!ids.includes(q.id)); if(!qc.find(q=>q.id===activeIssue)) activeIssue=qc[0]?.id||''; if(activeIssue){ const item=qc.find(q=>q.id===activeIssue); selectedGroup=item.group; activeSegment=item.seg; } render(); showToast(mode==='accept'?'已采纳质检建议':'已忽略质检提醒'); }
+      function openModal(title,text,confirm,fn){ root.querySelector('#modalTitle').textContent=title; root.querySelector('#modalText').textContent=text; root.querySelector('#modalConfirm').textContent=confirm; pending=fn; modal.style.display='flex'; }
+      function closeModal(){ pending=null; modal.style.display='none'; }
+      root.addEventListener('click', e=>{ const jump=e.target.closest('[data-jump]'); if(jump){ jumpToIssue(jump.dataset.jump); return; } const group=e.target.closest('[data-group]'); if(group){ selectedGroup=group.dataset.group; const first=qc.find(i=>i.group===selectedGroup); if(first) activeIssue=first.id; render(); return; } const row=e.target.closest('.subtitleItem'); if(row){ activeSegment=row.dataset.seg; updateVideo(activeSegment); renderRows(activeSegment); return; } const card=e.target.closest('.qcCard'); if(e.target.classList.contains('qcCheck')&&card){ const item=qc.find(q=>q.id===card.dataset.qc); if(item)item.checked=e.target.checked; renderTypes(); renderQc(); return; } if(e.target.classList.contains('qcAccept')&&card){ remove([card.dataset.qc],'accept'); return; } if(e.target.classList.contains('qcIgnore')&&card){ remove([card.dataset.qc],'ignore'); return; } if(card && card.dataset.qc && !e.target.closest('button')){ jumpToIssue(card.dataset.qc); return; } if(e.target.id==='batchAccept'){ remove(qc.filter(i=>i.checked).map(i=>i.id),'accept'); return; } if(e.target.id==='batchIgnore'){ const ids=qc.filter(i=>i.checked).map(i=>i.id); openModal('确认忽略','将忽略已选择的 '+ids.length+' 条质检提醒，忽略后本次不再展示。','确认忽略',()=>remove(ids,'ignore')); return; } if(e.target.id==='acceptAll'){ const ids=qc.map(i=>i.id); openModal('该集全部采纳','将采纳当前集全部 '+ids.length+' 条质检建议，并修改对应原字幕文本。请确认后继续。','确认采纳',()=>remove(ids,'accept')); return; } if(e.target.id==='collapseQc'){ container.classList.add('qcCollapsed'); return; } if(e.target.id==='expandQc'){ container.classList.remove('qcCollapsed'); return; } });
+      root.querySelector('#modalCancel').addEventListener('click',closeModal); root.querySelector('#modalConfirm').addEventListener('click',()=>{ const fn=pending; closeModal(); if(fn)fn(); }); updateVideo(activeSegment); render();
     })();
-  &lt;/script&gt;
-&lt;/div&gt;
+  </script>
+</div>
 
 
-
-
-&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-(() =&gt; {
-  if (window.FloatingUIDOM == null) {
-    return;
-  }
-  const { autoUpdate, computePosition, flip, offset, shift, size } =
-    window.FloatingUIDOM;
-  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
-  const tooltipId = `codex-visualization-tooltip-${
-    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
-  }`;
-  const tooltipGap = 5;
-  const hoverDelay = 700;
-  const skipDelay = 300;
-  let activeTrigger = null;
-  let pendingTrigger = null;
-  let tooltip = null;
-  let openTimeout = null;
-  let autoUpdateCleanup = null;
-  let positionRequest = 0;
-  let skipDelayUntil = 0;
-
-  const getTrigger = (target) =&gt;
-    target?.nodeType === Node.ELEMENT_NODE
-      ? target.closest(&quot;[data-tooltip]&quot;)
-      : null;
-  const containsTarget = (trigger, target) =&gt;
-    target?.nodeType != null &amp;&amp; trigger.contains(target);
-  const getContent = (trigger) =&gt;
-    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
-  const getPlacement = (trigger) =&gt; {
-    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
-    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
-  };
-  const getTooltip = () =&gt; {
-    if (tooltip == null) {
-      tooltip = document.createElement(&quot;div&quot;);
-      tooltip.id = tooltipId;
-      tooltip.className = &quot;tooltip&quot;;
-      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
-    }
-    return tooltip;
-  };
-  const setDescribedBy = (trigger, described) =&gt; {
-    const ids = new Set(
-      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
-        .split(/\s+/)
-        .filter(Boolean),
-    );
-    if (described) {
-      ids.add(tooltipId);
-    } else {
-      ids.delete(tooltipId);
-    }
-    if (ids.size === 0) {
-      trigger.removeAttribute(&quot;aria-describedby&quot;);
-    } else {
-      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
-    }
-  };
-  const clearOpenTimeout = () =&gt; {
-    if (openTimeout != null) {
-      window.clearTimeout(openTimeout);
-      openTimeout = null;
-    }
-    pendingTrigger = null;
-  };
-  const closeTooltip = (activateSkipDelay = true) =&gt; {
-    clearOpenTimeout();
-    positionRequest += 1;
-    autoUpdateCleanup?.();
-    autoUpdateCleanup = null;
-    if (activeTrigger == null) {
-      return;
-    }
-    setDescribedBy(activeTrigger, false);
-    activeTrigger = null;
-    tooltip?.remove();
-    if (activateSkipDelay) {
-      skipDelayUntil = Date.now() + skipDelay;
-    }
-  };
-  const updatePosition = (trigger, floating) =&gt; {
-    const request = ++positionRequest;
-    void computePosition(trigger, floating, {
-      middleware: [
-        offset(tooltipGap),
-        flip({ padding: tooltipGap }),
-        shift({ padding: tooltipGap }),
-        size({
-          padding: tooltipGap,
-          apply({ availableHeight, availableWidth, elements }) {
-            elements.floating.style.setProperty(
-              &quot;--tooltip-available-width&quot;,
-              `${Math.max(0, availableWidth)}px`,
-            );
-            elements.floating.style.setProperty(
-              &quot;--tooltip-available-height&quot;,
-              `${Math.max(0, availableHeight)}px`,
-            );
-          },
-        }),
-      ],
-      placement: getPlacement(trigger),
-      strategy: &quot;fixed&quot;,
-    })
-      .then(({ x, y }) =&gt; {
-        if (activeTrigger !== trigger || request !== positionRequest) {
-          return;
-        }
-        const scale = window.devicePixelRatio || 1;
-        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
-        floating.style.visibility = &quot;visible&quot;;
-      })
-      .catch(() =&gt; {
-        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
-          closeTooltip(false);
-        }
-      });
-  };
-  const openTooltip = (trigger) =&gt; {
-    const content = getContent(trigger);
-    if (!trigger.isConnected || content.length === 0) {
-      return;
-    }
-    clearOpenTimeout();
-    if (activeTrigger === trigger) {
-      return;
-    }
-    closeTooltip();
-    const floating = getTooltip();
-    floating.textContent = content;
-    floating.style.visibility = &quot;hidden&quot;;
-    floating.style.transform = &quot;translate(0, 0)&quot;;
-    document.body.appendChild(floating);
-    activeTrigger = trigger;
-    setDescribedBy(trigger, true);
-    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
-      updatePosition(trigger, floating);
-    });
-  };
-  const requestOpen = (trigger, immediate = false) =&gt; {
-    if (
-      getContent(trigger).length === 0 ||
-      activeTrigger === trigger ||
-      pendingTrigger === trigger
-    ) {
-      return;
-    }
-    clearOpenTimeout();
-    pendingTrigger = trigger;
-    const delay =
-      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
-        ? 0
-        : hoverDelay;
-    if (delay === 0) {
-      openTooltip(trigger);
-      return;
-    }
-    openTimeout = window.setTimeout(() =&gt; {
-      openTimeout = null;
-      pendingTrigger = null;
-      openTooltip(trigger);
-    }, delay);
-  };
-  const handlePointerOpen = (event) =&gt; {
-    if (event.pointerType === &quot;touch&quot;) {
-      return;
-    }
-    const trigger = getTrigger(event.target);
-    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
-      return;
-    }
-    requestOpen(trigger);
-  };
-  const handleLeave = (event) =&gt; {
-    const trigger = getTrigger(event.target);
-    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
-      return;
-    }
-    if (activeTrigger === trigger || pendingTrigger === trigger) {
-      closeTooltip();
-    }
-  };
-  const handleFocusIn = (event) =&gt; {
-    const trigger = getTrigger(event.target);
-    if (trigger?.matches(&quot;:focus-visible&quot;)) {
-      requestOpen(trigger, true);
-    }
-  };
-  const handleKeyDown = (event) =&gt; {
-    if (event.key === &quot;Escape&quot;) {
-      closeTooltip();
-    }
-  };
-  const handleContextMenu = (event) =&gt; {
-    const trigger = getTrigger(event.target);
-    if (activeTrigger === trigger || pendingTrigger === trigger) {
-      closeTooltip();
-    }
-  };
-  const destroy = () =&gt; {
-    closeTooltip(false);
-    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
-    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
-    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
-    document.removeEventListener(&quot;focusout&quot;, handleLeave);
-    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
-    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
-    tooltip = null;
-  };
-
-  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
-  document.addEventListener(&quot;pointerout&quot;, handleLeave);
-  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
-  document.addEventListener(&quot;focusout&quot;, handleLeave);
-  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
-  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
-  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
-})();
-&lt;/script&gt;
-&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-(() =&gt; {
-  const initialize = () =&gt; {
-    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
-  };
-  if (globalThis.lucide != null) {
-    initialize();
-    return;
-  }
-  document
-    .getElementById(&quot;codex-visualization-lucide&quot;)
-    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
-})();
-&lt;/script&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-"></iframe>
-</body>
-</html>
 
