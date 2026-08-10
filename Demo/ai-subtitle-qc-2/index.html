@@ -223,6 +223,88 @@
     #dv-real-qc-prototype .sourceText,
     #dv-real-qc-prototype .targetText { color: var(--text-primary); font-size: 16px; font-weight: 500; line-height: 1.8; word-break: break-word; }
     #dv-real-qc-prototype .targetText { color: rgba(255,255,255,.86); direction: rtl; text-align: right; }
+    #dv-real-qc-prototype .voiceBatchBar {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 12px 0 18px;
+      background: #242424;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .voiceBatchText { display: flex; align-items: center; gap: 12px; min-width: 0; font-size: 13px; }
+    #dv-real-qc-prototype .voiceBatchText strong { color: var(--text-primary); font-weight: 500; }
+    #dv-real-qc-prototype .voiceBatchLink { border: 0; background: transparent; color: var(--text-primary); cursor: pointer; padding: 0; font-size: 13px; }
+    #dv-real-qc-prototype .voiceBatchActions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    #dv-real-qc-prototype .voiceBatchActions .btnGhost,
+    #dv-real-qc-prototype .voiceBatchActions .btnPrimary { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
+    #dv-real-qc-prototype .subtitleItem.hasVoice { min-height: 286px; cursor: default; }
+    #dv-real-qc-prototype .voiceResultPanel {
+      grid-column: 4 / 6;
+      margin: 0 24px 18px 16px;
+      padding: 12px 14px;
+      border: 1px solid rgba(230,220,0,.9);
+      border-radius: 6px;
+      background: #202020;
+      display: grid;
+      gap: 10px;
+      position: relative;
+    }
+    #dv-real-qc-prototype .voiceResultHeader { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    #dv-real-qc-prototype .voiceResultTitle { display: inline-flex; align-items: center; gap: 6px; color: #fff200; font-size: 13px; font-weight: 600; }
+    #dv-real-qc-prototype .voiceResultTitle:before { content: "◆"; font-size: 9px; }
+    #dv-real-qc-prototype .voiceCompare { border: 0; background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 12px; padding: 0; }
+    #dv-real-qc-prototype .voiceScope { display: inline-flex; align-items: center; gap: 6px; color: var(--text-tertiary); font-size: 12px; }
+    #dv-real-qc-prototype .candidateGrid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+    #dv-real-qc-prototype .candidateCard {
+      min-width: 0;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 6px;
+      background: #282828;
+      padding: 10px;
+      display: grid;
+      gap: 9px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      position: relative;
+    }
+    #dv-real-qc-prototype .candidateCard:hover { background: #303030; border-color: rgba(255,255,255,.22); }
+    #dv-real-qc-prototype .candidateCard.selected { border-color: #6c39e6; box-shadow: inset 0 0 0 1px #6c39e6; background: #2a2436; }
+    #dv-real-qc-prototype .candidateCard.loading { opacity: .72; cursor: wait; }
+    #dv-real-qc-prototype .candidateCard.failed { border-color: rgba(255,77,79,.6); background: rgba(255,77,79,.08); }
+    #dv-real-qc-prototype .candidateTop { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    #dv-real-qc-prototype .candidateName { color: var(--text-primary); font-size: 13px; font-weight: 600; }
+    #dv-real-qc-prototype .candidateSelected { color: #8b5cf6; font-size: 13px; font-weight: 700; opacity: 0; }
+    #dv-real-qc-prototype .candidateCard.selected .candidateSelected { opacity: 1; }
+    #dv-real-qc-prototype .audioLine { display: grid; grid-template-columns: 26px minmax(0,1fr); gap: 8px; align-items: center; }
+    #dv-real-qc-prototype .playButton {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.16);
+      background: #1f1f1f;
+      color: #fff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      line-height: 1;
+    }
+    #dv-real-qc-prototype .audioBar { min-width: 0; height: 6px; border-radius: 999px; background: #444; overflow: hidden; }
+    #dv-real-qc-prototype .audioBar span { display: block; height: 100%; width: var(--audio-progress, 42%); background: #777; }
+    #dv-real-qc-prototype .candidateMeta { display: flex; justify-content: space-between; gap: 8px; color: var(--text-tertiary); font-size: 12px; font-variant-numeric: tabular-nums; }
+    #dv-real-qc-prototype .candidateMeta .ok { color: #52c41a; }
+    #dv-real-qc-prototype .candidateMeta .warn { color: #ff4d4f; }
+    #dv-real-qc-prototype .candidateActions { display: flex; gap: 8px; flex-wrap: wrap; }
+    #dv-real-qc-prototype .candidateActions .btnGhost,
+    #dv-real-qc-prototype .candidateActions .btnPrimary { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
+    #dv-real-qc-prototype .candidateFailText { color: #ff7875; font-size: 12px; min-height: 32px; display: flex; align-items: center; }
+    #dv-real-qc-prototype .voiceRowActions { display: flex; justify-content: flex-end; gap: 8px; }
+    #dv-real-qc-prototype .voiceRowActions .btnGhost { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
     #dv-real-qc-prototype mark { background: rgba(250,173,20,.32); color: #ffe7a3; padding: 0 3px; }
     #dv-real-qc-prototype .timelineContainer { flex-shrink: 0; background: #111; border-top: 1px solid #222; display: flex; flex-direction: column; height: 145px; user-select: none; }
     #dv-real-qc-prototype .timelineBody { flex: 1; display: flex; overflow: hidden; position: relative; }
@@ -302,6 +384,10 @@
       #dv-real-qc-prototype .qcPanel { min-height: 360px; border-left: 0; border-top: 1px solid var(--border-color); }
       #dv-real-qc-prototype .editorContainer.qcCollapsed .qcPanel { min-height: 42px; }
       #dv-real-qc-prototype .qcRail { writing-mode: horizontal-tb; flex-direction: row; justify-content: center; padding: 8px; }
+      #dv-real-qc-prototype .voiceBatchBar { grid-template-columns: 1fr; padding: 8px 12px; }
+      #dv-real-qc-prototype .voiceBatchActions { justify-content: flex-start; }
+      #dv-real-qc-prototype .voiceResultPanel { grid-column: 1 / -1; margin: 0 12px 16px; }
+      #dv-real-qc-prototype .candidateGrid { grid-template-columns: 1fr; }
     }
   </style>
   <div class="editorContainer" id="dvContainer">
@@ -329,6 +415,10 @@
         <div class="subtitleWithQc">
           <div class="subtitleListContainer">
             <div class="header"><div class="headerSpeaker">说话人</div><div class="headerTime">时间</div><div class="headerGroup">语义组</div><div class="headerLeft">英语</div><div class="headerRight">阿拉伯语</div></div>
+            <div class="voiceBatchBar" id="voiceBatchBar">
+              <div class="voiceBatchText"><span>已选择 <strong id="voiceSelectedCount">2</strong> 个候选</span><button type="button" class="voiceBatchLink" id="voiceSelectAll">全选</button><button type="button" class="voiceBatchLink" id="voiceClearAll">清空</button></div>
+              <div class="voiceBatchActions"><button type="button" class="btnGhost" id="voiceBatchRegenerate">批量换一个</button><button type="button" class="btnGhost" id="voiceBatchRefresh">批量换一批</button><button type="button" class="btnPrimary" id="voiceBatchAccept">批量采用</button><button type="button" class="btnGhost" id="voiceBatchExit">退出</button></div>
+            </div>
             <div class="subtitleListWrapper"><div class="subtitleList" id="subtitleRows"></div></div>
           </div>
           <aside class="qcPanel" aria-label="质检提醒面板">
@@ -360,14 +450,16 @@
       const toast = root.querySelector('#toast');
       const videoTimeEl = root.querySelector('#videoTime');
       const progressEl = root.querySelector('#videoProgress');
+      const voiceSelectedCountEl = root.querySelector('#voiceSelectedCount');
       let selectedGroup = '字幕文本规范';
       let activeIssue = 'q1';
       let activeSegment = 's1';
       let pending = null;
+      let voiceSeed = 4;
       const segments = [
-        { id:'s1', speaker:'Elsie', cls:'third', group:'1', time:'00:00:02,240 - 00:00:03,600', source:'Life is like a game of chess', target:'الحياة مثل لعبة الشطرنج' },
-        { id:'s2', speaker:'Elsie', cls:'third', group:'1', time:'00:00:04,679 - 00:00:06,120', source:'and we are both players in it', target:'ونحن اللاعبان فيها' },
-        { id:'s3', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:07,040 - 00:00:08,278', source:'If we leave the past behind,', target:'إذا تركنا الماضي خلفنا،' },
+        { id:'s1', speaker:'Elsie', cls:'third', group:'1', time:'00:00:02,240 - 00:00:03,600', source:'Life is like a game of chess', target:'الحياة مثل لعبة الشطرنج', voice:{ checked:true, selected:0, old:'原音频 00:00:01,360', candidates:[{name:'候选 1',dur:'00:00:01,420',speed:'1.00x',cps:'CPS 4.7',status:'ready',progress:'58%'},{name:'候选 2',dur:'00:00:01,510',speed:'1.08x',cps:'CPS 4.5',status:'ready',progress:'44%'},{name:'候选 3',dur:'00:00:01,390',speed:'0.96x',cps:'CPS 5.1',status:'ready',progress:'66%'}]} },
+        { id:'s2', speaker:'Elsie', cls:'third', group:'1', time:'00:00:04,679 - 00:00:06,120', source:'and we are both players in it', target:'ونحن اللاعبان فيها', voice:{ checked:true, selected:0, old:'原音频 00:00:01,441', candidates:[{name:'候选 1',dur:'00:00:01,510',speed:'1.00x',cps:'CPS 4.3',status:'ready',progress:'52%'},{name:'候选 2',dur:'00:00:01,630',speed:'1.12x',cps:'CPS 4.0',status:'ready',progress:'49%'},{name:'候选 3',dur:'--',speed:'--',cps:'生成失败',status:'failed',progress:'0%'}]} },
+        { id:'s3', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:07,040 - 00:00:08,278', source:'If we leave the past behind,', target:'إذا تركنا الماضي خلفنا،', voice:{ checked:false, selected:0, old:'原音频 00:00:01,238', candidates:[{name:'候选 1',dur:'00:00:01,320',speed:'1.00x',cps:'CPS 4.8',status:'ready',progress:'42%'},{name:'候选 2',dur:'00:00:01,280',speed:'0.98x',cps:'CPS 5.0',status:'ready',progress:'40%'},{name:'候选 3',dur:'00:00:01,470',speed:'1.16x',cps:'CPS 4.2',status:'ready',progress:'61%'}]} },
         { id:'s4', speaker:'Aidan Rowe', cls:'alt', group:'3', time:'00:00:13,519 - 00:00:15,198', source:'W-what... what do you want?!', target:'ماذا تريد؟' },
         { id:'s5', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:18,399 - 00:00:18,879', source:'elsie.', target:'إلسي.' },
         { id:'s6', speaker:'Aidan Rowe', cls:'alt', group:'3', time:'00:00:22,920 - 00:00:24,879', source:'You went to His Majesty to complain', target:'ذهبت إلى جلالته لتشتكي' }
@@ -405,14 +497,64 @@
         videoTimeEl.textContent = seg.time.split(' - ')[0];
         progressEl.style.setProperty('--progress-value', Math.min(86, 10 + Number(segNo(segId)) * 12) + '%');
       }
+      function voiceRows(){ return segments.filter(s => s.voice); }
+      function selectedVoiceRows(){ return voiceRows().filter(s => s.voice.checked); }
+      function updateVoiceBatch(){
+        const count = selectedVoiceRows().length;
+        voiceSelectedCountEl.textContent = count;
+        root.querySelector('#voiceBatchRegenerate').disabled = count === 0;
+        root.querySelector('#voiceBatchRefresh').disabled = count === 0;
+        root.querySelector('#voiceBatchAccept').disabled = count === 0;
+      }
+      function candidateHtml(seg, candidate, index){
+        const selected = seg.voice.selected === index;
+        const failed = candidate.status === 'failed';
+        const loading = candidate.status === 'loading';
+        const metaClass = candidate.cps && candidate.cps.indexOf('CPS') === 0 ? (candidate.cps.includes('5.1') ? 'warn' : 'ok') : 'warn';
+        const body = failed
+          ? '<div class="candidateFailText">生成失败，可重试或换一个</div>'
+          : '<div class="audioLine"><button type="button" class="playButton" data-play="'+seg.id+'" aria-label="播放 '+candidate.name+'">▶</button><div class="audioBar" style="--audio-progress:'+esc(candidate.progress || '45%')+'"><span></span></div></div><div class="candidateMeta"><span>'+esc(candidate.dur)+'</span><span>'+esc(candidate.speed)+'</span><span class="'+metaClass+'">'+esc(candidate.cps)+'</span></div>';
+        return '<article class="candidateCard '+(selected?'selected ':'')+(failed?'failed ':'')+(loading?'loading':'')+'" data-seg="'+seg.id+'" data-candidate="'+index+'"><div class="candidateTop"><span class="candidateName">'+esc(candidate.name)+'</span><span class="candidateSelected">✓</span></div>'+body+'<div class="candidateActions"><button type="button" class="btnPrimary voiceAccept" '+(failed||loading?'disabled':'')+'>采用</button><button type="button" class="btnGhost voiceRegenerate" '+(loading?'disabled':'')+'>'+(failed?'重试':'换一个')+'</button></div></article>';
+      }
+      function renderVoicePanel(seg){
+        if(!seg.voice) return '';
+        return '<div class="voiceResultPanel" data-voice-panel="'+seg.id+'"><div class="voiceResultHeader"><div class="voiceResultTitle">新音频结果</div><label class="voiceScope"><input type="checkbox" class="voiceScopeCheck" '+(seg.voice.checked?'checked':'')+'> 纳入批量操作</label></div><div class="candidateGrid">'+seg.voice.candidates.map((c,i)=>candidateHtml(seg,c,i)).join('')+'</div><div class="voiceRowActions"><button type="button" class="voiceCompare">'+esc(seg.voice.old)+'｜播放原音频</button><button type="button" class="btnGhost voiceRefreshGroup" data-seg="'+seg.id+'">换一批</button><button type="button" class="btnGhost voiceCancelGroup" data-seg="'+seg.id+'">取消</button></div></div>';
+      }
+      function makeCandidate(index){
+        const n = voiceSeed++;
+        const speeds = ['0.98x','1.00x','1.08x','1.14x'];
+        const cps = ['CPS 4.2','CPS 4.5','CPS 4.7','CPS 5.0'];
+        return { name:'候选 '+(index+1), dur:'00:00:01,'+(300+n*37).toString().slice(-3), speed:speeds[n % speeds.length], cps:cps[n % cps.length], status:'ready', progress:(38 + (n * 7) % 34)+'%' };
+      }
+      function regenerateCandidate(seg, index){
+        const item = seg.voice.candidates[index];
+        item.status = 'loading';
+        renderRows(activeSegment);
+        setTimeout(()=>{ seg.voice.candidates[index] = makeCandidate(index); seg.voice.selected = index; renderRows(activeSegment); showToast('已换出新的候选 '+(index+1)); }, 650);
+      }
+      function refreshCandidates(seg){
+        seg.voice.candidates = seg.voice.candidates.map((_, i) => ({...makeCandidate(i), status:'loading'}));
+        seg.voice.selected = 0;
+        renderRows(activeSegment);
+        setTimeout(()=>{ seg.voice.candidates = seg.voice.candidates.map((_, i) => makeCandidate(i)); seg.voice.selected = 0; renderRows(activeSegment); showToast('已重新生成 3 个候选'); }, 720);
+      }
+      function acceptVoice(seg){
+        const candidate = seg.voice.candidates[seg.voice.selected];
+        if(!candidate || candidate.status !== 'ready'){ showToast('当前候选不可采用'); return; }
+        seg.voice = null;
+        renderRows(activeSegment);
+        updateVoiceBatch();
+        showToast('已采用当前候选音频');
+      }
       function renderRows(active){
         rowsEl.innerHTML = segments.map(s => {
           const item = qc.find(q => q.seg === s.id);
           const source = esc(s.source);
           const times = s.time.split(' - ');
           const errorBadge = item ? '<span class="errorBadge"><span class="errorIcon">!</span><span>'+esc(item.group === '原文错误' ? '原文错误' : '文本规范')+'</span></span>' : '';
-          return '<div class="subtitleItem '+(active===s.id?'active ':'')+(item?'hasError':'')+'" data-seg="'+s.id+'">'+errorBadge+'<div class="speakerCell"><span class="speakerBadge '+s.cls+'">'+esc(s.speaker)+'</span></div><div class="timeCell"><span class="timeLine">'+esc(times[0]||'')+'</span><span class="timeLine">'+esc(times[1]||'')+'</span></div><div class="groupCell">'+esc(s.group)+'</div><div class="textCell sourceCell"><span class="segmentIndex">'+segNo(s.id)+'</span><div class="sourceText">'+source+'</div></div><div class="textCell"><div class="targetText">'+esc(s.target)+'</div></div></div>';
+          return '<div class="subtitleItem '+(active===s.id?'active ':'')+(item?'hasError ':'')+(s.voice?'hasVoice':'')+'" data-seg="'+s.id+'">'+errorBadge+'<div class="speakerCell"><span class="speakerBadge '+s.cls+'">'+esc(s.speaker)+'</span></div><div class="timeCell"><span class="timeLine">'+esc(times[0]||'')+'</span><span class="timeLine">'+esc(times[1]||'')+'</span></div><div class="groupCell">'+esc(s.group)+'</div><div class="textCell sourceCell"><span class="segmentIndex">'+segNo(s.id)+'</span><div class="sourceText">'+source+'</div></div><div class="textCell"><div class="targetText">'+esc(s.target)+'</div></div>'+renderVoicePanel(s)+'</div>';
         }).join('');
+        updateVoiceBatch();
       }
       function renderTypes(){ const c=counts(); if(!c.some(x=>x[0]===selectedGroup)) selectedGroup=c[0]?.[0]||''; totalEl.textContent='共 '+qc.length+' 处'; railEl.textContent=qc.length+'处'; typeEl.innerHTML=c.map(([group,n])=>{ const active=group===selectedGroup; const children=active?'<div class="typeChildren">'+qc.filter(i=>i.group===group).map(i=>'<button type="button" class="typeChild '+(i.id===activeIssue?'active ':'')+(i.checked?'checked':'')+'" data-jump="'+i.id+'"><span>第 '+segNo(i.seg)+' 段</span><span class="typeChildDetail">｜'+esc(i.detail)+'</span><span class="typeChildCheck">✓</span></button>').join('')+'</div>':''; return '<div><button type="button" class="typeButton '+(active?'active':'')+'" data-group="'+esc(group)+'"><span class="typeName">'+esc(group)+'</span><span class="typeCount">'+n+'</span><span class="typeArrow">'+(active?'▼':'▶')+'</span></button>'+children+'</div>'; }).join(''); }
       function renderQc(){ const items=qc.filter(i=>i.group===selectedGroup); const sel=qc.filter(i=>i.checked).length; root.querySelector('#batchAccept').disabled=sel===0; root.querySelector('#batchIgnore').disabled=sel===0; root.querySelector('#acceptAll').disabled=qc.length===0; listEl.innerHTML=items.length?items.map(i=>{ const d=diffPair(i.before,i.after); return '<article class="qcCard '+(i.id===activeIssue?'active':'')+'" data-qc="'+i.id+'"><div class="qcCardHeader"><label><input type="checkbox" class="qcCheck" '+(i.checked?'checked':'')+'> <span class="qcCardTitle">'+esc(i.title)+'</span></label></div><div class="qcCompare"><div><strong>当前</strong>'+d.before+'</div><div><strong>建议</strong>'+d.after+'</div><div class="qcNote">'+esc(i.note)+'</div></div><div class="qcActions"><button type="button" class="btnGhost qcIgnore">忽略</button><button type="button" class="btnPrimary qcAccept">采纳</button></div></article>'; }).join(''):'<article class="qcCard"><div class="qcNote">当前分类暂无质检提醒</div></article>'; }
@@ -422,7 +564,50 @@
       function remove(ids, mode){ ids.forEach(id=>{ const item=qc.find(q=>q.id===id); if(mode==='accept'&&item){ const seg=segments.find(s=>s.id===item.seg); if(seg&&seg.source===item.before) seg.source=item.after; }}); qc=qc.filter(q=>!ids.includes(q.id)); if(!qc.find(q=>q.id===activeIssue)) activeIssue=qc[0]?.id||''; if(activeIssue){ const item=qc.find(q=>q.id===activeIssue); selectedGroup=item.group; activeSegment=item.seg; } render(); showToast(mode==='accept'?'已采纳质检建议':'已忽略质检提醒'); }
       function openModal(title,text,confirm,fn){ root.querySelector('#modalTitle').textContent=title; root.querySelector('#modalText').textContent=text; root.querySelector('#modalConfirm').textContent=confirm; pending=fn; modal.style.display='flex'; }
       function closeModal(){ pending=null; modal.style.display='none'; }
-      root.addEventListener('click', e=>{ const jump=e.target.closest('[data-jump]'); if(jump){ jumpToIssue(jump.dataset.jump); return; } const group=e.target.closest('[data-group]'); if(group){ selectedGroup=group.dataset.group; const first=qc.find(i=>i.group===selectedGroup); if(first) activeIssue=first.id; render(); return; } const row=e.target.closest('.subtitleItem'); if(row){ activeSegment=row.dataset.seg; updateVideo(activeSegment); renderRows(activeSegment); return; } const card=e.target.closest('.qcCard'); if(e.target.classList.contains('qcCheck')&&card){ const item=qc.find(q=>q.id===card.dataset.qc); if(item)item.checked=e.target.checked; renderTypes(); renderQc(); return; } if(e.target.classList.contains('qcAccept')&&card){ remove([card.dataset.qc],'accept'); return; } if(e.target.classList.contains('qcIgnore')&&card){ remove([card.dataset.qc],'ignore'); return; } if(card && card.dataset.qc && !e.target.closest('button')){ jumpToIssue(card.dataset.qc); return; } if(e.target.id==='batchAccept'){ remove(qc.filter(i=>i.checked).map(i=>i.id),'accept'); return; } if(e.target.id==='batchIgnore'){ const ids=qc.filter(i=>i.checked).map(i=>i.id); openModal('确认忽略','将忽略已选择的 '+ids.length+' 条质检提醒，忽略后本次不再展示。','确认忽略',()=>remove(ids,'ignore')); return; } if(e.target.id==='acceptAll'){ const ids=qc.map(i=>i.id); openModal('该集全部采纳','将采纳当前集全部 '+ids.length+' 条质检建议，并修改对应原字幕文本。请确认后继续。','确认采纳',()=>remove(ids,'accept')); return; } if(e.target.id==='collapseQc'){ container.classList.add('qcCollapsed'); return; } if(e.target.id==='expandQc'){ container.classList.remove('qcCollapsed'); return; } });
+      root.addEventListener('click', e=>{
+        const jump=e.target.closest('[data-jump]');
+        if(jump){ jumpToIssue(jump.dataset.jump); return; }
+        const group=e.target.closest('[data-group]');
+        if(group){ selectedGroup=group.dataset.group; const first=qc.find(i=>i.group===selectedGroup); if(first) activeIssue=first.id; render(); return; }
+        const candidate=e.target.closest('.candidateCard');
+        if(candidate){
+          const seg=segments.find(s=>s.id===candidate.dataset.seg);
+          const index=Number(candidate.dataset.candidate);
+          if(!seg||!seg.voice) return;
+          if(e.target.classList.contains('voiceAccept')){ seg.voice.selected=index; acceptVoice(seg); return; }
+          if(e.target.classList.contains('voiceRegenerate')){ seg.voice.selected=index; regenerateCandidate(seg,index); return; }
+          if(e.target.closest('.playButton')){ showToast('播放 '+seg.voice.candidates[index].name); return; }
+          if(seg.voice.candidates[index].status==='ready'){ seg.voice.selected=index; renderRows(activeSegment); }
+          return;
+        }
+        const voicePanel=e.target.closest('.voiceResultPanel');
+        if(voicePanel){
+          const seg=segments.find(s=>s.id===voicePanel.dataset.voicePanel);
+          if(!seg||!seg.voice) return;
+          if(e.target.classList.contains('voiceScopeCheck')){ seg.voice.checked=e.target.checked; updateVoiceBatch(); return; }
+          if(e.target.classList.contains('voiceRefreshGroup')){ refreshCandidates(seg); return; }
+          if(e.target.classList.contains('voiceCancelGroup')){ seg.voice=null; renderRows(activeSegment); showToast('已取消该段候选结果'); return; }
+          if(e.target.classList.contains('voiceCompare')){ showToast('播放原音频对比'); return; }
+        }
+        if(e.target.id==='voiceSelectAll'){ voiceRows().forEach(s=>s.voice.checked=true); renderRows(activeSegment); return; }
+        if(e.target.id==='voiceClearAll'){ voiceRows().forEach(s=>s.voice.checked=false); renderRows(activeSegment); return; }
+        if(e.target.id==='voiceBatchRegenerate'){ selectedVoiceRows().forEach(s=>regenerateCandidate(s,s.voice.selected)); return; }
+        if(e.target.id==='voiceBatchRefresh'){ selectedVoiceRows().forEach(s=>refreshCandidates(s)); return; }
+        if(e.target.id==='voiceBatchAccept'){ const rows=selectedVoiceRows().filter(s=>s.voice.candidates[s.voice.selected]?.status==='ready'); rows.forEach(s=>s.voice=null); renderRows(activeSegment); showToast('已批量采用 '+rows.length+' 个候选音频'); return; }
+        if(e.target.id==='voiceBatchExit'){ voiceRows().forEach(s=>s.voice=null); renderRows(activeSegment); showToast('已退出批量抽卡结果'); return; }
+        const row=e.target.closest('.subtitleItem');
+        if(row){ activeSegment=row.dataset.seg; updateVideo(activeSegment); renderRows(activeSegment); return; }
+        const card=e.target.closest('.qcCard');
+        if(e.target.classList.contains('qcCheck')&&card){ const item=qc.find(q=>q.id===card.dataset.qc); if(item)item.checked=e.target.checked; renderTypes(); renderQc(); return; }
+        if(e.target.classList.contains('qcAccept')&&card){ remove([card.dataset.qc],'accept'); return; }
+        if(e.target.classList.contains('qcIgnore')&&card){ remove([card.dataset.qc],'ignore'); return; }
+        if(card && card.dataset.qc && !e.target.closest('button')){ jumpToIssue(card.dataset.qc); return; }
+        if(e.target.id==='batchAccept'){ remove(qc.filter(i=>i.checked).map(i=>i.id),'accept'); return; }
+        if(e.target.id==='batchIgnore'){ const ids=qc.filter(i=>i.checked).map(i=>i.id); openModal('确认忽略','将忽略已选择的 '+ids.length+' 条质检提醒，忽略后本次不再展示。','确认忽略',()=>remove(ids,'ignore')); return; }
+        if(e.target.id==='acceptAll'){ const ids=qc.map(i=>i.id); openModal('该集全部采纳','将采纳当前集全部 '+ids.length+' 条质检建议，并修改对应原字幕文本。请确认后继续。','确认采纳',()=>remove(ids,'accept')); return; }
+        if(e.target.id==='collapseQc'){ container.classList.add('qcCollapsed'); return; }
+        if(e.target.id==='expandQc'){ container.classList.remove('qcCollapsed'); return; }
+      });
       root.querySelector('#modalCancel').addEventListener('click',closeModal); root.querySelector('#modalConfirm').addEventListener('click',()=>{ const fn=pending; closeModal(); if(fn)fn(); }); updateVideo(activeSegment); render();
     })();
   </script>
