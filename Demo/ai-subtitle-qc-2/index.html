@@ -81,6 +81,155 @@
     #dv-real-qc-prototype .metaItem { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; opacity: .62; white-space: nowrap; }
     #dv-real-qc-prototype .metaItemExtract { color: #69c0ff; }
     #dv-real-qc-prototype .metaDivider { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,.2); }
+    #dv-real-qc-prototype .episodeNav {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+      margin-left: 2px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 6px;
+      background: rgba(255,255,255,.04);
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .episodeStep,
+    #dv-real-qc-prototype .episodeSelect {
+      height: 30px;
+      border: 0;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      line-height: 30px;
+    }
+    #dv-real-qc-prototype .episodeStep {
+      width: 30px;
+      padding: 0;
+      font-size: 18px;
+      color: rgba(255,255,255,.66);
+    }
+    #dv-real-qc-prototype .episodeStep:hover,
+    #dv-real-qc-prototype .episodeSelect:hover { color: #fff; background: rgba(255,255,255,.06); }
+    #dv-real-qc-prototype .episodeStep[disabled] { color: var(--text-disabled); cursor: not-allowed; background: transparent; }
+    #dv-real-qc-prototype .episodeSelect {
+      gap: 6px;
+      min-width: 104px;
+      padding: 0 10px;
+      border-left: 1px solid rgba(255,255,255,.12);
+      border-right: 1px solid rgba(255,255,255,.12);
+      color: var(--text-primary);
+    }
+    #dv-real-qc-prototype .episodeSelect .episodeWarn {
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: 8px;
+      background: rgba(255,77,79,.16);
+      color: #ff7875;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 16px;
+      text-align: center;
+    }
+    #dv-real-qc-prototype .episodeArrow { color: var(--text-tertiary); font-size: 10px; }
+    #dv-real-qc-prototype .episodePopover {
+      position: absolute;
+      left: 0;
+      top: 38px;
+      width: 432px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      box-shadow: 0 8px 24px rgba(0,0,0,.56);
+      display: none;
+      z-index: 20;
+    }
+    #dv-real-qc-prototype .episodeNav.open .episodePopover { display: block; }
+    #dv-real-qc-prototype .episodePopoverHeader {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      color: var(--text-tertiary);
+      font-size: 12px;
+    }
+    #dv-real-qc-prototype .episodeGrid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
+      max-height: 252px;
+      overflow-y: auto;
+      padding: 2px 4px 2px 0;
+      overscroll-behavior: contain;
+    }
+    #dv-real-qc-prototype .episodeGrid::-webkit-scrollbar { width: 8px; }
+    #dv-real-qc-prototype .episodeGrid::-webkit-scrollbar-track { background: #111; border-radius: 4px; }
+    #dv-real-qc-prototype .episodeGrid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+    #dv-real-qc-prototype .episodeTile {
+      position: relative;
+      height: 30px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 6px;
+      background: #202020;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 28px;
+      text-align: center;
+    }
+    #dv-real-qc-prototype .episodeTile:hover { color: #fff; background: #2a2a2a; border-color: rgba(255,255,255,.24); }
+    #dv-real-qc-prototype .episodeTile.stageTranslate { border-color: rgba(250,173,20,.62); color: #ffd666; }
+    #dv-real-qc-prototype .episodeTile.stageDubbing { border-color: rgba(105,192,255,.58); color: #9fd8ff; }
+    #dv-real-qc-prototype .episodeTile.current {
+      color: #fff;
+      border-color: #6c39e6;
+      background: rgba(98,36,255,.24);
+      box-shadow: inset 0 0 0 1px rgba(108,57,230,.55);
+    }
+    #dv-real-qc-prototype .episodeTile.processing,
+    #dv-real-qc-prototype .episodeTile.disabled {
+      color: var(--text-disabled);
+      cursor: not-allowed;
+      background: #181818;
+    }
+    #dv-real-qc-prototype .episodeTile.failed { border-color: rgba(255,77,79,.48); color: #ff9c99; }
+    #dv-real-qc-prototype .episodeTile.crossStage { box-shadow: inset 0 0 0 1px rgba(250,173,20,.16); }
+    #dv-real-qc-prototype .episodeIssue {
+      position: absolute;
+      right: -5px;
+      top: -5px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: 8px;
+      background: #ff4d4f;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 16px;
+    }
+    #dv-real-qc-prototype .episodeLegend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      padding-top: 8px;
+      color: var(--text-tertiary);
+      font-size: 12px;
+    }
+    #dv-real-qc-prototype .episodeLegend span:before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: 1px;
+      background: currentColor;
+    }
     #dv-real-qc-prototype .navRight { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
     #dv-real-qc-prototype .btnText,
     #dv-real-qc-prototype .btnGhost,
@@ -186,6 +335,10 @@
     #dv-real-qc-prototype .headerGroup { grid-area: group; justify-content: center; }
     #dv-real-qc-prototype .headerLeft { grid-area: source; padding: 6px 16px; gap: 8px; }
     #dv-real-qc-prototype .headerRight { grid-area: target; padding: 6px 16px; gap: 8px; }
+    #dv-real-qc-prototype .headerRight { justify-content: space-between; }
+    #dv-real-qc-prototype .headerTitle { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #dv-real-qc-prototype .headerActions { display: flex; gap: 8px; flex-shrink: 0; }
+    #dv-real-qc-prototype .headerActions .btnGhost { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
     #dv-real-qc-prototype .subtitleListWrapper { flex: 1; position: relative; overflow: hidden; }
     #dv-real-qc-prototype .subtitleList { height: 100%; overflow-x: hidden; overflow-y: auto; padding: 12px 0 24px; background: var(--bg-container); }
     #dv-real-qc-prototype .subtitleList::-webkit-scrollbar { width: 8px; }
@@ -203,7 +356,126 @@
     #dv-real-qc-prototype .subtitleItem:hover { background: #181818; }
     #dv-real-qc-prototype .subtitleItem.active { background: #1b1724; box-shadow: inset 3px 0 0 #8b5cf6; }
     #dv-real-qc-prototype .subtitleItem.hasError { background: rgba(255,77,79,.06); box-shadow: inset 3px 0 0 #ff4d4f; }
+    #dv-real-qc-prototype .insertArea {
+      height: 0;
+      position: relative;
+      z-index: 8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s ease;
+    }
+    #dv-real-qc-prototype .insertArea:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -9px;
+      height: 18px;
+      pointer-events: auto;
+    }
+    #dv-real-qc-prototype .insertArea:hover,
+    #dv-real-qc-prototype .insertArea:focus-within {
+      opacity: 1;
+    }
+    #dv-real-qc-prototype .insertBtn {
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 8px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 4px;
+      background: #242424;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      cursor: pointer;
+      pointer-events: auto;
+      position: relative;
+    }
+    #dv-real-qc-prototype .insertBtn:hover {
+      border-color: #f59e0b;
+      color: #f59e0b;
+      font-weight: 600;
+      background: #26221b;
+    }
+    #dv-real-qc-prototype .insertBtn:before,
+    #dv-real-qc-prototype .insertBtn:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 100px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.2));
+      pointer-events: none;
+    }
+    #dv-real-qc-prototype .insertBtn:before { right: 100%; transform: rotate(180deg); }
+    #dv-real-qc-prototype .insertBtn:after { left: 100%; }
+    #dv-real-qc-prototype .segmentToolbar {
+      grid-column: 1 / -1;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 12px;
+      background: #292929;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      color: var(--text-secondary);
+      cursor: default;
+    }
+    #dv-real-qc-prototype .segmentToolGroup { display: flex; align-items: center; gap: 0; min-width: 0; }
+    #dv-real-qc-prototype .segmentTool {
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.82);
+      padding: 0 10px;
+      cursor: pointer;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    #dv-real-qc-prototype .segmentTool:hover { color: #fff; background: rgba(255,255,255,.06); border-radius: 4px; }
+    #dv-real-qc-prototype .segmentTool + .segmentTool { border-left: 1px solid rgba(255,255,255,.18); }
+    #dv-real-qc-prototype .segmentToolIcon { color: rgba(255,255,255,.66); font-size: 14px; line-height: 1; }
+    #dv-real-qc-prototype .segmentDelete { width: 28px; height: 28px; padding: 0; justify-content: center; color: rgba(255,255,255,.55); border-left: 0 !important; }
+    #dv-real-qc-prototype .segmentMoreWrap { position: relative; }
+    #dv-real-qc-prototype .segmentMoreMenu {
+      position: absolute;
+      right: 0;
+      top: 30px;
+      width: 142px;
+      padding: 6px;
+      display: none;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.55);
+      z-index: 20;
+    }
+    #dv-real-qc-prototype .segmentMoreWrap:hover .segmentMoreMenu,
+    #dv-real-qc-prototype .segmentMoreWrap:focus-within .segmentMoreMenu { display: grid; gap: 2px; }
+    #dv-real-qc-prototype .segmentMoreItem {
+      height: 30px;
+      border: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--text-secondary);
+      text-align: left;
+      padding: 0 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    #dv-real-qc-prototype .segmentMoreItem:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .segmentMoreItem.danger:hover { color: #ff4d4f; background: rgba(255,77,79,.12); }
     #dv-real-qc-prototype .errorBadge { position: absolute; left: 0; top: 0; z-index: 5; display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px 2px 5px; background: rgba(220,38,38,.88); backdrop-filter: blur(4px); border-radius: 0 0 8px 0; font-size: 10px; color: #fff; font-weight: 700; letter-spacing: .2px; white-space: nowrap; line-height: 1.4; pointer-events: auto; }
+    #dv-real-qc-prototype .subtitleItem.active .errorBadge { top: 36px; }
+    #dv-real-qc-prototype .subtitleItem.batchSelectable.active .errorBadge { top: 0; }
     #dv-real-qc-prototype .errorIcon { width: 10px; height: 10px; border: 1px solid currentColor; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; line-height: 1; }
     #dv-real-qc-prototype .speakerCell { display: flex; justify-content: center; align-items: flex-start; padding: 20px 6px 6px; }
     #dv-real-qc-prototype .speakerBadge { max-width: 88px; display: inline-flex; align-items: center; gap: 5px; padding: 3px 6px; color: rgba(255,255,255,.9); font-size: 12px; font-weight: 500; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: transparent; border: 1px solid rgba(47,111,255,.42); border-radius: 4px; }
@@ -223,6 +495,7 @@
     #dv-real-qc-prototype .sourceText,
     #dv-real-qc-prototype .targetText { color: var(--text-primary); font-size: 16px; font-weight: 500; line-height: 1.8; word-break: break-word; }
     #dv-real-qc-prototype .targetText { color: rgba(255,255,255,.86); direction: rtl; text-align: right; }
+    #dv-real-qc-prototype .placeholderText { color: var(--text-tertiary); font-weight: 400; }
     #dv-real-qc-prototype .voiceBatchBar {
       display: grid;
       grid-template-columns: minmax(0,1fr) auto;
@@ -235,12 +508,33 @@
       color: var(--text-secondary);
       flex-shrink: 0;
     }
+    #dv-real-qc-prototype .voiceBatchBar.isHidden { display: none; }
     #dv-real-qc-prototype .voiceBatchText { display: flex; align-items: center; gap: 12px; min-width: 0; font-size: 13px; }
     #dv-real-qc-prototype .voiceBatchText strong { color: var(--text-primary); font-weight: 500; }
     #dv-real-qc-prototype .voiceBatchLink { border: 0; background: transparent; color: var(--text-primary); cursor: pointer; padding: 0; font-size: 13px; }
+    #dv-real-qc-prototype .voiceBatchDivider { width: 1px; height: 16px; background: rgba(255,255,255,.16); }
     #dv-real-qc-prototype .voiceBatchActions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
     #dv-real-qc-prototype .voiceBatchActions .btnGhost,
     #dv-real-qc-prototype .voiceBatchActions .btnPrimary { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
+    #dv-real-qc-prototype .barSpinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.2); border-top-color: #8b5cf6; border-radius: 50%; animation: dvSpin .8s linear infinite; }
+    @keyframes dvSpin { to { transform: rotate(360deg); } }
+    #dv-real-qc-prototype .batchRowCheck {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 6;
+      width: 22px;
+      height: 22px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      background: rgba(0,0,0,.24);
+      cursor: pointer;
+    }
+    #dv-real-qc-prototype .subtitleItem.batchSelectable .batchRowCheck { display: flex; }
+    #dv-real-qc-prototype .batchRowCheck input { width: 18px; height: 18px; accent-color: #6c39e6; cursor: pointer; }
     #dv-real-qc-prototype .subtitleItem.hasVoice { min-height: 286px; cursor: default; }
     #dv-real-qc-prototype .voiceResultPanel {
       grid-column: 4 / 6;
@@ -256,8 +550,14 @@
     #dv-real-qc-prototype .voiceResultHeader { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
     #dv-real-qc-prototype .voiceResultTitle { display: inline-flex; align-items: center; gap: 6px; color: #fff200; font-size: 13px; font-weight: 600; }
     #dv-real-qc-prototype .voiceResultTitle:before { content: "◆"; font-size: 9px; }
-    #dv-real-qc-prototype .voiceCompare { border: 0; background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 12px; padding: 0; }
+    #dv-real-qc-prototype .voiceCompare { display: inline-flex; align-items: center; gap: 8px; border: 0; background: transparent; color: var(--text-secondary); font-size: 12px; padding: 0; }
+    #dv-real-qc-prototype .voiceCompareLabel { color: var(--text-secondary); }
+    #dv-real-qc-prototype .voiceCompareTime { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+    #dv-real-qc-prototype .voiceComparePlay { height: 26px; line-height: 24px; padding: 0 10px; border-radius: 5px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: var(--text-primary); cursor: pointer; font-size: 12px; }
+    #dv-real-qc-prototype .voiceComparePlay:hover { background: rgba(255,255,255,.1); }
+    #dv-real-qc-prototype .voiceCurrentRow { display: flex; justify-content: flex-start; align-items: center; min-height: 28px; }
     #dv-real-qc-prototype .voiceScope { display: inline-flex; align-items: center; gap: 6px; color: var(--text-tertiary); font-size: 12px; }
+    #dv-real-qc-prototype .voiceScopeCheck { accent-color: #6c39e6; }
     #dv-real-qc-prototype .candidateGrid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
     #dv-real-qc-prototype .candidateCard {
       min-width: 0;
@@ -273,7 +573,7 @@
     }
     #dv-real-qc-prototype .candidateCard:hover { background: #303030; border-color: rgba(255,255,255,.22); }
     #dv-real-qc-prototype .candidateCard.selected { border-color: #6c39e6; box-shadow: inset 0 0 0 1px #6c39e6; background: #2a2436; }
-    #dv-real-qc-prototype .candidateCard.loading { opacity: .72; cursor: wait; }
+    #dv-real-qc-prototype .candidateCard.loading { cursor: wait; background: #202020; }
     #dv-real-qc-prototype .candidateCard.failed { border-color: rgba(255,77,79,.6); background: rgba(255,77,79,.08); }
     #dv-real-qc-prototype .candidateTop { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
     #dv-real-qc-prototype .candidateName { color: var(--text-primary); font-size: 13px; font-weight: 600; }
@@ -302,22 +602,93 @@
     #dv-real-qc-prototype .candidateActions { display: flex; gap: 8px; flex-wrap: wrap; }
     #dv-real-qc-prototype .candidateActions .btnGhost,
     #dv-real-qc-prototype .candidateActions .btnPrimary { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
+    #dv-real-qc-prototype .candidateCard.loading .candidateActions .btnGhost,
+    #dv-real-qc-prototype .candidateCard.loading .candidateActions .btnPrimary { opacity: .46; }
+    #dv-real-qc-prototype .voiceSkeleton { display: grid; gap: 8px; min-height: 52px; align-content: center; }
+    #dv-real-qc-prototype .voiceSkeletonBar { height: 16px; width: 100%; max-width: 640px; border-radius: 4px; background: linear-gradient(90deg, #3d3d3d 0%, #4a4a4a 50%, #3d3d3d 100%); background-size: 180% 100%; animation: dvVoicePulse 1.1s ease-in-out infinite; }
+    #dv-real-qc-prototype .voiceSkeletonText { color: rgba(255,255,255,.55); font-size: 12px; }
+    @keyframes dvVoicePulse { 0% { background-position: 100% 0; } 100% { background-position: -80% 0; } }
     #dv-real-qc-prototype .candidateFailText { color: #ff7875; font-size: 12px; min-height: 32px; display: flex; align-items: center; }
     #dv-real-qc-prototype .voiceRowActions { display: flex; justify-content: flex-end; gap: 8px; }
     #dv-real-qc-prototype .voiceRowActions .btnGhost { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
     #dv-real-qc-prototype mark { background: rgba(250,173,20,.32); color: #ffe7a3; padding: 0 3px; }
-    #dv-real-qc-prototype .timelineContainer { flex-shrink: 0; background: #111; border-top: 1px solid #222; display: flex; flex-direction: column; height: 145px; user-select: none; }
+    #dv-real-qc-prototype .timelineContainer { flex-shrink: 0; background: #111; border-top: 1px solid #222; display: flex; flex-direction: column; height: 250px; user-select: none; }
+    #dv-real-qc-prototype .timelineToolbar { height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: #181818; border-bottom: 1px solid #222; }
+    #dv-real-qc-prototype .timelineToolbarLeft,
+    #dv-real-qc-prototype .timelineToolbarRight { display: flex; align-items: center; gap: 8px; }
+    #dv-real-qc-prototype .timelineAddWrap { position: relative; }
+    #dv-real-qc-prototype .timelineToolBtn { width: 28px; height: 28px; border: 0; border-radius: 4px; background: transparent; color: rgba(255,255,255,.55); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; font-size: 14px; }
+    #dv-real-qc-prototype .timelineToolBtn:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .timelineToolBtn[disabled] { opacity: .3; cursor: not-allowed; background: transparent; }
+    #dv-real-qc-prototype .timelineActionBtn { width: auto; min-width: 64px; gap: 6px; padding: 0 10px; font-size: 13px; }
+    #dv-real-qc-prototype .timelineActionIcon { color: rgba(255,255,255,.66); font-size: 14px; line-height: 1; }
+    #dv-real-qc-prototype .timelineActionText { color: rgba(255,255,255,.72); }
+    #dv-real-qc-prototype .timelineToolBtn:hover .timelineActionText { color: #fff; }
+    #dv-real-qc-prototype .antDeleteIcon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: currentColor;
+      font-size: 14px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .antDeleteIcon svg {
+      width: 1em;
+      height: 1em;
+      fill: currentColor;
+      display: block;
+    }
+    #dv-real-qc-prototype .deleteLikeBtn:hover {
+      color: #ff4d4f !important;
+      background: rgba(255,77,79,.12) !important;
+    }
+    #dv-real-qc-prototype .timelineAddMenu { position: absolute; left: 0; bottom: 34px; width: 148px; padding: 6px; display: none; background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,.55); z-index: 15; }
+    #dv-real-qc-prototype .timelineAddWrap.open .timelineAddMenu { display: grid; gap: 2px; }
+    #dv-real-qc-prototype .timelineMenuItem { height: 30px; border: 0; border-radius: 4px; background: transparent; color: var(--text-secondary); text-align: left; padding: 0 8px; cursor: pointer; font-size: 13px; }
+    #dv-real-qc-prototype .timelineMenuItem:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .timelineZoomGroup { display: flex; align-items: center; gap: 6px; }
+    #dv-real-qc-prototype .timelineZoomSlider { width: 100px; height: 3px; border-radius: 999px; background: #333; position: relative; }
+    #dv-real-qc-prototype .timelineZoomSlider:before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 62%; border-radius: inherit; background: #fff; opacity: .82; }
+    #dv-real-qc-prototype .timelineZoomSlider:after { content: ""; position: absolute; left: 62%; top: 50%; width: 12px; height: 12px; transform: translate(-50%,-50%); border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,.16); }
     #dv-real-qc-prototype .timelineBody { flex: 1; display: flex; overflow: hidden; position: relative; }
-    #dv-real-qc-prototype .trackLabels { width: 44px; flex-shrink: 0; display: flex; flex-direction: column; border-right: 1px solid #222; background: #181818; padding-top: 36px; padding-bottom: 6px; gap: 6px; }
-    #dv-real-qc-prototype .trackLabel { height: 36px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+    #dv-real-qc-prototype .trackLabels { width: 44px; flex-shrink: 0; display: flex; flex-direction: column; border-right: 1px solid #222; background: #181818; padding-top: 48px; padding-bottom: 6px; gap: 6px; }
+    #dv-real-qc-prototype .trackLabel { height: 36px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: default; }
+    #dv-real-qc-prototype .trackLabelSmall { height: 24px; }
+    #dv-real-qc-prototype .trackLabelIcon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,.08); border-radius: 5px; position: relative; overflow: hidden; font-size: 11px; }
     #dv-real-qc-prototype .trackLabelSource { color: rgba(148,113,255,.8); }
     #dv-real-qc-prototype .trackLabelTranslated { color: rgba(110,231,183,.8); }
+    #dv-real-qc-prototype .trackLabelOriginal { color: rgba(105,192,255,.88); }
+    #dv-real-qc-prototype .trackLabelBgm { color: rgba(245,176,65,.85); height: 24px; }
+    #dv-real-qc-prototype .trackLabelIconBgm { width: 24px; height: 20px; border-radius: 4px; font-size: 10px; background: rgba(245,176,65,.12); }
     #dv-real-qc-prototype .timelineCanvas { flex: 1; overflow: hidden; position: relative; }
-    #dv-real-qc-prototype .ruler { height: 36px; border-bottom: 1px solid #222; color: rgba(255,255,255,.35); font-size: 10px; display: flex; align-items: end; gap: 48px; padding: 0 12px 6px; }
-    #dv-real-qc-prototype .track { position: relative; height: 36px; background: #1a1a1d; margin-bottom: 6px; }
-    #dv-real-qc-prototype .clip { position: absolute; top: 0; height: 100%; border-radius: 5px; display: flex; align-items: center; overflow: hidden; padding: 0 8px; color: rgba(255,255,255,.85); font-size: 11px; font-weight: 500; }
-    #dv-real-qc-prototype .clipSource { background: linear-gradient(135deg, rgba(86,34,220,.65), rgba(67,20,180,.55)); }
-    #dv-real-qc-prototype .clipTranslated { background: linear-gradient(135deg, rgba(16,185,129,.55), rgba(5,150,105,.45)); }
+    #dv-real-qc-prototype .timelineInnerCanvas { position: relative; height: 100%; min-width: 1120px; }
+    #dv-real-qc-prototype .ruler { height: 48px; border-bottom: 1px solid #222; color: rgba(255,255,255,.35); font-size: 10px; position: relative; }
+    #dv-real-qc-prototype .rulerTick { position: absolute; bottom: 7px; transform: translateX(-50%); }
+    #dv-real-qc-prototype .rulerTick:before { content: ""; position: absolute; left: 50%; bottom: 16px; width: 1px; height: 10px; background: rgba(255,255,255,.24); }
+    #dv-real-qc-prototype .rulerMinor { position: absolute; bottom: 18px; width: 1px; height: 6px; background: rgba(255,255,255,.12); }
+    #dv-real-qc-prototype .tracksRow { position: absolute; left: 0; right: 0; top: 54px; height: 150px; }
+    #dv-real-qc-prototype .track { position: absolute; left: 0; right: 0; height: 36px; background: #1a1a1d; cursor: crosshair; }
+    #dv-real-qc-prototype .trackBgm { position: absolute; left: 0; right: 0; height: 24px; background: #161614; border-top: 1px solid rgba(245,176,65,.08); pointer-events: none; }
+    #dv-real-qc-prototype .clip { position: absolute; top: 0; height: 100%; border-radius: 5px; display: flex; align-items: center; overflow: hidden; padding: 0 8px; color: rgba(255,255,255,.85); font-size: 11px; font-weight: 500; cursor: pointer; transition: filter .12s, box-shadow .12s; }
+    #dv-real-qc-prototype .clip:hover { filter: brightness(1.16); z-index: 2; }
+    #dv-real-qc-prototype .clip.selected { z-index: 4; box-shadow: inset 0 0 0 1px #fff; filter: brightness(1.25); }
+    #dv-real-qc-prototype .clipSource { background: linear-gradient(135deg, rgba(86,34,220,.65), rgba(67,20,180,.55)); opacity: .82; cursor: grab; }
+    #dv-real-qc-prototype .clipTranslated { background: linear-gradient(135deg, rgba(16,185,129,.55), rgba(5,150,105,.45)); cursor: grab; }
+    #dv-real-qc-prototype .clipSource.dragging,
+    #dv-real-qc-prototype .clipTranslated.dragging { cursor: grabbing; }
+    #dv-real-qc-prototype .clipOriginalVoice { background: linear-gradient(135deg, rgba(59,130,246,.72), rgba(37,99,235,.56)); border: 1px solid rgba(147,197,253,.45); cursor: grab; }
+    #dv-real-qc-prototype .clipOriginalVoice.dragging { cursor: grabbing; }
+    #dv-real-qc-prototype .clipBgm { position: absolute; top: 3px; bottom: 3px; left: 0; right: 0; border-radius: 3px; background: linear-gradient(90deg, rgba(245,176,65,.18), rgba(230,150,40,.22), rgba(245,176,65,.15), rgba(230,150,40,.22), rgba(245,176,65,.18)); overflow: hidden; }
+    #dv-real-qc-prototype .clipBgm:after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0, transparent 2px, rgba(245,176,65,.08) 2px, rgba(245,176,65,.08) 3px); }
+    #dv-real-qc-prototype .trimHandle { position: absolute; top: 0; bottom: 0; width: 8px; display: flex; align-items: center; justify-content: center; cursor: col-resize; z-index: 5; opacity: 0; transition: opacity .15s; }
+    #dv-real-qc-prototype .trimHandle:after { content: ""; width: 2px; height: 60%; background: rgba(255,255,255,.55); border-radius: 1px; }
+    #dv-real-qc-prototype .trimHandleLeft { left: 0; }
+    #dv-real-qc-prototype .trimHandleRight { right: 0; }
+    #dv-real-qc-prototype .clip:hover .trimHandle,
+    #dv-real-qc-prototype .clip.selected .trimHandle { opacity: 1; }
+    #dv-real-qc-prototype .timelinePlayhead { position: absolute; top: 24px; bottom: 0; width: 1px; background: #fff; z-index: 10; pointer-events: none; }
+    #dv-real-qc-prototype .timelinePlayheadHead { position: absolute; top: 0; left: 50%; transform: translateX(-50%); height: 16px; padding: 0 5px; border-radius: 2px; background: #6224ff; color: #fff; font-size: 9px; font-weight: 600; display: flex; align-items: center; white-space: nowrap; }
     #dv-real-qc-prototype .qcPanel {
       min-width: 0;
       border-left: 1px solid var(--border-color);
@@ -388,6 +759,9 @@
       #dv-real-qc-prototype .voiceBatchActions { justify-content: flex-start; }
       #dv-real-qc-prototype .voiceResultPanel { grid-column: 1 / -1; margin: 0 12px 16px; }
       #dv-real-qc-prototype .candidateGrid { grid-template-columns: 1fr; }
+      #dv-real-qc-prototype .episodePopover { width: 312px; }
+      #dv-real-qc-prototype .episodeGrid { grid-template-columns: repeat(6, 1fr); max-height: 222px; }
+      #dv-real-qc-prototype .episodeTile { height: 32px; line-height: 30px; }
     }
   </style>
   <div class="editorContainer" id="dvContainer">
@@ -395,8 +769,18 @@
       <div class="navLeft">
         <button type="button" class="backButton">← 返回</button>
         <div class="titleInfo">
-          <h1>结算翻译配音 <span>第一集</span></h1>
-          <div class="titleMeta"><span class="metaItem metaItemExtract">字幕资产提取</span><span class="metaDivider"></span><span class="metaItem">英文 → 阿拉伯语</span></div>
+          <h1>结算翻译配音 <span id="titleEpisode">第 12 集</span></h1>
+          <div class="titleMeta"><span class="metaItem metaItemExtract" id="currentStageLabel">配音</span><span class="metaDivider"></span><span class="metaItem">英文 → 阿拉伯语</span></div>
+        </div>
+        <div class="episodeNav" id="episodeNav">
+          <button type="button" class="episodeStep" id="episodePrev" aria-label="上一集">‹</button>
+          <button type="button" class="episodeSelect" id="episodeSelect"><span id="episodeSelectText">第 12 集</span><span class="episodeWarn" id="episodeCurrentWarn">8</span><span class="episodeArrow">▼</span></button>
+          <button type="button" class="episodeStep" id="episodeNext" aria-label="下一集">›</button>
+          <div class="episodePopover" id="episodePopover">
+            <div class="episodePopoverHeader"><span>切换集数</span><span id="episodeTotalText">当前任务共 66 集</span></div>
+            <div class="episodeGrid" id="episodeGrid"></div>
+            <div class="episodeLegend"><span style="color:#8b5cf6">当前集</span><span style="color:#ffd666">翻译阶段</span><span style="color:#69c0ff">配音阶段</span><span style="color:#ff7875">失败/异常</span><span style="color:rgba(255,255,255,.45)">处理中</span></div>
+          </div>
         </div>
       </div>
       <div class="navRight">
@@ -414,11 +798,8 @@
       <section class="subtitlePanel">
         <div class="subtitleWithQc">
           <div class="subtitleListContainer">
-            <div class="header"><div class="headerSpeaker">说话人</div><div class="headerTime">时间</div><div class="headerGroup">语义组</div><div class="headerLeft">英语</div><div class="headerRight">阿拉伯语</div></div>
-            <div class="voiceBatchBar" id="voiceBatchBar">
-              <div class="voiceBatchText"><span>已选择 <strong id="voiceSelectedCount">2</strong> 个候选</span><button type="button" class="voiceBatchLink" id="voiceSelectAll">全选</button><button type="button" class="voiceBatchLink" id="voiceClearAll">清空</button></div>
-              <div class="voiceBatchActions"><button type="button" class="btnGhost" id="voiceBatchRegenerate">批量换一个</button><button type="button" class="btnGhost" id="voiceBatchRefresh">批量换一批</button><button type="button" class="btnPrimary" id="voiceBatchAccept">批量采用</button><button type="button" class="btnGhost" id="voiceBatchExit">退出</button></div>
-            </div>
+            <div class="header"><div class="headerSpeaker">说话人</div><div class="headerTime">时间</div><div class="headerGroup">语义组</div><div class="headerLeft">英语</div><div class="headerRight"><span class="headerTitle">阿拉伯语</span><span class="headerActions"><button type="button" class="btnGhost" id="batchRetranslate">批量重翻</button><button type="button" class="btnGhost" id="batchRedub">批量重新配音</button></span></div></div>
+            <div class="voiceBatchBar" id="voiceBatchBar"></div>
             <div class="subtitleListWrapper"><div class="subtitleList" id="subtitleRows"></div></div>
           </div>
           <aside class="qcPanel" aria-label="质检提醒面板">
@@ -433,7 +814,50 @@
         </div>
       </section>
     </div>
-    <div class="timelineContainer"><div class="timelineBody"><div class="trackLabels"><div class="trackLabel trackLabelSource">原</div><div class="trackLabel trackLabelTranslated">译</div></div><div class="timelineCanvas"><div class="ruler"><span>0s</span><span>2s</span><span>4s</span><span>6s</span><span>8s</span><span>10s</span><span>12s</span><span>14s</span></div><div class="track"><span class="clip clipSource" style="left:6%; width:18%">Life is like a...</span><span class="clip clipSource" style="left:29%; width:17%">and we are...</span><span class="clip clipSource" style="left:52%; width:20%">If we leave...</span></div><div class="track"><span class="clip clipTranslated" style="left:7%; width:16%">الحياة مثل...</span><span class="clip clipTranslated" style="left:31%; width:15%">ونحن...</span><span class="clip clipTranslated" style="left:55%; width:18%">إذا تركنا...</span></div></div></div></div>
+    <div class="timelineContainer">
+      <div class="timelineToolbar">
+        <div class="timelineToolbarLeft">
+          <div class="timelineAddWrap" id="timelineAddWrap">
+            <button type="button" class="timelineToolBtn timelineActionBtn" id="timelineAddBtn" aria-label="新增片段"><span class="timelineActionIcon">＋</span><span class="timelineActionText">新增</span><span class="episodeArrow">▼</span></button>
+            <div class="timelineAddMenu">
+              <button type="button" class="timelineMenuItem" data-timeline-add="segment">插入空字幕段</button>
+              <button type="button" class="timelineMenuItem" data-timeline-add="voice">插入原人声段</button>
+            </div>
+          </div>
+          <button type="button" class="timelineToolBtn timelineActionBtn deleteLikeBtn" id="timelineDeleteBtn" aria-label="删除选中对象" disabled><span class="antDeleteIcon" aria-hidden="true"><svg viewBox="64 64 896 896" focusable="false"><path d="M360 184h304v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"></path></svg></span><span class="timelineActionText">删除</span></button>
+        </div>
+        <div class="timelineToolbarRight">
+          <div class="timelineZoomGroup">
+            <button type="button" class="timelineToolBtn" aria-label="缩小时间轴">−</button>
+            <div class="timelineZoomSlider" aria-hidden="true"></div>
+            <button type="button" class="timelineToolBtn" aria-label="放大时间轴">＋</button>
+          </div>
+        </div>
+      </div>
+      <div class="timelineBody">
+        <div class="trackLabels">
+          <div class="trackLabel trackLabelTranslated"><div class="trackLabelIcon">葡</div></div>
+          <div class="trackLabel trackLabelSource"><div class="trackLabelIcon">中</div></div>
+          <div class="trackLabel trackLabelOriginal"><div class="trackLabelIcon" title="原人声保留段：该时间范围内将保留原视频人声，并参与最终导出混音" aria-label="原人声保留段：该时间范围内将保留原视频人声，并参与最终导出混音">人</div></div>
+          <div class="trackLabel trackLabelBgm"><div class="trackLabelIcon trackLabelIconBgm">♫</div></div>
+        </div>
+        <div class="timelineCanvas">
+          <div class="timelineInnerCanvas">
+            <div class="ruler">
+              <span class="rulerMinor" style="left:7%"></span><span class="rulerMinor" style="left:15%"></span><span class="rulerMinor" style="left:23%"></span><span class="rulerMinor" style="left:31%"></span><span class="rulerMinor" style="left:39%"></span><span class="rulerMinor" style="left:47%"></span><span class="rulerMinor" style="left:55%"></span><span class="rulerMinor" style="left:63%"></span><span class="rulerMinor" style="left:71%"></span><span class="rulerMinor" style="left:79%"></span><span class="rulerMinor" style="left:87%"></span><span class="rulerMinor" style="left:95%"></span>
+              <span class="rulerTick" style="left:0%">0s</span><span class="rulerTick" style="left:16%">5s</span><span class="rulerTick" style="left:32%">10s</span><span class="rulerTick" style="left:48%">15s</span><span class="rulerTick" style="left:64%">20s</span><span class="rulerTick" style="left:80%">25s</span><span class="rulerTick" style="left:96%">30s</span>
+            </div>
+            <div class="tracksRow">
+              <div class="track" id="translatedTrack" style="top:0"></div>
+              <div class="track" id="sourceTrack" style="top:42px"></div>
+              <div class="track" id="originalVoiceTrack" style="top:84px"></div>
+              <div class="trackBgm" style="top:126px"><div class="clipBgm"></div></div>
+            </div>
+            <div class="timelinePlayhead" id="timelinePlayhead" style="left:43%"><div class="timelinePlayheadHead" id="timelinePlayheadHead">00:13.52</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="modalMask" id="modalMask" role="dialog" aria-modal="true"><div class="modalBox"><h3 id="modalTitle">确认操作</h3><p id="modalText"></p><div class="modalActions"><button type="button" class="btnGhost" id="modalCancel">返回确认</button><button type="button" class="btnPrimary" id="modalConfirm">确认</button></div></div></div>
     <div class="toast" id="toast" role="status"></div>
   </div>
@@ -450,12 +874,58 @@
       const toast = root.querySelector('#toast');
       const videoTimeEl = root.querySelector('#videoTime');
       const progressEl = root.querySelector('#videoProgress');
-      const voiceSelectedCountEl = root.querySelector('#voiceSelectedCount');
+      const voiceBatchBar = root.querySelector('#voiceBatchBar');
+      const timelineAddWrap = root.querySelector('#timelineAddWrap');
+      const timelineDeleteBtn = root.querySelector('#timelineDeleteBtn');
+      const translatedTrack = root.querySelector('#translatedTrack');
+      const sourceTrack = root.querySelector('#sourceTrack');
+      const originalVoiceTrack = root.querySelector('#originalVoiceTrack');
+      const timelinePlayhead = root.querySelector('#timelinePlayhead');
+      const timelinePlayheadHead = root.querySelector('#timelinePlayheadHead');
+      const episodeNav = root.querySelector('#episodeNav');
+      const episodeGrid = root.querySelector('#episodeGrid');
+      const episodeSelectText = root.querySelector('#episodeSelectText');
+      const episodeCurrentWarn = root.querySelector('#episodeCurrentWarn');
+      const titleEpisode = root.querySelector('#titleEpisode');
+      const stageLabel = root.querySelector('#currentStageLabel');
+      const saveStatus = root.querySelector('.saveStatus');
+      const episodeTotalText = root.querySelector('#episodeTotalText');
       let selectedGroup = '字幕文本规范';
       let activeIssue = 'q1';
       let activeSegment = 's1';
       let pending = null;
       let voiceSeed = 4;
+      let redubMode = 'results';
+      let batchSelectedIds = new Set();
+      let selectedTimeline = null;
+      let timelineDrag = null;
+      let timelineDragJustEnded = false;
+      const timelineDurationMs = 30000;
+      let currentTimelineMs = 13520;
+      let originalVoiceSeed = 3;
+      let originalVoiceClips = [
+        { id:'ov1', left:55.4, width:9.8, label:'原人声 #4' },
+        { id:'ov2', left:74.8, width:7.6, label:'原人声 00:23.46' }
+      ];
+      let currentEpisode = 12;
+      let currentStage = '配音';
+      const episodes = Array.from({length:66}, (_,i) => {
+        const no = i + 1;
+        const special = {
+          3: { status:'failed', stage:'配音', issues:5, text:'配音失败' },
+          7: { status:'processing', stage:'配音', issues:0, text:'配音中' },
+          10: { status:'crossStage', stage:'翻译', issues:2, text:'仅完成翻译' },
+          12: { status:'available', stage:'配音', issues:8, text:'当前阶段' },
+          13: { status:'available', stage:'配音', issues:1, text:'可编辑' },
+          18: { status:'processing', stage:'配音', issues:0, text:'配音中' },
+          22: { status:'failed', stage:'配音', issues:2, text:'配音失败' },
+          37: { status:'processing', stage:'翻译', issues:0, text:'翻译中' },
+          44: { status:'failed', stage:'配音', issues:4, text:'配音失败' },
+          58: { status:'crossStage', stage:'翻译', issues:3, text:'仅完成翻译' },
+          63: { status:'available', stage:'配音', issues:6, text:'可编辑' }
+        };
+        return { no, status:'available', stage:'配音', issues:[2,5,9,16,28,31,49,55,61].includes(no)?1:0, text:'可编辑', ...(special[no] || {}) };
+      });
       const segments = [
         { id:'s1', speaker:'Elsie', cls:'third', group:'1', time:'00:00:02,240 - 00:00:03,600', source:'Life is like a game of chess', target:'الحياة مثل لعبة الشطرنج', voice:{ checked:true, selected:0, old:'原音频 00:00:01,360', candidates:[{name:'候选 1',dur:'00:00:01,420',speed:'1.00x',cps:'CPS 4.7',status:'ready',progress:'58%'},{name:'候选 2',dur:'00:00:01,510',speed:'1.08x',cps:'CPS 4.5',status:'ready',progress:'44%'},{name:'候选 3',dur:'00:00:01,390',speed:'0.96x',cps:'CPS 5.1',status:'ready',progress:'66%'}]} },
         { id:'s2', speaker:'Elsie', cls:'third', group:'1', time:'00:00:04,679 - 00:00:06,120', source:'and we are both players in it', target:'ونحن اللاعبان فيها', voice:{ checked:true, selected:0, old:'原音频 00:00:01,441', candidates:[{name:'候选 1',dur:'00:00:01,510',speed:'1.00x',cps:'CPS 4.3',status:'ready',progress:'52%'},{name:'候选 2',dur:'00:00:01,630',speed:'1.12x',cps:'CPS 4.0',status:'ready',progress:'49%'},{name:'候选 3',dur:'--',speed:'--',cps:'生成失败',status:'failed',progress:'0%'}]} },
@@ -491,6 +961,359 @@
         };
       }
       function counts(){ const map={}; qc.forEach(i => map[i.group]=(map[i.group]||0)+1); return Object.entries(map).sort((a,b)=>b[1]-a[1]); }
+      function clampNum(value, min, max){ return Math.min(max, Math.max(min, value)); }
+      function formatTimelineTime(ms){
+        const total = Math.max(0, Math.round(ms));
+        const minutes = Math.floor(total / 60000);
+        const seconds = Math.floor((total % 60000) / 1000);
+        const centiseconds = Math.floor((total % 1000) / 10);
+        return String(minutes).padStart(2,'0') + ':' + String(seconds).padStart(2,'0') + '.' + String(centiseconds).padStart(2,'0');
+      }
+      function formatSubtitleTime(ms){
+        const total = Math.max(0, Math.round(ms));
+        const minutes = Math.floor(total / 60000);
+        const seconds = Math.floor((total % 60000) / 1000);
+        const millis = total % 1000;
+        return '00:' + String(minutes).padStart(2,'0') + ':' + String(seconds).padStart(2,'0') + ',' + String(millis).padStart(3,'0');
+      }
+      function segmentStartMs(seg){
+        const match = String(seg.time).match(/00:(\d{2}):(\d{2}),(\d{3})/);
+        if(!match) return 0;
+        return Number(match[1]) * 60000 + Number(match[2]) * 1000 + Number(match[3]);
+      }
+      function parseSubtitleTime(text){
+        const match = String(text).match(/00:(\d{2}):(\d{2}),(\d{3})/);
+        if(!match) return 0;
+        return Number(match[1]) * 60000 + Number(match[2]) * 1000 + Number(match[3]);
+      }
+      function segmentEndMs(seg){
+        const parts = String(seg.time).split(' - ');
+        return parseSubtitleTime(parts[1] || parts[0]);
+      }
+      function segmentPercent(seg){
+        const start = clampNum(segmentStartMs(seg), 0, timelineDurationMs);
+        const end = clampNum(segmentEndMs(seg), start + 100, timelineDurationMs);
+        return {
+          left: Number(((start / timelineDurationMs) * 100).toFixed(2)),
+          width: Number((((end - start) / timelineDurationMs) * 100).toFixed(2))
+        };
+      }
+      function clipText(text, fallback){
+        const value = String(text || '').trim();
+        return esc(value || fallback);
+      }
+      function updateTimelinePlayhead(ms){
+        currentTimelineMs = clampNum(ms, 0, timelineDurationMs);
+        const percent = (currentTimelineMs / timelineDurationMs) * 100;
+        timelinePlayhead.style.left = percent + '%';
+        timelinePlayheadHead.textContent = formatTimelineTime(currentTimelineMs);
+        videoTimeEl.textContent = formatSubtitleTime(currentTimelineMs);
+        progressEl.style.setProperty('--progress-value', Math.min(98, Math.max(2, percent)) + '%');
+      }
+      function updateTimelinePlayheadFromEvent(event){
+        const canvas = root.querySelector('.timelineInnerCanvas');
+        const rect = canvas.getBoundingClientRect();
+        const percent = clampNum((event.clientX - rect.left) / rect.width, 0, 1);
+        updateTimelinePlayhead(percent * timelineDurationMs);
+      }
+      function renderSegmentTracks(){
+        translatedTrack.innerHTML = segments.map(seg => {
+          const p = segmentPercent(seg);
+          return '<span class="clip clipTranslated timelineSelectable '+(selectedTimeline && selectedTimeline.type === 'segment' && selectedTimeline.id === seg.id ? 'selected' : '')+'" data-timeline-type="segment" data-timeline-id="'+seg.id+'" style="left:'+p.left+'%; width:'+Math.max(1,p.width)+'%"><span class="trimHandle trimHandleLeft"></span><span class="trimHandle trimHandleRight"></span>'+clipText(seg.target, '')+'</span>';
+        }).join('');
+        sourceTrack.innerHTML = segments.map(seg => {
+          const p = segmentPercent(seg);
+          return '<span class="clip clipSource timelineSelectable '+(selectedTimeline && selectedTimeline.type === 'source' && selectedTimeline.id === seg.id ? 'selected' : '')+'" data-timeline-type="source" data-timeline-id="'+seg.id+'" style="left:'+p.left+'%; width:'+Math.max(1,p.width)+'%"><span class="trimHandle trimHandleLeft"></span><span class="trimHandle trimHandleRight"></span>'+clipText(seg.source, '')+'</span>';
+        }).join('');
+      }
+      function renderOriginalVoiceTrack(){
+        originalVoiceTrack.innerHTML = originalVoiceClips.map(clip => (
+          '<span class="clip clipOriginalVoice timelineSelectable '+(selectedTimeline && selectedTimeline.type === 'originalVoice' && selectedTimeline.id === clip.id ? 'selected' : '')+'" data-timeline-type="originalVoice" data-timeline-id="'+clip.id+'" style="left:'+clip.left+'%; width:'+clip.width+'%"><span class="trimHandle trimHandleLeft"></span><span class="trimHandle trimHandleRight"></span>'+esc(clip.label)+'</span>'
+        )).join('');
+        root.querySelectorAll('.timelineSelectable').forEach(el => {
+          if(!(el.dataset.timelineType === 'originalVoice')){
+            el.classList.toggle('selected', !!selectedTimeline && selectedTimeline.id === el.dataset.timelineId);
+          }
+        });
+        timelineDeleteBtn.disabled = !selectedTimeline;
+      }
+      function renderTimeline(){
+        renderSegmentTracks();
+        renderOriginalVoiceTrack();
+      }
+      function selectTimeline(type, id){
+        selectedTimeline = { type, id };
+        if(type === 'segment' || type === 'source'){
+          activeSegment = id;
+          updateVideo(id);
+          renderRows(activeSegment);
+          return;
+        }
+        renderTimeline();
+      }
+      function clearTimelineSelection(){
+        selectedTimeline = null;
+        renderTimeline();
+      }
+      function addOriginalVoiceClip(){
+        const left = Number(((currentTimelineMs / timelineDurationMs) * 100).toFixed(2));
+        const width = Math.max(1, Math.min(6.6, 100 - left));
+        const exists = originalVoiceClips.some(clip => clip.left < left + width && clip.left + clip.width > left);
+        if(exists){
+          showToast('当前时间范围已存在原人声保留片段');
+          return;
+        }
+        const id = 'ov' + originalVoiceSeed++;
+        originalVoiceClips.push({ id, left, width, label:'原人声 ' + formatTimelineTime(currentTimelineMs) });
+        selectTimeline('originalVoice', id);
+        showToast('已插入原人声段');
+      }
+      function retainOriginalVoiceForSegment(segId){
+        const seg = segments.find(item => item.id === segId);
+        if(!seg) return;
+        const existing = originalVoiceClips.find(clip => clip.segmentId === segId);
+        if(existing){
+          selectTimeline('originalVoice', existing.id);
+          showToast('该段已保留原人声');
+          return;
+        }
+        const p = segmentPercent(seg);
+        const id = 'ov' + originalVoiceSeed++;
+        originalVoiceClips.push({
+          id,
+          segmentId: segId,
+          left: p.left,
+          width: Math.max(1, p.width),
+          label: '原人声 ' + formatTimelineTime(segmentStartMs(seg))
+        });
+        selectTimeline('originalVoice', id);
+        showToast('已保留该段原人声');
+      }
+      function cancelOriginalVoiceForSegment(segId){
+        const before = originalVoiceClips.length;
+        originalVoiceClips = originalVoiceClips.filter(clip => clip.segmentId !== segId);
+        if(before === originalVoiceClips.length){
+          showToast('该段暂无原人声保留片段');
+          return;
+        }
+        if(selectedTimeline && selectedTimeline.type === 'originalVoice' && !originalVoiceClips.some(clip => clip.id === selectedTimeline.id)){
+          selectedTimeline = null;
+        }
+        renderTimeline();
+        showToast('已取消该段原人声保留');
+      }
+      function insertSubtitleAt(afterIndex, startOverride){
+        const next = Math.max(...segments.map(s => Number(segNo(s.id)) || 0), 0) + 1;
+        const id = 's' + next;
+        const insertAt = clampNum(afterIndex, 0, segments.length);
+        const neighbor = insertAt === 0 ? null : segments[insertAt - 1];
+        const start = typeof startOverride === 'number'
+          ? clampNum(startOverride, 0, timelineDurationMs - 200)
+          : insertAt === 0
+            ? 0
+            : clampNum((neighbor ? segmentEndMs(neighbor) : 0) + 10, 0, timelineDurationMs - 200);
+        const end = clampNum(start + 200, start + 100, timelineDurationMs);
+        const newSegment = { id, speaker: neighbor?.speaker || '小蛇', cls: neighbor?.cls || '', group: neighbor?.group || String(insertAt + 1), time:formatSubtitleTime(start)+' - '+formatSubtitleTime(end), source:'', target:'', voice:null };
+        segments.splice(insertAt, 0, newSegment);
+        segments.sort((a,b)=>segmentStartMs(a)-segmentStartMs(b));
+        activeSegment = id;
+        selectedTimeline = { type:'segment', id };
+        updateTimelinePlayhead(start);
+        renderRows(activeSegment);
+        requestAnimationFrame(()=>{ const row=rowsEl.querySelector('[data-seg="'+id+'"]'); if(row) row.scrollIntoView({block:'center'}); });
+        showToast('已插入新字幕段落');
+      }
+      function addTimelineSegment(){
+        const insertAt = segments.findIndex(seg => segmentStartMs(seg) > currentTimelineMs);
+        const afterIndex = insertAt === -1 ? segments.length : insertAt;
+        insertSubtitleAt(afterIndex, currentTimelineMs);
+      }
+      function deleteSelectedTimeline(){
+        if(!selectedTimeline) return;
+        const timelineToDelete = { ...selectedTimeline };
+        if(timelineToDelete.type === 'originalVoice'){
+          openModal('确认删除','确认删除该原人声保留片段吗？删除后该片段将不再参与最终导出混音。','确认删除',()=>{
+            originalVoiceClips = originalVoiceClips.filter(clip => clip.id !== timelineToDelete.id);
+            clearTimelineSelection();
+            showToast('已删除原人声保留片段');
+          });
+          return;
+        }
+        openModal('确认删除','确认删除当前段落吗？删除后该段字幕、译文和配音结果将同步移除。','确认删除',()=>{
+          const deleteId = timelineToDelete.id;
+          const deleteIndex = segments.findIndex(seg => seg.id === deleteId);
+          if(deleteIndex >= 0) segments.splice(deleteIndex, 1);
+          qc = qc.filter(item => item.seg !== deleteId);
+          const nextSegment = segments[Math.min(deleteIndex, segments.length - 1)] || segments[deleteIndex - 1] || segments[0];
+          activeSegment = nextSegment ? nextSegment.id : '';
+          activeIssue = qc[0]?.id || '';
+          selectedGroup = qc[0]?.group || selectedGroup;
+          selectedTimeline = null;
+          if(nextSegment) updateVideo(nextSegment.id);
+          render();
+          showToast('已删除字幕段落');
+        });
+      }
+      function setSegmentTime(seg, startMs, endMs){
+        const start = clampNum(startMs, 0, timelineDurationMs - 100);
+        const end = clampNum(endMs, start + 100, timelineDurationMs);
+        seg.time = formatSubtitleTime(start) + ' - ' + formatSubtitleTime(end);
+      }
+      function beginTimelineDrag(event){
+        const clipEl = event.target.closest('.timelineSelectable');
+        if(!clipEl) return;
+        const type = clipEl.dataset.timelineType;
+        event.preventDefault();
+        event.stopPropagation();
+        const handle = event.target.closest('.trimHandle');
+        let mode = handle?.classList.contains('trimHandleLeft') ? 'trimLeft' : handle?.classList.contains('trimHandleRight') ? 'trimRight' : 'move';
+        const clipRect = clipEl.getBoundingClientRect();
+        const edgeWidth = Math.min(6, clipRect.width * 0.25);
+        if(event.clientX > clipRect.left + edgeWidth && event.clientX < clipRect.right - edgeWidth){
+          mode = 'move';
+        }
+        if(type === 'originalVoice'){
+          const clip = originalVoiceClips.find(item => item.id === clipEl.dataset.timelineId);
+          if(!clip) return;
+          selectedTimeline = { type:'originalVoice', id: clip.id };
+          timelineDrag = {
+            kind: 'originalVoice',
+            id: clip.id,
+            mode,
+            startX: event.clientX,
+            startLeft: clip.left,
+            startWidth: clip.width
+          };
+        } else {
+          const seg = segments.find(item => item.id === clipEl.dataset.timelineId);
+          if(!seg) return;
+          selectedTimeline = { type, id: seg.id };
+          activeSegment = seg.id;
+          timelineDrag = {
+            kind: 'subtitle',
+            id: seg.id,
+            type,
+            mode,
+            startX: event.clientX,
+            startStartMs: segmentStartMs(seg),
+            startEndMs: segmentEndMs(seg)
+          };
+        }
+        clipEl.classList.add('dragging');
+        renderTimeline();
+      }
+      function updateTimelineDrag(event){
+        if(!timelineDrag) return;
+        const canvas = root.querySelector('.timelineInnerCanvas');
+        const rect = canvas.getBoundingClientRect();
+        if(timelineDrag.kind === 'originalVoice'){
+          const delta = ((event.clientX - timelineDrag.startX) / rect.width) * 100;
+          const clip = originalVoiceClips.find(item => item.id === timelineDrag.id);
+          if(!clip) return;
+          const minWidth = 1;
+          if(timelineDrag.mode === 'move'){
+            clip.left = Number(clampNum(timelineDrag.startLeft + delta, 0, 100 - timelineDrag.startWidth).toFixed(2));
+            clip.width = Number(timelineDrag.startWidth.toFixed(2));
+          } else if(timelineDrag.mode === 'trimLeft'){
+            const right = timelineDrag.startLeft + timelineDrag.startWidth;
+            const nextLeft = clampNum(timelineDrag.startLeft + delta, 0, right - minWidth);
+            clip.left = Number(nextLeft.toFixed(2));
+            clip.width = Number((right - nextLeft).toFixed(2));
+          } else if(timelineDrag.mode === 'trimRight'){
+            clip.width = Number(clampNum(timelineDrag.startWidth + delta, minWidth, 100 - timelineDrag.startLeft).toFixed(2));
+          }
+          const startMs = (clip.left / 100) * timelineDurationMs;
+          clip.label = '原人声 ' + formatTimelineTime(startMs);
+          renderTimeline();
+          return;
+        }
+        const deltaMs = ((event.clientX - timelineDrag.startX) / rect.width) * timelineDurationMs;
+        const seg = segments.find(item => item.id === timelineDrag.id);
+        if(!seg) return;
+        const start = timelineDrag.startStartMs;
+        const end = timelineDrag.startEndMs;
+        const duration = end - start;
+        if(timelineDrag.mode === 'move'){
+          const nextStart = clampNum(start + deltaMs, 0, timelineDurationMs - duration);
+          setSegmentTime(seg, nextStart, nextStart + duration);
+        } else if(timelineDrag.mode === 'trimLeft'){
+          setSegmentTime(seg, clampNum(start + deltaMs, 0, end - 100), end);
+        } else if(timelineDrag.mode === 'trimRight'){
+          setSegmentTime(seg, start, clampNum(end + deltaMs, start + 100, timelineDurationMs));
+        }
+        updateTimelinePlayhead(segmentStartMs(seg));
+        renderRows(activeSegment);
+      }
+      function endTimelineDrag(){
+        if(!timelineDrag) return;
+        timelineDrag = null;
+        timelineDragJustEnded = true;
+        setTimeout(()=>{ timelineDragJustEnded = false; }, 0);
+        renderRows(activeSegment);
+      }
+      function renderEpisodeNav(){
+        const ep = episodes.find(item => item.no === currentEpisode) || episodes[0];
+        episodeSelectText.textContent = '第 ' + ep.no + ' 集';
+        titleEpisode.textContent = '第 ' + ep.no + ' 集';
+        stageLabel.textContent = currentStage;
+        episodeCurrentWarn.textContent = ep.issues;
+        episodeCurrentWarn.style.display = ep.issues ? 'inline-block' : 'none';
+        root.querySelector('#episodePrev').disabled = ep.no === 1;
+        root.querySelector('#episodeNext').disabled = ep.no === episodes.length;
+        episodeTotalText.textContent = '当前任务共 ' + episodes.length + ' 集';
+        episodeGrid.innerHTML = episodes.map(item => {
+          const current = item.no === currentEpisode;
+          const stageCls = item.stage === '翻译' ? 'stageTranslate' : item.stage === '配音' ? 'stageDubbing' : '';
+          const cls = ['episodeTile', stageCls, current ? 'current' : '', item.status === 'processing' ? 'processing disabled' : '', item.status === 'failed' ? 'failed' : '', item.status === 'crossStage' || item.stage !== currentStage ? 'crossStage' : ''].join(' ');
+          const issue = item.issues ? '<span class="episodeIssue">'+item.issues+'</span>' : '';
+          return '<button type="button" class="'+cls+'" data-episode-no="'+item.no+'" aria-label="第 '+item.no+' 集，'+esc(item.text)+'">'+item.no+issue+'</button>';
+        }).join('');
+      }
+      function scrollCurrentEpisodeTile(){
+        requestAnimationFrame(() => {
+          const current = episodeGrid.querySelector('.episodeTile.current');
+          if(current) current.scrollIntoView({block:'nearest', inline:'nearest'});
+        });
+      }
+      function finishEpisodeSwitch(ep, stage){
+        currentEpisode = ep.no;
+        currentStage = stage || ep.stage;
+        activeSegment = 's1';
+        activeIssue = qc[0]?.id || '';
+        selectedGroup = qc[0]?.group || '';
+        episodeNav.classList.remove('open');
+        saveStatus.textContent = '已保存';
+        updateVideo(activeSegment);
+        renderEpisodeNav();
+        render();
+        showToast('已切换至第 '+ep.no+' 集');
+      }
+      function saveThenSwitch(ep, stage){
+        episodeNav.classList.remove('open');
+        saveStatus.textContent = '保存中...';
+        setTimeout(() => finishEpisodeSwitch(ep, stage), 520);
+      }
+      function attemptEpisodeSwitch(no){
+        const ep = episodes.find(item => item.no === no);
+        if(!ep) return;
+        if(ep.no === currentEpisode){ episodeNav.classList.remove('open'); return; }
+        if(ep.status === 'processing'){
+          showToast('第 '+ep.no+' 集'+ep.text+'，暂不可进入');
+          return;
+        }
+        if(ep.status === 'failed'){
+          openModal('目标集暂不可进入','第 '+ep.no+' 集当前为“'+ep.text+'”，需要返回集列表处理重试后再进入编辑器。','知道了',()=>{});
+          return;
+        }
+        if(ep.stage !== currentStage || ep.status === 'crossStage'){
+          const text = currentStage === '配音' && ep.stage === '翻译'
+            ? '第 '+ep.no+' 集暂未进入配音阶段，是否前往翻译编辑器？'
+            : '第 '+ep.no+' 集已处于“'+ep.stage+'”阶段，是否前往对应阶段编辑器？';
+          openModal('前往'+ep.stage+'编辑器', text, '前往'+ep.stage+'编辑器',()=>saveThenSwitch(ep, ep.stage));
+          return;
+        }
+        saveThenSwitch(ep, currentStage);
+      }
       function updateVideo(segId){
         const seg = segments.find(s => s.id === segId);
         if(!seg) return;
@@ -500,31 +1323,98 @@
       function voiceRows(){ return segments.filter(s => s.voice); }
       function selectedVoiceRows(){ return voiceRows().filter(s => s.voice.checked); }
       function updateVoiceBatch(){
+        if(redubMode === 'select'){
+          const count = batchSelectedIds.size;
+          voiceBatchBar.className = 'voiceBatchBar';
+          voiceBatchBar.innerHTML = '<div class="voiceBatchText"><span>已选择 <strong>'+count+'</strong> 句</span><span class="voiceBatchDivider"></span><button type="button" class="voiceBatchLink" id="voiceSelectAll">全选</button><button type="button" class="voiceBatchLink" id="voiceClearAll">清空</button><button type="button" class="voiceBatchLink" id="voiceInvertAll">反选</button></div><div class="voiceBatchActions"><button type="button" class="btnPrimary" id="voiceBatchStart" '+(count===0?'disabled':'')+'>开始重配</button><button type="button" class="btnGhost" id="voiceBatchCancel">取消</button></div>';
+          return;
+        }
+        if(redubMode === 'running'){
+          voiceBatchBar.className = 'voiceBatchBar';
+          voiceBatchBar.innerHTML = '<div class="voiceBatchText"><span class="barSpinner"></span><span>重配中，请稍候...</span></div>';
+          return;
+        }
         const count = selectedVoiceRows().length;
-        voiceSelectedCountEl.textContent = count;
-        root.querySelector('#voiceBatchRegenerate').disabled = count === 0;
-        root.querySelector('#voiceBatchRefresh').disabled = count === 0;
-        root.querySelector('#voiceBatchAccept').disabled = count === 0;
+        if(!voiceRows().length){
+          voiceBatchBar.className = 'voiceBatchBar isHidden';
+          voiceBatchBar.innerHTML = '';
+          return;
+        }
+        voiceBatchBar.className = 'voiceBatchBar';
+        voiceBatchBar.innerHTML = '<div class="voiceBatchText"><span>已选择 <strong>'+count+'</strong> 个候选</span><span class="voiceBatchDivider"></span><button type="button" class="voiceBatchLink" id="voiceSelectAll">全选</button><button type="button" class="voiceBatchLink" id="voiceClearAll">清空</button></div><div class="voiceBatchActions"><button type="button" class="btnGhost" id="voiceBatchRegenerate" '+(count===0?'disabled':'')+'>批量换一个</button><button type="button" class="btnGhost" id="voiceBatchRefresh" '+(count===0?'disabled':'')+'>批量换一批</button><button type="button" class="btnPrimary" id="voiceBatchAccept" '+(count===0?'disabled':'')+'>批量采用</button><button type="button" class="btnGhost" id="voiceBatchExit">退出</button></div>';
       }
       function candidateHtml(seg, candidate, index){
         const selected = seg.voice.selected === index;
         const failed = candidate.status === 'failed';
         const loading = candidate.status === 'loading';
         const metaClass = candidate.cps && candidate.cps.indexOf('CPS') === 0 ? (candidate.cps.includes('5.1') ? 'warn' : 'ok') : 'warn';
-        const body = failed
-          ? '<div class="candidateFailText">生成失败，可重试或换一个</div>'
-          : '<div class="audioLine"><button type="button" class="playButton" data-play="'+seg.id+'" aria-label="播放 '+candidate.name+'">▶</button><div class="audioBar" style="--audio-progress:'+esc(candidate.progress || '45%')+'"><span></span></div></div><div class="candidateMeta"><span>'+esc(candidate.dur)+'</span><span>'+esc(candidate.speed)+'</span><span class="'+metaClass+'">'+esc(candidate.cps)+'</span></div>';
+        const body = loading
+          ? '<div class="voiceSkeleton"><div class="voiceSkeletonBar"></div><div class="voiceSkeletonText">正在生成候选配音...</div></div>'
+          : failed
+            ? '<div class="candidateFailText">生成失败，可重试或换一个</div>'
+            : '<div class="audioLine"><button type="button" class="playButton" data-play="'+seg.id+'" aria-label="播放 '+candidate.name+'">▶</button><div class="audioBar" style="--audio-progress:'+esc(candidate.progress || '45%')+'"><span></span></div></div><div class="candidateMeta"><span>'+esc(candidate.dur)+'</span><span>'+esc(candidate.speed)+'</span><span class="'+metaClass+'">'+esc(candidate.cps)+'</span></div>';
         return '<article class="candidateCard '+(selected?'selected ':'')+(failed?'failed ':'')+(loading?'loading':'')+'" data-seg="'+seg.id+'" data-candidate="'+index+'"><div class="candidateTop"><span class="candidateName">'+esc(candidate.name)+'</span><span class="candidateSelected">✓</span></div>'+body+'<div class="candidateActions"><button type="button" class="btnPrimary voiceAccept" '+(failed||loading?'disabled':'')+'>采用</button><button type="button" class="btnGhost voiceRegenerate" '+(loading?'disabled':'')+'>'+(failed?'重试':'换一个')+'</button></div></article>';
       }
       function renderVoicePanel(seg){
+        if(redubMode === 'select') return '';
         if(!seg.voice) return '';
-        return '<div class="voiceResultPanel" data-voice-panel="'+seg.id+'"><div class="voiceResultHeader"><div class="voiceResultTitle">新音频结果</div><label class="voiceScope"><input type="checkbox" class="voiceScopeCheck" '+(seg.voice.checked?'checked':'')+'> 纳入批量操作</label></div><div class="candidateGrid">'+seg.voice.candidates.map((c,i)=>candidateHtml(seg,c,i)).join('')+'</div><div class="voiceRowActions"><button type="button" class="voiceCompare">'+esc(seg.voice.old)+'｜播放原音频</button><button type="button" class="btnGhost voiceRefreshGroup" data-seg="'+seg.id+'">换一批</button><button type="button" class="btnGhost voiceCancelGroup" data-seg="'+seg.id+'">取消</button></div></div>';
+        if(redubMode === 'running' && !batchSelectedIds.has(seg.id)) return '';
+        const oldAudio = String(seg.voice.old || '').replace(/^原音频\s*/, '');
+        return '<div class="voiceResultPanel" data-voice-panel="'+seg.id+'"><div class="voiceResultHeader"><div class="voiceResultTitle">新音频结果</div><label class="voiceScope"><input type="checkbox" class="voiceScopeCheck" '+(seg.voice.checked?'checked':'')+'> 纳入批量操作</label></div><div class="voiceCurrentRow"><div class="voiceCompare"><span class="voiceCompareLabel">当前版本配音</span><span class="voiceCompareTime">'+esc(oldAudio)+'</span><button type="button" class="voiceComparePlay">播放</button></div></div><div class="candidateGrid">'+seg.voice.candidates.map((c,i)=>candidateHtml(seg,c,i)).join('')+'</div><div class="voiceRowActions"><button type="button" class="btnGhost voiceRefreshGroup" data-seg="'+seg.id+'">换一批</button><button type="button" class="btnGhost voiceCancelGroup" data-seg="'+seg.id+'">取消</button></div></div>';
       }
       function makeCandidate(index){
         const n = voiceSeed++;
         const speeds = ['0.98x','1.00x','1.08x','1.14x'];
         const cps = ['CPS 4.2','CPS 4.5','CPS 4.7','CPS 5.0'];
         return { name:'候选 '+(index+1), dur:'00:00:01,'+(300+n*37).toString().slice(-3), speed:speeds[n % speeds.length], cps:cps[n % cps.length], status:'ready', progress:(38 + (n * 7) % 34)+'%' };
+      }
+      function loadingCandidate(index){
+        return { name:'候选 '+(index+1), dur:'--', speed:'--', cps:'生成中', status:'loading', progress:'0%' };
+      }
+      function ensureLoadingVoice(seg){
+        const old = seg.voice?.old || '原音频 00:00:01,'+(260 + Number(segNo(seg.id))*37).toString().slice(-3);
+        seg.voice = { checked:true, selected:0, old, candidates:[loadingCandidate(0), loadingCandidate(1), loadingCandidate(2)] };
+      }
+      function finishVoice(seg){
+        if(!seg.voice) return;
+        seg.voice.candidates = [makeCandidate(0), makeCandidate(1), makeCandidate(2)];
+        seg.voice.selected = 0;
+        seg.voice.checked = true;
+      }
+      function triggerSingleRedub(segId){
+        const seg = segments.find(s => s.id === segId);
+        if(!seg) return;
+        redubMode = 'results';
+        ensureLoadingVoice(seg);
+        activeSegment = seg.id;
+        updateVideo(seg.id);
+        renderRows(activeSegment);
+        requestAnimationFrame(()=>{ const panel=rowsEl.querySelector('[data-voice-panel="'+seg.id+'"]'); if(panel) panel.scrollIntoView({block:'nearest'}); });
+        setTimeout(()=>{ finishVoice(seg); renderRows(activeSegment); showToast('已生成 3 个候选配音'); }, 760);
+      }
+      function enterBatchRedub(){
+        redubMode = 'select';
+        batchSelectedIds = new Set(['s1','s2']);
+        renderRows(activeSegment);
+      }
+      function startBatchRedub(){
+        if(!batchSelectedIds.size){ showToast('请先勾选需要重新配音的段落'); return; }
+        redubMode = 'running';
+        const ids = Array.from(batchSelectedIds);
+        ids.forEach(id => {
+          const seg = segments.find(s => s.id === id);
+          if(seg) ensureLoadingVoice(seg);
+        });
+        renderRows(activeSegment);
+        setTimeout(()=>{
+          ids.forEach(id => {
+            const seg = segments.find(s => s.id === id);
+            if(seg) finishVoice(seg);
+          });
+          redubMode = 'results';
+          renderRows(activeSegment);
+          showToast('已生成 '+ids.length+' 句配音候选');
+        }, 860);
       }
       function regenerateCandidate(seg, index){
         const item = seg.voice.candidates[index];
@@ -547,14 +1437,22 @@
         showToast('已采用当前候选音频');
       }
       function renderRows(active){
-        rowsEl.innerHTML = segments.map(s => {
+        const canShowInsert = redubMode !== 'select';
+        const topInsert = canShowInsert ? '<div class="insertArea" data-insert-after="0"><button type="button" class="insertBtn"><span>＋</span>插入</button></div>' : '';
+        rowsEl.innerHTML = topInsert + segments.map((s, index) => {
           const item = qc.find(q => q.seg === s.id);
           const source = esc(s.source);
           const times = s.time.split(' - ');
           const errorBadge = item ? '<span class="errorBadge"><span class="errorIcon">!</span><span>'+esc(item.group === '原文错误' ? '原文错误' : '文本规范')+'</span></span>' : '';
-          return '<div class="subtitleItem '+(active===s.id?'active ':'')+(item?'hasError ':'')+(s.voice?'hasVoice':'')+'" data-seg="'+s.id+'">'+errorBadge+'<div class="speakerCell"><span class="speakerBadge '+s.cls+'">'+esc(s.speaker)+'</span></div><div class="timeCell"><span class="timeLine">'+esc(times[0]||'')+'</span><span class="timeLine">'+esc(times[1]||'')+'</span></div><div class="groupCell">'+esc(s.group)+'</div><div class="textCell sourceCell"><span class="segmentIndex">'+segNo(s.id)+'</span><div class="sourceText">'+source+'</div></div><div class="textCell"><div class="targetText">'+esc(s.target)+'</div></div>'+renderVoicePanel(s)+'</div>';
+          const moreMenu = '<div class="segmentMoreWrap"><button type="button" class="segmentTool segmentMoreBtn" aria-label="更多段落操作"><span class="segmentToolIcon">⋯</span>更多</button><div class="segmentMoreMenu"><button type="button" class="segmentMoreItem" data-more-action="retain-original" data-seg="'+s.id+'">保留原人声</button><button type="button" class="segmentMoreItem" data-more-action="cancel-original" data-seg="'+s.id+'">取消保留原人声</button><button type="button" class="segmentMoreItem danger" data-more-action="delete" data-seg="'+s.id+'">删除</button></div></div>';
+          const toolbar = active===s.id && redubMode!=='select' ? '<div class="segmentToolbar"><div class="segmentToolGroup"><button type="button" class="segmentTool" data-tool="重翻"><span class="segmentToolIcon">A↔</span>重翻</button><button type="button" class="segmentTool" data-tool="情感调节"><span class="segmentToolIcon">◷</span>情感调节</button><button type="button" class="segmentTool" data-tool="语气词"><span class="segmentToolIcon">☁</span>语气词</button><button type="button" class="segmentTool" data-tool="重新生成配音"><span class="segmentToolIcon">♬</span>重新生成配音</button><button type="button" class="segmentTool" data-tool="发音纠正"><span class="segmentToolIcon">◖</span>发音纠正</button></div>'+moreMenu+'</div>' : '';
+          const batchCheck = redubMode === 'select' ? '<label class="batchRowCheck"><input type="checkbox" class="batchRowInput" data-batch-row="'+s.id+'" '+(batchSelectedIds.has(s.id)?'checked':'')+'></label>' : '';
+          const rowHtml = '<div class="subtitleItem '+(active===s.id?'active ':'')+(item?'hasError ':'')+(s.voice&&redubMode!=='select'?'hasVoice ':'')+(redubMode==='select'?'batchSelectable':'')+'" data-seg="'+s.id+'">'+errorBadge+toolbar+batchCheck+'<div class="speakerCell"><span class="speakerBadge '+s.cls+'">'+esc(s.speaker)+'</span></div><div class="timeCell"><span class="timeLine">'+esc(times[0]||'')+'</span><span class="timeLine">'+esc(times[1]||'')+'</span></div><div class="groupCell">'+esc(s.group)+'</div><div class="textCell sourceCell"><span class="segmentIndex">'+(index+1)+'</span><div class="sourceText">'+(source || '<span class="placeholderText">空字幕段</span>')+'</div></div><div class="textCell"><div class="targetText">'+(esc(s.target) || '<span class="placeholderText">待输入译文</span>')+'</div></div>'+renderVoicePanel(s)+'</div>';
+          const insertHtml = canShowInsert ? '<div class="insertArea" data-insert-after="'+(index+1)+'"><button type="button" class="insertBtn"><span>＋</span>插入</button></div>' : '';
+          return rowHtml + insertHtml;
         }).join('');
         updateVoiceBatch();
+        renderTimeline();
       }
       function renderTypes(){ const c=counts(); if(!c.some(x=>x[0]===selectedGroup)) selectedGroup=c[0]?.[0]||''; totalEl.textContent='共 '+qc.length+' 处'; railEl.textContent=qc.length+'处'; typeEl.innerHTML=c.map(([group,n])=>{ const active=group===selectedGroup; const children=active?'<div class="typeChildren">'+qc.filter(i=>i.group===group).map(i=>'<button type="button" class="typeChild '+(i.id===activeIssue?'active ':'')+(i.checked?'checked':'')+'" data-jump="'+i.id+'"><span>第 '+segNo(i.seg)+' 段</span><span class="typeChildDetail">｜'+esc(i.detail)+'</span><span class="typeChildCheck">✓</span></button>').join('')+'</div>':''; return '<div><button type="button" class="typeButton '+(active?'active':'')+'" data-group="'+esc(group)+'"><span class="typeName">'+esc(group)+'</span><span class="typeCount">'+n+'</span><span class="typeArrow">'+(active?'▼':'▶')+'</span></button>'+children+'</div>'; }).join(''); }
       function renderQc(){ const items=qc.filter(i=>i.group===selectedGroup); const sel=qc.filter(i=>i.checked).length; root.querySelector('#batchAccept').disabled=sel===0; root.querySelector('#batchIgnore').disabled=sel===0; root.querySelector('#acceptAll').disabled=qc.length===0; listEl.innerHTML=items.length?items.map(i=>{ const d=diffPair(i.before,i.after); return '<article class="qcCard '+(i.id===activeIssue?'active':'')+'" data-qc="'+i.id+'"><div class="qcCardHeader"><label><input type="checkbox" class="qcCheck" '+(i.checked?'checked':'')+'> <span class="qcCardTitle">'+esc(i.title)+'</span></label></div><div class="qcCompare"><div><strong>当前</strong>'+d.before+'</div><div><strong>建议</strong>'+d.after+'</div><div class="qcNote">'+esc(i.note)+'</div></div><div class="qcActions"><button type="button" class="btnGhost qcIgnore">忽略</button><button type="button" class="btnPrimary qcAccept">采纳</button></div></article>'; }).join(''):'<article class="qcCard"><div class="qcNote">当前分类暂无质检提醒</div></article>'; }
@@ -564,11 +1462,89 @@
       function remove(ids, mode){ ids.forEach(id=>{ const item=qc.find(q=>q.id===id); if(mode==='accept'&&item){ const seg=segments.find(s=>s.id===item.seg); if(seg&&seg.source===item.before) seg.source=item.after; }}); qc=qc.filter(q=>!ids.includes(q.id)); if(!qc.find(q=>q.id===activeIssue)) activeIssue=qc[0]?.id||''; if(activeIssue){ const item=qc.find(q=>q.id===activeIssue); selectedGroup=item.group; activeSegment=item.seg; } render(); showToast(mode==='accept'?'已采纳质检建议':'已忽略质检提醒'); }
       function openModal(title,text,confirm,fn){ root.querySelector('#modalTitle').textContent=title; root.querySelector('#modalText').textContent=text; root.querySelector('#modalConfirm').textContent=confirm; pending=fn; modal.style.display='flex'; }
       function closeModal(){ pending=null; modal.style.display='none'; }
+      root.addEventListener('pointerdown', e=>{
+        beginTimelineDrag(e);
+      });
+      window.addEventListener('pointermove', e=>{
+        updateTimelineDrag(e);
+      });
+      window.addEventListener('pointerup', ()=>{
+        endTimelineDrag();
+      });
       root.addEventListener('click', e=>{
+        if(timelineDragJustEnded) return;
+        const insertBtn=e.target.closest('[data-insert-after]');
+        if(insertBtn){
+          e.stopPropagation();
+          insertSubtitleAt(Number(insertBtn.dataset.insertAfter));
+          return;
+        }
+        if(e.target.closest('#timelineAddBtn')){
+          timelineAddWrap.classList.toggle('open');
+          return;
+        }
+        const timelineAdd=e.target.closest('[data-timeline-add]');
+        if(timelineAdd){
+          timelineAddWrap.classList.remove('open');
+          if(timelineAdd.dataset.timelineAdd === 'voice') addOriginalVoiceClip();
+          if(timelineAdd.dataset.timelineAdd === 'segment') addTimelineSegment();
+          return;
+        }
+        if(e.target.closest('#timelineDeleteBtn')){
+          deleteSelectedTimeline();
+          return;
+        }
+        const timelineClip=e.target.closest('.timelineSelectable');
+        if(timelineClip){
+          if(timelineDragJustEnded) return;
+          selectTimeline(timelineClip.dataset.timelineType, timelineClip.dataset.timelineId);
+          return;
+        }
+        if(e.target.closest('.timelineCanvas')){
+          updateTimelinePlayheadFromEvent(e);
+          clearTimelineSelection();
+          return;
+        }
+        if(!e.target.closest('.timelineAddWrap')) timelineAddWrap.classList.remove('open');
+        if(e.target.closest('#episodeSelect')){
+          episodeNav.classList.toggle('open');
+          renderEpisodeNav();
+          if(episodeNav.classList.contains('open')) scrollCurrentEpisodeTile();
+          return;
+        }
+        if(e.target.closest('#episodePrev')){
+          if(!root.querySelector('#episodePrev').disabled) attemptEpisodeSwitch(currentEpisode - 1);
+          return;
+        }
+        if(e.target.closest('#episodeNext')){
+          if(!root.querySelector('#episodeNext').disabled) attemptEpisodeSwitch(currentEpisode + 1);
+          return;
+        }
+        const episodeTile=e.target.closest('[data-episode-no]');
+        if(episodeTile){
+          attemptEpisodeSwitch(Number(episodeTile.dataset.episodeNo));
+          return;
+        }
+        if(!e.target.closest('.episodeNav')) episodeNav.classList.remove('open');
         const jump=e.target.closest('[data-jump]');
         if(jump){ jumpToIssue(jump.dataset.jump); return; }
         const group=e.target.closest('[data-group]');
         if(group){ selectedGroup=group.dataset.group; const first=qc.find(i=>i.group===selectedGroup); if(first) activeIssue=first.id; render(); return; }
+        const moreAction=e.target.closest('[data-more-action]');
+        if(moreAction){
+          const segId = moreAction.dataset.seg;
+          activeSegment = segId;
+          if(moreAction.dataset.moreAction === 'retain-original'){ retainOriginalVoiceForSegment(segId); renderRows(activeSegment); return; }
+          if(moreAction.dataset.moreAction === 'cancel-original'){ cancelOriginalVoiceForSegment(segId); renderRows(activeSegment); return; }
+          if(moreAction.dataset.moreAction === 'delete'){ selectedTimeline = { type:'segment', id:segId }; deleteSelectedTimeline(); return; }
+        }
+        const segmentTool=e.target.closest('.segmentTool');
+        if(segmentTool){
+          if(!segmentTool.dataset.tool) return;
+          if(segmentTool.dataset.tool === '重新生成配音'){ triggerSingleRedub(activeSegment); return; }
+          showToast(segmentTool.dataset.tool === '删除' ? '打开删除段落确认' : '打开'+segmentTool.dataset.tool);
+          return;
+        }
         const candidate=e.target.closest('.candidateCard');
         if(candidate){
           const seg=segments.find(s=>s.id===candidate.dataset.seg);
@@ -587,16 +1563,53 @@
           if(e.target.classList.contains('voiceScopeCheck')){ seg.voice.checked=e.target.checked; updateVoiceBatch(); return; }
           if(e.target.classList.contains('voiceRefreshGroup')){ refreshCandidates(seg); return; }
           if(e.target.classList.contains('voiceCancelGroup')){ seg.voice=null; renderRows(activeSegment); showToast('已取消该段候选结果'); return; }
-          if(e.target.classList.contains('voiceCompare')){ showToast('播放原音频对比'); return; }
+          if(e.target.classList.contains('voiceComparePlay')){ showToast('播放原音频对比'); return; }
         }
-        if(e.target.id==='voiceSelectAll'){ voiceRows().forEach(s=>s.voice.checked=true); renderRows(activeSegment); return; }
-        if(e.target.id==='voiceClearAll'){ voiceRows().forEach(s=>s.voice.checked=false); renderRows(activeSegment); return; }
+        const batchRow=e.target.closest('[data-batch-row]');
+        if(batchRow){
+          const id=batchRow.dataset.batchRow;
+          if(batchRow.checked) batchSelectedIds.add(id); else batchSelectedIds.delete(id);
+          updateVoiceBatch();
+          return;
+        }
+        if(e.target.closest('.batchRowCheck')) return;
+        if(e.target.id==='voiceSelectAll'){
+          if(redubMode==='select') batchSelectedIds = new Set(segments.map(s=>s.id)); else voiceRows().forEach(s=>s.voice.checked=true);
+          renderRows(activeSegment);
+          return;
+        }
+        if(e.target.id==='voiceClearAll'){
+          if(redubMode==='select') batchSelectedIds.clear(); else voiceRows().forEach(s=>s.voice.checked=false);
+          renderRows(activeSegment);
+          return;
+        }
+        if(e.target.id==='voiceInvertAll'){
+          const next = new Set();
+          segments.forEach(s=>{ if(!batchSelectedIds.has(s.id)) next.add(s.id); });
+          batchSelectedIds = next;
+          renderRows(activeSegment);
+          return;
+        }
+        if(e.target.id==='voiceBatchStart'){ startBatchRedub(); return; }
+        if(e.target.id==='voiceBatchCancel'){ redubMode = voiceRows().length ? 'results' : 'none'; batchSelectedIds.clear(); renderRows(activeSegment); return; }
         if(e.target.id==='voiceBatchRegenerate'){ selectedVoiceRows().forEach(s=>regenerateCandidate(s,s.voice.selected)); return; }
         if(e.target.id==='voiceBatchRefresh'){ selectedVoiceRows().forEach(s=>refreshCandidates(s)); return; }
         if(e.target.id==='voiceBatchAccept'){ const rows=selectedVoiceRows().filter(s=>s.voice.candidates[s.voice.selected]?.status==='ready'); rows.forEach(s=>s.voice=null); renderRows(activeSegment); showToast('已批量采用 '+rows.length+' 个候选音频'); return; }
-        if(e.target.id==='voiceBatchExit'){ voiceRows().forEach(s=>s.voice=null); renderRows(activeSegment); showToast('已退出批量抽卡结果'); return; }
+        if(e.target.id==='voiceBatchExit'){ voiceRows().forEach(s=>s.voice=null); redubMode='none'; renderRows(activeSegment); showToast('已退出批量抽卡结果'); return; }
+        if(e.target.id==='batchRetranslate'){ showToast('发起批量重翻'); return; }
+        if(e.target.id==='batchRedub'){ enterBatchRedub(); return; }
         const row=e.target.closest('.subtitleItem');
-        if(row){ activeSegment=row.dataset.seg; updateVideo(activeSegment); renderRows(activeSegment); return; }
+        if(row){
+          if(redubMode==='select'){
+            const id=row.dataset.seg;
+            if(batchSelectedIds.has(id)) batchSelectedIds.delete(id); else batchSelectedIds.add(id);
+            activeSegment=id;
+            updateVideo(activeSegment);
+            renderRows(activeSegment);
+            return;
+          }
+          activeSegment=row.dataset.seg; updateVideo(activeSegment); renderRows(activeSegment); return;
+        }
         const card=e.target.closest('.qcCard');
         if(e.target.classList.contains('qcCheck')&&card){ const item=qc.find(q=>q.id===card.dataset.qc); if(item)item.checked=e.target.checked; renderTypes(); renderQc(); return; }
         if(e.target.classList.contains('qcAccept')&&card){ remove([card.dataset.qc],'accept'); return; }
@@ -608,7 +1621,7 @@
         if(e.target.id==='collapseQc'){ container.classList.add('qcCollapsed'); return; }
         if(e.target.id==='expandQc'){ container.classList.remove('qcCollapsed'); return; }
       });
-      root.querySelector('#modalCancel').addEventListener('click',closeModal); root.querySelector('#modalConfirm').addEventListener('click',()=>{ const fn=pending; closeModal(); if(fn)fn(); }); updateVideo(activeSegment); render();
+      root.querySelector('#modalCancel').addEventListener('click',closeModal); root.querySelector('#modalConfirm').addEventListener('click',()=>{ const fn=pending; closeModal(); if(fn)fn(); }); updateVideo(activeSegment); updateTimelinePlayhead(currentTimelineMs); renderEpisodeNav(); render(); renderOriginalVoiceTrack();
     })();
   </script>
 </div>
