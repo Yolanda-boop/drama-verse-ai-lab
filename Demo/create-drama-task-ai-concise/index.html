@@ -1,0 +1,1706 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>创建剧任务 - 宽版优化原型</title>
+  <style>
+    :root {
+      --page: #080916;
+      --surface: #17172a;
+      --surface-2: #111125;
+      --surface-3: #0a0b18;
+      --line: #30304d;
+      --line-soft: rgba(255,255,255,0.09);
+      --text: #f5f2ff;
+      --text-soft: #c4c0df;
+      --muted: #8885b2;
+      --muted-2: #66638f;
+      --primary: #8c4dff;
+      --primary-2: #6f3dff;
+      --primary-soft: rgba(140,77,255,0.16);
+      --option-selected-bg: rgba(140,77,255,0.24);
+      --option-hover-bg: rgba(140,77,255,0.14);
+      --blue: #4e9cff;
+      --green: #25c59e;
+      --warning: #efb54a;
+      --danger: #ff6475;
+      --input: #090a18;
+      --shadow: 0 28px 90px rgba(0,0,0,0.46);
+      --field-label: 116px;
+      --font-title: 20px;
+      --font-section: 15px;
+      --font-body: 14px;
+      --font-help: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 14%, rgba(140,77,255,0.24), transparent 30%),
+        radial-gradient(circle at 88% 82%, rgba(78,156,255,0.12), transparent 34%),
+        var(--page);
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      font-size: var(--font-body);
+    }
+
+    button,
+    textarea,
+    select,
+    input {
+      font: inherit;
+    }
+
+    .task-dialog {
+      width: min(1080px, calc(100vw - 40px));
+      height: min(760px, calc(100vh - 40px));
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid rgba(140,77,255,0.22);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .dialog-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 20px 26px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .title-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .title-icon {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      color: #d9ccff;
+      background: var(--primary-soft);
+      border: 1px solid rgba(140,77,255,0.42);
+      border-radius: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: var(--font-title);
+      line-height: 28px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .header-subtitle {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: var(--font-help);
+      line-height: 18px;
+    }
+
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .icon-btn:hover {
+      color: var(--text);
+    }
+
+    .dialog-body {
+      overflow: auto;
+      padding: 22px 26px 26px;
+      scrollbar-color: rgba(255,255,255,0.36) transparent;
+      scrollbar-width: thin;
+    }
+
+    .setup-section {
+      margin-bottom: 22px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .form-line {
+      display: grid;
+      grid-template-columns: var(--field-label) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .form-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .line-label {
+      padding-top: 10px;
+      color: var(--text-soft);
+      font-size: var(--font-section);
+      line-height: 20px;
+      font-weight: 600;
+    }
+
+    .required {
+      color: var(--danger);
+      margin-left: 3px;
+    }
+
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .choice-card {
+      min-height: 78px;
+      padding: 13px 14px;
+      display: grid;
+      grid-template-rows: 22px 36px;
+      align-content: start;
+      text-align: left;
+      color: var(--text);
+      background: rgba(17,17,37,0.72);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease;
+    }
+
+    .choice-card:hover {
+      background: rgba(24,24,51,0.95);
+      border-color: rgba(140,77,255,0.48);
+    }
+
+    .choice-card.is-selected {
+      background: rgba(42,24,82,0.88);
+      border-color: var(--primary);
+      box-shadow: inset 0 0 0 1px rgba(140,77,255,0.12);
+    }
+
+    .choice-card.is-disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+    }
+
+    .choice-head {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 22px;
+      margin-bottom: 7px;
+    }
+
+    .choice-icon {
+      width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      color: #aaa6dc;
+      flex: none;
+    }
+
+    .choice-icon svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+    }
+
+    .choice-card.is-selected .choice-icon {
+      color: #dbcfff;
+    }
+
+    .choice-title {
+      min-width: 0;
+      font-size: var(--font-body);
+      line-height: 20px;
+      font-weight: 600;
+    }
+
+    .choice-desc {
+      color: var(--muted);
+      font-size: var(--font-help);
+      line-height: 18px;
+      min-height: 36px;
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .config-columns {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .config-panel {
+      min-height: 348px;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .config-panel + .config-panel {
+      padding-left: 28px;
+      border-left: 1px solid var(--line-soft);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: var(--font-section);
+      line-height: 22px;
+      font-weight: 600;
+    }
+
+    .panel-caption {
+      color: var(--muted);
+      font-size: var(--font-help);
+      line-height: 18px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: var(--field-label) minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .form-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0;
+      padding-top: 11px;
+      color: var(--text-soft);
+      font-size: var(--font-body);
+      line-height: 18px;
+      font-weight: 500;
+    }
+
+    textarea,
+    select,
+    .text-input {
+      width: 100%;
+      color: var(--text);
+      background: var(--input);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .text-input {
+      height: 42px;
+      padding: 0 12px;
+    }
+
+    textarea {
+      min-height: 150px;
+      padding: 13px 14px;
+      resize: vertical;
+      line-height: 21px;
+    }
+
+    select {
+      height: 42px;
+      padding: 0 12px;
+    }
+
+    textarea::placeholder,
+    .text-input::placeholder {
+      color: var(--muted-2);
+    }
+
+    textarea:focus,
+    select:focus,
+    .text-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(140,77,255,0.15);
+    }
+
+    .hint {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: var(--font-help);
+      line-height: 18px;
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px;
+      padding: 3px;
+      background: var(--surface-3);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .segment-btn {
+      min-height: 38px;
+      padding: 8px 10px;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .segment-btn.is-selected {
+      color: var(--text);
+      background: var(--option-selected-bg);
+      box-shadow: inset 0 0 0 1px rgba(140,77,255,0.56);
+    }
+
+    .segment-btn:hover {
+      color: var(--text);
+    }
+
+    .source-option {
+      grid-column: 1 / -1;
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(9,10,24,0.48);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+    }
+
+    .switch-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .switch-copy {
+      min-width: 0;
+    }
+
+    .switch-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      font-size: var(--font-body);
+      line-height: 20px;
+      font-weight: 600;
+    }
+
+    .switch-desc {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: var(--font-help);
+      line-height: 19px;
+    }
+
+    .help {
+      width: 18px;
+      height: 18px;
+      display: inline-grid;
+      place-items: center;
+      color: #a69cda;
+      border: 1px solid #504c78;
+      border-radius: 50%;
+      font-size: var(--font-help);
+      line-height: 18px;
+      cursor: help;
+      flex: none;
+    }
+
+    .switch {
+      position: relative;
+      width: 46px;
+      height: 26px;
+      flex: none;
+      margin-top: 1px;
+    }
+
+    .switch input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .switch-track {
+      position: absolute;
+      inset: 0;
+      background: #34324c;
+      border: 1px solid #4e4b6c;
+      border-radius: 999px;
+      transition: background 160ms ease, border-color 160ms ease;
+    }
+
+    .switch-track::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      background: #cac6e8;
+      border-radius: 50%;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .switch input:checked + .switch-track {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .switch input:checked + .switch-track::after {
+      transform: translateX(20px);
+      background: #fff;
+    }
+
+    .upload-box {
+      display: grid;
+      place-items: center;
+      min-height: 92px;
+      margin-top: 12px;
+      padding: 16px;
+      color: var(--muted);
+      text-align: center;
+      background: rgba(140,77,255,0.06);
+      border: 1px dashed rgba(140,77,255,0.40);
+      border-radius: 8px;
+    }
+
+    .upload-box strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text-soft);
+      font-weight: 600;
+    }
+
+    .video-combobox {
+      position: relative;
+    }
+
+    .video-select-control {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      min-height: 42px;
+      padding: 5px 10px;
+      color: var(--text);
+      background: var(--input);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      outline: none;
+      cursor: text;
+    }
+
+    .video-select-control:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(140,77,255,0.15);
+    }
+
+    .video-search {
+      min-width: 180px;
+      flex: 1;
+      height: 30px;
+      padding: 0;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      outline: none;
+    }
+
+    .video-search::placeholder {
+      color: var(--muted-2);
+    }
+
+    .video-dropdown {
+      position: absolute;
+      z-index: 10;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      overflow: hidden;
+      display: none;
+      margin-top: 8px;
+      background: #111026;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 48px rgba(0,0,0,0.34);
+    }
+
+    .video-combobox.is-open .video-dropdown {
+      display: block;
+    }
+
+    .selected-video-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 0;
+    }
+
+    .selected-video-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 160px;
+      padding: 3px 8px;
+      color: var(--text-soft);
+      background: rgba(140,77,255,0.14);
+      border: 1px solid rgba(140,77,255,0.28);
+      border-radius: 4px;
+      font-size: var(--font-help);
+      line-height: 18px;
+    }
+
+    .selected-video-tag span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tag-remove {
+      display: inline-grid;
+      place-items: center;
+      width: 14px;
+      height: 14px;
+      padding: 0;
+      color: var(--text-soft);
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .tag-remove:hover {
+      color: #fff;
+    }
+
+    .tag-remove:focus-visible {
+      outline: 1px solid rgba(255,255,255,0.72);
+      outline-offset: 2px;
+      border-radius: 3px;
+    }
+
+    .video-option {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 16px;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 14px;
+      color: var(--text-soft);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
+    }
+
+    .video-option.is-hidden {
+      display: none;
+    }
+
+    .video-option input {
+      display: none;
+    }
+
+    .video-option:last-child {
+      border-bottom: 0;
+    }
+
+    .video-option:hover,
+    .video-option.is-selected {
+      background: var(--option-selected-bg);
+    }
+
+    .video-option:not(.is-selected):hover {
+      background: var(--option-hover-bg);
+    }
+
+    .video-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .video-meta {
+      color: var(--muted);
+      font-size: var(--font-help);
+      line-height: 18px;
+      white-space: nowrap;
+    }
+
+    .srt-upload-zone {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 84px;
+      margin-top: 0;
+      padding: 14px 16px;
+      color: var(--muted);
+      text-align: left;
+      background: rgba(9,10,24,0.58);
+      border: 1px dashed rgba(140,77,255,0.46);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 160ms ease, background 160ms ease;
+    }
+
+    .srt-upload-zone:hover {
+      background: rgba(140,77,255,0.07);
+      border-color: rgba(140,77,255,0.76);
+    }
+
+    .srt-upload-zone input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    .srt-upload-zone > div {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-areas:
+        "icon title"
+        "icon desc"
+        "icon file";
+      column-gap: 12px;
+      align-items: center;
+      width: min(100%, 420px);
+    }
+
+    .upload-icon {
+      grid-area: icon;
+      width: 30px;
+      height: 30px;
+      display: inline-grid;
+      place-items: center;
+      color: #cdbdff;
+      background: rgba(140,77,255,0.16);
+      border: 1px solid rgba(140,77,255,0.42);
+      border-radius: 8px;
+    }
+
+    .upload-title {
+      grid-area: title;
+      display: block;
+      color: var(--text-soft);
+      font-size: var(--font-body);
+      line-height: 20px;
+      font-weight: 600;
+    }
+
+    .upload-desc,
+    .upload-file-name {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: var(--font-help);
+      line-height: 18px;
+    }
+
+    .upload-desc {
+      grid-area: desc;
+    }
+
+    .upload-file-name {
+      grid-area: file;
+      color: var(--green);
+    }
+
+    .local-upload-panel {
+      display: grid;
+      gap: 14px;
+    }
+
+    .asset-upload-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .asset-upload-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      min-height: 72px;
+      padding: 12px;
+      color: var(--muted);
+      background: rgba(9,10,24,0.58);
+      border: 1px dashed rgba(140,77,255,0.42);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 160ms ease, background 160ms ease;
+    }
+
+    .asset-upload-card:hover {
+      background: rgba(140,77,255,0.07);
+      border-color: rgba(140,77,255,0.72);
+    }
+
+    .asset-upload-card input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    .asset-upload-icon {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      color: #cdbdff;
+      background: rgba(140,77,255,0.16);
+      border: 1px solid rgba(140,77,255,0.42);
+      border-radius: 8px;
+    }
+
+    .asset-upload-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-soft);
+      font-weight: 600;
+      line-height: 20px;
+    }
+
+    .optional {
+      color: var(--muted);
+      font-size: var(--font-help);
+      font-weight: 500;
+    }
+
+    .asset-upload-desc,
+    .asset-upload-file {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: var(--font-help);
+      line-height: 18px;
+    }
+
+    .asset-upload-file {
+      color: var(--green);
+    }
+
+    .field-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 7px;
+      color: var(--text-soft);
+      font-weight: 500;
+      line-height: 20px;
+    }
+
+    .srt-settings {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .srt-setting-row {
+      min-height: 88px;
+      padding: 11px 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: start;
+      background: rgba(255,255,255,0.026);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+    }
+
+    .srt-setting-row .switch {
+      margin-top: 1px;
+    }
+
+    .srt-setting-row .switch-desc {
+      max-width: 240px;
+    }
+
+    .checkbox-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-soft);
+      font-size: var(--font-body);
+      line-height: 20px;
+      user-select: none;
+    }
+
+    .checkbox-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 20px;
+      align-items: center;
+    }
+
+    .checkbox-line input {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--primary);
+      margin: 0;
+    }
+
+    .flow-preview {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: var(--font-help);
+      line-height: 18px;
+    }
+
+    .flow-dot {
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: rgba(140,77,255,0.70);
+      border-radius: 50%;
+      font-size: 11px;
+      flex: none;
+    }
+
+    .readonly-note {
+      grid-column: 2;
+      padding: 13px 14px;
+      color: var(--muted);
+      background: rgba(239,181,74,0.08);
+      border: 1px solid rgba(239,181,74,0.22);
+      border-radius: 8px;
+      font-size: var(--font-help);
+      line-height: 19px;
+    }
+
+    .dialog-footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 26px;
+      background: rgba(23,23,42,0.97);
+      border-top: 1px solid var(--line);
+    }
+
+    .summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: var(--font-help);
+      line-height: 20px;
+    }
+
+    .summary-pill {
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 3px 8px;
+      color: var(--text-soft);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line-soft);
+      border-radius: 4px;
+      font-size: var(--font-help);
+      line-height: 18px;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      min-width: 82px;
+      height: 40px;
+      padding: 0 20px;
+      color: var(--text);
+      background: #22213a;
+      border: 1px solid #353351;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      border-color: rgba(140,77,255,0.74);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary-2), #a447ff);
+      border-color: #9c45ff;
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(140,77,255,0.30);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 940px) {
+      .task-dialog {
+        height: calc(100vh - 24px);
+        width: calc(100vw - 24px);
+      }
+
+      .config-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .config-panel + .config-panel {
+        padding-left: 0;
+        border-left: 0;
+        padding-top: 22px;
+        border-top: 1px solid var(--line-soft);
+      }
+
+      .task-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .srt-settings {
+        grid-template-columns: 1fr;
+      }
+
+      .srt-setting-row {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 8px;
+      }
+
+      .task-dialog {
+        width: calc(100vw - 16px);
+        height: calc(100vh - 16px);
+      }
+
+      .dialog-header,
+      .dialog-body,
+      .dialog-footer {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .task-grid,
+      .mode-grid,
+      .segmented {
+        grid-template-columns: 1fr;
+      }
+
+      .dialog-footer {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-actions {
+        justify-content: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="task-dialog" aria-label="创建剧任务宽版原型">
+    <header class="dialog-header">
+      <div class="title-block">
+        <div class="title-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24">
+            <path d="M4 7h16M4 12h10M4 17h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div>
+          <h1>创建剧任务</h1>
+          <div class="header-subtitle">先选择任务流，再配置素材来源与译文生成方式</div>
+        </div>
+      </div>
+      <button class="icon-btn" type="button" aria-label="关闭">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+    </header>
+
+    <section class="dialog-body">
+      <section class="setup-section">
+        <div class="form-line">
+          <div class="line-label">任务类型<span class="required">*</span></div>
+          <div class="task-grid" data-choice-group="taskType">
+            <button class="choice-card" type="button" data-value="extract">
+              <div class="choice-head">
+                <span class="choice-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M6 4h9l3 3v13H6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                    <path d="M15 4v4h4M9 11h6M9 15h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    <circle cx="16.5" cy="16.5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.8" />
+                    <path d="m18.3 18.3 1.7 1.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                  </svg>
+                </span>
+                <span class="choice-title">字幕资产提取</span>
+              </div>
+              <div class="choice-desc">先提取原字幕与说话人等资产，供人工前置校对使用</div>
+            </button>
+            <button class="choice-card" type="button" data-value="subtitle">
+              <div class="choice-head">
+                <span class="choice-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M5 5h14v14H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                    <path d="M8 9h4M8 13h3M15 8l-2.4 7M14.2 12h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span class="choice-title">仅字幕翻译</span>
+              </div>
+              <div class="choice-desc">基于已提取字幕进行翻译，适用于无需配音的场景</div>
+            </button>
+            <button class="choice-card is-selected" type="button" data-value="subtitle_dubbing">
+              <div class="choice-head">
+                <span class="choice-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M5 9v6h3l4 3V6L8 9H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                    <path d="M15.2 9.2a4 4 0 0 1 0 5.6M17.8 6.8a7.5 7.5 0 0 1 0 10.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                  </svg>
+                </span>
+                <span class="choice-title">翻译并配音</span>
+              </div>
+              <div class="choice-desc">对字幕进行翻译后配音</div>
+            </button>
+            <button class="choice-card" type="button" data-value="dubbing">
+              <div class="choice-head">
+                <span class="choice-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8" />
+                    <path d="M10 8.8v6.4l5-3.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                    <path d="M5 18.5h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".65" />
+                  </svg>
+                </span>
+                <span class="choice-title">仅配音</span>
+              </div>
+              <div class="choice-desc">基于已完成原字幕提取结果直接配音</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-line">
+          <div class="line-label">处理模式<span class="required">*</span></div>
+          <div>
+            <div class="segmented mode-grid" data-choice-group="processMode">
+              <button class="segment-btn is-selected" type="button" data-value="aipe">AIPE</button>
+              <button class="segment-btn" type="button" data-value="smart">智能速配</button>
+            </div>
+            <div class="hint" id="modeHint">按 AI + PE 流程逐阶段生成任务，人工校对后发起流转</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="config-columns">
+        <section class="config-panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">输入来源</div>
+              <div class="panel-caption">配置本次任务使用的视频或剧 ID</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label">原视频来源<span class="required">*</span></label>
+            <div class="segmented" data-choice-group="videoSource">
+              <button class="segment-btn is-selected" type="button" data-value="bookId">中台剧ID</button>
+              <button class="segment-btn" id="videoSourceSecondary" type="button" data-value="existing">本地视频ID</button>
+            </div>
+          </div>
+
+          <div class="form-row" id="bookIdInput">
+            <label class="form-label" for="dramaIds">中台剧ID<span class="required">*</span></label>
+            <div>
+              <textarea id="dramaIds" placeholder="每行一个剧ID，回车换行，单次上限20部"></textarea>
+              <div class="hint">剧ID仅允许11位阿拉伯数字，重复自动去重，单次上限20个</div>
+            </div>
+          </div>
+
+          <div class="form-row hidden" id="existingVideoInput">
+            <label class="form-label" for="videoSearch">本地视频ID<span class="required">*</span></label>
+            <div class="video-combobox">
+              <div class="video-select-control" id="videoSelectControl">
+                <div class="selected-video-tags" id="selectedVideoTags"></div>
+                <input class="video-search" id="videoSearch" type="text" placeholder="请输入视频ID或剧名称搜索" />
+              </div>
+              <div class="video-dropdown" role="listbox" aria-label="本地视频候选列表">
+                <div class="video-option" role="option" aria-selected="false">
+                  <input type="checkbox" aria-label="选择都市情缘" />
+                  <span class="video-name">都市情缘</span>
+                  <span class="video-meta">12345678901</span>
+                  <span class="video-meta">中文</span>
+                </div>
+                <div class="video-option" role="option">
+                  <input type="checkbox" aria-label="选择星际迷途" />
+                  <span class="video-name">星际迷途</span>
+                  <span class="video-meta">23456789012</span>
+                  <span class="video-meta">中文</span>
+                </div>
+                <div class="video-option" role="option">
+                  <input type="checkbox" aria-label="选择江湖儿女" />
+                  <span class="video-name">江湖儿女</span>
+                  <span class="video-meta">34567890123</span>
+                  <span class="video-meta">粤语</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row hidden" id="localVideoUploadInput">
+            <label class="form-label" for="localVideoFile">上传视频文件<span class="required">*</span></label>
+            <label class="asset-upload-card" for="localVideoFile">
+              <input id="localVideoFile" type="file" accept=".mp4,.zip" data-file-name-target="localVideoFileName" />
+              <span class="asset-upload-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 4v12m0-12 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <span>
+                <span class="asset-upload-title">点击或拖拽文件至此区域</span>
+                <span class="asset-upload-desc">支持 MP4；单集不超过 10 GB；ZIP 内文件按集序号命名，如 1.mp4、2.mp4</span>
+                <span class="asset-upload-file hidden" id="localVideoFileName"></span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="config-panel" id="outputPanel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title" id="outputPanelTitle">翻译与产出配置</div>
+              <div class="panel-caption" id="outputPanelCaption">AI 翻译与导入译文 SRT 为二选一译文来源</div>
+            </div>
+          </div>
+
+          <div class="local-upload-panel hidden" id="localUploadPanel">
+            <div class="form-row" id="localDramaNameRow">
+              <label class="form-label" for="localDramaName">剧名<span class="required">*</span></label>
+              <input class="text-input" id="localDramaName" type="text" placeholder="请输入剧名" />
+            </div>
+
+            <div class="form-row">
+              <label class="form-label" for="subtitleLanguage">字幕提取语言<span class="required">*</span><span class="help" title="选择原视频中需要进行字幕提取的主要语言。">?</span></label>
+              <select id="subtitleLanguage">
+                <option>中文</option>
+                <option>英语</option>
+                <option>日语</option>
+                <option>韩语</option>
+                <option>泰语</option>
+              </select>
+            </div>
+
+            <div class="asset-upload-list" id="localSupportUploadList">
+              <label class="asset-upload-card" for="localOriginalSrtFile">
+                <input id="localOriginalSrtFile" type="file" accept=".zip" data-file-name-target="localOriginalSrtFileName" />
+                <span class="asset-upload-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 4v12m0-12 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span>
+                  <span class="asset-upload-title">上传原字幕 SRT<span class="optional">可选</span></span>
+                  <span class="asset-upload-desc">支持 ZIP；可含多集 SRT，文件名需与视频文件名对应，如 1.srt、2.srt</span>
+                  <span class="asset-upload-file hidden" id="localOriginalSrtFileName"></span>
+                </span>
+              </label>
+
+              <label class="asset-upload-card" for="localScriptFile">
+                <input id="localScriptFile" type="file" accept=".txt,.doc,.docx" data-file-name-target="localScriptFileName" />
+                <span class="asset-upload-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 4v12m0-12 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span>
+                  <span class="asset-upload-title">上传剧本<span class="optional">可选</span></span>
+                  <span class="asset-upload-desc">支持 TXT、DOC、DOCX，不超过 50 MB；用于辅助说话人识别</span>
+                  <span class="asset-upload-file hidden" id="localScriptFileName"></span>
+                </span>
+              </label>
+
+              <label class="asset-upload-card" for="localOutlineFile">
+                <input id="localOutlineFile" type="file" accept=".txt,.doc,.docx" data-file-name-target="localOutlineFileName" />
+                <span class="asset-upload-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 4v12m0-12 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span>
+                  <span class="asset-upload-title">上传剧本大纲<span class="optional">可选</span></span>
+                  <span class="asset-upload-desc">支持 TXT、DOC、DOCX，不超过 50 MB；用于辅助角色信息提取</span>
+                  <span class="asset-upload-file hidden" id="localOutlineFileName"></span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row" id="languageRow">
+            <label class="form-label" for="targetLanguage">翻译到<span class="required">*</span></label>
+            <select id="targetLanguage">
+              <option>英语</option>
+              <option>日语</option>
+              <option>西班牙语</option>
+              <option>葡萄牙语</option>
+              <option>泰语</option>
+            </select>
+          </div>
+
+          <div class="form-row" id="sourceRow">
+            <label class="form-label">译文生成方式<span class="required">*</span></label>
+            <div class="segmented" data-choice-group="translationSource">
+              <button class="segment-btn is-selected" type="button" data-value="ai">AI 翻译</button>
+              <button class="segment-btn" type="button" data-value="srt">导入译文 SRT</button>
+            </div>
+
+            <div class="source-option" id="aiOption">
+              <div class="switch-row">
+                <div class="switch-copy">
+                  <div class="switch-title">
+                    <span>AI译文简短化</span>
+                    <span class="help" title="开启后，AI 翻译将结合字幕时长与目标语种 SPS 限制生成更简短的译文。翻译后系统自动检测音节数，超标段落会再次请求模型简短化。">?</span>
+                  </div>
+                  <div class="switch-desc">适合希望 AI 译文更贴近配音语速的场景；最终直接展示简短后的 AI 译文。</div>
+                </div>
+                <label class="switch" aria-label="AI译文简短化">
+                  <input id="conciseSwitch" type="checkbox" />
+                  <span class="switch-track"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="source-option hidden" id="srtOption">
+              <label class="srt-upload-zone" for="srtZipInput">
+                <input id="srtZipInput" type="file" accept=".zip" />
+                <div>
+                  <span class="upload-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24">
+                      <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 4v12m0-12 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                  <span class="upload-title">点击或拖拽 ZIP 文件到此区域</span>
+                  <span class="upload-desc">ZIP 文件名为剧ID，内含按集序号命名的 .srt 文件</span>
+                  <span class="upload-file-name hidden" id="srtFileName"></span>
+                </div>
+              </label>
+              <div class="srt-settings">
+                <div class="switch-row srt-setting-row">
+                  <div class="switch-copy">
+                    <div class="switch-title">
+                      <span>检测中台 SRT</span>
+                      <span class="help" title="开启后自动检测内容中台是否存在目标语言译文 SRT。">?</span>
+                    </div>
+                    <div class="switch-desc">优先检测中台是否已有目标语言译文 SRT</div>
+                  </div>
+                  <label class="switch" aria-label="检测中台 SRT">
+                    <input id="checkPlatformSrtSwitch" type="checkbox" checked />
+                    <span class="switch-track"></span>
+                  </label>
+                </div>
+                <div class="switch-row srt-setting-row">
+                  <div class="switch-copy">
+                    <div class="switch-title">
+                      <span>译文润色</span>
+                      <span class="help" title="对导入的译文进行润色优化（如简写、改写等），使其更适合配音合成语速需要。润色将在任务创建后自动执行，不影响原始译文文件。">?</span>
+                    </div>
+                    <div class="switch-desc">对导入译文做简写优化，适配配音语速</div>
+                  </div>
+                  <label class="switch" aria-label="译文润色">
+                    <input id="srtPolishSwitch" type="checkbox" />
+                    <span class="switch-track"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row hidden" id="nonTranslationNote">
+            <span class="form-label">说明</span>
+            <div class="readonly-note">
+              当前任务类型不涉及 AI 翻译配置，因此隐藏译文生成方式。
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <footer class="dialog-footer">
+      <div class="summary" aria-live="polite">
+        <span class="summary-label">当前配置</span>
+        <span class="summary-pill" id="summaryTask">翻译并配音</span>
+        <span class="summary-pill" id="summaryMode">AIPE</span>
+        <span class="summary-pill" id="summarySource">AI 翻译</span>
+      </div>
+      <div class="footer-actions">
+        <button class="btn" type="button">取消</button>
+        <button class="btn btn-primary" type="button" id="primaryAction">创建任务</button>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const state = {
+      taskType: 'subtitle_dubbing',
+      processMode: 'aipe',
+      videoSource: 'bookId',
+      translationSource: 'ai',
+      conciseEnabled: false,
+      srtPolishEnabled: false,
+    };
+
+    const taskLabels = {
+      extract: '字幕资产提取',
+      subtitle: '仅字幕翻译',
+      subtitle_dubbing: '翻译并配音',
+      dubbing: '仅配音',
+    };
+
+    const modeLabels = {
+      aipe: 'AIPE',
+      smart: '智能速配',
+    };
+
+    const sourceLabels = {
+      ai: 'AI 翻译',
+      srt: '导入译文 SRT',
+    };
+
+    const bookIdInput = document.getElementById('bookIdInput');
+    const existingVideoInput = document.getElementById('existingVideoInput');
+    const localVideoUploadInput = document.getElementById('localVideoUploadInput');
+    const outputPanel = document.getElementById('outputPanel');
+    const outputPanelTitle = document.getElementById('outputPanelTitle');
+    const outputPanelCaption = document.getElementById('outputPanelCaption');
+    const localUploadPanel = document.getElementById('localUploadPanel');
+    const localDramaNameRow = document.getElementById('localDramaNameRow');
+    const localSupportUploadList = document.getElementById('localSupportUploadList');
+    const languageRow = document.getElementById('languageRow');
+    const sourceRow = document.getElementById('sourceRow');
+    const aiOption = document.getElementById('aiOption');
+    const srtOption = document.getElementById('srtOption');
+    const nonTranslationNote = document.getElementById('nonTranslationNote');
+    const conciseSwitch = document.getElementById('conciseSwitch');
+    const srtPolishSwitch = document.getElementById('srtPolishSwitch');
+    const srtZipInput = document.getElementById('srtZipInput');
+    const srtFileName = document.getElementById('srtFileName');
+    const selectedVideoTags = document.getElementById('selectedVideoTags');
+    const videoCombobox = document.querySelector('.video-combobox');
+    const videoSelectControl = document.getElementById('videoSelectControl');
+    const videoSourceSecondary = document.getElementById('videoSourceSecondary');
+    const videoSearch = document.getElementById('videoSearch');
+    const modeHint = document.getElementById('modeHint');
+    const smartModeButton = document.querySelector('[data-choice-group="processMode"] [data-value="smart"]');
+    const summaryTask = document.getElementById('summaryTask');
+    const summaryMode = document.getElementById('summaryMode');
+    const summarySource = document.getElementById('summarySource');
+    const primaryAction = document.getElementById('primaryAction');
+
+    function isTranslationTask() {
+      return state.taskType === 'subtitle' || state.taskType === 'subtitle_dubbing';
+    }
+
+    function isLocalUploadFlow() {
+      return state.taskType === 'extract' && state.videoSource === 'existing';
+    }
+
+    function isExtractTask() {
+      return state.taskType === 'extract';
+    }
+
+    function getModeLabel(value) {
+      if (value === 'smart' && state.taskType === 'subtitle') return '智能速翻';
+      return modeLabels[value];
+    }
+
+    function updateGroup(group, value) {
+      document.querySelectorAll(`[data-choice-group="${group}"] [data-value]`).forEach((item) => {
+        item.classList.toggle('is-selected', item.dataset.value === value);
+      });
+    }
+
+    function render() {
+      updateGroup('taskType', state.taskType);
+      updateGroup('processMode', state.processMode);
+      updateGroup('videoSource', state.videoSource);
+      updateGroup('translationSource', state.translationSource);
+
+      const translationTask = isTranslationTask();
+      const extractTask = isExtractTask();
+      const localUploadFlow = isLocalUploadFlow();
+
+      bookIdInput.classList.toggle('hidden', state.videoSource !== 'bookId');
+      existingVideoInput.classList.toggle('hidden', state.videoSource !== 'existing' || extractTask);
+      localVideoUploadInput.classList.toggle('hidden', !localUploadFlow);
+      videoSourceSecondary.textContent = extractTask ? '本地上传' : '本地视频ID';
+
+      languageRow.classList.toggle('hidden', !translationTask);
+      sourceRow.classList.toggle('hidden', !translationTask);
+      localUploadPanel.classList.toggle('hidden', !localUploadFlow);
+      localDramaNameRow.classList.toggle('hidden', !localUploadFlow);
+      localSupportUploadList.classList.toggle('hidden', !localUploadFlow);
+      nonTranslationNote.classList.add('hidden');
+      outputPanel.classList.toggle('is-non-translation', !translationTask && !extractTask);
+
+      aiOption.classList.toggle('hidden', !translationTask || state.translationSource !== 'ai');
+      srtOption.classList.toggle('hidden', !translationTask || state.translationSource !== 'srt');
+
+      conciseSwitch.checked = state.conciseEnabled;
+      srtPolishSwitch.checked = state.srtPolishEnabled;
+      const file = srtZipInput.files && srtZipInput.files[0];
+      srtFileName.classList.toggle('hidden', !file || state.translationSource !== 'srt');
+      srtFileName.textContent = file ? `已选择：${file.name}` : '';
+
+      smartModeButton.textContent = getModeLabel('smart');
+      outputPanelTitle.textContent = extractTask ? '本地上传配置' : '翻译与产出配置';
+      outputPanelCaption.textContent = extractTask
+        ? localUploadFlow
+          ? '配置字幕提取语言及可选辅助材料'
+          : '使用中台剧已有字幕资产配置'
+        : translationTask
+          ? 'AI 翻译与导入译文 SRT 为二选一译文来源'
+          : '当前任务类型无需配置译文生成方式';
+
+      summaryTask.textContent = taskLabels[state.taskType];
+      summaryMode.textContent = getModeLabel(state.processMode);
+      modeHint.textContent = state.processMode === 'aipe'
+        ? '按 AI + PE 流程逐阶段生成任务，人工校对后发起流转'
+        : state.taskType === 'subtitle'
+          ? '自动完成前置字幕资产提取与字幕翻译流转，过程中不进入人工校对'
+          : '自动完成前置字幕资产提取、翻译与配音流转，过程中不进入人工校对';
+
+      if (translationTask) {
+        const extra = state.translationSource === 'ai' && state.conciseEnabled
+          ? ' · AI译文简短化'
+          : state.translationSource === 'srt' && state.srtPolishEnabled
+            ? ' · 译文润色'
+            : '';
+        summarySource.classList.remove('hidden');
+        summarySource.textContent = sourceLabels[state.translationSource] + extra;
+      } else {
+        summarySource.classList.toggle('hidden', !extractTask);
+        summarySource.textContent = extractTask
+          ? (state.videoSource === 'bookId' ? '中台剧ID' : '本地上传')
+          : '';
+      }
+
+      primaryAction.textContent = translationTask && state.translationSource === 'srt' ? '下一步' : '创建任务';
+    }
+
+    document.querySelectorAll('[data-choice-group] [data-value]').forEach((item) => {
+      item.addEventListener('click', () => {
+        const group = item.closest('[data-choice-group]').dataset.choiceGroup;
+        const value = item.dataset.value;
+        state[group] = value;
+
+        if (group === 'taskType' && !isTranslationTask()) {
+          state.translationSource = 'ai';
+          state.conciseEnabled = false;
+          state.srtPolishEnabled = false;
+        }
+
+        if (group === 'translationSource' && value === 'srt') {
+          state.conciseEnabled = false;
+        }
+
+        if (group === 'translationSource' && value === 'ai') {
+          state.srtPolishEnabled = false;
+        }
+
+        render();
+      });
+    });
+
+    conciseSwitch.addEventListener('change', () => {
+      state.conciseEnabled = conciseSwitch.checked;
+      render();
+    });
+
+    srtPolishSwitch.addEventListener('change', () => {
+      state.srtPolishEnabled = srtPolishSwitch.checked;
+      render();
+    });
+
+    srtZipInput.addEventListener('change', () => {
+      render();
+    });
+
+    document.querySelectorAll('[data-file-name-target]').forEach((input) => {
+      input.addEventListener('change', () => {
+        const target = document.getElementById(input.dataset.fileNameTarget);
+        const file = input.files && input.files[0];
+        if (!target) return;
+        target.classList.toggle('hidden', !file);
+        target.textContent = file ? `已选择：${file.name}` : '';
+      });
+    });
+
+    const videoOptions = Array.from(document.querySelectorAll('.video-option'));
+
+    function getVideoOptionValue(option) {
+      return option.querySelector('.video-meta')?.textContent?.trim()
+        || option.querySelector('.video-name')?.textContent?.trim()
+        || '';
+    }
+
+    function getSelectedVideoOptions() {
+      return videoOptions.filter((option) => option.querySelector('input[type="checkbox"]')?.checked);
+    }
+
+    function syncVideoOption(option) {
+      const checkbox = option.querySelector('input[type="checkbox"]');
+      if (!checkbox) return;
+      option.classList.toggle('is-selected', checkbox.checked);
+      option.setAttribute('aria-selected', checkbox.checked ? 'true' : 'false');
+    }
+
+    function resetVideoSearch() {
+      videoSearch.value = '';
+      videoOptions.forEach((option) => option.classList.remove('is-hidden'));
+    }
+
+    function renderSelectedVideoTags() {
+      const selected = getSelectedVideoOptions()
+        .map((option) => {
+          const name = option.querySelector('.video-name')?.textContent?.trim();
+          const value = getVideoOptionValue(option);
+          return name && value ? { name, value } : null;
+        })
+        .filter(Boolean);
+
+      selectedVideoTags.innerHTML = selected.map(({ name, value }) => `
+        <span class="selected-video-tag" data-value="${value}">
+          <span>${name}</span>
+          <button class="tag-remove" type="button" aria-label="移除${name}">×</button>
+        </span>
+      `).join('');
+
+      videoSearch.placeholder = selected.length ? '' : '请输入视频ID或剧名称搜索';
+    }
+
+    selectedVideoTags.addEventListener('click', (event) => {
+      const removeButton = event.target.closest('.tag-remove');
+      if (!removeButton) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const tag = removeButton.closest('.selected-video-tag');
+      const value = tag?.dataset.value;
+      const option = videoOptions.find((item) => getVideoOptionValue(item) === value);
+      const checkbox = option?.querySelector('input[type="checkbox"]');
+      if (!checkbox || !option) return;
+
+      checkbox.checked = false;
+      syncVideoOption(option);
+      resetVideoSearch();
+      renderSelectedVideoTags();
+      videoSearch.blur();
+    });
+
+    videoOptions.forEach((option) => {
+      option.addEventListener('click', (event) => {
+        const checkbox = option.querySelector('input[type="checkbox"]');
+        if (!checkbox) return;
+        if (event.target !== checkbox) checkbox.checked = !checkbox.checked;
+        syncVideoOption(option);
+        resetVideoSearch();
+        renderSelectedVideoTags();
+        videoSearch.blur();
+      });
+    });
+
+    videoSelectControl.addEventListener('click', () => {
+      videoCombobox.classList.add('is-open');
+      videoSearch.focus();
+    });
+
+    videoSearch.addEventListener('focus', () => {
+      videoCombobox.classList.add('is-open');
+    });
+
+    videoSearch.addEventListener('input', () => {
+      const keyword = videoSearch.value.trim().toLowerCase();
+      document.querySelectorAll('.video-option').forEach((option) => {
+        const text = option.textContent.toLowerCase();
+        option.classList.toggle('is-hidden', keyword.length > 0 && !text.includes(keyword));
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!videoCombobox.contains(event.target)) {
+        videoCombobox.classList.remove('is-open');
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
