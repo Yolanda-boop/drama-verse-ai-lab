@@ -291,6 +291,29 @@
     #dv-real-qc-prototype .videoControls { height: 92px; border-top: 1px solid #222; padding: 12px; color: var(--text-tertiary); font-size: 12px; }
     #dv-real-qc-prototype .progress { height: 4px; background: #2b2b2b; margin: 12px 0; position: relative; }
     #dv-real-qc-prototype .progress:after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--progress-value, 42%); background: #fff; transition: width .18s ease; }
+    #dv-real-qc-prototype .videoTimeRow,
+    #dv-real-qc-prototype .videoControlRow { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    #dv-real-qc-prototype .videoControlLeft,
+    #dv-real-qc-prototype .videoControlCenter,
+    #dv-real-qc-prototype .videoControlRight { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    #dv-real-qc-prototype .videoControlCenter { justify-content: center; flex: 1; color: rgba(255,255,255,.66); }
+    #dv-real-qc-prototype .subtitleStyleBtn {
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 0 8px;
+      cursor: pointer;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    #dv-real-qc-prototype .subtitleStyleBtn:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .subtitleStyleIcon { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; color: currentColor; flex: 0 0 auto; }
+    #dv-real-qc-prototype .subtitleStyleIcon svg { display: block; width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
     #dv-real-qc-prototype .subtitlePanel {
       flex: 1;
       display: flex;
@@ -746,6 +769,168 @@
     #dv-real-qc-prototype .modalBox h3 { margin: 0 0 10px; font-size: 16px; font-weight: 600; }
     #dv-real-qc-prototype .modalBox p { margin: 0 0 16px; color: var(--text-secondary); line-height: 1.5; }
     #dv-real-qc-prototype .modalActions { display: flex; justify-content: flex-end; gap: 10px; }
+    #dv-real-qc-prototype .subtitleStyleMask {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.68);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 12;
+    }
+    #dv-real-qc-prototype .subtitleStyleDialog {
+      width: min(980px, 96%);
+      max-height: min(720px, 92%);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 16px 42px rgba(0,0,0,.62);
+      overflow: hidden;
+    }
+    #dv-real-qc-prototype .subtitleStyleHeader {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .subtitleStyleTitle { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+    #dv-real-qc-prototype .subtitleStyleClose {
+      width: 30px;
+      height: 30px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 30px;
+    }
+    #dv-real-qc-prototype .subtitleStyleClose:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .subtitleStyleBody {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) 336px;
+      gap: 18px;
+      padding: 18px;
+      overflow: auto;
+    }
+    #dv-real-qc-prototype .subtitleStylePreviewPane {
+      min-height: 440px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #070707;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    #dv-real-qc-prototype .subtitlePreviewPhone {
+      width: min(260px, 70%);
+      aspect-ratio: 9/16;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, #40302a 0%, #8c7058 42%, #221b20 100%);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 18px 60px rgba(0,0,0,.55);
+    }
+    #dv-real-qc-prototype .subtitlePreviewPhone:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 58% 28%, rgba(255,235,198,.28), transparent 27%),
+        linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.18));
+      opacity: .7;
+    }
+    #dv-real-qc-prototype .subtitlePreviewText {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      bottom: 27.04%;
+      text-align: center;
+      color: #fff;
+      font-size: 30px;
+      line-height: 1.18;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-shadow: 0 1px 2px rgba(0,0,0,.72), 1px 0 1px rgba(0,0,0,.72), -1px 0 1px rgba(0,0,0,.72), 0 -1px 1px rgba(0,0,0,.72);
+      word-break: normal;
+      overflow-wrap: normal;
+      transform: translateY(50%);
+      z-index: 1;
+    }
+    #dv-real-qc-prototype .subtitleStyleForm { display: grid; align-content: start; gap: 14px; }
+    #dv-real-qc-prototype .subtitleStyleMeta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      padding-bottom: 2px;
+    }
+    #dv-real-qc-prototype .languageBadge {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 11px;
+      color: #c8baff;
+      background: rgba(98,36,255,.18);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    #dv-real-qc-prototype .styleField { display: grid; gap: 6px; }
+    #dv-real-qc-prototype .styleLabel { color: var(--text-secondary); font-size: 13px; }
+    #dv-real-qc-prototype .styleLabelWithHelp { display: inline-flex; align-items: center; gap: 6px; width: fit-content; color: var(--text-secondary); font-size: 13px; }
+    #dv-real-qc-prototype .styleHelpIcon { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border: 1px solid var(--border); border-radius: 50%; color: var(--text-tertiary); font-size: 11px; line-height: 1; cursor: help; }
+    #dv-real-qc-prototype .styleHelpIcon::after { content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); display: none; width: max-content; max-width: 260px; padding: 7px 9px; border: 1px solid rgba(255,255,255,.12); border-radius: 6px; background: #252131; color: #f3f0ff; font-size: 12px; line-height: 1.5; box-shadow: 0 8px 24px rgba(0,0,0,.28); z-index: 40; }
+    #dv-real-qc-prototype .styleHelpIcon::before { content: ""; position: absolute; left: 50%; bottom: calc(100% + 3px); transform: translateX(-50%); display: none; border: 5px solid transparent; border-top-color: #252131; z-index: 41; }
+    #dv-real-qc-prototype .styleHelpIcon:hover::after,
+    #dv-real-qc-prototype .styleHelpIcon:hover::before { display: block; }
+    #dv-real-qc-prototype .styleInput,
+    #dv-real-qc-prototype .styleSelect {
+      width: 100%;
+      height: 34px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 5px;
+      background: #111;
+      color: var(--text-primary);
+      padding: 0 10px;
+      outline: none;
+    }
+    #dv-real-qc-prototype .styleInput:focus,
+    #dv-real-qc-prototype .styleSelect:focus { border-color: #6c39e6; box-shadow: 0 0 0 2px rgba(98,36,255,.24); }
+    #dv-real-qc-prototype .styleSwitchRow {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 5px;
+      background: #111;
+      padding: 0 10px;
+      color: var(--text-secondary);
+    }
+    #dv-real-qc-prototype .styleSwitchRow input { width: 18px; height: 18px; accent-color: #6c39e6; }
+    #dv-real-qc-prototype .subtitleStyleFooter {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      border-top: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .subtitleStyleScope { color: var(--text-tertiary); font-size: 12px; }
+    #dv-real-qc-prototype .subtitleStyleActions { display: flex; align-items: center; gap: 10px; }
     #dv-real-qc-prototype .toast { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); padding: 10px 14px; display: none; z-index: 11; box-shadow: 0 4px 16px rgba(0,0,0,.6); }
     @media (max-width: 900px) {
       #dv-real-qc-prototype .videoPanel { display: none; }
@@ -793,7 +978,15 @@
     <div class="mainContent">
       <section class="videoPanel" aria-label="视频预览">
         <div class="videoStage"><div class="fakeVideo" aria-hidden="true"></div></div>
-        <div class="videoControls"><span id="videoTime">00:00:13,519</span><span style="float:right">00:02:34,459</span><div class="progress" id="videoProgress"></div><div style="text-align:center">◀︎  ▶︎  ▶︎</div></div>
+        <div class="videoControls">
+          <div class="videoTimeRow"><span id="videoTime">00:00:13,519</span><span>00:02:34,459</span></div>
+          <div class="progress" id="videoProgress"></div>
+          <div class="videoControlRow">
+            <div class="videoControlLeft"><button type="button" class="subtitleStyleBtn" id="subtitleStyleBtn" title="配置导出硬字幕样式"><span class="subtitleStyleIcon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.2 4.2h9.6a1.4 1.4 0 0 1 1.4 1.4v5a1.4 1.4 0 0 1-1.4 1.4H3.2a1.4 1.4 0 0 1-1.4-1.4v-5a1.4 1.4 0 0 1 1.4-1.4Z"></path><path d="M4.6 8.2h2.8M8.6 8.2h2.8M4.6 10.1h4.7"></path></svg></span><span>字幕样式</span></button></div>
+            <div class="videoControlCenter">◀︎  ▶︎  ▶︎</div>
+            <div class="videoControlRight"><span>1X</span><span>□</span></div>
+          </div>
+        </div>
       </section>
       <section class="subtitlePanel">
         <div class="subtitleWithQc">
@@ -858,6 +1051,34 @@
         </div>
       </div>
     </div>
+    <div class="subtitleStyleMask" id="subtitleStyleMask" role="dialog" aria-modal="true" aria-labelledby="subtitleStyleTitle">
+      <div class="subtitleStyleDialog">
+        <div class="subtitleStyleHeader">
+          <div class="subtitleStyleTitle" id="subtitleStyleTitle">字幕样式配置</div>
+          <button type="button" class="subtitleStyleClose" id="subtitleStyleClose" aria-label="关闭">×</button>
+        </div>
+        <div class="subtitleStyleBody">
+          <div class="subtitleStylePreviewPane">
+            <div class="subtitlePreviewPhone">
+              <div class="subtitlePreviewText" id="subtitlePreviewText">مرحبا، هذه معاينة للترجمة.</div>
+            </div>
+          </div>
+          <div class="subtitleStyleForm">
+            <div class="subtitleStyleMeta"><span>当前配置语种</span><span class="languageBadge" id="subtitleStyleLanguage">阿拉伯语</span></div>
+            <label class="styleField"><span class="styleLabel">字号大小</span><input class="styleInput" id="styleFontSize" type="number" min="1" max="180" step="1"></label>
+            <label class="styleField"><span class="styleLabel">字间距</span><input class="styleInput" id="styleLetterSpacing" type="number" min="-20" max="20" step="1"></label>
+            <label class="styleField"><span class="styleLabel">换行长度</span><input class="styleInput" id="styleLineLength" type="number" min="1" max="120" step="1"></label>
+            <label class="styleField"><span class="styleLabelWithHelp"><span>仅限空格处允许换行</span><span class="styleHelpIcon" data-tip="仅在词与词之间的空格处换行，不拆分单词。">?</span></span><span class="styleSwitchRow"><span id="styleSpaceWrapText">开启</span><input id="styleSpaceWrap" type="checkbox"></span></label>
+            <label class="styleField"><span class="styleLabel">字体</span><select class="styleSelect" id="styleFont"></select></label>
+            <label class="styleField"><span class="styleLabel">字幕位置（距底部 %）</span><input class="styleInput" id="stylePosition" type="number" min="0" max="100" step="0.01"></label>
+          </div>
+        </div>
+        <div class="subtitleStyleFooter">
+          <div class="subtitleStyleScope">应用后对当前剧当前语种的全部集生效</div>
+          <div class="subtitleStyleActions"><button type="button" class="btnGhost" id="subtitleStyleCancel">取消</button><button type="button" class="btnGhost" id="subtitleStyleReset">恢复默认值</button><button type="button" class="btnPrimary" id="subtitleStyleApply">应用至全剧</button></div>
+        </div>
+      </div>
+    </div>
     <div class="modalMask" id="modalMask" role="dialog" aria-modal="true"><div class="modalBox"><h3 id="modalTitle">确认操作</h3><p id="modalText"></p><div class="modalActions"><button type="button" class="btnGhost" id="modalCancel">返回确认</button><button type="button" class="btnPrimary" id="modalConfirm">确认</button></div></div></div>
     <div class="toast" id="toast" role="status"></div>
   </div>
@@ -890,6 +1111,16 @@
       const stageLabel = root.querySelector('#currentStageLabel');
       const saveStatus = root.querySelector('.saveStatus');
       const episodeTotalText = root.querySelector('#episodeTotalText');
+      const subtitleStyleMask = root.querySelector('#subtitleStyleMask');
+      const subtitlePreviewText = root.querySelector('#subtitlePreviewText');
+      const subtitleStyleLanguage = root.querySelector('#subtitleStyleLanguage');
+      const styleFontSize = root.querySelector('#styleFontSize');
+      const styleLetterSpacing = root.querySelector('#styleLetterSpacing');
+      const styleLineLength = root.querySelector('#styleLineLength');
+      const styleSpaceWrap = root.querySelector('#styleSpaceWrap');
+      const styleSpaceWrapText = root.querySelector('#styleSpaceWrapText');
+      const styleFont = root.querySelector('#styleFont');
+      const stylePosition = root.querySelector('#stylePosition');
       let selectedGroup = '字幕文本规范';
       let activeIssue = 'q1';
       let activeSegment = 's1';
@@ -904,11 +1135,31 @@
       let currentTimelineMs = 13520;
       let originalVoiceSeed = 3;
       let originalVoiceClips = [
-        { id:'ov1', left:55.4, width:9.8, label:'原人声 #4' },
-        { id:'ov2', left:74.8, width:7.6, label:'原人声 00:23.46' }
+        { id:'ov1', left:55.4, width:9.8, label:'原人声#1' },
+        { id:'ov2', left:74.8, width:7.6, label:'原人声#2' }
       ];
       let currentEpisode = 12;
       let currentStage = '配音';
+      const currentSubtitleLanguage = { code:'ar', name:'阿拉伯语' };
+      const fontOptions = [
+        'MiSans-Demibold.ttf',
+        'MiSans_Demibold.ttf',
+        'NotoNaskhArabic_VariableFont_wght.ttf',
+        'arial.ttf',
+        'SF_Pro_（越南语）.ttf'
+      ];
+      const subtitleStyleDefaults = {
+        en: { fontSize:60, letterSpacing:-2, lineLength:28, spaceWrap:true, font:'MiSans_Demibold.ttf', position:27.04, sample:'Hello, this is a subtitle preview.', dir:'ltr', label:'英语' },
+        zh: { fontSize:60, letterSpacing:-2, lineLength:14, spaceWrap:false, font:'MiSans_Demibold.ttf', position:27.04, sample:'你好，这是一条字幕预览。', dir:'ltr', label:'中文简体' },
+        ko: { fontSize:60, letterSpacing:-2, lineLength:28, spaceWrap:false, font:'MiSans_Demibold.ttf', position:27.04, sample:'안녕하세요, 자막 미리보기입니다.', dir:'ltr', label:'韩语' },
+        ar: { fontSize:90, letterSpacing:0, lineLength:22, spaceWrap:true, font:'NotoNaskhArabic_VariableFont_wght.ttf', position:27.04, sample:'مرحبا، هذه معاينة للترجمة.', dir:'rtl', label:'阿拉伯语' },
+        es: { fontSize:60, letterSpacing:-2, lineLength:28, spaceWrap:true, font:'MiSans_Demibold.ttf', position:27.04, sample:'Hola, esta es una vista previa de subtítulos.', dir:'ltr', label:'西班牙语' },
+        pt: { fontSize:60, letterSpacing:-2, lineLength:28, spaceWrap:true, font:'MiSans_Demibold.ttf', position:27.04, sample:'Olá, esta é uma prévia da legenda.', dir:'ltr', label:'葡萄牙语' },
+        th: { fontSize:60, letterSpacing:-1, lineLength:24, spaceWrap:true, font:'arial.ttf', position:27.04, sample:'สวัสดี นี่คือตัวอย่างคำบรรยาย', dir:'ltr', label:'泰语' },
+        vi: { fontSize:60, letterSpacing:-2, lineLength:22, spaceWrap:true, font:'SF_Pro_（越南语）.ttf', position:27.04, sample:'Xin chào, đây là bản xem trước phụ đề.', dir:'ltr', label:'越南语' }
+      };
+      let savedSubtitleStyle = { ...subtitleStyleDefaults[currentSubtitleLanguage.code] };
+      let draftSubtitleStyle = { ...savedSubtitleStyle };
       const episodes = Array.from({length:66}, (_,i) => {
         const no = i + 1;
         const special = {
@@ -945,6 +1196,82 @@
         { id:'q8', group:'术语不统一', detail:'称谓写法不统一', seg:'s6', title:'第 6 段｜称谓写法不统一', before:'His Majesty', after:'Your Majesty', note:'建议与全剧称谓写法保持一致', checked:false }
       ];
       function esc(text){ return String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+      function clampStyleNum(value, min, max, fallback){
+        const num = Number(value);
+        if(Number.isNaN(num)) return fallback;
+        return Math.min(max, Math.max(min, num));
+      }
+      function fontFamilyFromFile(file){
+        if(String(file).includes('NotoNaskhArabic')) return '"Times New Roman", serif';
+        if(String(file).includes('arial')) return 'Arial, sans-serif';
+        return '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif';
+      }
+      function normalizeSubtitleStyle(style){
+        return {
+          ...style,
+          fontSize: clampStyleNum(style.fontSize, 1, 180, 60),
+          letterSpacing: clampStyleNum(style.letterSpacing, -20, 20, -2),
+          lineLength: clampStyleNum(style.lineLength, 1, 120, 28),
+          position: clampStyleNum(style.position, 0, 100, 27.04),
+          spaceWrap: !!style.spaceWrap,
+          font: style.font || fontOptions[0]
+        };
+      }
+      function fillSubtitleStyleForm(){
+        draftSubtitleStyle = normalizeSubtitleStyle(draftSubtitleStyle);
+        subtitleStyleLanguage.textContent = currentSubtitleLanguage.name;
+        styleFont.innerHTML = fontOptions.map(font => '<option value="'+esc(font)+'">'+esc(font.replace(/\\.ttf$/i,''))+'</option>').join('');
+        styleFontSize.value = draftSubtitleStyle.fontSize;
+        styleLetterSpacing.value = draftSubtitleStyle.letterSpacing;
+        styleLineLength.value = draftSubtitleStyle.lineLength;
+        styleSpaceWrap.checked = !!draftSubtitleStyle.spaceWrap;
+        styleFont.value = draftSubtitleStyle.font;
+        stylePosition.value = draftSubtitleStyle.position;
+        renderSubtitlePreview();
+      }
+      function syncSubtitleStyleDraftFromForm(){
+        draftSubtitleStyle = normalizeSubtitleStyle({
+          ...draftSubtitleStyle,
+          fontSize: styleFontSize.value,
+          letterSpacing: styleLetterSpacing.value,
+          lineLength: styleLineLength.value,
+          spaceWrap: styleSpaceWrap.checked,
+          font: styleFont.value,
+          position: stylePosition.value
+        });
+        renderSubtitlePreview();
+      }
+      function renderSubtitlePreview(){
+        const style = normalizeSubtitleStyle(draftSubtitleStyle);
+        const visualSize = Math.max(12, Math.min(38, style.fontSize * 0.34));
+        subtitlePreviewText.textContent = style.sample || subtitleStyleDefaults.en.sample;
+        subtitlePreviewText.dir = style.dir || 'ltr';
+        subtitlePreviewText.style.fontFamily = fontFamilyFromFile(style.font);
+        subtitlePreviewText.style.fontSize = visualSize + 'px';
+        subtitlePreviewText.style.letterSpacing = (style.letterSpacing * 0.22) + 'px';
+        subtitlePreviewText.style.maxWidth = Math.max(8, style.lineLength) + 'ch';
+        subtitlePreviewText.style.whiteSpace = style.spaceWrap ? 'normal' : 'nowrap';
+        subtitlePreviewText.style.bottom = style.position + '%';
+        styleSpaceWrapText.textContent = style.spaceWrap ? '开启' : '关闭';
+      }
+      function openSubtitleStyleDialog(){
+        draftSubtitleStyle = { ...savedSubtitleStyle };
+        fillSubtitleStyleForm();
+        subtitleStyleMask.style.display = 'flex';
+      }
+      function closeSubtitleStyleDialog(){
+        subtitleStyleMask.style.display = 'none';
+      }
+      function resetSubtitleStyleToDefault(){
+        draftSubtitleStyle = { ...subtitleStyleDefaults[currentSubtitleLanguage.code] };
+        fillSubtitleStyleForm();
+        showToast('已恢复当前语种默认样式');
+      }
+      function applySubtitleStyle(){
+        savedSubtitleStyle = normalizeSubtitleStyle(draftSubtitleStyle);
+        closeSubtitleStyleDialog();
+        showToast('硬字幕样式已应用至当前剧阿拉伯语全部集');
+      }
       function segNo(segId){ return String(segId).replace('s',''); }
       function diffPair(before, after){
         const a = String(before), b = String(after);
@@ -1063,8 +1390,9 @@
           showToast('当前时间范围已存在原人声保留片段');
           return;
         }
-        const id = 'ov' + originalVoiceSeed++;
-        originalVoiceClips.push({ id, left, width, label:'原人声 ' + formatTimelineTime(currentTimelineMs) });
+        const serial = originalVoiceSeed++;
+        const id = 'ov' + serial;
+        originalVoiceClips.push({ id, left, width, label:'原人声#' + serial });
         selectTimeline('originalVoice', id);
         showToast('已插入原人声段');
       }
@@ -1078,13 +1406,14 @@
           return;
         }
         const p = segmentPercent(seg);
-        const id = 'ov' + originalVoiceSeed++;
+        const serial = originalVoiceSeed++;
+        const id = 'ov' + serial;
         originalVoiceClips.push({
           id,
           segmentId: segId,
           left: p.left,
           width: Math.max(1, p.width),
-          label: '原人声 ' + formatTimelineTime(segmentStartMs(seg))
+          label: '原人声#' + serial
         });
         selectTimeline('originalVoice', id);
         showToast('已保留该段原人声');
@@ -1222,8 +1551,6 @@
           } else if(timelineDrag.mode === 'trimRight'){
             clip.width = Number(clampNum(timelineDrag.startWidth + delta, minWidth, 100 - timelineDrag.startLeft).toFixed(2));
           }
-          const startMs = (clip.left / 100) * timelineDurationMs;
-          clip.label = '原人声 ' + formatTimelineTime(startMs);
           renderTimeline();
           return;
         }
@@ -1471,8 +1798,35 @@
       window.addEventListener('pointerup', ()=>{
         endTimelineDrag();
       });
+      root.addEventListener('input', e=>{
+        if(e.target.closest('#subtitleStyleMask')) syncSubtitleStyleDraftFromForm();
+      });
+      root.addEventListener('change', e=>{
+        if(e.target.closest('#subtitleStyleMask')) syncSubtitleStyleDraftFromForm();
+      });
       root.addEventListener('click', e=>{
         if(timelineDragJustEnded) return;
+        if(e.target.closest('#subtitleStyleBtn')){
+          openSubtitleStyleDialog();
+          return;
+        }
+        if(e.target.closest('#subtitleStyleClose') || e.target.closest('#subtitleStyleCancel')){
+          closeSubtitleStyleDialog();
+          return;
+        }
+        if(e.target.closest('#subtitleStyleReset')){
+          resetSubtitleStyleToDefault();
+          return;
+        }
+        if(e.target.closest('#subtitleStyleApply')){
+          syncSubtitleStyleDraftFromForm();
+          applySubtitleStyle();
+          return;
+        }
+        if(e.target === subtitleStyleMask){
+          closeSubtitleStyleDialog();
+          return;
+        }
         const insertBtn=e.target.closest('[data-insert-after]');
         if(insertBtn){
           e.stopPropagation();
