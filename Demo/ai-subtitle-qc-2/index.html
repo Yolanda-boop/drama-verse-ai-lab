@@ -1172,11 +1172,8 @@
       let currentStage = '配音';
       const currentSubtitleLanguage = { code:'ar', name:'阿拉伯语' };
       const fontOptions = [
-        'MiSans-Demibold.ttf',
-        'MiSans_Demibold.ttf',
         'NotoNaskhArabic_VariableFont_wght.ttf',
-        'arial.ttf',
-        'SF_Pro_（越南语）.ttf'
+        'SF Arabic'
       ];
       const subtitleStyleDefaults = {
         en: { fontSize:60, letterSpacing:-2, lineLength:28, spaceWrap:true, font:'MiSans_Demibold.ttf', position:27.04, sample:'Hello, this is a subtitle preview.', dir:'ltr', label:'英语' },
@@ -1279,6 +1276,7 @@
       }
       function fontFamilyFromFile(file){
         if(String(file).includes('NotoNaskhArabic')) return '"Times New Roman", serif';
+        if(String(file).includes('SF Arabic')) return '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
         if(String(file).includes('arial')) return 'Arial, sans-serif';
         return '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif';
       }
@@ -1290,13 +1288,13 @@
           lineLength: clampStyleNum(style.lineLength, 1, 120, 28),
           position: clampStyleNum(style.position, 0, 100, 27.04),
           spaceWrap: !!style.spaceWrap,
-          font: style.font || fontOptions[0]
+          font: fontOptions.includes(style.font) ? style.font : fontOptions[0]
         };
       }
       function fillSubtitleStyleForm(){
         draftSubtitleStyle = normalizeSubtitleStyle(draftSubtitleStyle);
         subtitleStyleLanguage.textContent = currentSubtitleLanguage.name;
-        styleFont.innerHTML = fontOptions.map(font => '<option value="'+esc(font)+'">'+esc(font.replace(/\\.ttf$/i,''))+'</option>').join('');
+        styleFont.innerHTML = fontOptions.map(font => '<option value="'+esc(font)+'">'+esc(font)+'</option>').join('');
         styleFontSize.value = draftSubtitleStyle.fontSize;
         styleLetterSpacing.value = draftSubtitleStyle.letterSpacing;
         styleLineLength.value = draftSubtitleStyle.lineLength;
