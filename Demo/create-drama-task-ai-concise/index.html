@@ -380,6 +380,10 @@
       border-radius: 8px;
     }
 
+    .segmented.is-single {
+      grid-template-columns: 1fr;
+    }
+
     .segment-btn {
       min-height: 38px;
       padding: 8px 10px;
@@ -872,6 +876,59 @@
       max-width: 240px;
     }
 
+    .voice-method-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .voice-method-card {
+      min-height: 78px;
+      padding: 14px;
+      display: grid;
+      grid-template-rows: 20px minmax(36px, auto);
+      align-content: start;
+      text-align: left;
+      color: var(--text);
+      background: rgba(17,17,37,0.72);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease;
+    }
+
+    .voice-method-card:hover {
+      background: rgba(24,24,51,0.95);
+      border-color: rgba(140,77,255,0.48);
+    }
+
+    .voice-method-card.is-selected {
+      background: rgba(42,24,82,0.88);
+      border-color: var(--primary);
+      box-shadow: inset 0 0 0 1px rgba(140,77,255,0.12);
+    }
+
+    .voice-method-card.is-disabled {
+      opacity: 0.44;
+      cursor: not-allowed;
+    }
+
+    .voice-method-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--text);
+      font-weight: 600;
+      line-height: 20px;
+    }
+
+    .voice-method-desc {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: var(--font-help);
+      line-height: 18px;
+    }
+
     .checkbox-line {
       display: flex;
       align-items: center;
@@ -1151,7 +1208,7 @@
         <div class="form-line">
           <div class="line-label">处理模式<span class="required">*</span></div>
           <div>
-            <div class="segmented mode-grid" data-choice-group="processMode">
+            <div class="segmented mode-grid" id="processModeGroup" data-choice-group="processMode">
               <button class="segment-btn is-selected" type="button" data-value="aipe">AIPE</button>
               <button class="segment-btn" type="button" data-value="smart">智能速配</button>
             </div>
@@ -1217,19 +1274,68 @@
 
           <div class="form-row hidden" id="localVideoUploadInput">
             <label class="form-label" for="localVideoFile">上传视频文件<span class="required">*</span></label>
-            <label class="asset-upload-card" for="localVideoFile">
-              <input id="localVideoFile" type="file" accept=".mp4,.zip" data-file-name-target="localVideoFileName" />
-              <span class="asset-upload-icon" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24">
-                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 4v12m0-12 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </span>
-              <span>
-                <span class="asset-upload-title">点击或拖拽文件至此区域</span>
-                <span class="asset-upload-desc">支持 MP4；单集不超过 10 GB；ZIP 内文件按集序号命名，如 1.mp4、2.mp4</span>
-                <span class="asset-upload-file hidden" id="localVideoFileName"></span>
-              </span>
-            </label>
+            <div class="asset-upload-list">
+              <label class="asset-upload-card" for="localVideoFile">
+                <input id="localVideoFile" type="file" accept=".mp4,.zip" data-file-name-target="localVideoFileName" />
+                <span class="asset-upload-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 4v12m0-12 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span>
+                  <span class="asset-upload-title">点击或拖拽文件至此区域</span>
+                  <span class="asset-upload-desc">ZIP 包内支持 MP4；单集不超过 10 GB；ZIP 内文件按集序号命名，如 1.mp4、2.mp4</span>
+                  <span class="asset-upload-file hidden" id="localVideoFileName"></span>
+                </span>
+              </label>
+
+              <label class="asset-upload-card" for="localOriginalSrtFile">
+                <input id="localOriginalSrtFile" type="file" accept=".zip" data-file-name-target="localOriginalSrtFileName" />
+                <span class="asset-upload-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 4v12m0-12 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span>
+                  <span class="asset-upload-title">上传原文 SRT<span class="optional">可选</span></span>
+                  <span class="asset-upload-desc">ZIP 包内文件名同样为纯阿拉伯数字；SRT 与视频按序号自动匹配，无 SRT 的集默认走 AI 字幕识别</span>
+                  <span class="asset-upload-file hidden" id="localOriginalSrtFileName"></span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row hidden" id="smartVideoUploadInput">
+            <label class="form-label" for="smartVideoZipFile">上传视频文件<span class="required">*</span></label>
+            <div class="asset-upload-list">
+              <label class="asset-upload-card" for="smartVideoZipFile">
+                <input id="smartVideoZipFile" type="file" accept=".zip" data-file-name-target="smartVideoZipFileName" />
+                <span class="asset-upload-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 4v12m0-12 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span>
+                  <span class="asset-upload-title">点击或拖拽文件至此区域</span>
+                  <span class="asset-upload-desc">ZIP 包内文件名须为纯阿拉伯数字，如 1.mp4、2.mp4；集序号须连续</span>
+                  <span class="asset-upload-file hidden" id="smartVideoZipFileName"></span>
+                </span>
+              </label>
+
+              <label class="asset-upload-card" for="smartOriginalSrtZipFile">
+                <input id="smartOriginalSrtZipFile" type="file" accept=".zip" data-file-name-target="smartOriginalSrtZipFileName" />
+                <span class="asset-upload-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 4v12m0-12 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <span>
+                  <span class="asset-upload-title">上传原文 SRT<span class="optional">可选</span></span>
+                  <span class="asset-upload-desc">ZIP 包内文件名同样为纯阿拉伯数字；SRT 与视频按序号自动匹配，无 SRT 的集默认走 AI 字幕识别</span>
+                  <span class="asset-upload-file hidden" id="smartOriginalSrtZipFileName"></span>
+                </span>
+              </label>
+            </div>
           </div>
         </section>
 
@@ -1259,20 +1365,6 @@
             </div>
 
             <div class="asset-upload-list" id="localSupportUploadList">
-              <label class="asset-upload-card" for="localOriginalSrtFile">
-                <input id="localOriginalSrtFile" type="file" accept=".zip" data-file-name-target="localOriginalSrtFileName" />
-                <span class="asset-upload-icon" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24">
-                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M12 4v12m0-12 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                </span>
-                <span>
-                  <span class="asset-upload-title">上传原字幕 SRT<span class="optional">可选</span></span>
-                  <span class="asset-upload-desc">支持 ZIP；可含多集 SRT，文件名需与视频文件名对应，如 1.srt、2.srt</span>
-                  <span class="asset-upload-file hidden" id="localOriginalSrtFileName"></span>
-                </span>
-              </label>
-
               <label class="asset-upload-card" for="localScriptFile">
                 <input id="localScriptFile" type="file" accept=".txt,.doc,.docx" data-file-name-target="localScriptFileName" />
                 <span class="asset-upload-icon" aria-hidden="true">
@@ -1316,9 +1408,9 @@
 
           <div class="form-row" id="sourceRow">
             <label class="form-label">译文生成方式<span class="required">*</span></label>
-            <div class="segmented" data-choice-group="translationSource">
+            <div class="segmented" id="translationSourceGroup" data-choice-group="translationSource">
               <button class="segment-btn is-selected" type="button" data-value="ai">AI 翻译</button>
-              <button class="segment-btn" type="button" data-value="srt">导入译文 SRT</button>
+              <button class="segment-btn" id="srtSourceButton" type="button" data-value="srt">导入译文 SRT</button>
             </div>
 
             <div class="source-option" id="aiOption">
@@ -1382,6 +1474,20 @@
             </div>
           </div>
 
+          <div class="form-row hidden" id="voiceMethodRow">
+            <label class="form-label">配音方式<span class="required">*</span></label>
+            <div class="voice-method-grid">
+              <button class="voice-method-card is-selected" type="button" data-voice-method="smart">
+                <div class="voice-method-title">音色智能匹配</div>
+                <div class="voice-method-desc">自动为每位说话人匹配合适的 AI 音色</div>
+              </button>
+              <button class="voice-method-card" type="button" data-voice-method="clone">
+                <div class="voice-method-title">音色复刻</div>
+                <div class="voice-method-desc">克隆原声音色进行配音</div>
+              </button>
+            </div>
+          </div>
+
           <div class="form-row hidden" id="nonTranslationNote">
             <span class="form-label">说明</span>
             <div class="readonly-note">
@@ -1414,6 +1520,7 @@
       translationSource: 'ai',
       conciseEnabled: false,
       srtPolishEnabled: false,
+      voiceMethod: 'smart',
     };
 
     const taskLabels = {
@@ -1433,9 +1540,15 @@
       srt: '导入译文 SRT',
     };
 
+    const voiceMethodLabels = {
+      smart: '音色智能匹配',
+      clone: '音色复刻',
+    };
+
     const bookIdInput = document.getElementById('bookIdInput');
     const existingVideoInput = document.getElementById('existingVideoInput');
     const localVideoUploadInput = document.getElementById('localVideoUploadInput');
+    const smartVideoUploadInput = document.getElementById('smartVideoUploadInput');
     const outputPanel = document.getElementById('outputPanel');
     const outputPanelTitle = document.getElementById('outputPanelTitle');
     const outputPanelCaption = document.getElementById('outputPanelCaption');
@@ -1444,8 +1557,11 @@
     const localSupportUploadList = document.getElementById('localSupportUploadList');
     const languageRow = document.getElementById('languageRow');
     const sourceRow = document.getElementById('sourceRow');
+    const translationSourceGroup = document.getElementById('translationSourceGroup');
+    const srtSourceButton = document.getElementById('srtSourceButton');
     const aiOption = document.getElementById('aiOption');
     const srtOption = document.getElementById('srtOption');
+    const voiceMethodRow = document.getElementById('voiceMethodRow');
     const nonTranslationNote = document.getElementById('nonTranslationNote');
     const conciseSwitch = document.getElementById('conciseSwitch');
     const srtPolishSwitch = document.getElementById('srtPolishSwitch');
@@ -1457,6 +1573,7 @@
     const videoSourceSecondary = document.getElementById('videoSourceSecondary');
     const videoSearch = document.getElementById('videoSearch');
     const modeHint = document.getElementById('modeHint');
+    const processModeGroup = document.getElementById('processModeGroup');
     const smartModeButton = document.querySelector('[data-choice-group="processMode"] [data-value="smart"]');
     const summaryTask = document.getElementById('summaryTask');
     const summaryMode = document.getElementById('summaryMode');
@@ -1475,6 +1592,26 @@
       return state.taskType === 'extract';
     }
 
+    function isDubbingTask() {
+      return state.taskType === 'subtitle_dubbing' || state.taskType === 'dubbing';
+    }
+
+    function isSmartMediaTask() {
+      return (isTranslationTask() || state.taskType === 'dubbing') && state.processMode === 'smart';
+    }
+
+    function shouldShowVoiceMethod() {
+      return isDubbingTask() && state.processMode === 'smart';
+    }
+
+    function isSmartLocalVideoFlow() {
+      return isSmartMediaTask() && state.videoSource === 'existing';
+    }
+
+    function onlySupportsAiTranslation() {
+      return state.taskType === 'subtitle';
+    }
+
     function getModeLabel(value) {
       if (value === 'smart' && state.taskType === 'subtitle') return '智能速翻';
       return modeLabels[value];
@@ -1486,23 +1623,46 @@
       });
     }
 
+    function updateVoiceMethod() {
+      document.querySelectorAll('[data-voice-method]').forEach((item) => {
+        item.classList.toggle('is-selected', item.dataset.voiceMethod === state.voiceMethod);
+      });
+    }
+
     function render() {
+      const translationTask = isTranslationTask();
+      const extractTask = isExtractTask();
+      const localUploadFlow = isLocalUploadFlow();
+      const smartMediaTask = isSmartMediaTask();
+      const smartLocalVideoFlow = isSmartLocalVideoFlow();
+      const voiceMethodVisible = shouldShowVoiceMethod();
+      const aiOnlyTranslation = onlySupportsAiTranslation();
+
+      if (aiOnlyTranslation && state.translationSource !== 'ai') {
+        state.translationSource = 'ai';
+        state.srtPolishEnabled = false;
+      }
+
       updateGroup('taskType', state.taskType);
       updateGroup('processMode', state.processMode);
       updateGroup('videoSource', state.videoSource);
       updateGroup('translationSource', state.translationSource);
-
-      const translationTask = isTranslationTask();
-      const extractTask = isExtractTask();
-      const localUploadFlow = isLocalUploadFlow();
+      updateVoiceMethod();
 
       bookIdInput.classList.toggle('hidden', state.videoSource !== 'bookId');
-      existingVideoInput.classList.toggle('hidden', state.videoSource !== 'existing' || extractTask);
+      existingVideoInput.classList.toggle('hidden', state.videoSource !== 'existing' || extractTask || smartMediaTask);
       localVideoUploadInput.classList.toggle('hidden', !localUploadFlow);
-      videoSourceSecondary.textContent = extractTask ? '本地上传' : '本地视频ID';
+      smartVideoUploadInput.classList.toggle('hidden', !smartLocalVideoFlow);
+      videoSourceSecondary.textContent = extractTask
+        ? '本地上传'
+        : smartMediaTask
+          ? '本地视频'
+          : '本地视频ID';
 
       languageRow.classList.toggle('hidden', !translationTask);
       sourceRow.classList.toggle('hidden', !translationTask);
+      translationSourceGroup.classList.toggle('is-single', aiOnlyTranslation);
+      srtSourceButton.classList.toggle('hidden', aiOnlyTranslation);
       localUploadPanel.classList.toggle('hidden', !localUploadFlow);
       localDramaNameRow.classList.toggle('hidden', !localUploadFlow);
       localSupportUploadList.classList.toggle('hidden', !localUploadFlow);
@@ -1511,6 +1671,7 @@
 
       aiOption.classList.toggle('hidden', !translationTask || state.translationSource !== 'ai');
       srtOption.classList.toggle('hidden', !translationTask || state.translationSource !== 'srt');
+      voiceMethodRow.classList.toggle('hidden', !voiceMethodVisible);
 
       conciseSwitch.checked = state.conciseEnabled;
       srtPolishSwitch.checked = state.srtPolishEnabled;
@@ -1518,15 +1679,27 @@
       srtFileName.classList.toggle('hidden', !file || state.translationSource !== 'srt');
       srtFileName.textContent = file ? `已选择：${file.name}` : '';
 
+      processModeGroup.classList.remove('is-single');
       smartModeButton.textContent = getModeLabel('smart');
-      outputPanelTitle.textContent = extractTask ? '本地上传配置' : '翻译与产出配置';
+      smartModeButton.classList.remove('hidden');
+      outputPanelTitle.textContent = extractTask
+        ? '本地上传配置'
+        : state.taskType === 'dubbing'
+          ? '配音产出配置'
+          : '翻译与产出配置';
       outputPanelCaption.textContent = extractTask
         ? localUploadFlow
           ? '配置字幕提取语言及可选辅助材料'
           : '使用中台剧已有字幕资产配置'
-        : translationTask
-          ? 'AI 翻译与导入译文 SRT 为二选一译文来源'
-          : '当前任务类型无需配置译文生成方式';
+        : state.taskType === 'dubbing'
+          ? state.processMode === 'smart'
+            ? '配置智能速配的配音方式'
+            : '当前任务仅进行配音产出，无需配置译文生成方式'
+          : translationTask
+            ? aiOnlyTranslation
+              ? '仅支持 AI 翻译生成译文'
+              : 'AI 翻译与导入译文 SRT 为二选一译文来源'
+            : '当前任务类型无需配置译文生成方式';
 
       summaryTask.textContent = taskLabels[state.taskType];
       summaryMode.textContent = getModeLabel(state.processMode);
@@ -1534,7 +1707,9 @@
         ? '按 AI + PE 流程逐阶段生成任务，人工校对后发起流转'
         : state.taskType === 'subtitle'
           ? '自动完成前置字幕资产提取与字幕翻译流转，过程中不进入人工校对'
-          : '自动完成前置字幕资产提取、翻译与配音流转，过程中不进入人工校对';
+          : state.taskType === 'dubbing'
+            ? '自动完成前置字幕资产提取并生成配音结果，过程中不进入人工校对'
+            : '自动完成前置字幕资产提取、翻译与配音流转，过程中不进入人工校对';
 
       if (translationTask) {
         const extra = state.translationSource === 'ai' && state.conciseEnabled
@@ -1543,11 +1718,15 @@
             ? ' · 译文润色'
             : '';
         summarySource.classList.remove('hidden');
-        summarySource.textContent = sourceLabels[state.translationSource] + extra;
+        summarySource.textContent = sourceLabels[state.translationSource] + extra
+          + (smartLocalVideoFlow ? ' · 本地视频' : '')
+          + (voiceMethodVisible ? ` · ${voiceMethodLabels[state.voiceMethod]}` : '');
       } else {
         summarySource.classList.toggle('hidden', !extractTask);
         summarySource.textContent = extractTask
           ? (state.videoSource === 'bookId' ? '中台剧ID' : '本地上传')
+          : voiceMethodVisible
+            ? voiceMethodLabels[state.voiceMethod]
           : '';
       }
 
@@ -1563,6 +1742,11 @@
         if (group === 'taskType' && !isTranslationTask()) {
           state.translationSource = 'ai';
           state.conciseEnabled = false;
+          state.srtPolishEnabled = false;
+        }
+
+        if (group === 'taskType' && value === 'subtitle') {
+          state.translationSource = 'ai';
           state.srtPolishEnabled = false;
         }
 
@@ -1590,6 +1774,13 @@
 
     srtZipInput.addEventListener('change', () => {
       render();
+    });
+
+    document.querySelectorAll('[data-voice-method]').forEach((item) => {
+      item.addEventListener('click', () => {
+        state.voiceMethod = item.dataset.voiceMethod;
+        render();
+      });
     });
 
     document.querySelectorAll('[data-file-name-target]').forEach((input) => {
