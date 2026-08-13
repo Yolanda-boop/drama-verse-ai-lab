@@ -30,13 +30,18 @@
     #dv-real-qc-prototype button,
     #dv-real-qc-prototype input { font: inherit; }
     #dv-real-qc-prototype .editorContainer {
-      display: flex;
-      flex-direction: column;
-      height: 820px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 336px;
+      grid-template-rows: 56px minmax(0, 1fr) 250px;
+      min-height: 820px;
+      height: max(820px, 100vh);
       background: #0a0a0a;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.08);
+      transition: grid-template-columns .18s ease;
+      position: relative;
     }
+    #dv-real-qc-prototype .editorContainer.qcCollapsed { grid-template-columns: minmax(0, 1fr) 42px; }
     #dv-real-qc-prototype .navbar {
       display: flex;
       align-items: center;
@@ -44,7 +49,8 @@
       padding: 0 24px;
       background: #141414;
       border-bottom: 1px solid #2a2a2a;
-      flex-shrink: 0;
+      grid-column: 1 / -1;
+      grid-row: 1;
       height: 56px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
       z-index: 3;
@@ -255,9 +261,11 @@
     #dv-real-qc-prototype .saveStatus { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; font-size: 12px; font-weight: 400; color: rgba(255,255,255,.3); }
     #dv-real-qc-prototype .mainContent {
       display: flex;
-      flex: 1;
+      grid-column: 1;
+      grid-row: 2;
       overflow: hidden;
       min-height: 0;
+      min-width: 0;
       background: var(--bg-container);
       position: relative;
     }
@@ -315,23 +323,22 @@
     #dv-real-qc-prototype .subtitleStyleIcon { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; color: currentColor; flex: 0 0 auto; }
     #dv-real-qc-prototype .subtitleStyleIcon svg { display: block; width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
     #dv-real-qc-prototype .subtitlePanel {
-      flex: 1;
+      flex: 1 1 0%;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       background: #141414;
       flex-shrink: 0;
-      min-width: 600px;
+      min-width: 0;
     }
     #dv-real-qc-prototype .subtitleWithQc {
       flex: 1;
       min-height: 0;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 336px;
-      transition: grid-template-columns .18s ease;
+      width: 100%;
+      display: flex;
+      min-width: 0;
     }
-    #dv-real-qc-prototype .editorContainer.qcCollapsed .subtitleWithQc { grid-template-columns: minmax(0, 1fr) 42px; }
-    #dv-real-qc-prototype .subtitleListContainer { display: flex; flex-direction: column; height: 100%; overflow: hidden; background: var(--bg-base); min-width: 0; }
+    #dv-real-qc-prototype .subtitleListContainer { flex: 1 1 auto; width: 100%; display: flex; flex-direction: column; height: 100%; overflow: hidden; background: var(--bg-base); min-width: 0; }
     #dv-real-qc-prototype .header {
       display: grid;
       grid-template-columns: 100px 100px 56px minmax(0,1fr) minmax(0,1fr);
@@ -465,7 +472,24 @@
     }
     #dv-real-qc-prototype .segmentTool:hover { color: #fff; background: rgba(255,255,255,.06); border-radius: 4px; }
     #dv-real-qc-prototype .segmentTool + .segmentTool { border-left: 1px solid rgba(255,255,255,.18); }
-    #dv-real-qc-prototype .segmentToolIcon { color: rgba(255,255,255,.66); font-size: 14px; line-height: 1; }
+    #dv-real-qc-prototype .segmentToolIcon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      color: rgba(255,255,255,.66);
+      font-size: 14px;
+      line-height: 1;
+      flex: 0 0 auto;
+    }
+    #dv-real-qc-prototype .segmentToolIcon svg {
+      display: block;
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+      overflow: hidden;
+    }
     #dv-real-qc-prototype .segmentDelete { width: 28px; height: 28px; padding: 0; justify-content: center; color: rgba(255,255,255,.55); border-left: 0 !important; }
     #dv-real-qc-prototype .segmentMoreWrap { position: relative; }
     #dv-real-qc-prototype .segmentMoreMenu {
@@ -635,7 +659,7 @@
     #dv-real-qc-prototype .voiceRowActions { display: flex; justify-content: flex-end; gap: 8px; }
     #dv-real-qc-prototype .voiceRowActions .btnGhost { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
     #dv-real-qc-prototype mark { background: rgba(250,173,20,.32); color: #ffe7a3; padding: 0 3px; }
-    #dv-real-qc-prototype .timelineContainer { flex-shrink: 0; background: #111; border-top: 1px solid #222; display: flex; flex-direction: column; height: 250px; user-select: none; }
+    #dv-real-qc-prototype .timelineContainer { grid-column: 1; grid-row: 3; min-width: 0; background: #111; border-top: 1px solid #222; display: flex; flex-direction: column; height: 100%; user-select: none; }
     #dv-real-qc-prototype .timelineToolbar { height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: #181818; border-bottom: 1px solid #222; }
     #dv-real-qc-prototype .timelineToolbarLeft,
     #dv-real-qc-prototype .timelineToolbarRight { display: flex; align-items: center; gap: 8px; }
@@ -713,7 +737,11 @@
     #dv-real-qc-prototype .timelinePlayhead { position: absolute; top: 24px; bottom: 0; width: 1px; background: #fff; z-index: 10; pointer-events: none; }
     #dv-real-qc-prototype .timelinePlayheadHead { position: absolute; top: 0; left: 50%; transform: translateX(-50%); height: 16px; padding: 0 5px; border-radius: 2px; background: #6224ff; color: #fff; font-size: 9px; font-weight: 600; display: flex; align-items: center; white-space: nowrap; }
     #dv-real-qc-prototype .qcPanel {
+      grid-column: 2;
+      grid-row: 2 / 4;
       min-width: 0;
+      min-height: 0;
+      height: 100%;
       border-left: 1px solid var(--border-color);
       background: var(--bg-container);
       display: flex;
@@ -739,7 +767,8 @@
     #dv-real-qc-prototype .typeName:before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--warning); margin-right: 8px; vertical-align: 1px; }
     #dv-real-qc-prototype .typeButton.active .typeName:before { background: var(--brand-purple-soft); }
     #dv-real-qc-prototype .typeCount { color: var(--warning); font-weight: 600; }
-    #dv-real-qc-prototype .typeArrow { color: var(--text-tertiary); font-size: 12px; margin-left: 2px; }
+    #dv-real-qc-prototype .typeArrow { color: var(--text-tertiary); font-size: 12px; margin-left: 2px; width: 18px; text-align: center; justify-self: end; cursor: pointer; }
+    #dv-real-qc-prototype .typeArrow:hover { color: var(--text-primary); }
     #dv-real-qc-prototype .typeChildren { display: grid; gap: 0; padding: 2px 0 6px 20px; }
     #dv-real-qc-prototype .typeChild { display: grid; grid-template-columns: auto minmax(0,1fr) 18px; align-items: center; min-width: 0; border: 0; background: transparent; color: rgba(139,92,246,.95); padding: 5px 8px; cursor: pointer; text-align: left; font-size: 13px; line-height: 20px; border-radius: 4px; }
     #dv-real-qc-prototype .typeChild:hover,
@@ -747,7 +776,7 @@
     #dv-real-qc-prototype .typeChildDetail { color: var(--text-tertiary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     #dv-real-qc-prototype .typeChildCheck { justify-self: end; color: #3b82f6; font-size: 14px; font-weight: 600; opacity: 0; }
     #dv-real-qc-prototype .typeChild.checked .typeChildCheck { opacity: 1; }
-    #dv-real-qc-prototype .qcList { min-height: 0; overflow: auto; padding: 0; display: block; }
+    #dv-real-qc-prototype .qcList { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 0; display: block; }
     #dv-real-qc-prototype .qcList::-webkit-scrollbar { width: 8px; }
     #dv-real-qc-prototype .qcList::-webkit-scrollbar-track { background: var(--bg-base); }
     #dv-real-qc-prototype .qcList::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
@@ -762,7 +791,7 @@
     #dv-real-qc-prototype .qcActions { display: flex; justify-content: flex-end; gap: 8px; }
     #dv-real-qc-prototype .qcActions .btnGhost,
     #dv-real-qc-prototype .qcActions .btnPrimary { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
-    #dv-real-qc-prototype .qcBatch { flex-shrink: 0; border-top: 1px solid var(--border-color); padding: 10px 12px; background: var(--bg-container); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    #dv-real-qc-prototype .qcBatch { flex-shrink: 0; border-top: 0; border-bottom: 1px solid var(--border-color); padding: 8px 12px 10px; background: var(--bg-container); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.16); z-index: 1; }
     #dv-real-qc-prototype .qcBatch .wide { grid-column: 1 / -1; }
     #dv-real-qc-prototype .modalMask { position: absolute; inset: 0; background: rgba(0,0,0,.66); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 10; }
     #dv-real-qc-prototype .modalBox { width: min(420px, 100%); background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 8px; padding: 18px; box-shadow: 0 8px 24px rgba(0,0,0,.6); }
@@ -933,11 +962,11 @@
     #dv-real-qc-prototype .subtitleStyleActions { display: flex; align-items: center; gap: 10px; }
     #dv-real-qc-prototype .toast { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); padding: 10px 14px; display: none; z-index: 11; box-shadow: 0 4px 16px rgba(0,0,0,.6); }
     @media (max-width: 900px) {
+      #dv-real-qc-prototype .editorContainer { grid-template-columns: 1fr; grid-template-rows: 56px minmax(0, 1fr) 250px auto; }
       #dv-real-qc-prototype .videoPanel { display: none; }
       #dv-real-qc-prototype .subtitlePanel { min-width: 0; }
-      #dv-real-qc-prototype .subtitleWithQc { grid-template-columns: 1fr; }
-      #dv-real-qc-prototype .editorContainer.qcCollapsed .subtitleWithQc { grid-template-columns: 1fr; }
-      #dv-real-qc-prototype .qcPanel { min-height: 360px; border-left: 0; border-top: 1px solid var(--border-color); }
+      #dv-real-qc-prototype .timelineContainer { grid-column: 1; grid-row: 3; height: 100%; }
+      #dv-real-qc-prototype .qcPanel { grid-column: 1; grid-row: 4; min-height: 360px; border-left: 0; border-top: 1px solid var(--border-color); }
       #dv-real-qc-prototype .editorContainer.qcCollapsed .qcPanel { min-height: 42px; }
       #dv-real-qc-prototype .qcRail { writing-mode: horizontal-tb; flex-direction: row; justify-content: center; padding: 8px; }
       #dv-real-qc-prototype .voiceBatchBar { grid-template-columns: 1fr; padding: 8px 12px; }
@@ -982,7 +1011,7 @@
           <div class="videoTimeRow"><span id="videoTime">00:00:13,519</span><span>00:02:34,459</span></div>
           <div class="progress" id="videoProgress"></div>
           <div class="videoControlRow">
-            <div class="videoControlLeft"><button type="button" class="subtitleStyleBtn" id="subtitleStyleBtn" title="配置导出硬字幕样式"><span class="subtitleStyleIcon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.2 4.2h9.6a1.4 1.4 0 0 1 1.4 1.4v5a1.4 1.4 0 0 1-1.4 1.4H3.2a1.4 1.4 0 0 1-1.4-1.4v-5a1.4 1.4 0 0 1 1.4-1.4Z"></path><path d="M4.6 8.2h2.8M8.6 8.2h2.8M4.6 10.1h4.7"></path></svg></span><span>字幕样式</span></button></div>
+            <div class="videoControlLeft"><button type="button" class="subtitleStyleBtn" id="subtitleStyleBtn" title="配置字幕样式预览"><span class="subtitleStyleIcon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.2 4.2h9.6a1.4 1.4 0 0 1 1.4 1.4v5a1.4 1.4 0 0 1-1.4 1.4H3.2a1.4 1.4 0 0 1-1.4-1.4v-5a1.4 1.4 0 0 1 1.4-1.4Z"></path><path d="M4.6 8.2h2.8M8.6 8.2h2.8M4.6 10.1h4.7"></path></svg></span><span>字幕样式</span></button></div>
             <div class="videoControlCenter">◀︎  ▶︎  ▶︎</div>
             <div class="videoControlRight"><span>1X</span><span>□</span></div>
           </div>
@@ -995,15 +1024,6 @@
             <div class="voiceBatchBar" id="voiceBatchBar"></div>
             <div class="subtitleListWrapper"><div class="subtitleList" id="subtitleRows"></div></div>
           </div>
-          <aside class="qcPanel" aria-label="质检提醒面板">
-            <div class="qcRail"><button type="button" class="collapseBtn" id="expandQc">‹</button><span>质检提醒</span><span class="qcCount" id="railCount">8处</span></div>
-            <div class="qcPanelMain">
-              <div class="qcPanelHeader"><div><span class="qcTitle">质检提醒</span><span class="qcCount" id="totalCount">共 8 处</span></div><button type="button" class="collapseBtn" id="collapseQc">›</button></div>
-              <div class="qcSummary"><div class="qcSummaryTop"><span>异常汇总</span><span>按数量倒序</span></div><div class="typeList" id="typeList"></div></div>
-              <div class="qcList" id="qcList"></div>
-              <div class="qcBatch"><button type="button" class="btnGhost" id="batchAccept">批量采纳</button><button type="button" class="btnGhost" id="batchIgnore">批量忽略</button><button type="button" class="btnPrimary wide" id="acceptAll">该集全部采纳</button></div>
-            </div>
-          </aside>
         </div>
       </section>
     </div>
@@ -1029,10 +1049,10 @@
       </div>
       <div class="timelineBody">
         <div class="trackLabels">
-          <div class="trackLabel trackLabelTranslated"><div class="trackLabelIcon">葡</div></div>
+          <div class="trackLabel trackLabelTranslated"><div class="trackLabelIcon">阿</div></div>
           <div class="trackLabel trackLabelSource"><div class="trackLabelIcon">中</div></div>
           <div class="trackLabel trackLabelOriginal"><div class="trackLabelIcon" title="原人声保留段：该时间范围内将保留原视频人声，并参与最终导出混音" aria-label="原人声保留段：该时间范围内将保留原视频人声，并参与最终导出混音">人</div></div>
-          <div class="trackLabel trackLabelBgm"><div class="trackLabelIcon trackLabelIconBgm">♫</div></div>
+          <div class="trackLabel trackLabelBgm" title="点击静音 BGM" aria-label="点击静音 BGM"><div class="trackLabelIcon trackLabelIconBgm">♫</div></div>
         </div>
         <div class="timelineCanvas">
           <div class="timelineInnerCanvas">
@@ -1051,6 +1071,15 @@
         </div>
       </div>
     </div>
+    <aside class="qcPanel" aria-label="质检提醒面板">
+      <div class="qcRail"><button type="button" class="collapseBtn" id="expandQc">‹</button><span>质检提醒</span><span class="qcCount" id="railCount">8处</span></div>
+      <div class="qcPanelMain">
+        <div class="qcPanelHeader"><div><span class="qcTitle">质检提醒</span><span class="qcCount" id="totalCount">共 8 处</span></div><button type="button" class="collapseBtn" id="collapseQc">›</button></div>
+        <div class="qcSummary"><div class="qcSummaryTop"><span>异常汇总</span><span>按数量倒序</span></div><div class="typeList" id="typeList"></div></div>
+        <div class="qcBatch"><button type="button" class="btnGhost" id="batchAccept">批量采纳</button><button type="button" class="btnGhost" id="batchIgnore">批量忽略</button><button type="button" class="btnPrimary wide" id="acceptAll">该集全部采纳</button></div>
+        <div class="qcList" id="qcList"></div>
+      </div>
+    </aside>
     <div class="subtitleStyleMask" id="subtitleStyleMask" role="dialog" aria-modal="true" aria-labelledby="subtitleStyleTitle">
       <div class="subtitleStyleDialog">
         <div class="subtitleStyleHeader">
@@ -1123,6 +1152,7 @@
       const stylePosition = root.querySelector('#stylePosition');
       let selectedGroup = '字幕文本规范';
       let activeIssue = 'q1';
+      let expandedGroups = new Set(['字幕文本规范']);
       let activeSegment = 's1';
       let pending = null;
       let voiceSeed = 4;
@@ -1196,6 +1226,52 @@
         { id:'q8', group:'术语不统一', detail:'称谓写法不统一', seg:'s6', title:'第 6 段｜称谓写法不统一', before:'His Majesty', after:'Your Majesty', note:'建议与全剧称谓写法保持一致', checked:false }
       ];
       function esc(text){ return String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+      function antToolbarIcon(name){
+        const icons = {
+          translation: {
+            viewBox: '64 64 896 896',
+            paths: [
+              'M140 188h584v164h76V144c0-17.7-14.3-32-32-32H96c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h544v-76H140V188z',
+              'M414.3 256h-60.6c-3.4 0-6.4 2.2-7.6 5.4L219 629.4c-.3.8-.4 1.7-.4 2.6 0 4.4 3.6 8 8 8h55.1c3.4 0 6.4-2.2 7.6-5.4L322 540h196.2L422 261.4a8.42 8.42 0 00-7.7-5.4zm12.4 228h-85.5L384 360.2 426.7 484zM936 528H800v-93c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v93H592c-13.3 0-24 10.7-24 24v176c0 13.3 10.7 24 24 24h136v152c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V752h136c13.3 0 24-10.7 24-24V552c0-13.3-10.7-24-24-24zM728 680h-88v-80h88v80zm160 0h-88v-80h88v80z'
+            ]
+          },
+          smile: {
+            viewBox: '64 64 896 896',
+            paths: [
+              'M288 421a48 48 0 1096 0 48 48 0 10-96 0zm352 0a48 48 0 1096 0 48 48 0 10-96 0zM512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm263 711c-34.2 34.2-74 61-118.3 79.8C611 874.2 562.3 884 512 884c-50.3 0-99-9.8-144.8-29.2A370.4 370.4 0 01248.9 775c-34.2-34.2-61-74-79.8-118.3C149.8 611 140 562.3 140 512s9.8-99 29.2-144.8A370.4 370.4 0 01249 248.9c34.2-34.2 74-61 118.3-79.8C413 149.8 461.7 140 512 140c50.3 0 99 9.8 144.8 29.2A370.4 370.4 0 01775.1 249c34.2 34.2 61 74 79.8 118.3C874.2 413 884 461.7 884 512s-9.8 99-29.2 144.8A368.89 368.89 0 01775 775zM664 533h-48.1c-4.2 0-7.8 3.2-8.1 7.4C604 589.9 562.5 629 512 629s-92.1-39.1-95.8-88.6c-.3-4.2-3.9-7.4-8.1-7.4H360a8 8 0 00-8 8.4c4.4 84.3 74.5 151.6 160 151.6s155.6-67.3 160-151.6a8 8 0 00-8-8.4z'
+            ]
+          },
+          comment: {
+            viewBox: '64 64 896 896',
+            paths: [
+              'M573 421c-23.1 0-41 17.9-41 40s17.9 40 41 40c21.1 0 39-17.9 39-40s-17.9-40-39-40zm-280 0c-23.1 0-41 17.9-41 40s17.9 40 41 40c21.1 0 39-17.9 39-40s-17.9-40-39-40z',
+              'M894 345a343.92 343.92 0 00-189-130v.1c-17.1-19-36.4-36.5-58-52.1-163.7-119-393.5-82.7-513 81-96.3 133-92.2 311.9 6 439l.8 132.6c0 3.2.5 6.4 1.5 9.4a31.95 31.95 0 0040.1 20.9L309 806c33.5 11.9 68.1 18.7 102.5 20.6l-.5.4c89.1 64.9 205.9 84.4 313 49l127.1 41.4c3.2 1 6.5 1.6 9.9 1.6 17.7 0 32-14.3 32-32V753c88.1-119.6 90.4-284.9 1-408zM323 735l-12-5-99 31-1-104-8-9c-84.6-103.2-90.2-251.9-11-361 96.4-132.2 281.2-161.4 413-66 132.2 96.1 161.5 280.6 66 412-80.1 109.9-223.5 150.5-348 102zm505-17l-8 10 1 104-98-33-12 5c-56 20.8-115.7 22.5-171 7l-.2-.1A367.31 367.31 0 00729 676c76.4-105.3 88.8-237.6 44.4-350.4l.6.4c23 16.5 44.1 37.1 62 62 72.6 99.6 68.5 235.2-8 330z',
+              'M433 421c-23.1 0-41 17.9-41 40s17.9 40 41 40c21.1 0 39-17.9 39-40s-17.9-40-39-40z'
+            ]
+          },
+          audio: {
+            viewBox: '64 64 896 896',
+            paths: [
+              'M842 454c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8 0 140.3-113.7 254-254 254S258 594.3 258 454c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8 0 168.7 126.6 307.9 290 327.6V884H326.7c-13.7 0-24.7 14.3-24.7 32v36c0 4.4 2.8 8 6.2 8h407.6c3.4 0 6.2-3.6 6.2-8v-36c0-17.7-11-32-24.7-32H548V782.1c165.3-18 294-158 294-328.1zM512 624c93.9 0 170-75.2 170-168V232c0-92.8-76.1-168-170-168s-170 75.2-170 168v224c0 92.8 76.1 168 170 168zm-94-392c0-50.6 41.9-92 94-92s94 41.4 94 92v224c0 50.6-41.9 92-94 92s-94-41.4-94-92V232z'
+            ]
+          },
+          sound: {
+            viewBox: '64 64 896 896',
+            paths: [
+              'M625.9 115c-5.9 0-11.9 1.6-17.4 5.3L254 352H90c-8.8 0-16 7.2-16 16v288c0 8.8 7.2 16 16 16h164l354.5 231.7c5.5 3.6 11.6 5.3 17.4 5.3 16.7 0 32.1-13.3 32.1-32.1V147.1c0-18.8-15.4-32.1-32.1-32.1zM586 803L293.4 611.7l-18-11.7H146V424h129.4l17.9-11.7L586 221v582zm348-327H806c-8.8 0-16 7.2-16 16v40c0 8.8 7.2 16 16 16h128c8.8 0 16-7.2 16-16v-40c0-8.8-7.2-16-16-16zm-41.9 261.8l-110.3-63.7a15.9 15.9 0 00-21.7 5.9l-19.9 34.5c-4.4 7.6-1.8 17.4 5.8 21.8L856.3 800a15.9 15.9 0 0021.7-5.9l19.9-34.5c4.4-7.6 1.7-17.4-5.8-21.8zM760 344a15.9 15.9 0 0021.7 5.9L892 286.2c7.6-4.4 10.2-14.2 5.8-21.8L878 230a15.9 15.9 0 00-21.7-5.9L746 287.8a15.99 15.99 0 00-5.8 21.8L760 344z'
+            ]
+          },
+          more: {
+            viewBox: '64 64 896 896',
+            paths: [
+              'M176 511a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0z'
+            ]
+          }
+        };
+        const icon = icons[name];
+        if(!icon) return '';
+        return '<span class="segmentToolIcon" aria-hidden="true"><svg viewBox="'+icon.viewBox+'" focusable="false">'+icon.paths.map(d => '<path d="'+d+'"></path>').join('')+'</svg></span>';
+      }
       function clampStyleNum(value, min, max, fallback){
         const num = Number(value);
         if(Number.isNaN(num)) return fallback;
@@ -1771,8 +1847,8 @@
           const source = esc(s.source);
           const times = s.time.split(' - ');
           const errorBadge = item ? '<span class="errorBadge"><span class="errorIcon">!</span><span>'+esc(item.group === '原文错误' ? '原文错误' : '文本规范')+'</span></span>' : '';
-          const moreMenu = '<div class="segmentMoreWrap"><button type="button" class="segmentTool segmentMoreBtn" aria-label="更多段落操作"><span class="segmentToolIcon">⋯</span>更多</button><div class="segmentMoreMenu"><button type="button" class="segmentMoreItem" data-more-action="retain-original" data-seg="'+s.id+'">保留原人声</button><button type="button" class="segmentMoreItem" data-more-action="cancel-original" data-seg="'+s.id+'">取消保留原人声</button><button type="button" class="segmentMoreItem danger" data-more-action="delete" data-seg="'+s.id+'">删除</button></div></div>';
-          const toolbar = active===s.id && redubMode!=='select' ? '<div class="segmentToolbar"><div class="segmentToolGroup"><button type="button" class="segmentTool" data-tool="重翻"><span class="segmentToolIcon">A↔</span>重翻</button><button type="button" class="segmentTool" data-tool="情感调节"><span class="segmentToolIcon">◷</span>情感调节</button><button type="button" class="segmentTool" data-tool="语气词"><span class="segmentToolIcon">☁</span>语气词</button><button type="button" class="segmentTool" data-tool="重新生成配音"><span class="segmentToolIcon">♬</span>重新生成配音</button><button type="button" class="segmentTool" data-tool="发音纠正"><span class="segmentToolIcon">◖</span>发音纠正</button></div>'+moreMenu+'</div>' : '';
+          const moreMenu = '<div class="segmentMoreWrap"><button type="button" class="segmentTool segmentMoreBtn" aria-label="更多段落操作">'+antToolbarIcon('more')+'更多</button><div class="segmentMoreMenu"><button type="button" class="segmentMoreItem" data-more-action="retain-original" data-seg="'+s.id+'">保留原人声</button><button type="button" class="segmentMoreItem" data-more-action="cancel-original" data-seg="'+s.id+'">取消保留原人声</button><button type="button" class="segmentMoreItem danger" data-more-action="delete" data-seg="'+s.id+'">删除</button></div></div>';
+          const toolbar = active===s.id && redubMode!=='select' ? '<div class="segmentToolbar"><div class="segmentToolGroup"><button type="button" class="segmentTool" data-tool="重翻">'+antToolbarIcon('translation')+'重翻</button><button type="button" class="segmentTool" data-tool="情感调节">'+antToolbarIcon('smile')+'情感调节</button><button type="button" class="segmentTool" data-tool="语气词">'+antToolbarIcon('comment')+'语气词</button><button type="button" class="segmentTool" data-tool="重新生成配音">'+antToolbarIcon('audio')+'重新生成配音</button><button type="button" class="segmentTool" data-tool="发音纠正">'+antToolbarIcon('sound')+'发音纠正</button></div>'+moreMenu+'</div>' : '';
           const batchCheck = redubMode === 'select' ? '<label class="batchRowCheck"><input type="checkbox" class="batchRowInput" data-batch-row="'+s.id+'" '+(batchSelectedIds.has(s.id)?'checked':'')+'></label>' : '';
           const rowHtml = '<div class="subtitleItem '+(active===s.id?'active ':'')+(item?'hasError ':'')+(s.voice&&redubMode!=='select'?'hasVoice ':'')+(redubMode==='select'?'batchSelectable':'')+'" data-seg="'+s.id+'">'+errorBadge+toolbar+batchCheck+'<div class="speakerCell"><span class="speakerBadge '+s.cls+'">'+esc(s.speaker)+'</span></div><div class="timeCell"><span class="timeLine">'+esc(times[0]||'')+'</span><span class="timeLine">'+esc(times[1]||'')+'</span></div><div class="groupCell">'+esc(s.group)+'</div><div class="textCell sourceCell"><span class="segmentIndex">'+(index+1)+'</span><div class="sourceText">'+(source || '<span class="placeholderText">空字幕段</span>')+'</div></div><div class="textCell"><div class="targetText">'+(esc(s.target) || '<span class="placeholderText">待输入译文</span>')+'</div></div>'+renderVoicePanel(s)+'</div>';
           const insertHtml = canShowInsert ? '<div class="insertArea" data-insert-after="'+(index+1)+'"><button type="button" class="insertBtn"><span>＋</span>插入</button></div>' : '';
@@ -1781,7 +1857,23 @@
         updateVoiceBatch();
         renderTimeline();
       }
-      function renderTypes(){ const c=counts(); if(!c.some(x=>x[0]===selectedGroup)) selectedGroup=c[0]?.[0]||''; totalEl.textContent='共 '+qc.length+' 处'; railEl.textContent=qc.length+'处'; typeEl.innerHTML=c.map(([group,n])=>{ const active=group===selectedGroup; const children=active?'<div class="typeChildren">'+qc.filter(i=>i.group===group).map(i=>'<button type="button" class="typeChild '+(i.id===activeIssue?'active ':'')+(i.checked?'checked':'')+'" data-jump="'+i.id+'"><span>第 '+segNo(i.seg)+' 段</span><span class="typeChildDetail">｜'+esc(i.detail)+'</span><span class="typeChildCheck">✓</span></button>').join('')+'</div>':''; return '<div><button type="button" class="typeButton '+(active?'active':'')+'" data-group="'+esc(group)+'"><span class="typeName">'+esc(group)+'</span><span class="typeCount">'+n+'</span><span class="typeArrow">'+(active?'▼':'▶')+'</span></button>'+children+'</div>'; }).join(''); }
+      function renderTypes(){
+        const c=counts();
+        const groupNames = c.map(x=>x[0]);
+        expandedGroups = new Set([...expandedGroups].filter(group => groupNames.includes(group)));
+        if(!c.some(x=>x[0]===selectedGroup)){
+          selectedGroup=c[0]?.[0]||'';
+          if(selectedGroup) expandedGroups.add(selectedGroup);
+        }
+        totalEl.textContent='共 '+qc.length+' 处';
+        railEl.textContent=qc.length+'处';
+        typeEl.innerHTML=c.map(([group,n])=>{
+          const active=group===selectedGroup;
+          const expanded=expandedGroups.has(group);
+          const children=expanded?'<div class="typeChildren">'+qc.filter(i=>i.group===group).map(i=>'<button type="button" class="typeChild '+(i.id===activeIssue?'active ':'')+(i.checked?'checked':'')+'" data-jump="'+i.id+'"><span>第 '+segNo(i.seg)+' 段</span><span class="typeChildDetail">｜'+esc(i.detail)+'</span><span class="typeChildCheck">✓</span></button>').join('')+'</div>':'';
+          return '<div><button type="button" class="typeButton '+(active?'active':'')+'" data-group="'+esc(group)+'" aria-expanded="'+expanded+'"><span class="typeName">'+esc(group)+'</span><span class="typeCount">'+n+'</span><span class="typeArrow" data-toggle-group="'+esc(group)+'">'+(expanded?'▼':'▶')+'</span></button>'+children+'</div>';
+        }).join('');
+      }
       function renderQc(){ const items=qc.filter(i=>i.group===selectedGroup); const sel=qc.filter(i=>i.checked).length; root.querySelector('#batchAccept').disabled=sel===0; root.querySelector('#batchIgnore').disabled=sel===0; root.querySelector('#acceptAll').disabled=qc.length===0; listEl.innerHTML=items.length?items.map(i=>{ const d=diffPair(i.before,i.after); return '<article class="qcCard '+(i.id===activeIssue?'active':'')+'" data-qc="'+i.id+'"><div class="qcCardHeader"><label><input type="checkbox" class="qcCheck" '+(i.checked?'checked':'')+'> <span class="qcCardTitle">'+esc(i.title)+'</span></label></div><div class="qcCompare"><div><strong>当前</strong>'+d.before+'</div><div><strong>建议</strong>'+d.after+'</div><div class="qcNote">'+esc(i.note)+'</div></div><div class="qcActions"><button type="button" class="btnGhost qcIgnore">忽略</button><button type="button" class="btnPrimary qcAccept">采纳</button></div></article>'; }).join(''):'<article class="qcCard"><div class="qcNote">当前分类暂无质检提醒</div></article>'; }
       function render(){ renderRows(activeSegment); renderTypes(); renderQc(); }
       function showToast(text){ toast.textContent=text; toast.style.display='block'; setTimeout(()=>toast.style.display='none',1700); }
@@ -1880,10 +1972,24 @@
           return;
         }
         if(!e.target.closest('.episodeNav')) episodeNav.classList.remove('open');
+        const toggleGroup=e.target.closest('[data-toggle-group]');
+        if(toggleGroup){
+          e.stopPropagation();
+          const groupName=toggleGroup.dataset.toggleGroup;
+          if(expandedGroups.has(groupName)) expandedGroups.delete(groupName);
+          else {
+            expandedGroups.add(groupName);
+            selectedGroup=groupName;
+            const first=qc.find(i=>i.group===selectedGroup);
+            if(first) activeIssue=first.id;
+          }
+          render();
+          return;
+        }
         const jump=e.target.closest('[data-jump]');
         if(jump){ jumpToIssue(jump.dataset.jump); return; }
         const group=e.target.closest('[data-group]');
-        if(group){ selectedGroup=group.dataset.group; const first=qc.find(i=>i.group===selectedGroup); if(first) activeIssue=first.id; render(); return; }
+        if(group){ selectedGroup=group.dataset.group; expandedGroups.add(selectedGroup); const first=qc.find(i=>i.group===selectedGroup); if(first) activeIssue=first.id; render(); return; }
         const moreAction=e.target.closest('[data-more-action]');
         if(moreAction){
           const segId = moreAction.dataset.seg;
