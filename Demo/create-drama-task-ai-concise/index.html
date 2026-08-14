@@ -1643,6 +1643,10 @@
         state.srtPolishEnabled = false;
       }
 
+      if (extractTask && state.processMode !== 'aipe') {
+        state.processMode = 'aipe';
+      }
+
       updateGroup('taskType', state.taskType);
       updateGroup('processMode', state.processMode);
       updateGroup('videoSource', state.videoSource);
@@ -1679,9 +1683,9 @@
       srtFileName.classList.toggle('hidden', !file || state.translationSource !== 'srt');
       srtFileName.textContent = file ? `已选择：${file.name}` : '';
 
-      processModeGroup.classList.remove('is-single');
+      processModeGroup.classList.toggle('is-single', extractTask);
       smartModeButton.textContent = getModeLabel('smart');
-      smartModeButton.classList.remove('hidden');
+      smartModeButton.classList.toggle('hidden', extractTask);
       outputPanelTitle.textContent = extractTask
         ? '本地上传配置'
         : state.taskType === 'dubbing'
@@ -1743,6 +1747,10 @@
           state.translationSource = 'ai';
           state.conciseEnabled = false;
           state.srtPolishEnabled = false;
+        }
+
+        if (group === 'taskType' && value === 'extract') {
+          state.processMode = 'aipe';
         }
 
         if (group === 'taskType' && value === 'subtitle') {
