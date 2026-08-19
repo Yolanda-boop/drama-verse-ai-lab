@@ -551,6 +551,24 @@
     #dv-real-qc-prototype .targetPlayBtn:hover { color: rgba(255,255,255,.92); background: rgba(128,128,128,.2); }
     #dv-real-qc-prototype .targetPlayIcon { width: 14px; height: 14px; display: block; fill: currentColor; transform: translateX(1px); }
     #dv-real-qc-prototype .placeholderText { color: var(--text-tertiary); font-weight: 400; }
+    #dv-real-qc-prototype .audioStateLine { display: flex; justify-content: flex-end; margin-top: 8px; min-height: 22px; }
+    #dv-real-qc-prototype .audioStateBadge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      max-width: 100%;
+      height: 22px;
+      padding: 0 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(250,173,20,.38);
+      background: rgba(250,173,20,.1);
+      color: #ffd666;
+      font-size: 12px;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+    #dv-real-qc-prototype .audioStateBadge.required { border-color: rgba(255,77,79,.42); background: rgba(255,77,79,.12); color: #ff9c99; }
+    #dv-real-qc-prototype .audioStateBadge.kept { border-color: rgba(82,196,26,.38); background: rgba(82,196,26,.1); color: #95de64; }
     #dv-real-qc-prototype .voiceBatchBar {
       display: grid;
       grid-template-columns: minmax(0,1fr) auto;
@@ -571,6 +589,26 @@
     #dv-real-qc-prototype .voiceBatchActions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
     #dv-real-qc-prototype .voiceBatchActions .btnGhost,
     #dv-real-qc-prototype .voiceBatchActions .btnPrimary { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
+    #dv-real-qc-prototype .audioRegenBar {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 44px;
+      padding: 8px 12px 8px 18px;
+      background: #211b12;
+      border-bottom: 1px solid rgba(250,173,20,.24);
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .audioRegenBar.isHidden { display: none; }
+    #dv-real-qc-prototype .audioRegenText { display: flex; align-items: center; gap: 10px; min-width: 0; font-size: 13px; line-height: 20px; }
+    #dv-real-qc-prototype .audioRegenIcon { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(250,173,20,.6); color: #ffd666; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; flex: 0 0 auto; }
+    #dv-real-qc-prototype .audioRegenText strong { color: var(--text-primary); font-weight: 600; }
+    #dv-real-qc-prototype .audioRegenSub { color: var(--text-tertiary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #dv-real-qc-prototype .audioRegenActions { display: flex; align-items: center; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+    #dv-real-qc-prototype .audioRegenActions .btnGhost,
+    #dv-real-qc-prototype .audioRegenActions .btnPrimary { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
     #dv-real-qc-prototype .barSpinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.2); border-top-color: #8b5cf6; border-radius: 50%; animation: dvSpin .8s linear infinite; }
     @keyframes dvSpin { to { transform: rotate(360deg); } }
     #dv-real-qc-prototype .batchRowCheck {
@@ -822,6 +860,126 @@
     #dv-real-qc-prototype .modalBox h3 { margin: 0 0 10px; font-size: 16px; font-weight: 600; }
     #dv-real-qc-prototype .modalBox p { margin: 0 0 16px; color: var(--text-secondary); line-height: 1.5; }
     #dv-real-qc-prototype .modalActions { display: flex; justify-content: flex-end; gap: 10px; }
+    #dv-real-qc-prototype .audioRegenMask {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.68);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 13;
+    }
+    #dv-real-qc-prototype .audioRegenDialog {
+      width: min(880px, 96%);
+      max-height: min(700px, 92%);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 16px 42px rgba(0,0,0,.62);
+      overflow: hidden;
+    }
+    #dv-real-qc-prototype .audioRegenHeader {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .audioRegenTitle { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+    #dv-real-qc-prototype .audioRegenClose { width: 30px; height: 30px; border: 0; border-radius: 4px; background: transparent; color: var(--text-tertiary); font-size: 22px; cursor: pointer; line-height: 1; }
+    #dv-real-qc-prototype .audioRegenClose:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .audioRegenBody { padding: 14px 18px 16px; overflow: auto; display: grid; gap: 12px; }
+    #dv-real-qc-prototype .audioRegenSummary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid rgba(250,173,20,.24);
+      border-radius: 6px;
+      background: rgba(250,173,20,.08);
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 20px;
+    }
+    #dv-real-qc-prototype .audioRegenSummary strong { color: #fff; font-weight: 600; }
+    #dv-real-qc-prototype .audioRegenHint { color: var(--text-tertiary); font-size: 12px; }
+    #dv-real-qc-prototype .audioRegenTable { display: grid; gap: 8px; }
+    #dv-real-qc-prototype .audioRegenTableHead,
+    #dv-real-qc-prototype .audioRegenRow {
+      display: grid;
+      grid-template-columns: 36px 78px 92px minmax(0,1fr) 150px 112px;
+      gap: 10px;
+      align-items: center;
+    }
+    #dv-real-qc-prototype .audioRegenTableHead {
+      color: var(--text-tertiary);
+      font-size: 12px;
+      padding: 0 10px;
+    }
+    #dv-real-qc-prototype .audioRegenRow {
+      min-height: 72px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 6px;
+      background: #202020;
+    }
+    #dv-real-qc-prototype .audioRegenRow:hover { background: #242424; border-color: rgba(255,255,255,.2); }
+    #dv-real-qc-prototype .audioRegenRow.required { background: rgba(255,77,79,.06); border-color: rgba(255,77,79,.26); }
+    #dv-real-qc-prototype .audioRegenRow.kept { background: rgba(82,196,26,.06); border-color: rgba(82,196,26,.24); }
+    #dv-real-qc-prototype .audioRegenCheck { width: 18px; height: 18px; accent-color: #6c39e6; }
+    #dv-real-qc-prototype .audioRegenCheck:disabled { cursor: not-allowed; opacity: .55; }
+    #dv-real-qc-prototype .audioRegenSegNo { color: #b9a4ff; font-weight: 600; }
+    #dv-real-qc-prototype .audioRegenSpeaker { color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #dv-real-qc-prototype .audioRegenTextCell { min-width: 0; color: rgba(255,255,255,.86); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: rtl; text-align: right; }
+    #dv-real-qc-prototype .audioRegenReason { display: flex; align-items: center; gap: 6px; min-width: 0; color: var(--text-secondary); }
+    #dv-real-qc-prototype .audioRegenReasonText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #dv-real-qc-prototype .audioRegenHelp {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.22);
+      color: var(--text-tertiary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex: 0 0 auto;
+      cursor: help;
+    }
+    #dv-real-qc-prototype .audioRegenHelp:hover { color: #fff; border-color: rgba(255,255,255,.42); background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .audioRegenTreatment {
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(250,173,20,.38);
+      background: rgba(250,173,20,.1);
+      color: #ffd666;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    #dv-real-qc-prototype .audioRegenTreatment.required { border-color: rgba(255,77,79,.42); background: rgba(255,77,79,.12); color: #ff9c99; }
+    #dv-real-qc-prototype .audioRegenTreatment.kept { border-color: rgba(82,196,26,.38); background: rgba(82,196,26,.1); color: #95de64; }
+    #dv-real-qc-prototype .audioRegenFooter {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      border-top: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .audioRegenFooterNote { color: var(--text-tertiary); font-size: 12px; line-height: 18px; }
+    #dv-real-qc-prototype .audioRegenFooterActions { display: flex; align-items: center; gap: 10px; }
     #dv-real-qc-prototype .subtitleStyleMask {
       position: absolute;
       inset: 0;
@@ -917,7 +1075,29 @@
       transform: translateY(50%);
       z-index: 1;
     }
+    #dv-real-qc-prototype .subtitlePreviewText.sourcePreview {
+      opacity: .9;
+      display: none;
+    }
     #dv-real-qc-prototype .subtitleStyleForm { display: grid; align-content: start; gap: 14px; }
+    #dv-real-qc-prototype .subtitleStyleTabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 3px;
+      border-radius: 6px;
+      background: rgba(255,255,255,.06);
+    }
+    #dv-real-qc-prototype .subtitleStyleTab {
+      height: 32px;
+      border: 0;
+      border-radius: 4px;
+      color: var(--text-tertiary);
+      background: transparent;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    #dv-real-qc-prototype .subtitleStyleTab.active { color: #fff; background: rgba(98,36,255,.55); }
     #dv-real-qc-prototype .subtitleStyleMeta {
       display: flex;
       justify-content: space-between;
@@ -959,6 +1139,9 @@
     }
     #dv-real-qc-prototype .styleInput:focus,
     #dv-real-qc-prototype .styleSelect:focus { border-color: #6c39e6; box-shadow: 0 0 0 2px rgba(98,36,255,.24); }
+    #dv-real-qc-prototype .styleInput[disabled],
+    #dv-real-qc-prototype .styleSelect[disabled] { opacity: .52; cursor: not-allowed; }
+    #dv-real-qc-prototype .styleField.disabled { opacity: .48; }
     #dv-real-qc-prototype .styleSwitchRow {
       height: 34px;
       display: flex;
@@ -971,7 +1154,45 @@
       padding: 0 10px;
       color: var(--text-secondary);
     }
-    #dv-real-qc-prototype .styleSwitchRow input { width: 18px; height: 18px; accent-color: #6c39e6; }
+    #dv-real-qc-prototype .styleSwitchRow input[type="checkbox"] {
+      appearance: none;
+      position: relative;
+      width: 42px;
+      height: 22px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255,255,255,.22);
+      cursor: pointer;
+      flex: 0 0 auto;
+      transition: background .16s ease, opacity .16s ease;
+    }
+    #dv-real-qc-prototype .styleSwitchRow input[type="checkbox"]:before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform .16s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,.28);
+    }
+    #dv-real-qc-prototype .styleSwitchRow input[type="checkbox"]:checked { background: var(--brand-purple); }
+    #dv-real-qc-prototype .styleSwitchRow input[type="checkbox"]:checked:before { transform: translateX(20px); }
+    #dv-real-qc-prototype .styleSwitchRow input[type="checkbox"]:disabled { cursor: not-allowed; opacity: .45; }
+    #dv-real-qc-prototype .subtitleStyleHint {
+      display: none;
+      margin-top: -3px;
+      padding: 8px 10px;
+      border: 1px solid rgba(250,173,20,.24);
+      border-radius: 6px;
+      background: rgba(250,173,20,.08);
+      color: #ffd666;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    #dv-real-qc-prototype .subtitleStyleHint.show { display: block; }
     #dv-real-qc-prototype .subtitleStyleFooter {
       min-height: 58px;
       display: flex;
@@ -984,7 +1205,356 @@
     }
     #dv-real-qc-prototype .subtitleStyleScope { color: var(--text-tertiary); font-size: 12px; }
     #dv-real-qc-prototype .subtitleStyleActions { display: flex; align-items: center; gap: 10px; }
-    #dv-real-qc-prototype .toast { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); padding: 10px 14px; display: none; z-index: 11; box-shadow: 0 4px 16px rgba(0,0,0,.6); }
+    #dv-real-qc-prototype .exportVideoMask {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 14;
+    }
+    #dv-real-qc-prototype .exportVideoDialog {
+      width: min(1020px, 98%);
+      height: min(720px, 94%);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 18px 52px rgba(0,0,0,.66);
+      overflow: hidden;
+    }
+    #dv-real-qc-prototype .exportVideoHeader {
+      min-height: 72px;
+      display: grid;
+      grid-template-columns: 210px minmax(0,1fr) 34px;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    #dv-real-qc-prototype .exportVideoTitle { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+    #dv-real-qc-prototype .exportVideoClose {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 30px;
+    }
+    #dv-real-qc-prototype .exportVideoClose:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .exportSteps { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: 0; }
+    #dv-real-qc-prototype .exportStep {
+      position: relative;
+      display: grid;
+      grid-template-columns: 28px auto;
+      grid-template-rows: auto auto;
+      column-gap: 8px;
+      row-gap: 2px;
+      align-items: center;
+      border: 0;
+      background: transparent;
+      color: var(--text-tertiary);
+      text-align: left;
+      cursor: pointer;
+      padding: 0 18px 0 0;
+      min-width: 0;
+    }
+    #dv-real-qc-prototype .exportStep:after {
+      content: "";
+      position: absolute;
+      left: 124px;
+      right: 10px;
+      top: 15px;
+      height: 2px;
+      background: rgba(255,255,255,.16);
+    }
+    #dv-real-qc-prototype .exportStep:last-child:after { display: none; }
+    #dv-real-qc-prototype .exportStepDot {
+      grid-row: 1 / 3;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.78);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    #dv-real-qc-prototype .exportStepTitle { color: var(--text-secondary); font-weight: 600; white-space: nowrap; }
+    #dv-real-qc-prototype .exportStepDesc { color: var(--text-tertiary); font-size: 12px; white-space: nowrap; }
+    #dv-real-qc-prototype .exportStep.active .exportStepDot,
+    #dv-real-qc-prototype .exportStep.done .exportStepDot { background: var(--brand-purple); color: #fff; }
+    #dv-real-qc-prototype .exportStep.active .exportStepTitle { color: #fff; }
+    #dv-real-qc-prototype .exportStep.done .exportStepDesc,
+    #dv-real-qc-prototype .exportStep.active .exportStepDesc { color: #00ee00; }
+    #dv-real-qc-prototype .exportVideoBody { flex: 1 1 auto; min-height: 0; padding: 12px 14px; overflow: hidden; }
+    #dv-real-qc-prototype .exportStepView { height: 100%; display: none; }
+    #dv-real-qc-prototype .exportStepView.active { display: block; }
+    #dv-real-qc-prototype .exportPlaceholder {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 8px;
+      line-height: 1.8;
+      text-align: center;
+    }
+    #dv-real-qc-prototype .exportSubtitleLayout {
+      height: 100%;
+      display: grid;
+      grid-template-columns: minmax(300px,.9fr) 440px;
+      gap: 20px;
+      min-height: 0;
+    }
+    #dv-real-qc-prototype .exportPreviewPanel {
+      position: relative;
+      min-width: 0;
+      background: #060606;
+      border-radius: 7px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #dv-real-qc-prototype .exportVideoFrame {
+      width: min(58%, 260px);
+      min-width: 210px;
+      max-height: 96%;
+      aspect-ratio: 9/16;
+      position: relative;
+      overflow: hidden;
+      border-radius: 7px;
+      background:
+        linear-gradient(112deg, rgba(255,255,255,.08) 0 34%, rgba(0,0,0,.28) 34% 35%, rgba(0,0,0,.74) 35% 100%),
+        radial-gradient(circle at 38% 22%, rgba(255,230,190,.35), transparent 33%),
+        linear-gradient(160deg, #b99a82 0%, #923b32 45%, #171314 46%, #050505 100%);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 18px 70px rgba(0,0,0,.58);
+    }
+    #dv-real-qc-prototype .exportVideoFrame:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 28%;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,.62));
+      pointer-events: none;
+    }
+    #dv-real-qc-prototype .exportVideoControls {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 14px;
+      z-index: 3;
+      display: grid;
+      gap: 10px;
+      color: #fff;
+      font-size: 13px;
+    }
+    #dv-real-qc-prototype .exportVideoControlTop { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+    #dv-real-qc-prototype .exportVideoProgress { height: 4px; border-radius: 999px; background: rgba(255,255,255,.24); position: relative; overflow: hidden; }
+    #dv-real-qc-prototype .exportVideoProgress:before { content: ""; position: absolute; inset: 0 auto 0 0; width: 19%; background: #fff; }
+    #dv-real-qc-prototype .exportSubtitleStage { position: absolute; inset: 0; z-index: 2; }
+    #dv-real-qc-prototype .exportSubtitleBar {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      width: max-content;
+      max-width: 82%;
+      color: #fff;
+      text-align: center;
+      white-space: pre-wrap;
+      font-weight: 700;
+      line-height: 1.25;
+      text-shadow: 1px 1px 4px rgba(0,0,0,.74);
+      border: 2px solid transparent;
+      border-radius: 3px;
+      padding: 2px 4px;
+      cursor: ns-resize;
+      user-select: none;
+      display: none;
+    }
+    #dv-real-qc-prototype .exportSubtitleBar.show { display: block; }
+    #dv-real-qc-prototype .exportSubtitleBar.active { border-color: #6c39e6; background: rgba(98,36,255,.08); }
+    #dv-real-qc-prototype .exportSubtitleBar.source { color: rgba(255,255,255,.92); opacity: .95; }
+    #dv-real-qc-prototype .exportConfigPanel {
+      min-width: 0;
+      overflow-y: auto;
+      padding: 2px 0 4px;
+      display: grid;
+      align-content: start;
+      gap: 14px;
+    }
+    #dv-real-qc-prototype .exportConfigHead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    #dv-real-qc-prototype .exportConfigHead h3 { margin: 0; font-size: 16px; font-weight: 700; color: var(--text-primary); }
+    #dv-real-qc-prototype .exportResetRow { grid-template-columns: minmax(0,1fr) 218px; }
+    #dv-real-qc-prototype .exportResetInline {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    #dv-real-qc-prototype .exportReset {
+      height: 28px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 4px;
+      background: rgba(255,255,255,.04);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0 8px;
+      white-space: nowrap;
+    }
+    #dv-real-qc-prototype .exportReset:hover { color: #fff; border-color: rgba(255,255,255,.28); background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .exportReset[disabled] { color: var(--text-disabled); cursor: not-allowed; }
+    #dv-real-qc-prototype .exportReset[disabled]:hover { color: var(--text-disabled); border-color: rgba(255,255,255,.1); background: rgba(255,255,255,.03); }
+    #dv-real-qc-prototype .exportSwitchList { display: grid; gap: 8px; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,.1); }
+    #dv-real-qc-prototype .exportSwitchItem,
+    #dv-real-qc-prototype .exportConfigRow {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 112px;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+    #dv-real-qc-prototype .exportSwitchItem small { display: block; color: var(--text-tertiary); font-size: 12px; margin-top: 2px; line-height: 1.45; }
+    #dv-real-qc-prototype .exportSwitch {
+      justify-self: end;
+      position: relative;
+      width: 46px;
+      height: 24px;
+      border-radius: 999px;
+      border: 0;
+      background: rgba(255,255,255,.22);
+      cursor: pointer;
+      transition: background .16s ease, opacity .16s ease;
+    }
+    #dv-real-qc-prototype .exportSwitch:before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform .16s ease;
+    }
+    #dv-real-qc-prototype .exportSwitch.on { background: var(--brand-purple); }
+    #dv-real-qc-prototype .exportSwitch.on:before { transform: translateX(22px); }
+    #dv-real-qc-prototype .exportSwitch[disabled] { opacity: .35; cursor: not-allowed; }
+    #dv-real-qc-prototype .exportTabs { display: none; grid-template-columns: 1fr 1fr; gap: 6px; padding: 3px; background: rgba(255,255,255,.06); border-radius: 6px; }
+    #dv-real-qc-prototype .exportTabs.show { display: grid; }
+    #dv-real-qc-prototype .exportTab {
+      height: 32px;
+      border: 0;
+      border-radius: 4px;
+      color: var(--text-tertiary);
+      background: transparent;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    #dv-real-qc-prototype .exportTab.active { color: #fff; background: rgba(98,36,255,.55); }
+    #dv-real-qc-prototype .exportConfigRows { display: grid; gap: 12px; }
+    #dv-real-qc-prototype .exportConfigRow.disabled { opacity: .45; }
+    #dv-real-qc-prototype .exportConfigInput,
+    #dv-real-qc-prototype .exportConfigSelect {
+      width: 112px;
+      height: 28px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 4px;
+      background: #111;
+      color: var(--text-primary);
+      padding: 0 8px;
+      outline: none;
+      justify-self: end;
+    }
+    #dv-real-qc-prototype .exportConfigInput:focus,
+    #dv-real-qc-prototype .exportConfigSelect:focus { border-color: #6c39e6; box-shadow: 0 0 0 2px rgba(98,36,255,.2); }
+    #dv-real-qc-prototype .exportConfigInput[disabled],
+    #dv-real-qc-prototype .exportConfigSelect[disabled] { opacity: .55; cursor: not-allowed; }
+    #dv-real-qc-prototype .exportInlineHint {
+      margin-top: -2px;
+      padding: 8px 10px;
+      border: 1px solid rgba(250,173,20,.24);
+      border-radius: 6px;
+      background: rgba(250,173,20,.08);
+      color: #ffd666;
+      font-size: 12px;
+      line-height: 1.45;
+      display: none;
+    }
+    #dv-real-qc-prototype .exportInlineHint.show { display: block; }
+    #dv-real-qc-prototype .exportConfirmGrid {
+      max-width: 660px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+    #dv-real-qc-prototype .exportConfirmSection {
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      background: rgba(255,255,255,.04);
+      padding: 14px 16px;
+    }
+    #dv-real-qc-prototype .exportConfirmSection h4 { margin: 0 0 10px; font-size: 15px; color: #fff; }
+    #dv-real-qc-prototype .exportConfirmRows { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 7px 18px; }
+    #dv-real-qc-prototype .exportConfirmRows span { color: var(--text-tertiary); }
+    #dv-real-qc-prototype .exportConfirmRows strong { color: var(--text-primary); font-weight: 500; }
+    #dv-real-qc-prototype .exportVideoFooter {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 20px;
+      border-top: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .exportFooterNote { color: var(--text-tertiary); font-size: 12px; }
+    #dv-real-qc-prototype .exportFooterActions { display: flex; align-items: center; gap: 10px; }
+    #dv-real-qc-prototype .toast {
+      position: absolute;
+      left: 50%;
+      top: 24px;
+      transform: translateX(-50%);
+      min-width: 220px;
+      max-width: min(560px, calc(100% - 40px));
+      background: linear-gradient(135deg, rgba(82,196,26,.14) 0%, rgba(18,18,22,.96) 60%);
+      border: 1px solid rgba(82,196,26,.35);
+      border-radius: 6px;
+      color: rgba(255,255,255,.96);
+      padding: 13px 20px 13px 18px;
+      display: none;
+      z-index: 30;
+      box-shadow: 0 4px 12px rgba(0,0,0,.6), 0 16px 48px rgba(0,0,0,.7), 0 8px 32px rgba(82,196,26,.12);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 22px;
+      text-align: left;
+      overflow: hidden;
+    }
+    #dv-real-qc-prototype .toast:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, #7de84a 0%, #52c41a 100%);
+      box-shadow: 2px 0 12px rgba(82,196,26,.6);
+    }
     @media (max-width: 900px) {
       #dv-real-qc-prototype .editorContainer { grid-template-columns: 1fr; grid-template-rows: 56px minmax(0, 1fr) 250px auto; }
       #dv-real-qc-prototype .videoPanel { display: none; }
@@ -994,7 +1564,14 @@
       #dv-real-qc-prototype .editorContainer.qcCollapsed .qcPanel { min-height: 42px; }
       #dv-real-qc-prototype .qcRail { writing-mode: horizontal-tb; flex-direction: row; justify-content: center; padding: 8px; }
       #dv-real-qc-prototype .voiceBatchBar { grid-template-columns: 1fr; padding: 8px 12px; }
+      #dv-real-qc-prototype .audioRegenBar { grid-template-columns: 1fr; padding: 8px 12px; }
       #dv-real-qc-prototype .voiceBatchActions { justify-content: flex-start; }
+      #dv-real-qc-prototype .audioRegenActions { justify-content: flex-start; }
+      #dv-real-qc-prototype .audioRegenTableHead { display: none; }
+      #dv-real-qc-prototype .audioRegenRow { grid-template-columns: 28px 58px minmax(0,1fr); }
+      #dv-real-qc-prototype .audioRegenSpeaker,
+      #dv-real-qc-prototype .audioRegenReason,
+      #dv-real-qc-prototype .audioRegenTreatment { grid-column: 2 / -1; }
       #dv-real-qc-prototype .voiceResultPanel { grid-column: 1 / -1; margin: 0 12px 16px; }
       #dv-real-qc-prototype .candidateGrid { grid-template-columns: 1fr; }
       #dv-real-qc-prototype .episodePopover { width: 312px; }
@@ -1025,7 +1602,7 @@
         <button type="button" class="btnText">查找替换</button>
         <button type="button" class="btnText">发音纠正词典</button>
         <span class="saveStatus">已保存</span>
-        <button type="button" class="btnPrimary">完成并导出</button>
+        <button type="button" class="btnPrimary" id="openExportVideo">完成并导出</button>
       </div>
     </div>
     <div class="mainContent">
@@ -1045,6 +1622,7 @@
         <div class="subtitleWithQc">
           <div class="subtitleListContainer">
             <div class="header"><div class="headerSpeaker">说话人</div><div class="headerTime">时间</div><div class="headerGroup">语义组</div><div class="headerLeft">英语</div><div class="headerRight"><span class="headerTitle">阿拉伯语</span><span class="headerActions"><button type="button" class="btnGhost" id="batchRetranslate">批量重翻</button><button type="button" class="btnGhost" id="batchRedub">批量重新配音</button></span></div></div>
+            <div class="audioRegenBar" id="audioRegenBar"></div>
             <div class="voiceBatchBar" id="voiceBatchBar"></div>
             <div class="subtitleListWrapper"><div class="subtitleList" id="subtitleRows"></div></div>
           </div>
@@ -1113,22 +1691,131 @@
         <div class="subtitleStyleBody">
           <div class="subtitleStylePreviewPane">
             <div class="subtitlePreviewPhone">
-              <div class="subtitlePreviewText" id="subtitlePreviewText">مرحبا، هذه معاينة للترجمة.</div>
+              <div class="subtitlePreviewText sourcePreview" id="subtitlePreviewSourceText">Hello, this is a subtitle preview.</div>
+              <div class="subtitlePreviewText targetPreview" id="subtitlePreviewText">مرحبا، هذه معاينة للترجمة.</div>
             </div>
           </div>
           <div class="subtitleStyleForm">
+            <div class="subtitleStyleTabs">
+              <button type="button" class="subtitleStyleTab active" data-style-tab="target">译文字幕</button>
+              <button type="button" class="subtitleStyleTab" data-style-tab="source">原文字幕</button>
+            </div>
             <div class="subtitleStyleMeta"><span>当前配置语种</span><span class="languageBadge" id="subtitleStyleLanguage">阿拉伯语</span></div>
+            <label class="styleField" id="styleSourceToggleField"><span class="styleLabel">显示原文字幕</span><span class="styleSwitchRow"><span id="styleSourceEnabledText">关闭</span><input id="styleSourceEnabled" type="checkbox"></span></label>
             <label class="styleField"><span class="styleLabel">字号大小</span><input class="styleInput" id="styleFontSize" type="number" min="1" max="180" step="1"></label>
             <label class="styleField"><span class="styleLabel">字间距</span><input class="styleInput" id="styleLetterSpacing" type="number" min="-20" max="20" step="1"></label>
             <label class="styleField"><span class="styleLabel">换行长度</span><input class="styleInput" id="styleLineLength" type="number" min="1" max="120" step="1"></label>
+            <label class="styleField"><span class="styleLabelWithHelp"><span>智能切帧展示</span><span class="styleHelpIcon" data-tip="开启后，单语字幕超过单帧最大行数时，系统会自动尝试切帧展示，不拆分原字幕段，不影响 TTS。">?</span></span><span class="styleSwitchRow"><span id="styleSmartCutText">开启</span><input id="styleSmartCut" type="checkbox"></span></label>
+            <label class="styleField"><span class="styleLabel">单帧最大行数</span><select class="styleSelect" id="styleMaxLines"><option value="1">1 行</option><option value="2">2 行</option><option value="3">3 行</option></select></label>
+            <div class="subtitleStyleHint" id="subtitleStyleDualHint">已开启原文字幕，双语硬字幕暂不支持智能切帧展示，系统已自动关闭。</div>
             <label class="styleField"><span class="styleLabelWithHelp"><span>仅限空格处允许换行</span><span class="styleHelpIcon" data-tip="仅在词与词之间的空格处换行，不拆分单词。">?</span></span><span class="styleSwitchRow"><span id="styleSpaceWrapText">开启</span><input id="styleSpaceWrap" type="checkbox"></span></label>
             <label class="styleField"><span class="styleLabel">字体</span><select class="styleSelect" id="styleFont"></select></label>
             <label class="styleField"><span class="styleLabel">字幕位置（距底部 %）</span><input class="styleInput" id="stylePosition" type="number" min="0" max="100" step="0.01"></label>
           </div>
         </div>
         <div class="subtitleStyleFooter">
-          <div class="subtitleStyleScope">保存后仅对编辑器内字幕样式预览生效</div>
+          <div class="subtitleStyleScope">保存后影响编辑器内字幕预览与智能切帧展示，导出音视频不联动</div>
           <div class="subtitleStyleActions"><button type="button" class="btnGhost" id="subtitleStyleCancel">取消</button><button type="button" class="btnGhost" id="subtitleStyleReset">恢复默认值</button><button type="button" class="btnPrimary" id="subtitleStyleApply">保存预览</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="audioRegenMask" id="audioRegenMask" role="dialog" aria-modal="true" aria-labelledby="audioRegenTitle">
+      <div class="audioRegenDialog">
+        <div class="audioRegenHeader">
+          <div class="audioRegenTitle" id="audioRegenTitle">选择合成段落</div>
+          <button type="button" class="audioRegenClose" id="audioRegenClose" aria-label="关闭">×</button>
+        </div>
+        <div class="audioRegenBody">
+          <div class="audioRegenSummary" id="audioRegenSummary"></div>
+          <div class="audioRegenTable">
+            <div class="audioRegenTableHead"><span></span><span>段落</span><span>说话人</span><span>译文内容</span><span>变更原因</span><span>处理方式</span></div>
+            <div id="audioRegenList"></div>
+          </div>
+        </div>
+        <div class="audioRegenFooter">
+          <div class="audioRegenFooterNote">取消勾选后将保留上一次配音音频，字幕仍展示最新译文文本。</div>
+          <div class="audioRegenFooterActions"><button type="button" class="btnGhost" id="audioRegenCancel">取消</button><button type="button" class="btnPrimary" id="audioRegenPrimary">合成本次勾选段落</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="exportVideoMask" id="exportVideoMask" role="dialog" aria-modal="true" aria-labelledby="exportVideoTitle">
+      <div class="exportVideoDialog">
+        <div class="exportVideoHeader">
+          <div class="exportVideoTitle" id="exportVideoTitle">导出视频配置</div>
+          <div class="exportSteps" aria-label="导出配置步骤">
+            <button type="button" class="exportStep" data-export-step="0"><span class="exportStepDot">✓</span><span class="exportStepTitle">字幕擦除</span><span class="exportStepDesc" id="exportStepEraseDesc">已擦除</span></button>
+            <button type="button" class="exportStep" data-export-step="1"><span class="exportStepDot">2</span><span class="exportStepTitle">添加硬字幕</span><span class="exportStepDesc" id="exportStepSubtitleDesc">启用</span></button>
+            <button type="button" class="exportStep" data-export-step="2"><span class="exportStepDot">3</span><span class="exportStepTitle">确认提交</span><span class="exportStepDesc"> </span></button>
+          </div>
+          <button type="button" class="exportVideoClose" id="exportVideoClose" aria-label="关闭">×</button>
+        </div>
+        <div class="exportVideoBody">
+          <div class="exportStepView" data-export-view="0">
+            <div class="exportPlaceholder">
+              <div>
+                <strong>字幕擦除</strong><br>
+                当前剧已在内容系统配置擦除任务，导出时将沿用已擦除结果。<br>
+                本原型聚焦第 2 步「添加硬字幕」配置。
+              </div>
+            </div>
+          </div>
+          <div class="exportStepView" data-export-view="1">
+            <div class="exportSubtitleLayout">
+              <div class="exportPreviewPanel">
+                <div class="exportVideoFrame" id="exportVideoFrame">
+                  <div class="exportSubtitleStage" id="exportSubtitleStage">
+                    <div class="exportSubtitleBar source" data-export-subtitle-bar="source">Life is like a game of chess</div>
+                    <div class="exportSubtitleBar target" data-export-subtitle-bar="target">الحياة مثل لعبة الشطرنج</div>
+                  </div>
+                  <div class="exportVideoControls">
+                    <div class="exportVideoControlTop"><span>▶　0:00 / 1:05</span><span>🔊　□</span></div>
+                    <div class="exportVideoProgress" aria-hidden="true"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="exportConfigPanel">
+                <div class="exportConfigHead">
+                  <h3>添加硬字幕</h3>
+                </div>
+                <div class="exportSwitchList">
+                  <label class="exportSwitchItem">
+                    <span>添加译文硬字幕<small>按译文字幕时间轴烧录目标语字幕</small></span>
+                    <button type="button" class="exportSwitch" data-export-enabled="target" aria-label="添加译文硬字幕"></button>
+                  </label>
+                  <label class="exportSwitchItem">
+                    <span>添加原文硬字幕<small>开启后与译文同屏展示，共用译文时间轴</small></span>
+                    <button type="button" class="exportSwitch" data-export-enabled="source" aria-label="添加原文硬字幕"></button>
+                  </label>
+                </div>
+                <div class="exportTabs" id="exportTabs">
+                  <button type="button" class="exportTab" data-export-tab="target">译文字幕</button>
+                  <button type="button" class="exportTab" data-export-tab="source">原文字幕</button>
+                </div>
+                <div class="exportInlineHint" id="exportDualHint">已开启原文字幕，双语硬字幕暂不支持智能切帧展示，系统已自动关闭。</div>
+                <div class="exportConfigRows">
+                  <div class="exportConfigRow exportResetRow"><span>恢复默认</span><span class="exportResetInline"><button type="button" class="exportReset" id="exportResetTarget">译文默认</button><button type="button" class="exportReset" id="exportResetSource">原文默认</button></span></div>
+                  <label class="exportConfigRow"><span>字号</span><input class="exportConfigInput" data-export-field="fontSize" type="number" min="2" max="200" step="1"></label>
+                  <label class="exportConfigRow"><span>字间距</span><input class="exportConfigInput" data-export-field="letterSpacing" type="number" min="-10" max="20" step="1"></label>
+                  <label class="exportConfigRow"><span>换行长度</span><input class="exportConfigInput" data-export-field="lineLength" type="number" min="10" max="200" step="1"></label>
+                  <label class="exportConfigRow" id="exportSmartCutRow"><span>智能切帧展示</span><button type="button" class="exportSwitch" id="exportSmartCutSwitch" aria-label="智能切帧展示"></button></label>
+                  <label class="exportConfigRow" id="exportMaxLinesRow"><span>单帧最大行数</span><select class="exportConfigSelect" id="exportMaxLines"><option value="1">1 行</option><option value="2">2 行</option><option value="3">3 行</option></select></label>
+                  <label class="exportConfigRow"><span>空格换行</span><button type="button" class="exportSwitch" data-export-space-wrap aria-label="空格换行"></button></label>
+                  <label class="exportConfigRow"><span>字体</span><select class="exportConfigSelect" data-export-field="font"></select></label>
+                  <label class="exportConfigRow"><span>字幕位置（距底部）%</span><input class="exportConfigInput" data-export-field="position" type="number" min="0" max="100" step="0.01"></label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="exportStepView" data-export-view="2">
+            <div class="exportConfirmGrid" id="exportConfirmGrid"></div>
+          </div>
+        </div>
+        <div class="exportVideoFooter">
+          <div class="exportFooterNote" id="exportFooterNote">导出配置与编辑器内字幕样式配置不联动</div>
+          <div class="exportFooterActions">
+            <button type="button" class="btnGhost" id="exportPrev">← 上一步</button>
+            <button type="button" class="btnPrimary" id="exportNext">下一步 →</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1149,6 +1836,11 @@
       const videoTimeEl = root.querySelector('#videoTime');
       const progressEl = root.querySelector('#videoProgress');
       const voiceBatchBar = root.querySelector('#voiceBatchBar');
+      const audioRegenBar = root.querySelector('#audioRegenBar');
+      const audioRegenMask = root.querySelector('#audioRegenMask');
+      const audioRegenSummary = root.querySelector('#audioRegenSummary');
+      const audioRegenList = root.querySelector('#audioRegenList');
+      const audioRegenPrimary = root.querySelector('#audioRegenPrimary');
       const timelineAddWrap = root.querySelector('#timelineAddWrap');
       const timelineDeleteBtn = root.querySelector('#timelineDeleteBtn');
       const translatedTrack = root.querySelector('#translatedTrack');
@@ -1166,14 +1858,36 @@
       const episodeTotalText = root.querySelector('#episodeTotalText');
       const subtitleStyleMask = root.querySelector('#subtitleStyleMask');
       const subtitlePreviewText = root.querySelector('#subtitlePreviewText');
+      const subtitlePreviewSourceText = root.querySelector('#subtitlePreviewSourceText');
       const subtitleStyleLanguage = root.querySelector('#subtitleStyleLanguage');
+      const styleSourceToggleField = root.querySelector('#styleSourceToggleField');
+      const styleSourceEnabled = root.querySelector('#styleSourceEnabled');
+      const styleSourceEnabledText = root.querySelector('#styleSourceEnabledText');
+      const subtitleStyleDualHint = root.querySelector('#subtitleStyleDualHint');
       const styleFontSize = root.querySelector('#styleFontSize');
       const styleLetterSpacing = root.querySelector('#styleLetterSpacing');
       const styleLineLength = root.querySelector('#styleLineLength');
+      const styleSmartCut = root.querySelector('#styleSmartCut');
+      const styleSmartCutText = root.querySelector('#styleSmartCutText');
+      const styleMaxLines = root.querySelector('#styleMaxLines');
       const styleSpaceWrap = root.querySelector('#styleSpaceWrap');
       const styleSpaceWrapText = root.querySelector('#styleSpaceWrapText');
       const styleFont = root.querySelector('#styleFont');
       const stylePosition = root.querySelector('#stylePosition');
+      const exportVideoMask = root.querySelector('#exportVideoMask');
+      const exportStepButtons = Array.from(root.querySelectorAll('[data-export-step]'));
+      const exportStepViews = Array.from(root.querySelectorAll('[data-export-view]'));
+      const exportTabs = root.querySelector('#exportTabs');
+      const exportDualHint = root.querySelector('#exportDualHint');
+      const exportSmartCutRow = root.querySelector('#exportSmartCutRow');
+      const exportMaxLinesRow = root.querySelector('#exportMaxLinesRow');
+      const exportSmartCutSwitch = root.querySelector('#exportSmartCutSwitch');
+      const exportMaxLines = root.querySelector('#exportMaxLines');
+      const exportConfirmGrid = root.querySelector('#exportConfirmGrid');
+      const exportFooterNote = root.querySelector('#exportFooterNote');
+      const exportPrev = root.querySelector('#exportPrev');
+      const exportNext = root.querySelector('#exportNext');
+      const exportVideoFrame = root.querySelector('#exportVideoFrame');
       let selectedGroup = '字幕文本规范';
       let activeIssue = 'q1';
       let expandedGroups = new Set(['字幕文本规范']);
@@ -1194,23 +1908,45 @@
       ];
       let currentEpisode = 12;
       let currentStage = '配音';
+      let exportStep = 1;
+      let exportActiveTab = 'target';
+      let exportDrag = null;
+      let subtitleStyleActiveTab = 'target';
       const currentSubtitleLanguage = { code:'ar', name:'阿拉伯语' };
       const fontOptions = [
+        'MiSans_Demibold.ttf',
         'NotoNaskhArabic_VariableFont_wght.ttf',
         'SF Arabic'
       ];
       const subtitleStyleDefaults = {
-        en: { fontSize:60, letterSpacing:-2, lineLength:28, spaceWrap:true, font:'MiSans_Demibold.ttf', position:27.04, sample:'Hello, this is a subtitle preview.', dir:'ltr', label:'英语' },
-        zh: { fontSize:60, letterSpacing:-2, lineLength:14, spaceWrap:false, font:'MiSans_Demibold.ttf', position:27.04, sample:'你好，这是一条字幕预览。', dir:'ltr', label:'中文简体' },
-        ko: { fontSize:60, letterSpacing:-2, lineLength:28, spaceWrap:false, font:'MiSans_Demibold.ttf', position:27.04, sample:'안녕하세요, 자막 미리보기입니다.', dir:'ltr', label:'韩语' },
-        ar: { fontSize:90, letterSpacing:0, lineLength:22, spaceWrap:true, font:'NotoNaskhArabic_VariableFont_wght.ttf', position:27.04, sample:'مرحبا، هذه معاينة للترجمة.', dir:'rtl', label:'阿拉伯语' },
-        es: { fontSize:60, letterSpacing:-2, lineLength:28, spaceWrap:true, font:'MiSans_Demibold.ttf', position:27.04, sample:'Hola, esta es una vista previa de subtítulos.', dir:'ltr', label:'西班牙语' },
-        pt: { fontSize:60, letterSpacing:-2, lineLength:28, spaceWrap:true, font:'MiSans_Demibold.ttf', position:27.04, sample:'Olá, esta é uma prévia da legenda.', dir:'ltr', label:'葡萄牙语' },
-        th: { fontSize:60, letterSpacing:-1, lineLength:24, spaceWrap:true, font:'arial.ttf', position:27.04, sample:'สวัสดี นี่คือตัวอย่างคำบรรยาย', dir:'ltr', label:'泰语' },
-        vi: { fontSize:60, letterSpacing:-2, lineLength:22, spaceWrap:true, font:'SF_Pro_（越南语）.ttf', position:27.04, sample:'Xin chào, đây là bản xem trước phụ đề.', dir:'ltr', label:'越南语' }
+        en: { fontSize:60, letterSpacing:-2, lineLength:28, smartCut:false, maxLines:3, spaceWrap:true, font:'MiSans_Demibold.ttf', position:27.04, sample:'Hello, this is a subtitle preview.', dir:'ltr', label:'英语' },
+        zh: { fontSize:60, letterSpacing:-2, lineLength:14, smartCut:false, maxLines:3, spaceWrap:false, font:'MiSans_Demibold.ttf', position:27.04, sample:'你好，这是一条字幕预览。', dir:'ltr', label:'中文简体' },
+        ko: { fontSize:60, letterSpacing:-2, lineLength:28, smartCut:false, maxLines:3, spaceWrap:false, font:'MiSans_Demibold.ttf', position:27.04, sample:'안녕하세요, 자막 미리보기입니다.', dir:'ltr', label:'韩语' },
+        ar: { fontSize:90, letterSpacing:0, lineLength:22, smartCut:false, maxLines:3, spaceWrap:true, font:'NotoNaskhArabic_VariableFont_wght.ttf', position:27.04, sample:'مرحبا، هذه معاينة للترجمة.', dir:'rtl', label:'阿拉伯语' },
+        es: { fontSize:60, letterSpacing:-2, lineLength:28, smartCut:false, maxLines:3, spaceWrap:true, font:'MiSans_Demibold.ttf', position:27.04, sample:'Hola, esta es una vista previa de subtítulos.', dir:'ltr', label:'西班牙语' },
+        pt: { fontSize:60, letterSpacing:-2, lineLength:28, smartCut:false, maxLines:3, spaceWrap:true, font:'MiSans_Demibold.ttf', position:27.04, sample:'Olá, esta é uma prévia da legenda.', dir:'ltr', label:'葡萄牙语' },
+        th: { fontSize:60, letterSpacing:-1, lineLength:24, smartCut:false, maxLines:3, spaceWrap:true, font:'arial.ttf', position:27.04, sample:'สวัสดี นี่คือตัวอย่างคำบรรยาย', dir:'ltr', label:'泰语' },
+        vi: { fontSize:60, letterSpacing:-2, lineLength:22, smartCut:false, maxLines:3, spaceWrap:true, font:'SF_Pro_（越南语）.ttf', position:27.04, sample:'Xin chào, đây là bản xem trước phụ đề.', dir:'ltr', label:'越南语' }
       };
       let savedSubtitleStyle = { ...subtitleStyleDefaults[currentSubtitleLanguage.code] };
       let draftSubtitleStyle = { ...savedSubtitleStyle };
+      let savedSourceSubtitleStyle = { ...subtitleStyleDefaults.en, position:43, sample:'Life is like a game of chess.', label:'英语' };
+      let draftSourceSubtitleStyle = { ...savedSourceSubtitleStyle };
+      let savedSourceSubtitleEnabled = false;
+      let draftSourceSubtitleEnabled = false;
+      const exportDefaults = {
+        target: { ...subtitleStyleDefaults[currentSubtitleLanguage.code], position:31.5, lineLength:22, sample:'الحياة مثل لعبة الشطرنج', label:'字幕译文' },
+        source: { ...subtitleStyleDefaults.en, position:43, lineLength:28, sample:'Life is like a game of chess', label:'字幕原文' }
+      };
+      let exportSubtitleConfig = {
+        eraseEnabled: true,
+        targetEnabled: true,
+        sourceEnabled: false,
+        smartCut: false,
+        maxLines: 3,
+        target: { ...exportDefaults.target },
+        source: { ...exportDefaults.source }
+      };
       const episodes = Array.from({length:66}, (_,i) => {
         const no = i + 1;
         const special = {
@@ -1235,6 +1971,12 @@
         { id:'s4', speaker:'Aidan Rowe', cls:'alt', group:'3', time:'00:00:13,519 - 00:00:15,198', source:'W-what... what do you want?!', target:'ماذا تريد؟' },
         { id:'s5', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:18,399 - 00:00:18,879', source:'elsie.', target:'إلسي.' },
         { id:'s6', speaker:'Aidan Rowe', cls:'alt', group:'3', time:'00:00:22,920 - 00:00:24,879', source:'You went to His Majesty to complain', target:'ذهبت إلى جلالته لتشتكي' }
+      ];
+      let audioRegenItems = [
+        { seg:'s1', type:'optional', selected:true, kept:false, reason:'译文文本已调整', detail:'该段已有可用配音音频，且未发生段落结构、说话人、配音参数、语气词或发音规则变更。可取消本次合成并保留上一次配音音频。' },
+        { seg:'s2', type:'optional', selected:true, kept:false, reason:'敏感词脱敏展示', detail:'系统不检测文本修改幅度。保留当前音频后，字幕展示最新译文文本，配音仍使用上一次合成结果，请确认该差异符合业务预期。' },
+        { seg:'s4', type:'required', selected:true, kept:false, reason:'段落已拆分', detail:'该段由已合成段落拆分而来，原音频无法与当前段落一一绑定。如不重新合成，可能导致字幕与配音内容、时长对不齐。' },
+        { seg:'s6', type:'required', selected:true, kept:false, reason:'音频缺失', detail:'当前段落暂无可用配音音频，需合成后才能正常预览和导出。' }
       ];
       let qc = [
         { id:'q1', group:'字幕文本规范', detail:'句末标点缺失', seg:'s1', title:'第 1 段｜句末标点缺失', before:'Life is like a game of chess', after:'Life is like a game of chess.', note:'建议补充句末句号', checked:false },
@@ -1310,26 +2052,62 @@
           fontSize: clampStyleNum(style.fontSize, 1, 180, 60),
           letterSpacing: clampStyleNum(style.letterSpacing, -20, 20, -2),
           lineLength: clampStyleNum(style.lineLength, 1, 120, 28),
+          smartCut: style.smartCut !== false,
+          maxLines: Math.round(clampStyleNum(style.maxLines, 1, 3, 3)),
           position: clampStyleNum(style.position, 0, 100, 27.04),
           spaceWrap: !!style.spaceWrap,
           font: fontOptions.includes(style.font) ? style.font : fontOptions[0]
         };
       }
+      function activeStyleDraft(){
+        return subtitleStyleActiveTab === 'source' ? draftSourceSubtitleStyle : draftSubtitleStyle;
+      }
+      function setActiveStyleDraft(style){
+        if(subtitleStyleActiveTab === 'source') draftSourceSubtitleStyle = normalizeSubtitleStyle(style);
+        else draftSubtitleStyle = normalizeSubtitleStyle(style);
+      }
       function fillSubtitleStyleForm(){
         draftSubtitleStyle = normalizeSubtitleStyle(draftSubtitleStyle);
-        subtitleStyleLanguage.textContent = currentSubtitleLanguage.name;
+        draftSourceSubtitleStyle = normalizeSubtitleStyle(draftSourceSubtitleStyle);
+        if(draftSourceSubtitleEnabled) draftSubtitleStyle.smartCut = false;
+        const activeStyle = activeStyleDraft();
+        subtitleStyleLanguage.textContent = subtitleStyleActiveTab === 'source' ? '英语' : currentSubtitleLanguage.name;
+        root.querySelectorAll('[data-style-tab]').forEach(btn => btn.classList.toggle('active', btn.dataset.styleTab === subtitleStyleActiveTab));
+        styleSourceToggleField.style.display = subtitleStyleActiveTab === 'source' ? 'grid' : 'none';
+        styleSourceEnabled.checked = !!draftSourceSubtitleEnabled;
+        styleSourceEnabledText.textContent = draftSourceSubtitleEnabled ? '开启' : '关闭';
         styleFont.innerHTML = fontOptions.map(font => '<option value="'+esc(font)+'">'+esc(font)+'</option>').join('');
-        styleFontSize.value = draftSubtitleStyle.fontSize;
-        styleLetterSpacing.value = draftSubtitleStyle.letterSpacing;
-        styleLineLength.value = draftSubtitleStyle.lineLength;
-        styleSpaceWrap.checked = !!draftSubtitleStyle.spaceWrap;
-        styleFont.value = draftSubtitleStyle.font;
-        stylePosition.value = draftSubtitleStyle.position;
+        styleFontSize.value = activeStyle.fontSize;
+        styleLetterSpacing.value = activeStyle.letterSpacing;
+        styleLineLength.value = activeStyle.lineLength;
+        styleSmartCut.checked = !!draftSubtitleStyle.smartCut;
+        styleMaxLines.value = draftSubtitleStyle.maxLines;
+        styleSpaceWrap.checked = !!activeStyle.spaceWrap;
+        styleFont.value = activeStyle.font;
+        stylePosition.value = activeStyle.position;
+        styleSmartCut.disabled = !!draftSourceSubtitleEnabled;
+        styleMaxLines.disabled = !!draftSourceSubtitleEnabled || !draftSubtitleStyle.smartCut;
+        styleSmartCut.closest('.styleField').classList.toggle('disabled', !!draftSourceSubtitleEnabled);
+        styleMaxLines.closest('.styleField').classList.toggle('disabled', !!draftSourceSubtitleEnabled || !draftSubtitleStyle.smartCut);
+        subtitleStyleDualHint.classList.toggle('show', !!draftSourceSubtitleEnabled);
+        const sourceFieldsDisabled = subtitleStyleActiveTab === 'source' && !draftSourceSubtitleEnabled;
+        [styleFontSize, styleLetterSpacing, styleLineLength, styleSmartCut, styleMaxLines, styleSpaceWrap, styleFont, stylePosition].forEach(el => {
+          el.disabled = sourceFieldsDisabled ||
+            (draftSourceSubtitleEnabled && (el === styleSmartCut || el === styleMaxLines)) ||
+            (el === styleMaxLines && !draftSubtitleStyle.smartCut);
+          const field = el.closest('.styleField');
+          if(field && field !== styleSourceToggleField) field.classList.toggle(
+            'disabled',
+            sourceFieldsDisabled ||
+              (draftSourceSubtitleEnabled && (el === styleSmartCut || el === styleMaxLines)) ||
+              (el === styleMaxLines && !draftSubtitleStyle.smartCut)
+          );
+        });
         renderSubtitlePreview();
       }
       function syncSubtitleStyleDraftFromForm(){
-        draftSubtitleStyle = normalizeSubtitleStyle({
-          ...draftSubtitleStyle,
+        const nextStyle = normalizeSubtitleStyle({
+          ...activeStyleDraft(),
           fontSize: styleFontSize.value,
           letterSpacing: styleLetterSpacing.value,
           lineLength: styleLineLength.value,
@@ -1337,23 +2115,39 @@
           font: styleFont.value,
           position: stylePosition.value
         });
+        setActiveStyleDraft(nextStyle);
+        draftSubtitleStyle = normalizeSubtitleStyle({
+          ...draftSubtitleStyle,
+          smartCut: draftSourceSubtitleEnabled ? false : styleSmartCut.checked,
+          maxLines: styleMaxLines.value
+        });
         renderSubtitlePreview();
       }
       function renderSubtitlePreview(){
-        const style = normalizeSubtitleStyle(draftSubtitleStyle);
-        const visualSize = Math.max(12, Math.min(38, style.fontSize * 0.34));
-        subtitlePreviewText.textContent = style.sample || subtitleStyleDefaults.en.sample;
-        subtitlePreviewText.dir = style.dir || 'ltr';
-        subtitlePreviewText.style.fontFamily = fontFamilyFromFile(style.font);
-        subtitlePreviewText.style.fontSize = visualSize + 'px';
-        subtitlePreviewText.style.letterSpacing = (style.letterSpacing * 0.22) + 'px';
-        subtitlePreviewText.style.maxWidth = Math.max(8, style.lineLength) + 'ch';
-        subtitlePreviewText.style.whiteSpace = style.spaceWrap ? 'normal' : 'nowrap';
-        subtitlePreviewText.style.bottom = style.position + '%';
-        styleSpaceWrapText.textContent = style.spaceWrap ? '开启' : '关闭';
+        const targetStyle = normalizeSubtitleStyle(draftSubtitleStyle);
+        const sourceStyle = normalizeSubtitleStyle(draftSourceSubtitleStyle);
+        function paint(el, style){
+          const visualSize = Math.max(12, Math.min(38, style.fontSize * 0.34));
+          el.textContent = style.sample || subtitleStyleDefaults.en.sample;
+          el.dir = style.dir || 'ltr';
+          el.style.fontFamily = fontFamilyFromFile(style.font);
+          el.style.fontSize = visualSize + 'px';
+          el.style.letterSpacing = (style.letterSpacing * 0.22) + 'px';
+          el.style.maxWidth = Math.max(8, style.lineLength) + 'ch';
+          el.style.whiteSpace = style.spaceWrap ? 'normal' : 'nowrap';
+          el.style.bottom = style.position + '%';
+        }
+        paint(subtitlePreviewText, targetStyle);
+        paint(subtitlePreviewSourceText, sourceStyle);
+        subtitlePreviewSourceText.style.display = draftSourceSubtitleEnabled ? 'block' : 'none';
+        styleSmartCutText.textContent = targetStyle.smartCut ? '开启' : '关闭';
+        styleSpaceWrapText.textContent = activeStyleDraft().spaceWrap ? '开启' : '关闭';
       }
       function openSubtitleStyleDialog(){
         draftSubtitleStyle = { ...savedSubtitleStyle };
+        draftSourceSubtitleStyle = { ...savedSourceSubtitleStyle };
+        draftSourceSubtitleEnabled = savedSourceSubtitleEnabled;
+        subtitleStyleActiveTab = 'target';
         fillSubtitleStyleForm();
         subtitleStyleMask.style.display = 'flex';
       }
@@ -1361,14 +2155,200 @@
         subtitleStyleMask.style.display = 'none';
       }
       function resetSubtitleStyleToDefault(){
-        draftSubtitleStyle = { ...subtitleStyleDefaults[currentSubtitleLanguage.code] };
+        if(subtitleStyleActiveTab === 'source') draftSourceSubtitleStyle = { ...subtitleStyleDefaults.en, position:43, sample:'Life is like a game of chess.', label:'英语' };
+        else draftSubtitleStyle = { ...subtitleStyleDefaults[currentSubtitleLanguage.code] };
         fillSubtitleStyleForm();
-        showToast('已恢复当前语种默认样式');
+        showToast((subtitleStyleActiveTab === 'source' ? '原文' : '译文') + '字幕样式已恢复默认');
       }
       function applySubtitleStyle(){
         savedSubtitleStyle = normalizeSubtitleStyle(draftSubtitleStyle);
+        savedSourceSubtitleStyle = normalizeSubtitleStyle(draftSourceSubtitleStyle);
+        savedSourceSubtitleEnabled = !!draftSourceSubtitleEnabled;
         closeSubtitleStyleDialog();
-        showToast('硬字幕样式已应用至当前剧阿拉伯语全部集');
+        showToast(savedSourceSubtitleEnabled ? '双语硬字幕样式已应用至编辑器预览' : '字幕样式与单帧最大行数已应用至编辑器预览');
+      }
+      function activeExportStyleKey(){
+        return exportActiveTab === 'source' && exportSubtitleConfig.sourceEnabled ? 'source' : 'target';
+      }
+      function getActiveExportStyle(){
+        const key = activeExportStyleKey();
+        exportSubtitleConfig[key] = normalizeSubtitleStyle(exportSubtitleConfig[key]);
+        return exportSubtitleConfig[key];
+      }
+      function renderExportBar(kind){
+        const bar = root.querySelector('[data-export-subtitle-bar="'+kind+'"]');
+        const enabled = kind === 'target' ? exportSubtitleConfig.targetEnabled : exportSubtitleConfig.sourceEnabled;
+        const style = normalizeSubtitleStyle(exportSubtitleConfig[kind]);
+        if(!bar) return;
+        bar.classList.toggle('show', !!enabled);
+        bar.classList.toggle('active', activeExportStyleKey() === kind);
+        bar.textContent = style.sample;
+        bar.dir = style.dir || 'ltr';
+        bar.style.bottom = style.position + '%';
+        bar.style.fontFamily = fontFamilyFromFile(style.font);
+        bar.style.fontSize = Math.max(13, Math.min(36, style.fontSize * 0.38)) + 'px';
+        bar.style.letterSpacing = (style.letterSpacing * 0.22) + 'px';
+        bar.style.maxWidth = 'min(82%, ' + Math.max(12, style.lineLength) + 'ch)';
+      }
+      function renderExportConfirm(){
+        function section(title, enabled, style){
+          if(!enabled) return '';
+          const s = normalizeSubtitleStyle(style);
+          return '<div class="exportConfirmSection"><h4>'+esc(title)+'</h4><div class="exportConfirmRows">'
+            + '<div><span>字号：</span><strong>'+s.fontSize+'</strong></div>'
+            + '<div><span>字间距：</span><strong>'+s.letterSpacing+'</strong></div>'
+            + '<div><span>换行长度：</span><strong>'+s.lineLength+'</strong></div>'
+            + '<div><span>空格换行：</span><strong>'+(s.spaceWrap ? '是' : '否')+'</strong></div>'
+            + '<div><span>字体：</span><strong>'+esc(s.font)+'</strong></div>'
+            + '<div><span>字幕位置：</span><strong>'+s.position+'%</strong></div>'
+            + '</div></div>';
+        }
+        const dual = exportSubtitleConfig.targetEnabled && exportSubtitleConfig.sourceEnabled;
+        const smartCutText = dual ? '不支持（双语已置灰）' : (exportSubtitleConfig.smartCut ? '开启' : '关闭');
+        const maxLinesText = exportSubtitleConfig.smartCut && !dual ? exportSubtitleConfig.maxLines + ' 行' : '不生效';
+        const html = [
+          '<div class="exportConfirmSection"><h4>字幕擦除</h4><div class="exportConfirmRows"><div><span>状态：</span><strong>已擦除</strong></div><div><span>来源：</span><strong>内容系统配置</strong></div></div></div>',
+          '<div class="exportConfirmSection"><h4>硬字幕渲染</h4><div class="exportConfirmRows">'
+            + '<div><span>添加译文硬字幕：</span><strong>'+(exportSubtitleConfig.targetEnabled ? '启用' : '关闭')+'</strong></div>'
+            + '<div><span>添加原文硬字幕：</span><strong>'+(exportSubtitleConfig.sourceEnabled ? '启用' : '关闭')+'</strong></div>'
+            + '<div><span>智能切帧展示：</span><strong>'+smartCutText+'</strong></div>'
+            + '<div><span>单帧最大行数：</span><strong>'+maxLinesText+'</strong></div>'
+            + '<div><span>时间轴规则：</span><strong>'+(dual ? '原文与译文共用译文时间轴' : '使用译文时间轴')+'</strong></div>'
+            + '</div></div>',
+          section('译文硬字幕', exportSubtitleConfig.targetEnabled, exportSubtitleConfig.target),
+          section('原文硬字幕', exportSubtitleConfig.sourceEnabled, exportSubtitleConfig.source)
+        ].filter(Boolean).join('');
+        exportConfirmGrid.innerHTML = html || '<div class="exportPlaceholder">未启用任何导出处理</div>';
+      }
+      function renderExportDialog(){
+        if(!exportSubtitleConfig.targetEnabled){
+          exportSubtitleConfig.sourceEnabled = false;
+          exportActiveTab = 'target';
+        }
+        if(exportSubtitleConfig.sourceEnabled){
+          exportSubtitleConfig.smartCut = false;
+        } else if(exportActiveTab === 'source') {
+          exportActiveTab = 'target';
+        }
+        const dual = exportSubtitleConfig.targetEnabled && exportSubtitleConfig.sourceEnabled;
+        exportStepButtons.forEach((btn, index) => {
+          btn.classList.toggle('active', index === exportStep);
+          btn.classList.toggle('done', index < exportStep);
+        });
+        exportStepViews.forEach(view => {
+          view.classList.toggle('active', Number(view.dataset.exportView) === exportStep);
+        });
+        root.querySelector('#exportStepSubtitleDesc').textContent = exportSubtitleConfig.targetEnabled ? (dual ? '双语' : '启用') : '关闭';
+        exportTabs.classList.toggle('show', dual);
+        root.querySelectorAll('[data-export-tab]').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.exportTab === activeExportStyleKey());
+        });
+        const targetSwitch = root.querySelector('[data-export-enabled="target"]');
+        const sourceSwitch = root.querySelector('[data-export-enabled="source"]');
+        const resetSourceBtn = root.querySelector('#exportResetSource');
+        targetSwitch.classList.toggle('on', exportSubtitleConfig.targetEnabled);
+        sourceSwitch.classList.toggle('on', exportSubtitleConfig.sourceEnabled);
+        sourceSwitch.disabled = !exportSubtitleConfig.targetEnabled;
+        resetSourceBtn.disabled = !exportSubtitleConfig.sourceEnabled;
+        exportDualHint.classList.toggle('show', dual);
+        exportSmartCutRow.classList.toggle('disabled', dual);
+        exportMaxLinesRow.classList.toggle('disabled', dual || !exportSubtitleConfig.smartCut);
+        exportSmartCutSwitch.classList.toggle('on', exportSubtitleConfig.smartCut);
+        exportSmartCutSwitch.disabled = dual;
+        exportMaxLines.disabled = dual || !exportSubtitleConfig.smartCut;
+        exportMaxLines.value = exportSubtitleConfig.maxLines;
+        const activeStyle = getActiveExportStyle();
+        root.querySelectorAll('[data-export-field]').forEach(field => {
+          const key = field.dataset.exportField;
+          if(key === 'font'){
+            field.innerHTML = fontOptions.map(font => '<option value="'+esc(font)+'">'+esc(font)+'</option>').join('');
+          }
+          field.value = activeStyle[key];
+        });
+        const spaceSwitch = root.querySelector('[data-export-space-wrap]');
+        spaceSwitch.classList.toggle('on', !!activeStyle.spaceWrap);
+        renderExportBar('source');
+        renderExportBar('target');
+        if(exportStep === 2) renderExportConfirm();
+        exportPrev.disabled = exportStep === 0;
+        exportNext.textContent = exportStep === 2 ? '提交合成任务' : '下一步 →';
+        exportFooterNote.textContent = dual
+          ? '双语硬字幕共用译文时间轴；智能切帧展示与单帧最大行数已置灰'
+          : '导出配置与编辑器内字幕样式配置不联动';
+      }
+      function openExportDialog(){
+        exportStep = 1;
+        exportActiveTab = exportSubtitleConfig.sourceEnabled ? 'target' : 'target';
+        renderExportDialog();
+        exportVideoMask.style.display = 'flex';
+      }
+      function closeExportDialog(){
+        exportVideoMask.style.display = 'none';
+        exportDrag = null;
+      }
+      function updateExportFieldFromInput(input){
+        if(!input || !input.dataset.exportField) return;
+        const key = input.dataset.exportField;
+        const styleKey = activeExportStyleKey();
+        const rawValue = input.value;
+        exportSubtitleConfig[styleKey] = normalizeSubtitleStyle({
+          ...exportSubtitleConfig[styleKey],
+          [key]: key === 'font' ? rawValue : Number(rawValue)
+        });
+        renderExportDialog();
+      }
+      function resetExportStyleByKey(key){
+        if(key === 'source' && !exportSubtitleConfig.sourceEnabled) return;
+        exportSubtitleConfig[key] = { ...exportDefaults[key] };
+        exportActiveTab = key;
+        renderExportDialog();
+        showToast((key === 'source' ? '原文' : '译文') + '字幕样式已恢复默认');
+      }
+      function setExportSourceEnabled(enabled){
+        if(enabled && !exportSubtitleConfig.targetEnabled) return;
+        const wasOff = !exportSubtitleConfig.sourceEnabled;
+        exportSubtitleConfig.sourceEnabled = enabled;
+        if(enabled){
+          exportSubtitleConfig.smartCut = false;
+          exportActiveTab = 'source';
+        } else {
+          exportActiveTab = 'target';
+        }
+        renderExportDialog();
+        if(enabled && wasOff){
+          showToast('已开启原文字幕，双语硬字幕暂不支持智能切帧展示，系统已自动关闭。');
+        }
+      }
+      function beginExportSubtitleDrag(event){
+        const bar = event.target.closest('[data-export-subtitle-bar]');
+        if(!bar || !exportVideoMask.contains(bar)) return false;
+        const kind = bar.dataset.exportSubtitleBar;
+        const enabled = kind === 'target' ? exportSubtitleConfig.targetEnabled : exportSubtitleConfig.sourceEnabled;
+        if(!enabled) return false;
+        event.preventDefault();
+        event.stopPropagation();
+        exportActiveTab = kind;
+        exportDrag = {
+          kind,
+          startY: event.clientY,
+          startPosition: normalizeSubtitleStyle(exportSubtitleConfig[kind]).position
+        };
+        renderExportDialog();
+        return true;
+      }
+      function updateExportSubtitleDrag(event){
+        if(!exportDrag) return;
+        const rect = exportVideoFrame.getBoundingClientRect();
+        const dy = ((event.clientY - exportDrag.startY) / Math.max(1, rect.height)) * 100;
+        const next = Math.round(clampNum(exportDrag.startPosition - dy, 4, 96) * 100) / 100;
+        exportSubtitleConfig[exportDrag.kind] = normalizeSubtitleStyle({
+          ...exportSubtitleConfig[exportDrag.kind],
+          position: next
+        });
+        renderExportDialog();
+      }
+      function endExportSubtitleDrag(){
+        exportDrag = null;
       }
       function segNo(segId){ return String(segId).replace('s',''); }
       function diffPair(before, after){
@@ -1745,6 +2725,89 @@
         videoTimeEl.textContent = seg.time.split(' - ')[0];
         progressEl.style.setProperty('--progress-value', Math.min(86, 10 + Number(segNo(segId)) * 12) + '%');
       }
+      function activeAudioRegenItems(){ return audioRegenItems.filter(item => !item.kept); }
+      function getAudioRegenItem(segId){ return audioRegenItems.find(item => item.seg === segId); }
+      function audioRegenStats(){
+        const active = activeAudioRegenItems();
+        return {
+          total: active.length,
+          optional: active.filter(item => item.type === 'optional').length,
+          required: active.filter(item => item.type === 'required').length,
+          selected: active.filter(item => item.type === 'required' || item.selected).length,
+          kept: audioRegenItems.filter(item => item.kept).length
+        };
+      }
+      function updateAudioRegenBar(){
+        const stats = audioRegenStats();
+        if(!stats.total){
+          audioRegenBar.className = 'audioRegenBar isHidden';
+          audioRegenBar.innerHTML = '';
+          return;
+        }
+        const detail = stats.optional
+          ? '其中 '+stats.optional+' 个可选择保留当前音频，'+stats.required+' 个需要重新合成'
+          : '全部为需要重新合成段落';
+        audioRegenBar.className = 'audioRegenBar';
+        audioRegenBar.innerHTML = '<div class="audioRegenText"><span class="audioRegenIcon">!</span><span>需重新生成 <strong>'+stats.total+'</strong> 个音频片段</span><span class="audioRegenSub">'+detail+'</span></div><div class="audioRegenActions"><button type="button" class="btnGhost" id="openAudioRegen">选择段落合成</button><button type="button" class="btnPrimary" id="synthAllPending">合成全部</button></div>';
+      }
+      function treatmentText(item){
+        if(item.kept) return '已保留当前音频';
+        if(item.type === 'required') return '需要重新合成';
+        return item.selected ? '重新合成' : '保留当前音频';
+      }
+      function renderAudioStateBadge(segId){
+        const item = getAudioRegenItem(segId);
+        if(!item) return '';
+        if(item.kept) return '<div class="audioStateLine"><span class="audioStateBadge kept" title="字幕展示最新译文文本，配音仍使用上一次合成结果。">已保留当前音频</span></div>';
+        if(item.type === 'required') return '<div class="audioStateLine"><span class="audioStateBadge required" title="'+esc(item.detail)+'">需重新合成</span></div>';
+        return '<div class="audioStateLine"><span class="audioStateBadge" title="'+esc(item.detail)+'">待合成，可保留音频</span></div>';
+      }
+      function renderAudioRegenModal(){
+        const stats = audioRegenStats();
+        audioRegenSummary.innerHTML = '<span>当前有 <strong>'+stats.total+'</strong> 个音频片段待处理，<strong>'+stats.optional+'</strong> 个可保留当前音频，<strong>'+stats.required+'</strong> 个需要重新合成。</span><span class="audioRegenHint">系统不检测译文文本修改幅度。</span>';
+        audioRegenList.innerHTML = audioRegenItems.map(item => {
+          const seg = segments.find(s => s.id === item.seg);
+          if(!seg) return '';
+          const required = item.type === 'required';
+          const checked = required || item.selected;
+          const willKeep = item.kept || (!required && !item.selected);
+          const cls = willKeep ? ' kept' : required ? ' required' : '';
+          const treatmentCls = willKeep ? ' kept' : required ? ' required' : '';
+          return '<label class="audioRegenRow'+cls+'" data-audio-regen-row="'+item.seg+'"><span><input type="checkbox" class="audioRegenCheck" data-audio-regen-check="'+item.seg+'" '+(checked?'checked':'')+' '+(required?'disabled':'')+'></span><span class="audioRegenSegNo">第 '+segNo(seg.id)+' 段</span><span class="audioRegenSpeaker">'+esc(seg.speaker)+'</span><span class="audioRegenTextCell">'+esc(seg.target || '待输入译文')+'</span><span class="audioRegenReason"><span class="audioRegenReasonText">'+esc(item.reason)+'</span><span class="audioRegenHelp" title="'+esc(item.detail)+'">?</span></span><span class="audioRegenTreatment'+treatmentCls+'">'+treatmentText(item)+'</span></label>';
+        }).join('');
+        audioRegenPrimary.disabled = stats.selected === 0;
+      }
+      function openAudioRegenDialog(){
+        renderAudioRegenModal();
+        audioRegenMask.style.display = 'flex';
+      }
+      function closeAudioRegenDialog(){
+        audioRegenMask.style.display = 'none';
+      }
+      function synthAudioItems(ids){
+        if(!ids.length){ showToast('请先勾选需要合成的段落'); return; }
+        audioRegenItems = audioRegenItems.filter(item => !ids.includes(item.seg));
+        renderRows(activeSegment);
+        closeAudioRegenDialog();
+        const keptCount = audioRegenItems.filter(item => item.kept).length;
+        showToast(keptCount ? '已发起 '+ids.length+' 个音频片段合成，'+keptCount+' 个段落保留当前音频' : '已发起 '+ids.length+' 个音频片段合成');
+      }
+      function applyAudioRegenSelection(){
+        const selectedIds = [];
+        audioRegenItems.forEach(item => {
+          if(item.type === 'required' || item.selected) selectedIds.push(item.seg);
+          else if(item.type === 'optional') item.kept = true;
+        });
+        synthAudioItems(selectedIds);
+      }
+      function synthAllPendingAudio(){
+        const active = activeAudioRegenItems();
+        active.forEach(item => {
+          item.selected = true;
+        });
+        const ids = active.map(item => item.seg);
+        synthAudioItems(ids);
+      }
       function voiceRows(){ return segments.filter(s => s.voice); }
       function selectedVoiceRows(){ return voiceRows().filter(s => s.voice.checked); }
       function updateVoiceBatch(){
@@ -1877,11 +2940,13 @@
           const moreMenu = '<div class="segmentMoreWrap"><button type="button" class="segmentTool segmentMoreBtn" aria-label="更多段落操作">'+antToolbarIcon('more')+'更多</button><div class="segmentMoreMenu"><button type="button" class="segmentMoreItem" data-more-action="retain-original" data-seg="'+s.id+'">保留原人声</button><button type="button" class="segmentMoreItem danger" data-more-action="delete" data-seg="'+s.id+'">删除</button></div></div>';
           const toolbar = active===s.id && redubMode!=='select' ? '<div class="segmentToolbar"><div class="segmentToolGroup"><button type="button" class="segmentTool" data-tool="重翻">'+antToolbarIcon('translation')+'重翻</button><button type="button" class="segmentTool" data-tool="情感调节">'+antToolbarIcon('smile')+'情感调节</button><button type="button" class="segmentTool" data-tool="语气词">'+antToolbarIcon('comment')+'语气词</button><button type="button" class="segmentTool" data-tool="重新生成配音">'+antToolbarIcon('audio')+'重新生成配音</button><button type="button" class="segmentTool" data-tool="发音纠正">'+antToolbarIcon('sound')+'发音纠正</button></div>'+moreMenu+'</div>' : '';
           const batchCheck = redubMode === 'select' ? '<label class="batchRowCheck"><input type="checkbox" class="batchRowInput" data-batch-row="'+s.id+'" '+(batchSelectedIds.has(s.id)?'checked':'')+'></label>' : '';
-          const rowHtml = '<div class="subtitleItem '+(active===s.id?'active ':'')+(item?'hasError ':'')+(s.voice&&redubMode!=='select'?'hasVoice ':'')+(redubMode==='select'?'batchSelectable':'')+'" data-seg="'+s.id+'">'+errorBadge+toolbar+batchCheck+'<div class="speakerCell"><span class="speakerBadge '+s.cls+'">'+esc(s.speaker)+'</span></div><div class="timeCell"><span class="timeLine">'+esc(times[0]||'')+'</span><span class="timeLine">'+esc(times[1]||'')+'</span></div><div class="groupCell">'+esc(s.group)+'</div><div class="textCell sourceCell"><span class="segmentIndex">'+(index+1)+'</span><div class="sourceText">'+(source || '<span class="placeholderText">空字幕段</span>')+'</div></div><div class="textCell targetCell"><div class="targetTextWrap"><button type="button" class="targetPlayBtn targetPlayFloat" data-target-play="'+s.id+'" aria-label="播放译文片段"><svg class="targetPlayIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button><div class="targetText">'+(esc(s.target) || '<span class="placeholderText">待输入译文</span>')+'</div></div></div>'+renderVoicePanel(s)+'</div>';
+          const audioStateBadge = renderAudioStateBadge(s.id);
+          const rowHtml = '<div class="subtitleItem '+(active===s.id?'active ':'')+(item?'hasError ':'')+(s.voice&&redubMode!=='select'?'hasVoice ':'')+(redubMode==='select'?'batchSelectable':'')+'" data-seg="'+s.id+'">'+errorBadge+toolbar+batchCheck+'<div class="speakerCell"><span class="speakerBadge '+s.cls+'">'+esc(s.speaker)+'</span></div><div class="timeCell"><span class="timeLine">'+esc(times[0]||'')+'</span><span class="timeLine">'+esc(times[1]||'')+'</span></div><div class="groupCell">'+esc(s.group)+'</div><div class="textCell sourceCell"><span class="segmentIndex">'+(index+1)+'</span><div class="sourceText">'+(source || '<span class="placeholderText">空字幕段</span>')+'</div></div><div class="textCell targetCell"><div class="targetTextWrap"><button type="button" class="targetPlayBtn targetPlayFloat" data-target-play="'+s.id+'" aria-label="播放译文片段"><svg class="targetPlayIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button><div class="targetText">'+(esc(s.target) || '<span class="placeholderText">待输入译文</span>')+'</div></div>'+audioStateBadge+'</div>'+renderVoicePanel(s)+'</div>';
           const insertHtml = canShowInsert ? '<div class="insertArea" data-insert-after="'+(index+1)+'"><button type="button" class="insertBtn"><span>＋</span>插入</button></div>' : '';
           return rowHtml + insertHtml;
         }).join('');
         updateVoiceBatch();
+        updateAudioRegenBar();
         renderTimeline();
       }
       function renderTypes(){
@@ -1912,24 +2977,135 @@
       function openModal(title,text,confirm,fn){ root.querySelector('#modalTitle').textContent=title; root.querySelector('#modalText').textContent=text; root.querySelector('#modalConfirm').textContent=confirm; pending=fn; modal.style.display='flex'; }
       function closeModal(){ pending=null; modal.style.display='none'; }
       root.addEventListener('pointerdown', e=>{
+        if(beginExportSubtitleDrag(e)) return;
         beginTimelineDrag(e);
       });
       window.addEventListener('pointermove', e=>{
+        updateExportSubtitleDrag(e);
         updateTimelineDrag(e);
       });
       window.addEventListener('pointerup', ()=>{
+        endExportSubtitleDrag();
         endTimelineDrag();
       });
       root.addEventListener('input', e=>{
         if(e.target.closest('#subtitleStyleMask')) syncSubtitleStyleDraftFromForm();
+        if(e.target.closest('#exportVideoMask')) updateExportFieldFromInput(e.target);
       });
       root.addEventListener('change', e=>{
-        if(e.target.closest('#subtitleStyleMask')) syncSubtitleStyleDraftFromForm();
+        if(e.target === styleSourceEnabled){
+          const wasOff = !draftSourceSubtitleEnabled;
+          draftSourceSubtitleEnabled = styleSourceEnabled.checked;
+          if(draftSourceSubtitleEnabled) draftSubtitleStyle.smartCut = false;
+          fillSubtitleStyleForm();
+          if(draftSourceSubtitleEnabled && wasOff) showToast('已开启原文字幕，双语硬字幕暂不支持智能切帧展示，系统已自动关闭。');
+          return;
+        }
+        if(e.target.closest('#subtitleStyleMask')){
+          syncSubtitleStyleDraftFromForm();
+          if(e.target === styleSmartCut) fillSubtitleStyleForm();
+        }
+        if(e.target.closest('#exportVideoMask')) updateExportFieldFromInput(e.target);
+        if(e.target === exportMaxLines){
+          exportSubtitleConfig.maxLines = Number(exportMaxLines.value);
+          renderExportDialog();
+        }
+        const audioCheck = e.target.closest('[data-audio-regen-check]');
+        if(audioCheck){
+          const item = getAudioRegenItem(audioCheck.dataset.audioRegenCheck);
+          if(item && item.type === 'optional'){
+            item.selected = audioCheck.checked;
+            renderAudioRegenModal();
+            renderRows(activeSegment);
+          }
+        }
       });
       root.addEventListener('click', e=>{
         if(timelineDragJustEnded) return;
+        if(e.target.closest('#openExportVideo')){
+          openExportDialog();
+          return;
+        }
+        if(e.target.closest('#exportVideoClose')){
+          closeExportDialog();
+          return;
+        }
+        if(e.target === exportVideoMask){
+          closeExportDialog();
+          return;
+        }
+        const exportStepBtn = e.target.closest('[data-export-step]');
+        if(exportStepBtn){
+          exportStep = Number(exportStepBtn.dataset.exportStep);
+          renderExportDialog();
+          return;
+        }
+        const exportTabBtn = e.target.closest('[data-export-tab]');
+        if(exportTabBtn){
+          exportActiveTab = exportTabBtn.dataset.exportTab;
+          renderExportDialog();
+          return;
+        }
+        const exportEnabledBtn = e.target.closest('[data-export-enabled]');
+        if(exportEnabledBtn){
+          const key = exportEnabledBtn.dataset.exportEnabled;
+          if(key === 'target'){
+            exportSubtitleConfig.targetEnabled = !exportSubtitleConfig.targetEnabled;
+            if(!exportSubtitleConfig.targetEnabled) exportSubtitleConfig.sourceEnabled = false;
+            renderExportDialog();
+          } else {
+            setExportSourceEnabled(!exportSubtitleConfig.sourceEnabled);
+          }
+          return;
+        }
+        if(e.target.closest('#exportSmartCutSwitch')){
+          if(!exportSubtitleConfig.sourceEnabled){
+            exportSubtitleConfig.smartCut = !exportSubtitleConfig.smartCut;
+            renderExportDialog();
+          }
+          return;
+        }
+        if(e.target.closest('[data-export-space-wrap]')){
+          const key = activeExportStyleKey();
+          exportSubtitleConfig[key] = normalizeSubtitleStyle({
+            ...exportSubtitleConfig[key],
+            spaceWrap: !exportSubtitleConfig[key].spaceWrap
+          });
+          renderExportDialog();
+          return;
+        }
+        if(e.target.closest('#exportResetTarget')){
+          resetExportStyleByKey('target');
+          return;
+        }
+        if(e.target.closest('#exportResetSource')){
+          resetExportStyleByKey('source');
+          return;
+        }
+        if(e.target.closest('#exportPrev')){
+          exportStep = Math.max(0, exportStep - 1);
+          renderExportDialog();
+          return;
+        }
+        if(e.target.closest('#exportNext')){
+          if(exportStep < 2){
+            exportStep += 1;
+            renderExportDialog();
+          } else {
+            closeExportDialog();
+            showToast(exportSubtitleConfig.sourceEnabled ? '已提交双语硬字幕视频合成任务' : '已提交译文硬字幕视频合成任务');
+          }
+          return;
+        }
         if(e.target.closest('#subtitleStyleBtn')){
           openSubtitleStyleDialog();
+          return;
+        }
+        const styleTab = e.target.closest('[data-style-tab]');
+        if(styleTab){
+          syncSubtitleStyleDraftFromForm();
+          subtitleStyleActiveTab = styleTab.dataset.styleTab;
+          fillSubtitleStyleForm();
           return;
         }
         if(e.target.closest('#subtitleStyleClose') || e.target.closest('#subtitleStyleCancel')){
@@ -1947,6 +3123,26 @@
         }
         if(e.target === subtitleStyleMask){
           closeSubtitleStyleDialog();
+          return;
+        }
+        if(e.target.closest('#openAudioRegen')){
+          openAudioRegenDialog();
+          return;
+        }
+        if(e.target.closest('#synthAllPending')){
+          synthAllPendingAudio();
+          return;
+        }
+        if(e.target.closest('#audioRegenClose') || e.target.closest('#audioRegenCancel')){
+          closeAudioRegenDialog();
+          return;
+        }
+        if(e.target.closest('#audioRegenPrimary')){
+          applyAudioRegenSelection();
+          return;
+        }
+        if(e.target === audioRegenMask){
+          closeAudioRegenDialog();
           return;
         }
         const insertBtn=e.target.closest('[data-insert-after]');
