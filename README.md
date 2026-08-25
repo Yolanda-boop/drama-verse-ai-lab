@@ -5,6 +5,7 @@ Private workspace for Drama Verse demos and internal prototypes.
 ## Demo
 
 - `Demo/ai-subtitle-qc-2/`: AI subtitle QC 2.0 editor interaction prototype.
+- `Demo/external-admin-role-online-increment/`: External admin role and export workflow incremental prototype.
 
 ## Secure sharing recommendation
 

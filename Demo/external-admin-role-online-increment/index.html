@@ -1,0 +1,3504 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Drama Verse 外部管理员角色增量原型</title>
+  <style>
+    :root {
+      --page-bg: #020205;
+      --panel: #0c0b10;
+      --panel-2: #111018;
+      --panel-3: #17131f;
+      --modal: #28272d;
+      --modal-2: #34333a;
+      --line: rgba(255,255,255,.12);
+      --line-2: rgba(255,255,255,.18);
+      --text: rgba(255,255,255,.92);
+      --sub: rgba(255,255,255,.58);
+      --muted: rgba(255,255,255,.38);
+      --purple: #7b3cff;
+      --purple-2: #5b27d9;
+      --purple-soft: rgba(123,60,255,.18);
+      --purple-line: rgba(137,96,255,.58);
+      --green: #7fe869;
+      --green-bg: rgba(82,196,26,.18);
+      --orange: #ffc35a;
+      --orange-bg: rgba(250,173,20,.2);
+      --cyan: #72d9ff;
+      --cyan-bg: rgba(36,173,219,.18);
+      --red: #ff8b8b;
+      --red-bg: rgba(255,77,79,.18);
+      --radius: 12px;
+      --input-bg: #0a0a0c;
+      --input-hover-bg: #0f0f12;
+      --input-focus-bg: #101014;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 1280px;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 55% 0%, rgba(96, 32, 180, .18), transparent 26%),
+        linear-gradient(180deg, #06020d 0, #020205 170px, #020205 100%);
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    button, input, select { font: inherit; }
+
+    button {
+      transition: background .16s ease, border-color .16s ease, color .16s ease, box-shadow .16s ease, opacity .16s ease;
+    }
+
+    .icon-sprite { display: none; }
+
+    .btn-icon,
+    .close-icon {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 212px minmax(0, 1fr);
+      grid-template-rows: 60px minmax(0, 1fr);
+    }
+
+    .topbar {
+      grid-column: 1 / -1;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-bottom: 1px solid rgba(255,255,255,.09);
+      background: linear-gradient(90deg, #050508, #10091f 48%, #050508);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, #a855f7, #6037ff);
+      box-shadow: 0 0 22px rgba(129,72,255,.38);
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+    }
+
+    .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    .role-pill {
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 9px;
+      color: #d9ccff;
+      border: 1px solid var(--purple-line);
+      border-radius: 12px;
+      background: var(--purple-soft);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .sidebar {
+      border-right: 1px solid rgba(255,255,255,.08);
+      background: rgba(8,8,12,.94);
+      padding: 24px 6px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav button {
+      width: 196px;
+      height: 48px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: rgba(255,255,255,.68);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 18px;
+      text-align: left;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .nav button.active {
+      background: rgba(91,39,217,.28);
+      color: #e6ddff;
+      box-shadow: inset 3px 0 0 #8c61ff;
+    }
+
+    .nav svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .page {
+      min-width: 0;
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .filter-card,
+    .table-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(120deg, rgba(123,60,255,.12), transparent 28%),
+        rgba(9,9,12,.92);
+      box-shadow: 0 14px 50px rgba(0,0,0,.22);
+    }
+
+    .filter-card {
+      min-height: 118px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1.15fr 1.15fr 1fr 1fr auto auto;
+      gap: 14px 20px;
+      align-items: end;
+    }
+
+    .filter-card .wide { grid-column: span 2; }
+
+    .filter-card.record-filter-card {
+      grid-template-columns: 1.25fr 1.1fr 1fr 1fr 1fr 1.6fr;
+      align-items: end;
+    }
+
+    .filter-card.record-filter-card .actions-field {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .filter-card.user-filter-card {
+      grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
+    }
+
+    .filter-card.user-filter-card .actions-field {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      white-space: nowrap;
+    }
+
+    .filter-card.user-filter-card .create-user-btn {
+      min-width: 156px;
+    }
+
+    .filter-card.task-center-filter-card {
+      grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1fr 1fr auto auto auto;
+      min-height: 118px;
+    }
+
+    .filter-card.workbench-filter-card {
+      grid-template-columns: 1.7fr 1.1fr 1fr 1fr 1.1fr 1fr;
+      align-items: end;
+    }
+
+    .filter-card.episode-quick-card {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+    }
+
+    .field label {
+      color: rgba(255,255,255,.58);
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .field input,
+    .field select {
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: var(--input-bg);
+      color: var(--text);
+      padding: 0 12px;
+      min-width: 0;
+      outline: none;
+    }
+
+    .field input:hover,
+    .field select:hover {
+      border-color: rgba(255,255,255,.2);
+      background: var(--input-hover-bg);
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: rgba(98,36,255,.65);
+      background: var(--input-focus-bg);
+      box-shadow: 0 0 0 2px rgba(98,36,255,.14);
+    }
+
+    .field input::placeholder { color: rgba(255,255,255,.28); }
+
+    .btn {
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.18);
+      color: var(--text);
+      background: rgba(255,255,255,.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .btn.primary {
+      border-color: transparent;
+      background: #722ed1;
+      color: #fff;
+      box-shadow: none;
+    }
+
+    .btn:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,.32);
+      background: rgba(255,255,255,.12);
+    }
+
+    .btn.primary:hover {
+      border-color: transparent;
+      background: #8344e8;
+      box-shadow: 0 0 0 2px rgba(114,46,209,.16);
+    }
+
+    .btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn.clear {
+      background: rgba(255,255,255,.08);
+    }
+
+    .btn.clear:hover {
+      background: rgba(255,255,255,.13);
+    }
+
+    .table-card {
+      overflow: hidden;
+    }
+
+    .table-card.scrollable {
+      overflow: hidden;
+    }
+
+    .wide-table-scroll {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(132,100,255,.52) rgba(255,255,255,.045);
+    }
+
+    .wide-table-scroll::-webkit-scrollbar {
+      height: 10px;
+    }
+
+    .wide-table-scroll::-webkit-scrollbar-track {
+      margin-inline: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.045);
+    }
+
+    .wide-table-scroll::-webkit-scrollbar-thumb {
+      border: 2px solid rgba(12,10,18,.96);
+      border-radius: 999px;
+      background: rgba(132,100,255,.58);
+    }
+
+    .wide-table-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(167,139,250,.78);
+    }
+
+    .wide-record-table {
+      width: 2020px;
+      min-width: 2020px;
+    }
+
+    .wide-task-center-table {
+      width: 2080px;
+      min-width: 2080px;
+    }
+
+    .wide-workbench-table {
+      width: 1760px;
+      min-width: 1760px;
+    }
+
+    .wide-episode-table {
+      width: 1720px;
+      min-width: 1720px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    th, td {
+      height: 52px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      color: var(--text);
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 14px;
+    }
+
+    th {
+      height: 44px;
+      color: rgba(255,255,255,.62);
+      font-size: 11px;
+      letter-spacing: .07em;
+      background: rgba(255,255,255,.03);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    td {
+      background: rgba(0,0,0,.18);
+    }
+
+    tr:hover td { background: rgba(255,255,255,.035); }
+
+    .op-cell,
+    th.op-cell {
+      background: rgba(19,16,27,.92);
+      text-align: center;
+    }
+
+    .name-strong { font-weight: 500; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+    .muted { color: var(--sub); }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 5px;
+      border: 1px solid rgba(126,87,255,.58);
+      color: #d9ccff;
+      background: rgba(99,58,190,.42);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .tag.green {
+      color: var(--green);
+      background: var(--green-bg);
+      border-color: rgba(126,232,105,.36);
+    }
+
+    .tag.red {
+      color: var(--red);
+      background: var(--red-bg);
+      border-color: rgba(255,139,139,.36);
+    }
+
+    .tag.blue {
+      color: var(--cyan);
+      background: var(--cyan-bg);
+      border-color: rgba(114,217,255,.34);
+    }
+
+    .tag.yellow {
+      color: #ffd666;
+      background: rgba(250,173,20,.16);
+      border-color: rgba(250,173,20,.5);
+    }
+
+    .tag.orange {
+      color: var(--orange);
+      background: var(--orange-bg);
+      border-color: rgba(255,195,90,.42);
+    }
+
+    .tag.manager {
+      color: #f0eaff;
+      background: rgba(125,63,255,.36);
+      border-color: rgba(155,121,255,.66);
+    }
+
+    .ai-progress {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .ai-pill {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 9px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #d9ccff;
+      background: rgba(123,60,255,.25);
+      border: 1px solid rgba(132,100,255,.5);
+    }
+
+    .ai-pill.yellow {
+      color: #ffd666;
+      background: rgba(250,173,20,.16);
+      border-color: rgba(250,173,20,.45);
+    }
+
+    .page-header {
+      min-height: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--sub);
+      font-weight: 600;
+    }
+
+    .breadcrumb strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .quick-label {
+      color: var(--sub);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .quick-chip {
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .floating-bar {
+      position: sticky;
+      bottom: 14px;
+      z-index: 5;
+      margin: 14px auto 0;
+      width: max-content;
+      max-width: calc(100% - 32px);
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 12px 8px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(132,100,255,.42);
+      background: rgba(23,19,31,.96);
+      box-shadow: 0 16px 40px rgba(0,0,0,.45);
+    }
+
+    .floating-bar strong {
+      color: #eee8ff;
+      font-weight: 700;
+    }
+
+    .progress-cell {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 136px;
+    }
+
+    .progress-track {
+      width: 72px;
+      height: 6px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #7b5cff, #52c41a);
+    }
+
+    .actions {
+      display: inline-flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .pill-btn {
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    .pill-btn:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,.26);
+      background: rgba(255,255,255,.11);
+    }
+
+    .pill-btn.warn { color: #ffd591; background: rgba(250,173,20,.1); border-color: rgba(250,173,20,.38); }
+    .pill-btn.info { color: #c9ddff; background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.16); }
+    .pill-btn.primary { color: #fff; background: #722ed1; border-color: #722ed1; }
+    .pill-btn.primary:hover { background: #8344e8; border-color: #8344e8; }
+    .pill-btn.disabled { color: rgba(255,255,255,.28); border-color: rgba(255,255,255,.1); cursor: not-allowed; }
+
+    .pagination {
+      height: 68px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      padding: 0 20px;
+      color: var(--sub);
+      background: rgba(0,0,0,.24);
+    }
+
+    .page-no {
+      min-width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.14);
+      display: grid;
+      place-items: center;
+      color: var(--sub);
+      background: rgba(255,255,255,.045);
+    }
+
+    .page-no.active {
+      color: #fff;
+      border-color: var(--purple-line);
+      background: rgba(97,39,220,.75);
+    }
+
+    .small-select,
+    .jump-input {
+      height: 34px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 0 10px;
+    }
+
+    .jump-input { width: 58px; }
+
+    .empty-tip {
+      height: 180px;
+      display: grid;
+      place-items: center;
+      color: var(--sub);
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.56);
+      z-index: 20;
+      padding: 24px;
+    }
+
+    .modal-mask.show { display: flex; }
+
+    .modal {
+      width: min(972px, calc(100vw - 48px));
+      max-height: calc(100vh - 48px);
+      overflow: hidden;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 12px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012)),
+        var(--modal);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      box-shadow:
+        0 24px 72px rgba(0,0,0,.58),
+        inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .modal.small { width: 500px; }
+
+    .modal-head {
+      padding: 20px 22px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .modal-title {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .modal-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(114,46,209,.22);
+      color: #d8ccff;
+      border: 1px solid rgba(114,46,209,.58);
+    }
+
+    .modal-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .modal h2 {
+      margin: 0;
+      color: var(--text);
+      font-size: 19px;
+      font-weight: 600;
+      line-height: 28px;
+    }
+
+    .modal-title p {
+      margin: 4px 0 0;
+      color: rgba(255,255,255,.6);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 20px;
+    }
+
+    .close {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: rgba(255,255,255,.46);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: rgba(255,255,255,.8);
+      background: rgba(255,255,255,.06);
+    }
+
+    .modal-body {
+      min-height: 0;
+      overflow: auto;
+      padding: 14px 22px 0;
+      scrollbar-color: rgba(255,255,255,.25) transparent;
+    }
+
+    .modal-footer {
+      border-top: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.025);
+      padding: 16px 22px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal.small .modal-footer {
+      border-top: 0;
+      background: transparent;
+    }
+
+    .modal.video-confirm-modal {
+      width: 556px;
+      border-radius: 8px;
+      background: #25252a;
+    }
+
+    .video-confirm-modal .modal-head {
+      padding: 26px 26px 15px;
+      border-bottom: 1px solid rgba(255,255,255,.13);
+      align-items: center;
+    }
+
+    .video-confirm-modal .modal-title {
+      display: block;
+    }
+
+    .video-confirm-modal .modal-title h2 {
+      font-size: 18px;
+      line-height: 26px;
+      font-weight: 700;
+    }
+
+    .video-confirm-modal .modal-title p {
+      display: none;
+    }
+
+    .video-confirm-modal .modal-body {
+      padding: 20px 26px 28px;
+      overflow: visible;
+    }
+
+    .video-confirm-content {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      align-items: center;
+      gap: 14px;
+      min-height: 70px;
+    }
+
+    .video-confirm-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      border: 1px solid #722ed1;
+      background: #722ed1;
+      box-shadow: 0 0 0 6px rgba(114,46,209,.14);
+    }
+
+    .video-confirm-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .video-confirm-text {
+      max-width: 405px;
+      color: rgba(255,255,255,.92);
+      font-size: 16px;
+      line-height: 28px;
+      font-weight: 700;
+    }
+
+    .video-confirm-text em {
+      color: #ffc53d;
+      font-style: normal;
+    }
+
+    .video-confirm-modal .modal-footer {
+      min-height: 64px;
+      padding: 8px 26px 20px;
+      border-top: 1px solid rgba(255,255,255,.13);
+      justify-content: flex-end;
+      background: transparent;
+    }
+
+    .summary strong { color: #e2dbff; }
+
+    .task-card {
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 12px;
+      background: rgba(255,255,255,.05);
+      padding: 20px 22px 10px;
+      margin-bottom: 20px;
+    }
+
+    .task-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+
+    .task-card h3 {
+      margin: 0 0 9px;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .fact-row {
+      display: flex;
+      gap: 22px;
+      flex-wrap: wrap;
+      color: rgba(255,255,255,.68);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .current-assign {
+      padding: 18px 0 8px;
+      min-height: 115px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      color: var(--sub);
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+      padding: 18px 0 2px;
+    }
+
+    .empty-state .box {
+      width: 56px;
+      height: 34px;
+      border-radius: 0 0 18px 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.28);
+      position: relative;
+    }
+
+    .empty-state .box::before {
+      content: "";
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      top: -8px;
+      height: 10px;
+      border-radius: 0 0 4px 4px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.24);
+    }
+
+    .add-section {
+      border: 1px solid rgba(132,100,255,.46);
+      border-radius: 12px;
+      background: linear-gradient(145deg, rgba(112,72,255,.13), rgba(255,255,255,.035));
+      padding: 16px;
+      margin-top: 4px;
+    }
+
+    .add-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 14px;
+      color: rgba(255,255,255,.75);
+      font-weight: 600;
+    }
+
+    .add-head strong {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--purple);
+      box-shadow: 0 0 0 4px rgba(123,60,255,.14);
+      display: inline-block;
+    }
+
+    .draft-row {
+      display: grid;
+      grid-template-columns: 28px 260px minmax(220px, 1fr) 36px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .draft-row.admin-assign-row {
+      grid-template-columns: 28px 160px 260px minmax(220px, 1fr) 36px;
+    }
+
+    .row-index {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      color: #d8ceff;
+      background: rgba(112,72,255,.26);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .select-like {
+      height: 34px;
+      border: 1px solid rgba(132,100,255,.36);
+      border-radius: 7px;
+      background: #111;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      min-width: 0;
+    }
+
+    select.select-like {
+      display: block;
+      width: 100%;
+      appearance: auto;
+      cursor: pointer;
+    }
+
+    .type-field {
+      height: 34px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      border-radius: 7px;
+      border: 1px solid rgba(132,100,255,.46);
+      background: rgba(98,36,255,.08);
+      overflow: hidden;
+    }
+
+    .type-field span:first-child {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: #b9acec;
+      font-size: 13px;
+      font-weight: 600;
+      border-right: 1px solid rgba(167,139,250,.22);
+      background: rgba(98,36,255,.1);
+    }
+
+    .type-field strong {
+      padding: 0 10px;
+      font-size: 14px;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .type-field select {
+      height: 100%;
+      min-width: 0;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      padding: 0 10px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .type-field select:focus {
+      box-shadow: none;
+    }
+
+    .trash {
+      width: 34px;
+      height: 34px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.58);
+      background: rgba(255,255,255,.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .trash:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,.28);
+      background: rgba(255,255,255,.13);
+    }
+
+    .add-more {
+      height: 32px;
+      color: #ddd5ff;
+      border: 1px dashed rgba(132,100,255,.64);
+      background: rgba(112,72,255,.1);
+      border-radius: 6px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .add-more:hover {
+      color: #fff;
+      border-color: #8c5cff;
+      background: rgba(114,46,209,.18);
+    }
+
+    .standard-form {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      padding: 13px 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px;
+      background: rgba(255,255,255,.035);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.045);
+    }
+
+    .standard-field {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      align-items: center;
+      gap: 6px 12px;
+      min-height: 34px;
+    }
+
+    .standard-field label {
+      color: rgba(255,255,255,.6);
+      font-size: 14px;
+      line-height: 22px;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .standard-field.required label::before {
+      content: "*";
+      margin-right: 4px;
+      color: #ff7875;
+      font-family: SimSun, sans-serif;
+    }
+
+    .standard-field input,
+    .standard-field select {
+      width: 100%;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      color: var(--text);
+      padding: 0 12px;
+      outline: none;
+    }
+
+    .phone-input-group {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      height: 32px;
+    }
+
+    .phone-prefix {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.14);
+      border-right: 0;
+      border-radius: 8px 0 0 8px;
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.5);
+      font-size: 14px;
+    }
+
+    .standard-field .phone-input-group input {
+      border-radius: 0 8px 8px 0;
+    }
+
+    .standard-field input[readonly],
+    .standard-value.is-readonly {
+      color: rgba(255,255,255,.62);
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+    }
+
+    .standard-value.is-readonly {
+      height: 32px;
+      padding: 0 12px;
+    }
+
+    .standard-field input:hover,
+    .standard-field select:hover {
+      border-color: rgba(255,255,255,.22);
+      background: rgba(0,0,0,.3);
+    }
+
+    .standard-field input:focus,
+    .standard-field select:focus {
+      border-color: rgba(98,36,255,.65);
+      box-shadow: 0 0 0 2px rgba(98,36,255,.14);
+    }
+
+    .phone-input-group:focus-within .phone-prefix {
+      border-color: rgba(98,36,255,.65);
+      background: rgba(255,255,255,.1);
+    }
+
+    .standard-field.has-error input,
+    .standard-field.has-error select {
+      border-color: rgba(255,120,117,.72);
+      box-shadow: 0 0 0 2px rgba(255,77,79,.1);
+    }
+
+    .standard-field.has-error .phone-prefix {
+      border-color: rgba(255,120,117,.72);
+    }
+
+    .field-error {
+      grid-column: 2;
+      min-height: 18px;
+      margin-top: -3px;
+      color: #ff9aa3;
+      font-size: 12px;
+      line-height: 18px;
+      display: none;
+    }
+
+    .field-error.show {
+      display: block;
+    }
+
+    .standard-value {
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      color: rgba(255,255,255,.88);
+      font-size: 14px;
+      line-height: 22px;
+    }
+
+    .tip {
+      margin: 4px 0 0 104px;
+      color: rgba(255,255,255,.55);
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .record-note {
+      margin-bottom: 14px;
+      color: rgba(255,255,255,.62);
+    }
+
+    .record-note strong { color: #e6ddff; }
+
+    .page-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      margin: 0 0 14px;
+    }
+
+    .page-title h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 30px;
+      font-weight: 600;
+    }
+
+    .page-title p {
+      margin: 4px 0 0;
+      color: var(--sub);
+      font-size: 13px;
+      line-height: 20px;
+    }
+
+    .title-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex: 0 0 auto;
+    }
+
+    .modal.export-modal {
+      width: min(920px, calc(100vw - 32px));
+      max-width: calc(100vw - 32px);
+      height: min(760px, calc(100vh - 24px));
+      border-radius: 8px;
+      background: #202021;
+    }
+
+    .export-modal .modal-head {
+      min-height: 72px;
+      padding: 16px 14px 14px;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,.16);
+    }
+
+    .export-modal .modal-title {
+      min-width: 188px;
+    }
+
+    .export-modal .modal-icon,
+    .export-modal .modal-title p {
+      display: none;
+    }
+
+    .export-modal .modal h2,
+    .export-modal h2 {
+      font-size: 18px;
+      line-height: 28px;
+      font-weight: 700;
+    }
+
+    .export-top-steps {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 9px;
+      min-width: 0;
+      padding: 0 4px;
+    }
+
+    .export-top-step {
+      display: grid;
+      grid-template-columns: 30px auto;
+      grid-template-rows: 22px 18px;
+      column-gap: 8px;
+      align-items: center;
+      color: rgba(255,255,255,.38);
+      min-width: 92px;
+      position: relative;
+    }
+
+    .export-top-step:not(:last-child)::after {
+      content: "";
+      grid-column: 3;
+      grid-row: 1;
+      width: 50px;
+      height: 1px;
+      margin-left: 4px;
+      background: rgba(255,255,255,.16);
+    }
+
+    .export-top-step strong {
+      color: rgba(255,255,255,.82);
+      font-size: 14px;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+
+    .export-top-step.is-muted strong {
+      color: rgba(255,255,255,.42);
+    }
+
+    .export-top-step.done strong {
+      color: rgba(255,255,255,.82);
+    }
+
+    .export-top-step .step-index {
+      grid-row: 1 / span 2;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: rgba(255,255,255,.1);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .export-top-step .step-index svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .export-top-step.done .step-index,
+    .export-top-step.active .step-index {
+      background: linear-gradient(135deg, #6027e8, #842fff);
+      box-shadow: 0 0 20px rgba(123,60,255,.34);
+    }
+
+    .export-top-step .step-status {
+      grid-column: 2;
+      color: #32e86d;
+      font-size: 11px;
+      line-height: 16px;
+      font-weight: 600;
+    }
+
+    .export-top-step.is-muted .step-status {
+      color: rgba(255,255,255,.32);
+    }
+
+    .export-top-step:not(.active):not(.done) .step-status {
+      color: rgba(255,255,255,.32);
+    }
+
+    .export-modal .close {
+      flex: 0 0 32px;
+    }
+
+    .export-modal .modal-body {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .export-content {
+      min-height: 0;
+      height: 100%;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 344px minmax(0, 1fr);
+      gap: 14px;
+      overflow: hidden;
+    }
+
+    .export-content.single-pane {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 32px 48px;
+    }
+
+    .export-step-panel {
+      display: contents;
+    }
+
+    .export-step-panel.is-hidden {
+      display: none;
+    }
+
+    .export-preview {
+      min-height: 0;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: #000;
+    }
+
+    .phone-preview {
+      width: 210px;
+      height: min(374px, calc(100% - 40px));
+      min-height: 348px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(107deg, rgba(247,185,151,.78) 0 34%, rgba(26,8,7,.84) 35% 100%),
+        #130909;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 18px 48px rgba(0,0,0,.46);
+    }
+
+    .phone-subtitle-box {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 92px;
+      min-height: 98px;
+      display: grid;
+      place-items: center;
+      padding: 8px;
+      border: 2px solid #7d3cff;
+      color: #fff;
+      background: rgba(28,12,48,.72);
+      font-size: 27px;
+      line-height: 1.25;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .phone-controls {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 16px;
+      color: #fff;
+      display: grid;
+      gap: 10px;
+    }
+
+    .phone-control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .phone-progress {
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.42);
+      overflow: hidden;
+    }
+
+    .phone-progress span {
+      display: block;
+      width: 18%;
+      height: 100%;
+      background: #fff;
+    }
+
+    .export-form-pane {
+      min-height: 0;
+      max-height: 100%;
+      overflow-y: auto;
+      padding: 3px 18px 18px 0;
+      display: grid;
+      align-content: start;
+      gap: 11px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(132,100,255,.45) rgba(255,255,255,.04);
+    }
+
+    .export-form-pane::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .export-form-pane::-webkit-scrollbar-track {
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .export-form-pane::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(132,100,255,.5);
+    }
+
+    .export-form-pane h3 {
+      margin: 0 0 4px;
+      font-size: 20px;
+      line-height: 30px;
+      font-weight: 700;
+    }
+
+    .export-setting-line {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 140px;
+      align-items: center;
+      gap: 14px;
+      min-height: 34px;
+    }
+
+    .export-setting-line.is-disabled {
+      opacity: .38;
+    }
+
+    .export-setting-copy strong {
+      display: block;
+      color: rgba(255,255,255,.86);
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 600;
+    }
+
+    .export-setting-copy span {
+      display: block;
+      color: rgba(255,255,255,.42);
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    .export-setting-line input,
+    .export-setting-line select,
+    .export-setting-line button {
+      width: 140px;
+      height: 31px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.24);
+      color: rgba(255,255,255,.92);
+      padding: 0 12px;
+    }
+
+    .export-setting-line button {
+      cursor: pointer;
+      background: rgba(255,255,255,.08);
+    }
+
+    .export-setting-line button:hover {
+      border-color: rgba(255,255,255,.28);
+      background: rgba(255,255,255,.13);
+    }
+
+    .export-setting-divider {
+      height: 1px;
+      background: rgba(255,255,255,.12);
+      margin: 0 0 4px;
+    }
+
+    .music-step-card {
+      width: min(680px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .music-step-card .setting-row {
+      min-height: 70px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      padding-bottom: 18px;
+    }
+
+    .music-step-card .setting-note {
+      color: rgba(255,255,255,.72);
+      font-size: 13px;
+      line-height: 22px;
+      font-weight: 400;
+    }
+
+    .export-confirm-card {
+      width: min(720px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .export-confirm-row {
+      display: grid;
+      grid-template-columns: 140px minmax(0, 1fr);
+      gap: 16px;
+      min-height: 40px;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .export-confirm-row span {
+      color: rgba(255,255,255,.48);
+    }
+
+    .export-confirm-row strong {
+      color: rgba(255,255,255,.9);
+      font-weight: 600;
+    }
+
+    .export-footer-note {
+      color: rgba(255,255,255,.45);
+      font-size: 13px;
+      line-height: 20px;
+    }
+
+    .export-modal .modal-footer {
+      min-height: 61px;
+      padding: 13px 18px;
+      border-top: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.02);
+    }
+
+    .setting-pane {
+      width: min(620px, 100%);
+      padding: 2px 0 0;
+      display: grid;
+      align-content: start;
+      gap: 20px;
+    }
+
+    .setting-pane h3 {
+      margin: 0;
+      color: #fff;
+      font-size: 20px;
+      line-height: 30px;
+      font-weight: 700;
+    }
+
+    .setting-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .setting-label {
+      color: rgba(255,255,255,.78);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .setting-note {
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 5px;
+      padding: 14px 18px;
+      color: #ff4d57;
+      background: rgba(255,255,255,.03);
+      font-size: 16px;
+      line-height: 28px;
+      font-weight: 700;
+    }
+
+    .config-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .config-section {
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      padding: 0;
+    }
+
+    .config-section h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 700;
+    }
+
+    .radio-grid,
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .export-modal .radio-grid,
+    .export-modal .info-grid,
+    .export-modal .pipeline {
+      grid-template-columns: 1fr;
+    }
+
+    .option-tile {
+      min-height: 64px;
+      padding: 12px;
+      border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.13);
+      background: rgba(0,0,0,.16);
+      cursor: pointer;
+      display: grid;
+      gap: 5px;
+    }
+
+    .option-tile:has(input:checked) {
+      border-color: rgba(132,100,255,.78);
+      background: rgba(123,60,255,.18);
+      box-shadow: inset 0 0 0 1px rgba(132,100,255,.22);
+    }
+
+    .option-tile input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .option-title {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .option-desc,
+    .info-item span,
+    .switch-desc,
+    .pipeline-desc {
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .switch-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .switch {
+      width: 46px;
+      height: 26px;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .switch input {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .switch-slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.16);
+      transition: background .18s ease, border-color .18s ease;
+      pointer-events: none;
+    }
+
+    .switch-slider::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 2px;
+      top: 2px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform .18s ease;
+    }
+
+    .switch input:checked + .switch-slider {
+      border-color: rgba(132,100,255,.72);
+      background: linear-gradient(135deg, #6027e8, #842fff);
+    }
+
+    .switch input:checked + .switch-slider::after {
+      transform: translateX(20px);
+    }
+
+    .music-config {
+      margin-top: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .music-config.is-hidden {
+      display: none;
+    }
+
+    .info-item {
+      min-height: 72px;
+      padding: 12px;
+      border-radius: 9px;
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(0,0,0,.14);
+    }
+
+    .info-item strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #e8e1ff;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .pipeline-step {
+      min-height: 60px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      background: rgba(0,0,0,.16);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .pipeline-step strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .segment-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .segment-row {
+      display: grid;
+      grid-template-columns: 112px 1fr 72px;
+      align-items: center;
+      gap: 12px;
+      min-height: 38px;
+      color: rgba(255,255,255,.72);
+      font-size: 13px;
+    }
+
+    .segment-bar {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      overflow: hidden;
+    }
+
+    .segment-bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #7b5cff, #72d9ff);
+    }
+
+    .admin-only,
+    .external-manager-only { display: none; }
+
+    body.admin .admin-only { display: inline-flex; }
+    body.admin tr.admin-only { display: table-row; }
+    body.external .external-manager-only { display: inline-flex; }
+    body.external tr.external-manager-only { display: table-row; }
+    body.admin .field.admin-only,
+    body.external .field.external-manager-only { display: grid; }
+    body.admin .record-note.admin-only,
+    body.external .record-note.external-manager-only { display: block; }
+    body.admin .standard-field.admin-only,
+    body.external .standard-field.external-manager-only { display: grid; }
+    body.external .tip.external-manager-only { display: block; }
+    body.admin .external-manager-only { display: none !important; }
+    body.external .admin-only { display: none !important; }
+    body.external #page-episodes .title-actions,
+    body.external #page-episodes .episode-quick-card,
+    body.external #page-episodes .floating-bar {
+      display: none !important;
+    }
+    body.external #page-episodes .wide-episode-table {
+      width: 1486px;
+      min-width: 1486px;
+    }
+    body.external #page-episodes .wide-episode-table col:first-child,
+    body.external #page-episodes .wide-episode-table col:last-child {
+      visibility: collapse;
+      width: 0 !important;
+    }
+    body.external #page-episodes .wide-episode-table th:first-child,
+    body.external #page-episodes .wide-episode-table td:first-child,
+    body.external #page-episodes .wide-episode-table th:last-child,
+    body.external #page-episodes .wide-episode-table td:last-child {
+      display: none;
+    }
+    .standard-field.is-hidden { display: none !important; }
+
+    .toast {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      max-width: 440px;
+      min-height: 40px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(30,30,35,.98);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 8px 24px rgba(0,0,0,.32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1000;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .toast.warning { border-color: rgba(250,173,20,.48); color: #ffe58f; }
+    .toast.success { border-color: rgba(82,196,26,.46); color: #d3f2c3; }
+    .toast.error { border-color: rgba(255,77,79,.46); color: #ffccc7; }
+  </style>
+</head>
+<body class="admin">
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="icon-search" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35"/><circle cx="11" cy="11" r="7"/></symbol>
+    <symbol id="icon-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></symbol>
+    <symbol id="icon-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24"><path d="M12 16V4m0 0 4 4m-4-4-4 4"/><path d="M20 16v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3"/></symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 4v12m0 0 4-4m-4 4-4-4"/><path d="M20 20H4"/></symbol>
+    <symbol id="icon-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="icon-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></symbol>
+    <symbol id="icon-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/></symbol>
+    <symbol id="icon-mic" viewBox="0 0 24 24"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></symbol>
+    <symbol id="icon-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+    <symbol id="icon-check-square" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></symbol>
+  </svg>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">DV</div>
+        <span>Drama Verse</span>
+      </div>
+      <div class="user-chip">
+        <span class="avatar">人</span>
+        <span id="viewerName">李姝宜</span>
+        <span class="role-pill" id="viewerRole">内部管理员</span>
+        <select id="viewMode" aria-label="切换查看视角">
+          <option value="admin">内部管理员视角</option>
+          <option value="external">外部管理员视角</option>
+        </select>
+      </div>
+    </header>
+
+    <aside class="sidebar">
+      <nav class="nav" aria-label="左侧导航">
+        <button type="button" class="active" data-page="workbench">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h6v6h-6v-6Z" stroke="currentColor" stroke-width="1.8"/></svg>
+          工作台
+        </button>
+        <button type="button">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M7 4h10v16H7V4Zm3 4h4m-4 4h4" stroke="currentColor" stroke-width="1.8"/></svg>
+          术语库
+        </button>
+        <button type="button" data-page="task-center">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M7 3v4m10-4v4M5 7h14v13H5V7Zm4 5h3m-3 4h6" stroke="currentColor" stroke-width="1.8"/></svg>
+          任务中心
+        </button>
+        <button type="button" data-page="users">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M16 20v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2m14 0v-2a3 3 0 0 0-2-2.8M12 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm6 2a3 3 0 1 0-2.8-4" stroke="currentColor" stroke-width="1.8"/></svg>
+          用户管理
+        </button>
+        <button type="button" data-page="records">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16H5V4Zm4 5h6m-6 4h6m-6 4h3" stroke="currentColor" stroke-width="1.8"/></svg>
+          分配记录
+        </button>
+      </nav>
+    </aside>
+
+    <main class="page">
+      <section class="view" id="page-users">
+        <div class="filter-card user-filter-card">
+          <div class="field"><label>姓名</label><input placeholder="模糊搜索"></div>
+          <div class="field"><label>邮箱</label><input placeholder="模糊搜索"></div>
+          <div class="field"><label>手机号</label><input placeholder="支持空格格式"></div>
+          <div class="field"><label>角色</label><select><option>请选择</option><option>外部管理员</option><option>外部校对员</option><option>普通校对员</option></select></div>
+          <div class="field"><label>状态</label><select><option>请选择</option><option>正常</option><option>禁用</option></select></div>
+          <div class="actions-field">
+            <button class="btn clear" type="button">清空条件</button>
+            <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
+            <button class="btn primary create-user-btn admin-only" type="button" data-open="userModal" data-user-mode="create"><svg class="btn-icon"><use href="#icon-user-plus"></use></svg>新增外部用户</button>
+            <button class="btn primary create-user-btn external-manager-only" type="button" data-open="userModal" data-user-mode="create"><svg class="btn-icon"><use href="#icon-user-plus"></use></svg>新增外部校对员</button>
+          </div>
+          <div class="field wide"><label>创建时间</label><input placeholder="开始日期  —  结束日期"></div>
+          <div class="field admin-only"><label>供应商名称</label><input placeholder="模糊搜索"></div>
+          <div class="field admin-only"><label>所属外部管理员</label><input placeholder="姓名 / 手机号"></div>
+        </div>
+
+        <div class="table-card">
+          <table aria-label="用户管理表格">
+            <colgroup>
+              <col style="width: 11%">
+              <col style="width: 15%">
+              <col style="width: 12%">
+              <col style="width: 10%">
+              <col style="width: 12%">
+              <col style="width: 12%">
+              <col style="width: 8%">
+              <col style="width: 13%">
+              <col style="width: 16%">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>姓名</th>
+                <th>邮箱</th>
+                <th>手机号</th>
+                <th>角色</th>
+                <th>供应商名称</th>
+                <th>所属外部管理员</th>
+                <th>状态</th>
+                <th>创建时间</th>
+                <th class="op-cell">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="admin-only">
+                <td class="name-strong">林可</td>
+                <td class="mono">-</td>
+                <td class="mono">+86 13700912231</td>
+                <td><span class="tag manager">外部管理员</span></td>
+                <td>Drama Verse</td>
+                <td>-</td>
+                <td><span class="tag green">正常</span></td>
+                <td class="mono">2026-08-20 10:21:56</td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部管理员" data-user-name="林可" data-user-contact="phone" data-user-phone="+86 13700912231" data-user-supplier="Drama Verse">编辑用户</button></span></td>
+              </tr>
+              <tr>
+                <td class="name-strong">春鹏C</td>
+                <td class="mono">-</td>
+                <td class="mono">+86 16601248978</td>
+                <td><span class="tag">外部校对员</span></td>
+                <td>星桥译配</td>
+                <td>林可</td>
+                <td><span class="tag green">正常</span></td>
+                <td class="mono">2026-08-13 17:11:08</td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏C" data-user-contact="phone" data-user-phone="+86 16601248978">编辑用户</button></span></td>
+              </tr>
+              <tr>
+                <td class="name-strong">春鹏B</td>
+                <td class="mono">-</td>
+                <td class="mono">+86 16601248979</td>
+                <td><span class="tag">外部校对员</span></td>
+                <td>星桥译配</td>
+                <td>林可</td>
+                <td><span class="tag green">正常</span></td>
+                <td class="mono">2026-08-12 11:46:42</td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏B" data-user-contact="phone" data-user-phone="+86 16601248979">编辑用户</button></span></td>
+              </tr>
+              <tr>
+                <td class="name-strong">春鹏D</td>
+                <td class="mono">-</td>
+                <td class="mono">+86 16601248977</td>
+                <td><span class="tag">外部校对员</span></td>
+                <td>-</td>
+                <td>林可</td>
+                <td><span class="tag red">禁用</span></td>
+                <td class="mono">2026-08-14 15:58:01</td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">启用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏D" data-user-contact="phone" data-user-phone="+86 16601248977">编辑用户</button></span></td>
+              </tr>
+              <tr class="admin-only">
+                <td class="name-strong">戴忻楠</td>
+                <td class="mono">daizn@dianzhong.com</td>
+                <td class="mono">+86 18900919206</td>
+                <td><span class="tag">普通校对员</span></td>
+                <td>-</td>
+                <td>-</td>
+                <td><span class="tag green">正常</span></td>
+                <td class="mono">2026-08-19 11:48:44</td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="普通校对员" data-user-name="戴忻楠" data-user-contact="email" data-user-email="daizn@dianzhong.com" data-user-phone="+86 18900919206">编辑用户</button></span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination">
+            <span>共 68 条</span><span class="page-no active">1</span><span class="page-no">2</span><span class="page-no">3</span><span class="page-no">4</span><span class="page-no">5</span><select class="small-select"><option>10 条/页</option></select><span>跳至</span><input class="jump-input"><span>页</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="view active" id="page-workbench">
+        <div class="filter-card workbench-filter-card">
+          <div class="field wide"><label>剧 ID</label><input placeholder="输入 11 位剧 ID，回车添加"></div>
+          <div class="field"><label>剧标题</label><input placeholder="模糊搜索"></div>
+          <div class="field"><label>原始语言</label><select><option>请选择</option><option>中文（简体）</option><option>韩语</option><option>英语</option></select></div>
+          <div class="field"><label>目标语言</label><select><option>请选择</option><option>英语</option><option>日语</option><option>葡萄牙语（巴西）</option></select></div>
+          <div class="field"><label>任务类型</label><select><option>翻译并配音</option><option>字幕翻译</option><option>字幕提取</option></select></div>
+          <div class="field"><label>译文来源</label><select><option>请选择</option><option>AI翻译</option><option>导入SRT</option></select></div>
+          <div class="field wide"><label>创建时间</label><input placeholder="开始日期  →  结束日期"></div>
+          <div class="field"><label>创建人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
+          <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
+          <button class="btn clear" type="button">清空条件</button>
+          <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
+          <button class="btn primary admin-only" type="button"><svg class="btn-icon"><use href="#icon-upload"></use></svg>导入剧</button>
+          <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出剧列表</button>
+        </div>
+
+        <div class="table-card scrollable">
+          <div class="wide-table-scroll">
+            <table class="wide-workbench-table" aria-label="工作台剧任务表格">
+              <colgroup>
+                <col style="width: 64px">
+                <col style="width: 140px">
+                <col style="width: 320px">
+                <col style="width: 138px">
+                <col style="width: 138px">
+                <col style="width: 190px">
+                <col style="width: 100px">
+                <col style="width: 120px">
+                <col style="width: 195px">
+                <col style="width: 120px">
+                <col style="width: 195px">
+                <col style="width: 190px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" aria-label="选择全部剧任务"></th>
+                  <th>剧 ID</th>
+                  <th>剧标题</th>
+                  <th>原始语言</th>
+                  <th>翻译到</th>
+                  <th>AI进度</th>
+                  <th>译文来源</th>
+                  <th>创建人</th>
+                  <th>创建时间</th>
+                  <th>更新人</th>
+                  <th>更新时间</th>
+                  <th class="op-cell">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox" aria-label="选择神话缠魂"></td>
+                  <td class="mono">41000004763</td>
+                  <td class="name-strong">神话缠魂，我觉醒了大圣3</td>
+                  <td>中文（简体）</td>
+                  <td>葡萄牙语（巴西）</td>
+                  <td><span class="ai-progress"><span class="ai-pill">翻译 3/3</span><span class="ai-pill yellow">配音 0/3</span></span></td>
+                  <td>AI翻译</td>
+                  <td>曹春鹏</td>
+                  <td class="mono">2026-08-21 11:33:05</td>
+                  <td>曹春鹏</td>
+                  <td class="mono">2026-08-21 16:32:35</td>
+                  <td class="op-cell"><span class="actions"><button class="pill-btn info admin-only" data-open="assignExternalManager" data-task-type="translation_dubbing">分配</button><button class="pill-btn info external-manager-only" data-open="assignReviewer" data-task-type="translation_dubbing">分配</button><button class="pill-btn primary" data-page="episodes">查看</button></span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="选择韩语剧"></td>
+                  <td class="mono">41000004856</td>
+                  <td class="name-strong">복수하러 우리집에 갈래?</td>
+                  <td>韩语</td>
+                  <td>日语</td>
+                  <td><span class="ai-progress"><span class="ai-pill">翻译 51/51</span><span class="ai-pill yellow">配音 0/51</span></span></td>
+                  <td>AI翻译</td>
+                  <td>杨晨</td>
+                  <td class="mono">2026-08-20 20:52:05</td>
+                  <td>张雨时</td>
+                  <td class="mono">2026-08-20 21:26:57</td>
+                  <td class="op-cell"><span class="actions"><button class="pill-btn info admin-only" data-open="assignExternalManager" data-task-type="translation_dubbing">分配</button><button class="pill-btn info external-manager-only" data-open="assignReviewer" data-task-type="translation_dubbing">分配</button><button class="pill-btn primary" data-page="episodes">查看</button></span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="选择思美人第二季"></td>
+                  <td class="mono">41000004443</td>
+                  <td class="name-strong">思美人第二季</td>
+                  <td>中文（简体）</td>
+                  <td>英语</td>
+                  <td><span class="ai-progress"><span class="ai-pill">翻译 20/20</span><span class="ai-pill yellow">配音 20/20</span></span></td>
+                  <td>AI翻译</td>
+                  <td>杨晨</td>
+                  <td class="mono">2026-08-20 14:03:06</td>
+                  <td>杨晨</td>
+                  <td class="mono">2026-08-21 10:41:41</td>
+                  <td class="op-cell"><span class="actions"><button class="pill-btn info admin-only" data-open="assignExternalManager" data-task-type="translation_dubbing">分配</button><button class="pill-btn info external-manager-only" data-open="assignReviewer" data-task-type="translation_dubbing">分配</button><button class="pill-btn primary" data-page="episodes">查看</button></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span>共 3 条</span><span class="page-no active">1</span><select class="small-select"><option>10 条/页</option></select>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="page-episodes">
+        <div class="page-header">
+          <div class="breadcrumb">
+            <button class="btn clear" type="button" data-page="workbench"><svg class="btn-icon"><use href="#icon-arrow-left"></use></svg>返回</button>
+            <span>剧列表</span>
+            <span>/</span>
+            <strong>思美人第二季</strong>
+          </div>
+          <div class="title-actions">
+            <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-book"></use></svg>AI术语映射</button>
+            <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-mic"></use></svg>说话人&音色管理</button>
+          </div>
+        </div>
+
+        <div class="filter-card episode-quick-card">
+          <span class="quick-label">快速选择：</span>
+          <button class="quick-chip" type="button">翻译完成</button>
+          <button class="quick-chip" type="button">翻译已校对</button>
+          <button class="quick-chip" type="button">全选可配音</button>
+        </div>
+
+        <div class="table-card scrollable">
+          <div class="wide-table-scroll">
+            <table class="wide-episode-table" aria-label="集列表表格">
+              <colgroup>
+                <col style="width: 64px">
+                <col style="width: 86px">
+                <col style="width: 140px">
+                <col style="width: 260px">
+                <col style="width: 150px">
+                <col style="width: 210px">
+                <col style="width: 170px">
+                <col style="width: 140px">
+                <col style="width: 195px">
+                <col style="width: 140px">
+                <col style="width: 170px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" aria-label="选择全部剧集"></th>
+                  <th>序号</th>
+                  <th>集 ID</th>
+                  <th>集名称</th>
+                  <th>任务类型</th>
+                  <th>状态</th>
+                  <th>质检提醒</th>
+                  <th>创建人</th>
+                  <th>创建时间</th>
+                  <th>更新人</th>
+                  <th class="op-cell">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox" checked aria-label="选择第一集"></td>
+                  <td class="mono">1</td>
+                  <td class="mono">873444987</td>
+                  <td class="name-strong">第一集</td>
+                  <td><span class="tag yellow">翻译并配音</span></td>
+                  <td><span class="tag manager">配音已校对</span></td>
+                  <td><span class="tag orange">3 类 / 13 处</span></td>
+                  <td>杨晨</td>
+                  <td class="mono">2026-08-20 14:03:06</td>
+                  <td>李姝宜</td>
+                  <td class="op-cell"><span class="actions"><button class="pill-btn warn">重擦人声</button><button class="pill-btn primary">编辑</button></span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="选择第二集"></td>
+                  <td class="mono">2</td>
+                  <td class="mono">873444988</td>
+                  <td class="name-strong">第二集</td>
+                  <td><span class="tag yellow">翻译并配音</span></td>
+                  <td><span class="tag manager">配音已校对</span></td>
+                  <td><span class="tag orange">1 类 / 7 处</span></td>
+                  <td>杨晨</td>
+                  <td class="mono">2026-08-20 14:03:06</td>
+                  <td>杨晨</td>
+                  <td class="op-cell"><span class="actions"><button class="pill-btn warn">重擦人声</button><button class="pill-btn primary">编辑</button></span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="选择第三集"></td>
+                  <td class="mono">3</td>
+                  <td class="mono">873444989</td>
+                  <td class="name-strong">第三集</td>
+                  <td><span class="tag yellow">翻译并配音</span></td>
+                  <td><span class="tag manager">配音已校对</span></td>
+                  <td><span class="tag orange">2 类 / 10 处</span></td>
+                  <td>杨晨</td>
+                  <td class="mono">2026-08-20 14:03:06</td>
+                  <td>杨晨</td>
+                  <td class="op-cell"><span class="actions"><button class="pill-btn warn">重擦人声</button><button class="pill-btn primary">编辑</button></span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="选择第四集"></td>
+                  <td class="mono">4</td>
+                  <td class="mono">873444990</td>
+                  <td class="name-strong">第四集</td>
+                  <td><span class="tag yellow">翻译并配音</span></td>
+                  <td><span class="tag blue">配音完成</span></td>
+                  <td><span class="tag orange">2 类 / 28 处</span></td>
+                  <td>杨晨</td>
+                  <td class="mono">2026-08-20 14:03:06</td>
+                  <td>张健</td>
+                  <td class="op-cell"><span class="actions"><button class="pill-btn warn">重擦人声</button><button class="pill-btn primary">编辑</button></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="floating-bar">
+          <strong>已选 1 集</strong>
+          <button class="btn clear" type="button">导出字幕<svg class="btn-icon"><use href="#icon-chevron-down"></use></svg></button>
+          <button class="btn primary" type="button" data-open="videoExportConfirmModal" data-export-kind="mp4" data-export-range="multi" data-export-count="1"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出音视频</button>
+          <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-mic"></use></svg>发起配音</button>
+        </div>
+        <div class="pagination">
+          <span>共 20 条</span><span class="page-no active">1</span><select class="small-select"><option>20 条/页</option></select>
+        </div>
+      </section>
+
+      <section class="view" id="page-task-center">
+        <div class="page-title">
+          <div>
+            <h1>任务中心</h1>
+            <p>保持线上导出任务列表结构，在任务维度新增音乐剥离字段和筛选。</p>
+          </div>
+        </div>
+        <div class="filter-card task-center-filter-card">
+          <div class="field wide"><label>剧 ID</label><input placeholder="输入 11 位剧 ID，回车添加"></div>
+          <div class="field"><label>剧名</label><input placeholder="模糊搜索"></div>
+          <div class="field"><label>目标语言</label><select><option>请选择</option><option>英语</option><option>日语</option><option>韩语</option><option>泰语</option><option>葡萄牙语（巴西）</option></select></div>
+          <div class="field"><label>合成进度</label><select><option>请选择</option><option>合成中</option><option>集已完成</option><option>失败</option></select></div>
+          <div class="field"><label>音乐剥离</label><select><option>全部</option><option>启用</option><option>关闭</option></select></div>
+          <div class="field"><label>剥离状态</label><select><option>全部</option><option>无需处理</option><option>待处理</option><option>处理中</option><option>完成</option><option>失败</option></select></div>
+          <div class="field wide"><label>提交时间</label><input placeholder="开始日期  →  结束日期"></div>
+          <div class="field"><label>提交人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
+          <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
+          <button class="btn clear" type="button">清空条件</button>
+          <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
+          <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出任务列表</button>
+        </div>
+
+        <div class="table-card scrollable">
+          <div class="wide-table-scroll">
+          <table class="wide-task-center-table" aria-label="任务中心导出任务表格">
+            <colgroup>
+              <col style="width: 100px">
+              <col style="width: 130px">
+              <col style="width: 250px">
+              <col style="width: 130px">
+              <col style="width: 110px">
+              <col style="width: 170px">
+              <col style="width: 130px">
+              <col style="width: 150px">
+              <col style="width: 160px">
+              <col style="width: 190px">
+              <col style="width: 190px">
+              <col style="width: 110px">
+              <col style="width: 150px">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>任务 ID</th>
+                <th>剧 ID</th>
+                <th>剧名</th>
+                <th>目标语言</th>
+                <th>合成参数</th>
+                <th>合成进度</th>
+                <th>音乐剥离</th>
+                <th>剥离状态</th>
+                <th>提交人</th>
+                <th>提交时间</th>
+                <th>完成时间</th>
+                <th>更新人</th>
+                <th class="op-cell">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mono">279</td>
+                <td class="mono">41000004697</td>
+                <td class="name-strong">横刀夺爱</td>
+                <td>泰语</td>
+                <td><button class="pill-btn primary" data-open="musicParamsModal">查看</button></td>
+                <td><span class="progress-cell"><strong style="color:#32e86d">3</strong> / 3 集已完成</span></td>
+                <td><span class="tag">关闭</span></td>
+                <td>无需处理</td>
+                <td>郭凯旋</td>
+                <td class="mono">2026-08-21 17:01:34</td>
+                <td class="mono">2026-08-21 17:10:38</td>
+                <td>郭凯旋</td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-open="musicParamsModal">查看</button><button class="pill-btn primary" data-submit="开始下载任务文件">下载</button></span></td>
+              </tr>
+              <tr>
+                <td class="mono">278</td>
+                <td class="mono">41000004856</td>
+                <td class="name-strong">복수하러 우리집에 갈래?</td>
+                <td>日语</td>
+                <td><button class="pill-btn primary" data-open="musicParamsModal">查看</button></td>
+                <td><span class="progress-cell"><strong style="color:#32e86d">51</strong> / 51 集已完成</span></td>
+                <td><span class="tag blue">已启用</span></td>
+                <td><span class="tag green">完成</span></td>
+                <td>郭凯旋</td>
+                <td class="mono">2026-08-21 16:58:15</td>
+                <td class="mono">2026-08-21 16:59:47</td>
+                <td>郭凯旋</td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-open="musicParamsModal">查看</button><button class="pill-btn primary" data-submit="开始下载任务文件">下载</button></span></td>
+              </tr>
+              <tr>
+                <td class="mono">277</td>
+                <td class="mono">41000004443</td>
+                <td class="name-strong">思美人第二季</td>
+                <td>英语</td>
+                <td><button class="pill-btn primary" data-open="musicParamsModal">查看</button></td>
+                <td><span class="progress-cell"><strong style="color:#32e86d">20</strong> / 20 集已完成</span></td>
+                <td><span class="tag blue">已启用</span></td>
+                <td><span class="tag orange">部分完成</span></td>
+                <td>郭凯旋</td>
+                <td class="mono">2026-08-21 16:07:19</td>
+                <td class="mono">2026-08-21 16:08:04</td>
+                <td>郭凯旋</td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-open="musicParamsModal">查看</button><button class="pill-btn primary" data-submit="开始下载任务文件">下载</button></span></td>
+              </tr>
+              <tr>
+                <td class="mono">276</td>
+                <td class="mono">41000004443</td>
+                <td class="name-strong">思美人第二季</td>
+                <td>英语</td>
+                <td><button class="pill-btn primary" data-open="musicParamsModal">查看</button></td>
+                <td><span class="progress-cell"><strong style="color:#32e86d">20</strong> / 20 集已完成</span></td>
+                <td><span class="tag">关闭</span></td>
+                <td>无需处理</td>
+                <td>郭凯旋</td>
+                <td class="mono">2026-08-21 16:01:44</td>
+                <td class="mono">2026-08-21 16:02:35</td>
+                <td>郭凯旋</td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-open="musicParamsModal">查看</button><button class="pill-btn primary" data-submit="开始下载任务文件">下载</button></span></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <div class="pagination">
+            <span>共 240 条</span><span class="page-no active">1</span><span class="page-no">2</span><span class="page-no">3</span><span class="page-no">4</span><span class="page-no">5</span><span>...</span><span class="page-no">24</span><select class="small-select"><option>10 条/页</option></select><span>跳至</span><input class="jump-input"><span>页</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="page-records">
+        <div class="filter-card record-filter-card">
+          <div class="field wide"><label>剧 ID</label><input placeholder="输入 11 位剧 ID，回车添加"></div>
+          <div class="field"><label>剧标题</label><input placeholder="模糊搜索"></div>
+          <div class="field"><label>原始语言</label><select><option>请选择</option><option>中文（简体）</option><option>英语</option><option>西语</option></select></div>
+          <div class="field"><label>目标语言</label><select><option>请选择</option><option>英语</option><option>西语</option><option>葡语</option></select></div>
+          <div class="field"><label>任务类型</label><select><option>请选择</option><option>翻译并配音</option><option>仅翻译</option><option>字幕资产提取</option></select></div>
+          <div class="field wide"><label>创建时间</label><input placeholder="开始日期  →  结束日期"></div>
+          <div class="field"><label>创建人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
+          <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
+          <div class="field"><label>分配给</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
+          <div class="field"><label>分配对象角色</label><select><option>全部</option><option>外部管理员</option><option>外部校对员</option></select></div>
+          <div class="field"><label>分配类型</label><select><option>请选择</option><option>外部管理员可管理</option><option>翻译且配音</option><option>仅翻译</option></select></div>
+          <div class="field"><label>分配人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
+          <div class="field wide"><label>分配时间</label><input placeholder="开始日期  →  结束日期"></div>
+          <div class="actions-field">
+            <button class="btn clear" type="button">清空条件</button>
+            <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
+          </div>
+        </div>
+        <p class="record-note admin-only"><strong>内部管理员视角：</strong>分配记录新增展示“分配对象角色”，可区分分给外部管理员的管理权限和分给外部校对员的最终校对任务。</p>
+        <p class="record-note external-manager-only"><strong>外部管理员视角：</strong>默认不展示全量分配记录入口；如通过任务分配弹窗查看，仅能看自己可管理任务的当前分配。</p>
+        <div class="table-card scrollable">
+          <div class="wide-table-scroll">
+          <table class="wide-record-table" aria-label="分配记录表格">
+            <colgroup>
+              <col style="width: 130px">
+              <col style="width: 210px">
+              <col style="width: 120px">
+              <col style="width: 120px">
+              <col style="width: 130px">
+              <col style="width: 170px">
+              <col style="width: 120px">
+              <col style="width: 185px">
+              <col style="width: 120px">
+              <col style="width: 185px">
+              <col style="width: 140px">
+              <col style="width: 130px">
+              <col style="width: 130px">
+              <col style="width: 140px">
+              <col style="width: 185px">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>剧 ID</th>
+                <th>剧标题</th>
+                <th>原始语言</th>
+                <th>翻译到</th>
+                <th>任务类型</th>
+                <th>AI进度</th>
+                <th>创建人</th>
+                <th>创建时间</th>
+                <th>更新人</th>
+                <th>更新时间</th>
+                <th>分配给</th>
+                <th>分配对象角色</th>
+                <th>分配类型</th>
+                <th>分配人</th>
+                <th>分配时间</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mono">41000004443</td>
+                <td class="name-strong">思美人第二季</td>
+                <td>中文（简体）</td>
+                <td>英语</td>
+                <td>翻译并配音</td>
+                <td><span class="progress-cell"><span class="progress-track"><span class="progress-bar" style="width:100%"></span></span>100%</span></td>
+                <td>王晓晨</td>
+                <td class="mono">2026-08-19 10:32:11</td>
+                <td>李姝宜</td>
+                <td class="mono">2026-08-20 11:18:03</td>
+                <td>林可</td>
+                <td><span class="tag manager">外部管理员</span></td>
+                <td><span class="tag orange">可管理任务</span></td>
+                <td>李姝宜</td>
+                <td class="mono">2026-08-20 11:20:16</td>
+              </tr>
+              <tr>
+                <td class="mono">41000004443</td>
+                <td class="name-strong">思美人第二季</td>
+                <td>中文（简体）</td>
+                <td>英语</td>
+                <td>翻译并配音</td>
+                <td><span class="progress-cell"><span class="progress-track"><span class="progress-bar" style="width:100%"></span></span>100%</span></td>
+                <td>王晓晨</td>
+                <td class="mono">2026-08-19 10:32:11</td>
+                <td>春鹏C</td>
+                <td class="mono">2026-08-20 11:36:10</td>
+                <td>春鹏C</td>
+                <td><span class="tag">外部校对员</span></td>
+                <td>翻译且配音</td>
+                <td>林可</td>
+                <td class="mono">2026-08-20 11:37:42</td>
+              </tr>
+              <tr>
+                <td class="mono">41000005517</td>
+                <td class="name-strong">月色沉沦</td>
+                <td>中文（简体）</td>
+                <td>西语</td>
+                <td>仅翻译</td>
+                <td><span class="progress-cell"><span class="progress-track"><span class="progress-bar" style="width:82%"></span></span>82%</span></td>
+                <td>苏宁</td>
+                <td class="mono">2026-08-18 14:06:25</td>
+                <td>林可</td>
+                <td class="mono">2026-08-19 17:03:49</td>
+                <td>春鹏B</td>
+                <td><span class="tag">外部校对员</span></td>
+                <td>仅翻译</td>
+                <td>林可</td>
+                <td class="mono">2026-08-19 17:09:21</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          <div class="pagination">
+            <span>共 3 条</span><span class="page-no active">1</span><select class="small-select"><option>20 条/页</option></select><span>跳至</span><input class="jump-input"><span>页</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-mask" id="assignReviewer" role="dialog" aria-modal="true" aria-labelledby="assignReviewerTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title"><div class="modal-icon"><svg><use href="#icon-users"></use></svg></div><div><h2 id="assignReviewerTitle">分配任务</h2><p>仅可分配给自己名下的外部译配员</p></div></div>
+        <span class="role-pill">已选择 1 个任务</span>
+        <button class="close" type="button" data-close aria-label="关闭"><svg class="close-icon"><use href="#icon-x"></use></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="task-card">
+          <div class="task-card-head">
+            <div><h3>思美人第二季</h3><div class="fact-row"><span>剧ID：41000004443</span><span>中文（简体）→ 英语</span></div></div>
+            <span class="tag manager" id="reviewerTaskTypeTag">翻译并配音</span>
+          </div>
+          <div class="current-assign">
+            <strong>当前分配</strong><strong>0 人</strong>
+            <div class="empty-state"><span class="box"></span><strong>当前暂无分配</strong><span>可在下方添加自己名下的外部译配员</span></div>
+          </div>
+        </div>
+        <div class="add-section">
+          <div class="add-head"><strong><span class="dot"></span>新增分配</strong><span>以下外部译配员及详细任务类型将应用于所选 1 个任务</span></div>
+          <div class="draft-row">
+            <div class="row-index">1</div>
+            <select class="select-like" aria-label="选择外部译配员" required>
+              <option value="" selected disabled hidden>搜索自己名下外部译配员</option>
+              <option>春鹏C</option>
+              <option>春鹏B</option>
+              <option>春鹏D</option>
+            </select>
+            <div class="type-field" id="reviewerAssignTypeField"><span>详细任务</span><select aria-label="详细任务"><option>翻译并配音</option><option>翻译</option><option>配音</option></select></div>
+            <button class="trash" type="button" aria-label="删除"><svg class="btn-icon"><use href="#icon-trash"></use></svg></button>
+          </div>
+          <button class="add-more" type="button"><svg class="btn-icon"><use href="#icon-plus"></use></svg>继续添加人员分配</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="summary">本次添加 <strong>0</strong> 位外部译配员 · 覆盖 <strong>1</strong> 个任务 · 共 <strong>1</strong> 条分配记录</div>
+        <div class="actions"><button class="btn" type="button" data-close>取消</button><button class="btn primary" type="button" data-submit="已分配给外部译配员">确认分配</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="assignExternalManager" role="dialog" aria-modal="true" aria-labelledby="assignManagerTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title"><div class="modal-icon"><svg><use href="#icon-users"></use></svg></div><div><h2 id="assignManagerTitle">分配任务</h2><p id="adminAssignDesc">将任务分配给外部管理员，仅授予查看和再分配权限</p></div></div>
+        <span class="role-pill">已选择 1 个任务</span>
+        <button class="close" type="button" data-close aria-label="关闭"><svg class="close-icon"><use href="#icon-x"></use></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="task-card">
+          <div class="task-card-head">
+            <div><h3>思美人第二季</h3><div class="fact-row"><span>剧ID：41000004443</span><span>中文（简体）→ 英语</span></div></div>
+            <span class="tag manager" id="adminTaskTypeTag">翻译并配音</span>
+          </div>
+          <div class="current-assign">
+            <strong id="adminAssignCurrentTitle">当前外部管理员</strong><strong>0 人</strong>
+            <div class="empty-state"><span class="box"></span><strong id="adminAssignEmptyTitle">当前暂无外部管理员</strong><span id="adminAssignEmptySub">分配后对方只可查看和继续分配</span></div>
+          </div>
+        </div>
+        <div class="add-section">
+          <div class="add-head"><strong><span class="dot"></span><span id="adminAssignAddTitle">新增外部管理员</span></strong><span id="adminAssignAddDesc">该分配不算最终校对任务分配</span></div>
+          <div class="draft-row admin-assign-row">
+            <div class="row-index">1</div>
+            <select class="select-like" id="adminAssignRole" aria-label="分配对象">
+              <option selected>外部管理员</option>
+              <option>外部校对员</option>
+            </select>
+            <select class="select-like" id="adminAssignUser" aria-label="选择分配人员">
+              <option value="">搜索外部管理员</option>
+              <option>林可</option>
+              <option>Mia Sun</option>
+            </select>
+            <div class="type-field" id="adminAssignTypeField"><span id="adminAssignTypeLabel">分配类型</span><strong>分配任务</strong></div>
+            <button class="trash" type="button" aria-label="删除"><svg class="btn-icon"><use href="#icon-trash"></use></svg></button>
+          </div>
+          <button class="add-more" type="button"><svg class="btn-icon"><use href="#icon-plus"></use></svg>继续添加人员分配</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="summary" id="adminAssignSummary">分配给外部管理员后，对方不可进入编辑器、不可导出。</div>
+        <div class="actions"><button class="btn" type="button" data-close>取消</button><button class="btn primary" type="button" id="adminAssignSubmit" data-submit="已分配给外部管理员">确认分配</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="userModal" role="dialog" aria-modal="true" aria-labelledby="userModalTitle">
+    <div class="modal small">
+      <div class="modal-head">
+        <div class="modal-title"><div class="modal-icon"><svg><use href="#icon-user-plus"></use></svg></div><div><h2 id="userModalTitle">新增外部用户</h2><p id="userModalSub">内部管理员可选择外部管理员或外部校对员</p></div></div>
+        <button class="close" type="button" data-close aria-label="关闭"><svg class="close-icon"><use href="#icon-x"></use></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="standard-form">
+          <div class="standard-field required" id="nameField">
+            <label>姓名</label>
+            <input id="externalUserName" placeholder="请输入姓名" maxlength="20">
+            <div class="field-error" id="nameError"></div>
+          </div>
+          <div class="standard-field required" id="adminRoleField">
+            <label>角色</label>
+            <select id="externalUserRole">
+              <option>外部校对员</option>
+              <option selected>外部管理员</option>
+            </select>
+          </div>
+          <div class="standard-field required external-manager-only" id="fixedRoleField">
+            <label>角色</label>
+            <div class="standard-value">外部校对员</div>
+          </div>
+          <div class="standard-field admin-only" id="managerOwnerField">
+            <label>所属外部管理员</label>
+            <select id="externalManagerSelect">
+              <option value="">无</option>
+              <option value="linke" data-supplier="Drama Verse">林可</option>
+              <option value="mia" data-supplier="Mia Studio">Mia Sun</option>
+            </select>
+          </div>
+          <div class="standard-field external-manager-only" id="currentManagerField">
+            <label>所属外部管理员</label>
+            <div class="standard-value is-readonly">林可</div>
+          </div>
+          <div class="standard-field required" id="supplierInputField">
+            <label>供应商名称</label>
+            <select id="supplierInput" aria-label="供应商名称">
+              <option selected>Drama Verse</option>
+              <option>星桥译配</option>
+              <option>Mia Studio</option>
+              <option>云声译制</option>
+            </select>
+            <div class="field-error" id="supplierError"></div>
+          </div>
+          <div class="standard-field" id="supplierReadonlyField">
+            <label>供应商名称</label>
+            <div class="standard-value is-readonly" id="supplierReadonlyValue">Drama Verse</div>
+          </div>
+          <div class="standard-field required is-hidden" id="contactTypeField">
+            <label>联系方式</label>
+            <select id="contactType" aria-label="联系方式">
+              <option value="phone" selected>手机号码</option>
+              <option value="email">邮箱</option>
+            </select>
+            <div class="field-error" id="contactTypeError"></div>
+          </div>
+          <div class="standard-field required" id="phoneField">
+            <label>手机号码</label>
+            <div class="phone-input-group">
+              <span class="phone-prefix">+86</span>
+              <input id="externalUserPhone" placeholder="请输入手机号" maxlength="11">
+            </div>
+            <div class="field-error" id="phoneError"></div>
+          </div>
+          <div class="standard-field required is-hidden" id="emailField">
+            <label>邮箱</label>
+            <input id="externalUserEmail" placeholder="请输入邮箱" maxlength="80">
+            <div class="field-error" id="emailError"></div>
+          </div>
+          <p class="tip external-manager-only">外部管理员新增用户时，角色固定为外部校对员，并自动归属当前外部管理员。</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="muted" id="userContactHint">手机号用于外部用户验证码登录</span>
+        <div class="actions"><button class="btn" type="button" data-close>取消</button><button class="btn primary" type="button" id="saveExternalUser">保存</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="videoExportConfirmModal" role="dialog" aria-modal="true" aria-labelledby="videoExportConfirmTitle">
+    <div class="modal video-confirm-modal">
+      <div class="modal-head">
+        <div class="modal-title"><h2 id="videoExportConfirmTitle">确认导出视频</h2><p>确认后进入配置面板</p></div>
+        <button class="close" type="button" data-close aria-label="关闭"><svg class="close-icon"><use href="#icon-x"></use></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="video-confirm-content">
+          <div class="video-confirm-icon"><svg><use href="#icon-check-square"></use></svg></div>
+          <div class="video-confirm-text">已选中 <em>1</em> 集配音完成的视频，确认要进行视频合成与导出吗？</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="actions"><button class="btn" type="button" data-close>取消</button><button class="btn primary" type="button" data-open="exportMediaModal" data-export-kind="mp4" data-export-range="multi" data-export-count="1">确认导出</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="exportMediaModal" role="dialog" aria-modal="true" aria-labelledby="exportMediaTitle">
+    <div class="modal export-modal">
+      <div class="modal-head">
+        <div class="modal-title"><div class="modal-icon"><svg><use href="#icon-download"></use></svg></div><div><h2 id="exportMediaTitle">导出音视频配置</h2><p id="exportMediaSub">配置本次导出是否进行音乐剥离</p></div></div>
+        <div class="export-top-steps" aria-label="导出配置步骤">
+          <div class="export-top-step" data-export-step-indicator="1"><span class="step-index">1</span><strong>字幕擦除</strong><span class="step-status">已擦除</span></div>
+          <div class="export-top-step" data-export-step-indicator="2"><span class="step-index">2</span><strong>添加硬字幕</strong><span class="step-status">启用</span></div>
+          <div class="export-top-step" data-export-step-indicator="3"><span class="step-index">3</span><strong>音乐剥离</strong><span class="step-status" id="musicStepStatus">未启用</span></div>
+          <div class="export-top-step" data-export-step-indicator="4"><span class="step-index">4</span><strong>确认提交</strong><span class="step-status">待确认</span></div>
+        </div>
+        <button class="close" type="button" data-close aria-label="关闭"><svg class="close-icon"><use href="#icon-x"></use></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="export-content" id="exportContent">
+          <div class="export-step-panel" data-export-step-panel="1">
+            <div class="export-preview">
+              <div class="phone-preview" aria-label="视频预览">
+                <div class="phone-subtitle-box">الحياة مثل لعبة<br>الشطرنج</div>
+                <div class="phone-controls"><div class="phone-control-row"><span>▶ 0:00 / 1:05</span><span>▣</span></div><div class="phone-progress"><span></span></div></div>
+              </div>
+            </div>
+            <div class="export-form-pane">
+              <h3>字幕擦除</h3>
+              <div class="export-setting-line">
+                <div class="export-setting-copy"><strong>去除原视频字幕</strong><span>使用已完成的字幕擦除结果，导出视频不保留原始字幕画面。</span></div>
+                <label class="switch" aria-label="去除原视频字幕"><input type="checkbox" checked><span class="switch-slider"></span></label>
+              </div>
+              <div class="export-setting-line">
+                <div class="export-setting-copy"><strong>擦除结果</strong><span>已完成，可继续配置硬字幕样式。</span></div>
+                <button type="button">查看结果</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="export-step-panel" data-export-step-panel="2">
+            <div class="export-preview">
+              <div class="phone-preview" aria-label="视频预览">
+                <div class="phone-subtitle-box">الحياة مثل لعبة<br>الشطرنج</div>
+                <div class="phone-controls"><div class="phone-control-row"><span>▶ 0:00 / 1:05</span><span>▣</span></div><div class="phone-progress"><span></span></div></div>
+              </div>
+            </div>
+            <div class="export-form-pane">
+              <h3>添加硬字幕</h3>
+              <div class="export-setting-line">
+                <div class="export-setting-copy"><strong>添加译文硬字幕</strong><span>按译文字幕时间轴烧录目标语字幕</span></div>
+                <label class="switch" aria-label="添加译文硬字幕"><input type="checkbox" checked><span class="switch-slider"></span></label>
+              </div>
+              <div class="export-setting-line">
+                <div class="export-setting-copy"><strong>添加原文硬字幕</strong><span>开启后与译文同屏展示，共用译文时间轴</span></div>
+                <label class="switch" aria-label="添加原文硬字幕"><input type="checkbox"><span class="switch-slider"></span></label>
+              </div>
+              <div class="export-setting-divider"></div>
+              <div class="export-setting-line">
+                <div class="export-setting-copy"><strong>恢复默认</strong></div>
+                <button type="button">译文恢复</button>
+              </div>
+              <div class="export-setting-line"><div class="export-setting-copy"><strong>字号</strong></div><input value="90" aria-label="字号"></div>
+              <div class="export-setting-line"><div class="export-setting-copy"><strong>字间距</strong></div><input value="0" aria-label="字间距"></div>
+              <div class="export-setting-line"><div class="export-setting-copy"><strong>换行长度</strong></div><input value="22" aria-label="换行长度"></div>
+              <div class="export-setting-line">
+                <div class="export-setting-copy"><strong>智能切帧展示</strong></div>
+                <label class="switch" aria-label="智能切帧展示"><input type="checkbox"><span class="switch-slider"></span></label>
+              </div>
+              <div class="export-setting-line is-disabled"><div class="export-setting-copy"><strong>单帧最大行数</strong></div><select disabled><option>3 行</option></select></div>
+              <div class="export-setting-line">
+                <div class="export-setting-copy"><strong>空格换行</strong></div>
+                <label class="switch" aria-label="空格换行"><input type="checkbox" checked><span class="switch-slider"></span></label>
+              </div>
+              <div class="export-setting-line"><div class="export-setting-copy"><strong>字体</strong></div><select aria-label="字体"><option>NotoNaskhArabic_...</option><option>系统默认</option></select></div>
+              <div class="export-setting-line"><div class="export-setting-copy"><strong>字幕位置（距底部）%</strong></div><input value="31.5" aria-label="字幕位置"></div>
+            </div>
+          </div>
+
+          <div class="export-step-panel" data-export-step-panel="3">
+            <div class="music-step-card">
+              <div class="setting-row">
+                <div>
+                  <div class="setting-label">剥离音乐 <span class="tag" id="musicEnabledText">未启用</span></div>
+                  <div class="switch-desc">默认关闭。开启后，本次导出任务将自动检测疑似音乐片段，并剥离主旋律。</div>
+                </div>
+                <label class="switch" aria-label="开启音乐剥离">
+                  <input id="musicStripToggle" type="checkbox">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+              <div class="music-config is-hidden" id="musicConfigPanel">
+                <div class="setting-note">开启后仅作用于本次导出：系统自动识别疑似歌曲/音乐片段，优先剥离主旋律，尽量保留对白、环境音和特效音。处理结果进入任务中心，可下载或查看检测明细。</div>
+              </div>
+              <div class="info-grid">
+                <div class="info-item"><strong>处理范围</strong><span>仅处理检测到的音乐片段，不覆盖配音音频。</span></div>
+                <div class="info-item"><strong>任务流转</strong><span>启用后视频合成与音乐剥离异步执行，并流转到任务中心。</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="export-step-panel" data-export-step-panel="4">
+            <div class="export-confirm-card">
+              <h3>确认提交</h3>
+              <div class="export-confirm-row"><span>导出范围</span><strong id="exportRangeTag">已选择 1 集</strong></div>
+              <div class="export-confirm-row"><span>字幕擦除</span><strong>已擦除</strong></div>
+              <div class="export-confirm-row"><span>添加硬字幕</span><strong>启用译文硬字幕</strong></div>
+              <div class="export-confirm-row"><span>音乐剥离</span><strong id="musicConfirmText">未启用</strong></div>
+              <div class="setting-note">提交后将进入任务中心异步处理。启用音乐剥离时，会先检测疑似音乐片段并处理后再生成导出文件。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="export-footer-note" id="exportFooterNote">导出配置与编辑器内字幕样式配置不联动</div>
+        <div class="actions"><button class="btn" type="button" id="exportPrevBtn"><svg class="btn-icon"><use href="#icon-arrow-left"></use></svg>上一步</button><button class="btn primary" type="button" id="exportNextBtn">下一步<svg class="btn-icon"><use href="#icon-arrow-right"></use></svg></button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="musicParamsModal" role="dialog" aria-modal="true" aria-labelledby="musicParamsTitle">
+    <div class="modal small">
+      <div class="modal-head">
+        <div class="modal-title"><div class="modal-icon"><svg><use href="#icon-music"></use></svg></div><div><h2 id="musicParamsTitle">音乐剥离参数</h2><p>查看该导出任务的检测结果和剥离状态</p></div></div>
+        <button class="close" type="button" data-close aria-label="关闭"><svg class="close-icon"><use href="#icon-x"></use></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="standard-form">
+          <div class="standard-field">
+            <label>是否启用</label>
+            <div class="standard-value is-readonly">已启用</div>
+          </div>
+          <div class="standard-field">
+            <label>检测模式</label>
+            <div class="standard-value is-readonly">自动检测音乐片段</div>
+          </div>
+          <div class="standard-field">
+            <label>处理动作</label>
+            <div class="standard-value is-readonly">剥离主旋律</div>
+          </div>
+          <div class="standard-field">
+            <label>保留目标</label>
+            <div class="standard-value is-readonly">对白、环境音、特效音</div>
+          </div>
+          <div class="standard-field">
+            <label>检测结果</label>
+            <div class="standard-value is-readonly">3 个音乐片段 · 共 46.8 秒 · 1 段需人工复核</div>
+          </div>
+          <div class="segment-list" aria-label="检测到的音乐片段">
+            <div class="segment-row"><span class="mono">00:12.4-00:28.8</span><span class="segment-bar"><span style="width:91%"></span></span><span>置信 91%</span></div>
+            <div class="segment-row"><span class="mono">01:13.1-01:31.5</span><span class="segment-bar"><span style="width:86%"></span></span><span>置信 86%</span></div>
+            <div class="segment-row"><span class="mono">02:46.0-02:58.0</span><span class="segment-bar"><span style="width:62%"></span></span><span>待复核</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="muted">该结果仅作用于本次导出，不覆盖原始任务音频。</span>
+        <div class="actions"><button class="btn" type="button" data-close>关闭</button><button class="btn primary" type="button" data-page="episodes" data-close>去集列表</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const body = document.body;
+    const viewMode = document.getElementById('viewMode');
+    const viewerName = document.getElementById('viewerName');
+    const viewerRole = document.getElementById('viewerRole');
+    const toast = document.getElementById('toast');
+    const adminRoleField = document.getElementById('adminRoleField');
+    const fixedRoleField = document.getElementById('fixedRoleField');
+    const externalUserRole = document.getElementById('externalUserRole');
+    const externalManagerSelect = document.getElementById('externalManagerSelect');
+    const managerOwnerField = document.getElementById('managerOwnerField');
+    const supplierInputField = document.getElementById('supplierInputField');
+    const supplierInput = document.getElementById('supplierInput');
+    const supplierError = document.getElementById('supplierError');
+    const supplierReadonlyField = document.getElementById('supplierReadonlyField');
+    const supplierReadonlyValue = document.getElementById('supplierReadonlyValue');
+    const currentManagerField = document.getElementById('currentManagerField');
+    const contactTypeField = document.getElementById('contactTypeField');
+    const contactType = document.getElementById('contactType');
+    const contactTypeError = document.getElementById('contactTypeError');
+    const externalUserName = document.getElementById('externalUserName');
+    const externalUserPhone = document.getElementById('externalUserPhone');
+    const externalUserEmail = document.getElementById('externalUserEmail');
+    const saveExternalUser = document.getElementById('saveExternalUser');
+    const nameField = document.getElementById('nameField');
+    const phoneField = document.getElementById('phoneField');
+    const emailField = document.getElementById('emailField');
+    const nameError = document.getElementById('nameError');
+    const phoneError = document.getElementById('phoneError');
+    const emailError = document.getElementById('emailError');
+    const userContactHint = document.getElementById('userContactHint');
+    const adminAssignRole = document.getElementById('adminAssignRole');
+    const adminAssignUser = document.getElementById('adminAssignUser');
+    const adminAssignDesc = document.getElementById('adminAssignDesc');
+    const adminAssignCurrentTitle = document.getElementById('adminAssignCurrentTitle');
+    const adminAssignEmptyTitle = document.getElementById('adminAssignEmptyTitle');
+    const adminAssignEmptySub = document.getElementById('adminAssignEmptySub');
+    const adminAssignAddTitle = document.getElementById('adminAssignAddTitle');
+    const adminAssignAddDesc = document.getElementById('adminAssignAddDesc');
+    const adminAssignTypeLabel = document.getElementById('adminAssignTypeLabel');
+    const adminAssignTypeField = document.getElementById('adminAssignTypeField');
+    const adminAssignSummary = document.getElementById('adminAssignSummary');
+    const adminAssignSubmit = document.getElementById('adminAssignSubmit');
+    const reviewerTaskTypeTag = document.getElementById('reviewerTaskTypeTag');
+    const reviewerAssignTypeField = document.getElementById('reviewerAssignTypeField');
+    const adminTaskTypeTag = document.getElementById('adminTaskTypeTag');
+    const musicStripToggle = document.getElementById('musicStripToggle');
+    const musicConfigPanel = document.getElementById('musicConfigPanel');
+    const musicEnabledText = document.getElementById('musicEnabledText');
+    const exportModalSummary = document.getElementById('exportModalSummary');
+    const exportMediaTitle = document.getElementById('exportMediaTitle');
+    const exportMediaSub = document.getElementById('exportMediaSub');
+    const exportRangeTag = document.getElementById('exportRangeTag');
+    const musicStepStatus = document.getElementById('musicStepStatus');
+    const musicConfirmText = document.getElementById('musicConfirmText');
+    const exportContent = document.getElementById('exportContent');
+    const exportFooterNote = document.getElementById('exportFooterNote');
+    const exportPrevBtn = document.getElementById('exportPrevBtn');
+    const exportNextBtn = document.getElementById('exportNextBtn');
+    let currentAdminTaskType = 'translation_dubbing';
+    let userModalMode = 'create';
+    let lastSelectedUserRole = '';
+    let currentEditingUserName = '';
+    let exportCurrentStep = 2;
+
+    function showToast(text, type = 'success') {
+      toast.textContent = text;
+      toast.classList.remove('success', 'warning', 'error');
+      toast.classList.add(type);
+      toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    function switchPage(page) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(`page-${page}`)?.classList.add('active');
+      document.querySelectorAll('[data-page]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.page === page);
+      });
+      if (body.classList.contains('external') && page === 'records') {
+        showToast('外部管理员暂无全量分配记录访问权限，仅可在分配弹窗查看当前任务分配', 'warning');
+      }
+    }
+
+    function switchRole() {
+      const admin = viewMode.value === 'admin';
+      body.classList.toggle('admin', admin);
+      body.classList.toggle('external', !admin);
+      viewerName.textContent = admin ? '李姝宜' : '林可';
+      viewerRole.textContent = admin ? '内部管理员' : '外部管理员';
+      updateUserModalTitle();
+      updateUserModalFields();
+      if (!admin && document.getElementById('page-records').classList.contains('active')) {
+        switchPage('users');
+      }
+    }
+
+    function updateUserModalTitle() {
+      const admin = viewMode.value === 'admin';
+      const title = document.getElementById('userModalTitle');
+      const sub = document.getElementById('userModalSub');
+      if (userModalMode === 'edit') {
+        title.textContent = '编辑用户';
+        sub.textContent = admin
+          ? '可调整用户角色；切换为外部角色后需维护外部归属信息'
+          : '角色固定为外部校对员，仅可维护联系方式等基础信息';
+        return;
+      }
+      title.textContent = admin ? '新增外部用户' : '新增外部校对员';
+      sub.textContent = admin ? '内部管理员可选择外部管理员或外部校对员' : '仅新增自己名下外部校对员';
+    }
+
+    function setUserRoleOptions(mode, selectedRole) {
+      if (!externalUserRole) return;
+      const createOptions = ['外部校对员', '外部管理员'];
+      const editOptions = ['内部管理员', '高级校对员', '普通校对员', '外部管理员', '外部校对员'];
+      const options = mode === 'edit' ? editOptions : createOptions;
+      externalUserRole.innerHTML = options
+        .map(role => `<option${role === selectedRole ? ' selected' : ''}>${role}</option>`)
+        .join('');
+    }
+
+    function normalizeChinaPhone(rawPhone) {
+      const phone = (rawPhone || '').trim();
+      if (!phone) return '';
+      const digits = phone.replace(/\D/g, '');
+      if (digits.startsWith('86') && digits.length >= 13) {
+        return digits.slice(2, 13);
+      }
+      if (/^1\d{10}$/.test(digits)) {
+        return digits;
+      }
+      return digits.slice(0, 11);
+    }
+
+    function getCurrentUserRole() {
+      const admin = viewMode.value === 'admin';
+      if (admin) {
+        return externalUserRole?.value || '';
+      }
+      return '外部校对员';
+    }
+
+    function setupUserModal(trigger) {
+      const admin = viewMode.value === 'admin';
+      userModalMode = trigger?.dataset?.userMode || 'create';
+      const selectedRole = userModalMode === 'edit'
+        ? (trigger.dataset.userRole || '普通校对员')
+        : admin ? '外部管理员' : '外部校对员';
+      setUserRoleOptions(userModalMode, selectedRole);
+      externalUserName.value = userModalMode === 'edit' ? (trigger.dataset.userName || '') : '';
+      currentEditingUserName = userModalMode === 'edit' ? (trigger.dataset.userName || '') : '';
+      externalUserPhone.value = userModalMode === 'edit' ? normalizeChinaPhone(trigger.dataset.userPhone || '') : '';
+      externalUserEmail.value = userModalMode === 'edit' ? (trigger.dataset.userEmail || '') : '';
+      const selectedContact = userModalMode === 'edit'
+        ? (trigger.dataset.userContact || (trigger.dataset.userEmail ? 'email' : 'phone'))
+        : 'phone';
+      contactType.value = selectedRole === '外部校对员' ? selectedContact : 'phone';
+      externalManagerSelect.value = userModalMode === 'edit' && selectedRole === '外部校对员' ? 'linke' : '';
+      supplierInput.value = selectedRole === '外部管理员' ? (trigger.dataset.userSupplier || 'Drama Verse') : '';
+      lastSelectedUserRole = selectedRole;
+      clearUserFormErrors();
+      updateUserModalTitle();
+      updateUserModalFields();
+    }
+
+    function getSelectedSupplierName() {
+      const selected = externalManagerSelect?.selectedOptions?.[0];
+      return selected?.dataset?.supplier || '';
+    }
+
+    function updateExternalManagerOptions(selectedRole) {
+      if (!externalManagerSelect) return;
+      const shouldFilterCurrentUser = userModalMode === 'edit' && selectedRole === '外部校对员';
+      Array.from(externalManagerSelect.options).forEach(option => {
+        if (!option.value) {
+          option.textContent = '无';
+          return;
+        }
+        const isCurrentUser = option.textContent.trim() === currentEditingUserName;
+        option.hidden = shouldFilterCurrentUser && isCurrentUser;
+        option.disabled = shouldFilterCurrentUser && isCurrentUser;
+        if (option.selected && option.disabled) {
+          externalManagerSelect.value = '';
+        }
+      });
+    }
+
+    function updateUserModalFields() {
+      const admin = viewMode.value === 'admin';
+      const roleEditable = admin;
+      const selectedRole = getCurrentUserRole();
+      const isExternalAdminRole = selectedRole === '外部管理员';
+      const isExternalReviewerRole = selectedRole === '外部校对员';
+      updateExternalManagerOptions(selectedRole);
+      const selectedSupplier = admin ? getSelectedSupplierName() : 'Drama Verse';
+
+      adminRoleField?.classList.toggle('is-hidden', !roleEditable);
+      fixedRoleField?.classList.toggle('is-hidden', roleEditable || admin);
+      managerOwnerField?.classList.toggle('is-hidden', !admin || !isExternalReviewerRole);
+      currentManagerField?.classList.toggle('is-hidden', admin || !isExternalReviewerRole);
+      supplierInputField?.classList.toggle('is-hidden', !roleEditable || !isExternalAdminRole);
+      if (roleEditable && isExternalAdminRole && !supplierInput.value) {
+        supplierInput.value = 'Drama Verse';
+      }
+      supplierReadonlyField?.classList.toggle(
+        'is-hidden',
+        isExternalAdminRole || !isExternalReviewerRole || (admin && !selectedSupplier),
+      );
+
+      if (supplierReadonlyValue) {
+        supplierReadonlyValue.textContent = selectedSupplier || '-';
+      }
+
+      contactTypeField?.classList.toggle('is-hidden', !isExternalReviewerRole);
+      if (!isExternalReviewerRole && contactType?.value !== 'phone') {
+        contactType.value = 'phone';
+      }
+      if (contactType) {
+        contactType.disabled = !isExternalReviewerRole;
+      }
+      const contactValue = isExternalReviewerRole ? (contactType?.value || 'phone') : 'phone';
+      phoneField?.classList.toggle('is-hidden', contactValue !== 'phone');
+      emailField?.classList.toggle('is-hidden', contactValue !== 'email');
+      if (userContactHint) {
+        userContactHint.textContent = isExternalReviewerRole && contactValue === 'email'
+          ? '邮箱用于外部用户登录通知'
+          : '手机号用于外部用户验证码登录';
+      }
+    }
+
+    function setFieldError(field, errorNode, message) {
+      field?.classList.toggle('has-error', Boolean(message));
+      if (errorNode) {
+        errorNode.textContent = message || '';
+        errorNode.classList.toggle('show', Boolean(message));
+      }
+    }
+
+    function clearUserFormErrors() {
+      setFieldError(nameField, nameError, '');
+      setFieldError(phoneField, phoneError, '');
+      setFieldError(emailField, emailError, '');
+      setFieldError(contactTypeField, contactTypeError, '');
+      setFieldError(supplierInputField, supplierError, '');
+    }
+
+    function validateExternalUserForm() {
+      clearUserFormErrors();
+      const name = externalUserName.value.trim();
+      if (!name) {
+        setFieldError(nameField, nameError, '请输入姓名');
+        externalUserName.focus();
+        return false;
+      }
+      if (name.length < 2 || name.length > 20) {
+        setFieldError(nameField, nameError, '姓名长度需为 2-20 个字符');
+        externalUserName.focus();
+        return false;
+      }
+      if (!/^[\u4e00-\u9fa5A-Za-z·]+$/.test(name)) {
+        setFieldError(nameField, nameError, '姓名仅支持汉字和字母');
+        externalUserName.focus();
+        return false;
+      }
+
+      const role = getCurrentUserRole();
+      if (!role) {
+        showToast('请选择角色', 'warning');
+        externalUserRole.focus();
+        return false;
+      }
+      if (role === '外部管理员' && !supplierInput.value) {
+        setFieldError(supplierInputField, supplierError, '请选择供应商名称');
+        supplierInput.focus();
+        return false;
+      }
+
+      const contactValue = role === '外部校对员' ? (contactType?.value || 'phone') : 'phone';
+      if (contactValue === 'phone') {
+        const phone = externalUserPhone.value.trim();
+        if (!phone) {
+          setFieldError(phoneField, phoneError, '请输入手机号码');
+          externalUserPhone.focus();
+          return false;
+        }
+        if (!/^1\d{10}$/.test(phone)) {
+          setFieldError(phoneField, phoneError, '请输入11位中国大陆手机号，区号固定为+86');
+          externalUserPhone.focus();
+          return false;
+        }
+        return true;
+      }
+      const email = externalUserEmail.value.trim();
+      if (!email) {
+        setFieldError(emailField, emailError, '请输入邮箱');
+        externalUserEmail.focus();
+        return false;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setFieldError(emailField, emailError, '邮箱格式不正确');
+        externalUserEmail.focus();
+        return false;
+      }
+      return true;
+    }
+
+    function handleExternalUserSave() {
+      if (!validateExternalUserForm()) return;
+      document.getElementById('userModal')?.classList.remove('show');
+      showToast(userModalMode === 'edit' ? '用户已保存' : '外部用户已新增', 'success');
+    }
+
+    function getTaskTypeLabel(taskType) {
+      return taskType === 'dubbing_only' ? '仅配音' : '翻译并配音';
+    }
+
+    function renderTypeField(field, label, taskType, fixedValue) {
+      if (!field) return;
+      if (fixedValue) {
+        field.innerHTML = `<span>${label}</span><strong>${fixedValue}</strong>`;
+        return;
+      }
+      if (taskType === 'dubbing_only') {
+        field.innerHTML = `<span>${label}</span><strong>配音</strong>`;
+        return;
+      }
+      field.innerHTML = `<span>${label}</span><select aria-label="${label}"><option>翻译并配音</option><option>翻译</option><option>配音</option></select>`;
+    }
+
+    function updateReviewerTaskType(taskType = 'translation_dubbing') {
+      reviewerTaskTypeTag.textContent = getTaskTypeLabel(taskType);
+      renderTypeField(reviewerAssignTypeField, '详细任务', taskType);
+    }
+
+    function updateAdminAssignMode() {
+      if (!adminAssignRole || !adminAssignUser) return;
+      const isManager = adminAssignRole.value === '外部管理员';
+      adminAssignUser.innerHTML = isManager
+        ? '<option value="">搜索外部管理员</option><option>林可</option><option>Mia Sun</option>'
+        : '<option value="">搜索外部校对员</option><option>春鹏C</option><option>春鹏B</option><option>春鹏D</option>';
+      adminAssignDesc.textContent = isManager
+        ? '将任务分配给外部管理员，仅授予查看和再分配权限'
+        : '将任务直接分配给外部校对员，权限与线上外部校对员一致';
+      adminAssignCurrentTitle.textContent = isManager ? '当前外部管理员' : '当前外部校对员';
+      adminAssignEmptyTitle.textContent = isManager ? '当前暂无外部管理员' : '当前暂无外部校对员';
+      adminAssignEmptySub.textContent = isManager ? '分配后对方只可查看和继续分配' : '可在下方添加最终处理人员';
+      adminAssignAddTitle.textContent = isManager ? '新增外部管理员' : '新增外部校对员';
+      adminAssignAddDesc.textContent = isManager ? '该分配不算最终校对任务分配' : '该分配为最终校对任务分配';
+      renderTypeField(
+        adminAssignTypeField,
+        '分配类型',
+        currentAdminTaskType,
+        isManager ? '分配任务' : '',
+      );
+      adminAssignSummary.textContent = isManager
+        ? '分配给外部管理员后，对方不可进入编辑器、不可导出。'
+        : '分配给外部校对员后，对方权限与线上外部校对员一致。';
+      adminAssignSubmit.dataset.submit = isManager ? '已分配给外部管理员' : '已分配给外部校对员';
+    }
+
+    function updateAdminTaskType(taskType = 'translation_dubbing') {
+      currentAdminTaskType = taskType;
+      adminTaskTypeTag.textContent = getTaskTypeLabel(taskType);
+      updateAdminAssignMode();
+    }
+
+    function checkedValue(name) {
+      return document.querySelector(`input[name="${name}"]:checked`)?.value || '';
+    }
+
+    function setRadioValue(name, value) {
+      document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+        input.checked = input.value === value;
+      });
+    }
+
+    function updateMusicStripConfig() {
+      const enabled = Boolean(musicStripToggle?.checked);
+      musicConfigPanel?.classList.toggle('is-hidden', !enabled);
+      if (musicEnabledText) {
+        musicEnabledText.textContent = enabled ? '已启用' : '未启用';
+        musicEnabledText.className = enabled ? 'tag blue' : 'tag';
+      }
+      if (musicStepStatus) {
+        musicStepStatus.textContent = enabled ? '已启用' : '未启用';
+        musicStepStatus.style.color = enabled ? '#32e86d' : 'rgba(255,255,255,.42)';
+      }
+      if (musicConfirmText) {
+        musicConfirmText.textContent = enabled ? '已启用，自动检测音乐片段并剥离主旋律' : '未启用';
+      }
+    }
+
+    function renderExportStep(step) {
+      exportCurrentStep = Math.max(1, Math.min(4, step));
+      document.querySelectorAll('[data-export-step-panel]').forEach(panel => {
+        panel.classList.toggle('is-hidden', Number(panel.dataset.exportStepPanel) !== exportCurrentStep);
+      });
+      exportContent?.classList.toggle('single-pane', exportCurrentStep >= 3);
+      document.querySelectorAll('[data-export-step-indicator]').forEach(indicator => {
+        const index = Number(indicator.dataset.exportStepIndicator);
+        indicator.classList.toggle('active', index === exportCurrentStep);
+        indicator.classList.toggle('done', index < exportCurrentStep);
+        indicator.classList.toggle('is-muted', index > exportCurrentStep);
+        const stepIndex = indicator.querySelector('.step-index');
+        if (stepIndex) {
+          stepIndex.innerHTML = index < exportCurrentStep
+            ? '<svg aria-hidden="true"><use href="#icon-check"></use></svg>'
+            : String(index);
+        }
+      });
+      if (exportPrevBtn) {
+        exportPrevBtn.disabled = exportCurrentStep === 1;
+      }
+      if (exportNextBtn) {
+        exportNextBtn.innerHTML = exportCurrentStep === 4
+          ? '提交导出'
+          : '下一步<svg class="btn-icon"><use href="#icon-arrow-right"></use></svg>';
+      }
+      if (exportFooterNote) {
+        const notes = {
+          1: '字幕擦除结果来自当前剧任务，返回上一步可重新查看擦除配置',
+          2: '导出配置与编辑器内字幕样式配置不联动',
+          3: '音乐剥离仅作用于本次导出任务，默认关闭',
+          4: '确认无误后提交，任务将流转到任务中心',
+        };
+        exportFooterNote.textContent = notes[exportCurrentStep];
+      }
+      updateMusicStripConfig();
+    }
+
+    function setupExportModal(trigger) {
+      const kind = trigger?.dataset?.exportKind || 'mp4';
+      const range = trigger?.dataset?.exportRange || 'single';
+      const isMulti = range === 'multi';
+      const count = trigger?.dataset?.exportCount || (isMulti ? '2' : '1');
+      exportMediaTitle.textContent = kind === 'wav' ? '导出 WAV 配置' : '导出音视频配置';
+      exportMediaSub.textContent = kind === 'wav'
+        ? '单集 WAV 如启用音乐剥离，将异步流转到任务中心'
+        : isMulti ? '批量导出所选剧集，开启音乐剥离后将异步进入任务中心' : '单集导出配置，开启音乐剥离后将异步进入任务中心';
+      if (exportRangeTag) {
+        exportRangeTag.textContent = `已选择 ${count} 集`;
+      }
+      if (exportModalSummary) {
+        exportModalSummary.dataset.rangeLabel = `已选择 ${count} 集`;
+      }
+      if (musicStripToggle) {
+        musicStripToggle.checked = false;
+        musicStripToggle.disabled = false;
+      }
+      renderExportStep(2);
+    }
+
+    document.querySelectorAll('[data-page]').forEach(btn => {
+      btn.addEventListener('click', () => switchPage(btn.dataset.page));
+    });
+    document.querySelectorAll('[data-open]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const currentMask = btn.closest('.modal-mask');
+        if (currentMask && currentMask.id !== btn.dataset.open) {
+          currentMask.classList.remove('show');
+        }
+        if (btn.dataset.open === 'userModal') {
+          setupUserModal(btn);
+        }
+        if (btn.dataset.open === 'assignReviewer') {
+          updateReviewerTaskType(btn.dataset.taskType || 'translation_dubbing');
+        }
+        if (btn.dataset.open === 'assignExternalManager') {
+          updateAdminTaskType(btn.dataset.taskType || 'translation_dubbing');
+        }
+        if (btn.dataset.open === 'exportMediaModal') {
+          setupExportModal(btn);
+        }
+        document.getElementById(btn.dataset.open)?.classList.add('show');
+      });
+    });
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', () => btn.closest('.modal-mask')?.classList.remove('show'));
+    });
+    document.querySelectorAll('.modal-mask').forEach(mask => {
+      mask.addEventListener('click', event => {
+        if (event.target === mask) mask.classList.remove('show');
+      });
+    });
+    document.querySelectorAll('[data-submit]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.closest('.modal-mask')?.classList.remove('show');
+        showToast(btn.dataset.submit, 'success');
+      });
+    });
+    externalUserRole?.addEventListener('change', () => {
+      const nextRole = externalUserRole.value;
+      if (nextRole === '外部校对员' && lastSelectedUserRole !== '外部校对员') {
+        externalManagerSelect.value = '';
+        contactType.value = 'phone';
+      }
+      if (nextRole === '外部管理员' && !supplierInput.value) {
+        supplierInput.value = 'Drama Verse';
+      }
+      lastSelectedUserRole = nextRole;
+      clearUserFormErrors();
+      updateUserModalFields();
+    });
+    externalManagerSelect?.addEventListener('change', updateUserModalFields);
+    externalUserName?.addEventListener('input', () => setFieldError(nameField, nameError, ''));
+    supplierInput?.addEventListener('change', () => setFieldError(supplierInputField, supplierError, ''));
+    contactType?.addEventListener('change', () => {
+      setFieldError(contactTypeField, contactTypeError, '');
+      setFieldError(phoneField, phoneError, '');
+      setFieldError(emailField, emailError, '');
+      updateUserModalFields();
+    });
+    externalUserPhone?.addEventListener('input', () => {
+      externalUserPhone.value = externalUserPhone.value.replace(/\D/g, '').slice(0, 11);
+      setFieldError(phoneField, phoneError, '');
+    });
+    externalUserPhone?.addEventListener('blur', () => {
+      externalUserPhone.value = normalizeChinaPhone(externalUserPhone.value);
+    });
+    externalUserEmail?.addEventListener('input', () => setFieldError(emailField, emailError, ''));
+    saveExternalUser?.addEventListener('click', handleExternalUserSave);
+    adminAssignRole?.addEventListener('change', updateAdminAssignMode);
+    musicStripToggle?.addEventListener('change', updateMusicStripConfig);
+    exportPrevBtn?.addEventListener('click', () => {
+      if (exportCurrentStep > 1) renderExportStep(exportCurrentStep - 1);
+    });
+    exportNextBtn?.addEventListener('click', () => {
+      if (exportCurrentStep < 4) {
+        renderExportStep(exportCurrentStep + 1);
+        return;
+      }
+      document.getElementById('exportMediaModal')?.classList.remove('show');
+      showToast('导出任务已提交至任务中心', 'success');
+    });
+    viewMode.addEventListener('change', switchRole);
+    switchRole();
+    updateAdminAssignMode();
+    renderExportStep(2);
+  </script>
+</body>
+</html>
