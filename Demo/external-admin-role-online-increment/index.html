@@ -384,13 +384,13 @@
     }
 
     .wide-task-center-table {
-      width: 2080px;
-      min-width: 2080px;
+      width: 1930px;
+      min-width: 1930px;
     }
 
     .wide-task-chapter-table {
-      width: 1540px;
-      min-width: 1540px;
+      width: 1680px;
+      min-width: 1680px;
     }
 
     .wide-workbench-table {
@@ -2170,6 +2170,13 @@
       font-size: 13px;
     }
 
+    .music-detail-list .segment-row {
+      grid-template-columns: 1fr;
+      padding: 0 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,.04);
+    }
+
     .segment-bar {
       height: 8px;
       border-radius: 999px;
@@ -2820,7 +2827,6 @@
           <div class="field"><label>目标语言</label><select><option>请选择</option><option>英语</option><option>日语</option><option>韩语</option><option>泰语</option><option>葡萄牙语（巴西）</option></select></div>
           <div class="field"><label>合成进度</label><select><option>请选择</option><option>全部完成</option><option>未全部完成</option></select></div>
           <div class="field"><label>音乐剥离</label><select><option>全部</option><option>启用</option><option>关闭</option></select></div>
-          <div class="field"><label>剥离状态</label><select><option>全部</option><option>无需处理</option><option>待处理</option><option>处理中</option><option>完成</option><option>失败</option></select></div>
           <div class="field wide"><label>提交时间</label><input placeholder="开始日期  →  结束日期"></div>
           <div class="field"><label>提交人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
           <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
@@ -2840,7 +2846,6 @@
               <col style="width: 110px">
               <col style="width: 170px">
               <col style="width: 130px">
-              <col style="width: 150px">
               <col style="width: 160px">
               <col style="width: 190px">
               <col style="width: 190px">
@@ -2856,7 +2861,6 @@
                 <th>合成参数</th>
                 <th>合成进度</th>
                 <th>音乐剥离</th>
-                <th>剥离状态</th>
                 <th>提交人</th>
                 <th>提交时间</th>
                 <th>完成时间</th>
@@ -2873,7 +2877,6 @@
                 <td><button class="pill-btn primary" data-open="synthesisParamsModal">查看</button></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">3</strong> / 3 集已完成</span></td>
                 <td><span class="tag">关闭</span></td>
-                <td>无需处理</td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 17:01:34</td>
                 <td class="mono">2026-08-21 17:10:38</td>
@@ -2888,7 +2891,6 @@
                 <td><button class="pill-btn primary" data-open="synthesisParamsModal">查看</button></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">51</strong> / 51 集已完成</span></td>
                 <td><span class="tag blue">已启用</span></td>
-                <td><span class="tag green">完成</span></td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 16:58:15</td>
                 <td class="mono">2026-08-21 16:59:47</td>
@@ -2903,7 +2905,6 @@
                 <td><button class="pill-btn primary" data-open="synthesisParamsModal">查看</button></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">19</strong> / 20 集已完成</span></td>
                 <td><span class="tag blue">已启用</span></td>
-                <td><span class="tag red">1 集失败</span></td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 16:07:19</td>
                 <td class="mono">-</td>
@@ -2918,7 +2919,6 @@
                 <td><button class="pill-btn primary" data-open="synthesisParamsModal">查看</button></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">20</strong> / 20 集已完成</span></td>
                 <td><span class="tag">关闭</span></td>
-                <td>无需处理</td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 16:01:44</td>
                 <td class="mono">2026-08-21 16:02:35</td>
@@ -2968,6 +2968,7 @@
                 <col style="width: 140px">
                 <col style="width: 120px">
                 <col style="width: 130px">
+                <col style="width: 140px">
                 <col style="width: 180px">
                 <col style="width: 190px">
                 <col style="width: 190px">
@@ -2980,6 +2981,7 @@
                   <th>状态</th>
                   <th>视频预览</th>
                   <th>音乐剥离</th>
+                  <th>剥离状态</th>
                   <th>检测结果</th>
                   <th>提交时间</th>
                   <th>更新时间</th>
@@ -2993,7 +2995,8 @@
                   <td><span class="tag green">合成完成</span></td>
                   <td><button class="pill-btn primary">查看</button></td>
                   <td><span class="tag blue">已启用</span></td>
-                  <td><button class="pill-btn info" data-open="musicParamsModal">3 段 · 46.8 秒</button></td>
+                  <td><span class="tag green">已完成</span></td>
+                  <td><button class="pill-btn info" data-open="musicParamsModal">3 段</button></td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:04</td>
                   <td class="op-cell">—</td>
@@ -3004,7 +3007,8 @@
                   <td><span class="tag green">合成完成</span></td>
                   <td><button class="pill-btn primary">查看</button></td>
                   <td><span class="tag blue">已启用</span></td>
-                  <td><button class="pill-btn info" data-open="musicParamsModal">2 段 · 31.2 秒</button></td>
+                  <td><span class="tag orange">处理中</span></td>
+                  <td><button class="pill-btn info" data-open="musicParamsModal">2 段</button></td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:12</td>
                   <td class="op-cell">—</td>
@@ -3014,8 +3018,9 @@
                   <td>英语</td>
                   <td><span class="tag red">失败</span></td>
                   <td><button class="pill-btn disabled">查看</button></td>
+                  <td><span class="tag blue">已启用</span></td>
                   <td><span class="tag red">失败</span></td>
-                  <td><button class="pill-btn info" data-open="musicParamsModal">1 段待复核</button></td>
+                  <td><button class="pill-btn info" data-open="musicParamsModal">1 段</button></td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:31</td>
                   <td class="op-cell"><button class="pill-btn warn">重试</button></td>
@@ -3025,7 +3030,8 @@
                   <td>英语</td>
                   <td><span class="tag">排队中</span></td>
                   <td><button class="pill-btn disabled">查看</button></td>
-                  <td><span class="tag">待处理</span></td>
+                  <td><span class="tag blue">已启用</span></td>
+                  <td><span class="tag">队列中</span></td>
                   <td>-</td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:07:19</td>
@@ -3535,35 +3541,15 @@
       </div>
       <div class="modal-body">
         <div class="standard-form">
-          <div class="standard-field">
-            <label>是否启用</label>
-            <div class="standard-value is-readonly">已启用</div>
-          </div>
-          <div class="standard-field">
-            <label>检测模式</label>
-            <div class="standard-value is-readonly">自动检测音乐片段</div>
-          </div>
-          <div class="standard-field">
-            <label>处理动作</label>
-            <div class="standard-value is-readonly">剥离主旋律</div>
-          </div>
-          <div class="standard-field">
-            <label>保留目标</label>
-            <div class="standard-value is-readonly">对白、环境音、特效音</div>
-          </div>
-          <div class="standard-field">
-            <label>检测结果</label>
-            <div class="standard-value is-readonly">3 个音乐片段 · 共 46.8 秒 · 1 段需人工复核</div>
-          </div>
-          <div class="segment-list" aria-label="检测到的音乐片段">
-            <div class="segment-row"><span class="mono">00:12.4-00:28.8</span><span class="segment-bar"><span style="width:91%"></span></span><span>置信 91%</span></div>
-            <div class="segment-row"><span class="mono">01:13.1-01:31.5</span><span class="segment-bar"><span style="width:86%"></span></span><span>置信 86%</span></div>
-            <div class="segment-row"><span class="mono">02:46.0-02:58.0</span><span class="segment-bar"><span style="width:62%"></span></span><span>待复核</span></div>
+          <div class="segment-list music-detail-list" aria-label="被剥离音乐片段时间">
+            <div class="segment-row"><span class="mono">00:12.4-00:28.8</span></div>
+            <div class="segment-row"><span class="mono">01:13.1-01:31.5</span></div>
+            <div class="segment-row"><span class="mono">02:46.0-02:58.0</span></div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <span class="muted">该结果仅作用于本次导出，不覆盖原始任务音频。</span>
+        <span></span>
         <div class="actions"><button class="btn primary" type="button" data-close>关闭</button></div>
       </div>
     </div>
