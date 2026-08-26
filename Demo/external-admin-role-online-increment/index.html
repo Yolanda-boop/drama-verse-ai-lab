@@ -3306,8 +3306,8 @@
             <div class="standard-value is-readonly" id="supplierReadonlyValue">Drama Verse</div>
           </div>
           <div class="standard-field required is-hidden" id="contactTypeField">
-            <label>联系方式</label>
-            <select id="contactType" aria-label="联系方式">
+            <label>登录方式</label>
+            <select id="contactType" aria-label="登录方式">
               <option value="phone" selected>手机号码</option>
               <option value="email">邮箱</option>
             </select>
@@ -3676,7 +3676,7 @@
         title.textContent = '编辑用户';
         sub.textContent = admin
           ? '可调整用户角色；切换为外部角色后需维护外部归属信息'
-          : '角色固定为外部校对员，仅可维护联系方式等基础信息';
+          : '角色固定为外部校对员，仅可维护登录方式等基础信息';
         return;
       }
       title.textContent = admin ? '新增外部用户' : '新增外部校对员';
@@ -3766,7 +3766,7 @@
       const isExternalAdminRole = selectedRole === '外部管理员';
       const isExternalReviewerRole = selectedRole === '外部校对员';
       updateExternalManagerOptions(selectedRole);
-      const selectedSupplier = admin ? getSelectedSupplierName() : 'Drama Verse';
+      const selectedSupplier = admin ? (getSelectedSupplierName() || 'Drama Verse') : 'Drama Verse';
 
       adminRoleField?.classList.toggle('is-hidden', !roleEditable);
       fixedRoleField?.classList.toggle('is-hidden', roleEditable || admin);
@@ -3778,11 +3778,11 @@
       }
       supplierReadonlyField?.classList.toggle(
         'is-hidden',
-        isExternalAdminRole || !isExternalReviewerRole || (admin && !selectedSupplier),
+        isExternalAdminRole || !isExternalReviewerRole,
       );
 
       if (supplierReadonlyValue) {
-        supplierReadonlyValue.textContent = selectedSupplier || '-';
+        supplierReadonlyValue.textContent = selectedSupplier;
       }
 
       contactTypeField?.classList.toggle('is-hidden', !isExternalReviewerRole);

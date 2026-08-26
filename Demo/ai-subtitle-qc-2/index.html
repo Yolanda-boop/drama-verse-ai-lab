@@ -264,7 +264,7 @@
       vertical-align: 1px;
       background: currentColor;
     }
-    #dv-real-qc-prototype .navRight { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    #dv-real-qc-prototype .navRight { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
     #dv-real-qc-prototype .btnText,
     #dv-real-qc-prototype .btnGhost,
     #dv-real-qc-prototype .btnPrimary,
@@ -279,6 +279,28 @@
       font-size: 14px;
       line-height: 30px;
     }
+    #dv-real-qc-prototype .btnText {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #dv-real-qc-prototype .navToolIcon {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      display: inline-flex;
+      color: currentColor;
+    }
+    #dv-real-qc-prototype .navToolIcon svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
     #dv-real-qc-prototype .btnText:hover,
     #dv-real-qc-prototype .btnGhost:hover { color: var(--text-primary); background: rgba(255,255,255,.06); }
     #dv-real-qc-prototype .btnGhost { border-color: rgba(255,255,255,.14); background: rgba(255,255,255,.04); }
@@ -286,7 +308,98 @@
     #dv-real-qc-prototype .btnPrimary:hover { background: #7444ff; }
     #dv-real-qc-prototype .btnPrimary[disabled],
     #dv-real-qc-prototype .btnGhost[disabled] { opacity: .38; cursor: not-allowed; }
-    #dv-real-qc-prototype .saveStatus { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; font-size: 12px; font-weight: 400; color: rgba(255,255,255,.3); }
+    #dv-real-qc-prototype .saveStatus {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 30px;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(255,255,255,.5);
+      white-space: nowrap;
+      cursor: default;
+    }
+    #dv-real-qc-prototype .saveStatus:before {
+      content: "✓";
+      width: 15px;
+      height: 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(82,196,26,.16);
+      color: #95de64;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 15px;
+    }
+    #dv-real-qc-prototype .saveStatus:after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      min-width: 178px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 6px;
+      background: #262626;
+      color: rgba(255,255,255,.82);
+      box-shadow: 0 8px 24px rgba(0,0,0,.45);
+      font-size: 12px;
+      line-height: 18px;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(4px);
+      transition: opacity .16s ease, transform .16s ease;
+      z-index: 30;
+    }
+    #dv-real-qc-prototype .saveStatus:hover:after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    #dv-real-qc-prototype .navUser {
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding-left: 10px;
+      border-left: 1px solid rgba(255,255,255,.12);
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+    #dv-real-qc-prototype .navAvatar {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,.14);
+      color: rgba(255,255,255,.86);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    #dv-real-qc-prototype .navUserName {
+      max-width: 86px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+    #dv-real-qc-prototype .navRole {
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      border: 1px solid rgba(139,92,246,.58);
+      border-radius: 12px;
+      color: #d8ccff;
+      background: rgba(98,36,255,.18);
+      font-size: 12px;
+      line-height: 22px;
+    }
     #dv-real-qc-prototype .mainContent {
       display: flex;
       grid-column: 1;
@@ -1796,6 +1909,39 @@
       background: linear-gradient(180deg, #7de84a 0%, #52c41a 100%);
       box-shadow: 2px 0 12px rgba(82,196,26,.6);
     }
+    #dv-real-qc-prototype .globalLoading {
+      position: absolute;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      place-items: center;
+      background: rgba(0,0,0,.46);
+      backdrop-filter: blur(2px);
+    }
+    #dv-real-qc-prototype .globalLoading.show { display: grid; }
+    #dv-real-qc-prototype .globalLoadingCard {
+      min-width: 244px;
+      min-height: 104px;
+      display: grid;
+      place-items: center;
+      gap: 12px;
+      padding: 22px 28px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 8px;
+      background: rgba(26,26,26,.96);
+      color: rgba(255,255,255,.88);
+      box-shadow: 0 16px 48px rgba(0,0,0,.56);
+      font-size: 14px;
+      font-weight: 500;
+    }
+    #dv-real-qc-prototype .globalLoadingSpinner {
+      width: 26px;
+      height: 26px;
+      border: 3px solid rgba(255,255,255,.18);
+      border-top-color: #8b5cf6;
+      border-radius: 50%;
+      animation: dvSpin .8s linear infinite;
+    }
     @media (max-width: 1080px) {
       #dv-real-qc-prototype .exportSubtitleLayout {
         grid-template-columns: minmax(240px,.76fr) minmax(460px,1fr);
@@ -1909,12 +2055,18 @@
         </div>
       </div>
       <div class="navRight">
-        <button type="button" class="btnText" id="findReplaceBtn">查找替换</button>
+        <button type="button" class="btnText" id="termMappingBtn"><span class="navToolIcon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M6.4 2.4h5.7a1.5 1.5 0 0 1 1.5 1.5v8.2a1.5 1.5 0 0 1-1.5 1.5H3.9a1.5 1.5 0 0 1-1.5-1.5V6.4L6.4 2.4Z"></path><path d="M6.4 2.4v3.2a.8.8 0 0 1-.8.8H2.4M5.2 9h5.6M5.2 11.2h3.4"></path></svg></span>AI术语映射</button>
+        <button type="button" class="btnText" id="findReplaceBtn"><span class="navToolIcon" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.2"></circle><path d="m10.2 10.2 3.1 3.1"></path></svg></span>查找替换</button>
         <button type="button" class="btnText" id="pronunciationDictBtn">发音纠正词典</button>
-        <span class="saveStatus">已保存</span>
         <span class="translationReviewSync" id="translationReviewSync"></span>
+        <span class="saveStatus" data-tooltip="当前修改已自动保存">已保存</span>
         <button type="button" class="btnPrimary" id="completeTranslationReview" title="提交后将标记当前集翻译校对完成，并锁定已保存的AI译文反馈用于模型优化">完成校对</button>
         <button type="button" class="btnPrimary" id="openExportVideo">完成并导出</button>
+        <div class="navUser" aria-label="当前用户及角色">
+          <span class="navAvatar">李</span>
+          <span class="navUserName">李姝宜</span>
+          <span class="navRole">管理员</span>
+        </div>
       </div>
     </div>
     <div class="mainContent">
@@ -2151,16 +2303,21 @@
           </div>
         </div>
         <div class="aiFeedbackFooter">
-          <div class="aiFeedbackFooterNote">仅保存专家主动反馈的 badcase，完成校对后已保存反馈将被锁定</div>
+          <div class="aiFeedbackFooterNote">点击「完成校对」后，已保存的反馈将不可再修改</div>
           <div class="aiFeedbackFooterActions">
             <button type="button" class="btnGhost" id="aiFeedbackCancel">取消</button>
-            <button type="button" class="btnGhost" id="aiFeedbackSave">保存反馈</button>
             <button type="button" class="btnPrimary" id="aiFeedbackApply">保存反馈并应用译文</button>
           </div>
         </div>
       </div>
     </div>
     <div class="modalMask" id="modalMask" role="dialog" aria-modal="true"><div class="modalBox"><h3 id="modalTitle">确认操作</h3><p id="modalText"></p><div class="modalActions"><button type="button" class="btnGhost" id="modalCancel">返回确认</button><button type="button" class="btnPrimary" id="modalConfirm">确认</button></div></div></div>
+    <div class="globalLoading" id="globalLoading" aria-live="polite" aria-busy="true">
+      <div class="globalLoadingCard">
+        <div class="globalLoadingSpinner" aria-hidden="true"></div>
+        <div id="globalLoadingText">正在提交校对结果...</div>
+      </div>
+    </div>
     <div class="toast" id="toast" role="status"></div>
   </div>
   <script>
@@ -2174,6 +2331,8 @@
       const railEl = root.querySelector('#railCount');
       const modal = root.querySelector('#modalMask');
       const toast = root.querySelector('#toast');
+      const globalLoading = root.querySelector('#globalLoading');
+      const globalLoadingText = root.querySelector('#globalLoadingText');
       const videoTimeEl = root.querySelector('#videoTime');
       const progressEl = root.querySelector('#videoProgress');
       const voiceBatchBar = root.querySelector('#voiceBatchBar');
@@ -2196,6 +2355,7 @@
       const titleEpisode = root.querySelector('#titleEpisode');
       const stageLabel = root.querySelector('#currentStageLabel');
       const saveStatus = root.querySelector('.saveStatus');
+      const termMappingBtn = root.querySelector('#termMappingBtn');
       const openExportVideoBtn = root.querySelector('#openExportVideo');
       const completeTranslationReviewBtn = root.querySelector('#completeTranslationReview');
       const pronunciationDictBtn = root.querySelector('#pronunciationDictBtn');
@@ -2267,6 +2427,8 @@
       let currentEpisode = 12;
       let currentStage = '配音';
       let translationReviewCompleted = false;
+      let reviewSubmitCompleted = false;
+      let reviewSubmitSubmitting = false;
       let feedbackSyncStatus = 'idle';
       let activeFeedbackSegmentId = null;
       let feedbackDraftTags = [];
@@ -3038,17 +3200,19 @@
         container.classList.toggle('dubbingEditor', !isTranslationEditor());
         episodeSelectText.textContent = '第 ' + ep.no + ' 集';
         titleEpisode.textContent = '第 ' + ep.no + ' 集';
-        stageLabel.textContent = translationReviewCompleted ? '翻译校对完成' : currentStage;
-        openExportVideoBtn.style.display = isTranslationEditor() ? 'none' : '';
-        completeTranslationReviewBtn.style.display = isTranslationEditor() ? '' : 'none';
-        completeTranslationReviewBtn.disabled = !!translationReviewCompleted;
-        completeTranslationReviewBtn.textContent = translationReviewCompleted ? '已完成校对' : '完成校对';
-        pronunciationDictBtn.style.display = isTranslationEditor() ? 'none' : '';
+        stageLabel.textContent = currentStage;
+        const translationEditor = isTranslationEditor();
+        termMappingBtn.style.display = translationEditor ? '' : 'none';
+        openExportVideoBtn.style.display = translationEditor ? 'none' : '';
+        completeTranslationReviewBtn.style.display = translationEditor ? '' : 'none';
+        completeTranslationReviewBtn.disabled = !!translationReviewCompleted || reviewSubmitCompleted || reviewSubmitSubmitting;
+        completeTranslationReviewBtn.textContent = reviewSubmitSubmitting ? '提交中...' : (translationReviewCompleted || reviewSubmitCompleted ? '校对已完成' : '完成校对');
+        pronunciationDictBtn.style.display = translationEditor ? 'none' : '';
         translationReviewSync.className = 'translationReviewSync' + (feedbackSyncStatus === 'success' ? ' success' : '');
-        if(isTranslationEditor() && feedbackSyncStatus === 'syncing'){
+        if(translationEditor && feedbackSyncStatus === 'syncing'){
           translationReviewSync.textContent = 'AI译文反馈同步中，不影响继续操作';
           translationReviewSync.style.display = 'inline-flex';
-        } else if(isTranslationEditor() && feedbackSyncStatus === 'success'){
+        } else if(translationEditor && feedbackSyncStatus === 'success'){
           translationReviewSync.textContent = 'AI译文反馈已同步';
           translationReviewSync.style.display = 'inline-flex';
         } else {
@@ -3079,6 +3243,8 @@
         currentEpisode = ep.no;
         currentStage = stage || ep.stage;
         translationReviewCompleted = currentStage === '翻译校对完成' || !!ep.reviewCompleted;
+        reviewSubmitCompleted = !!ep.reviewSubmitCompleted;
+        reviewSubmitSubmitting = false;
         feedbackSyncStatus = translationReviewCompleted ? (ep.feedbackSynced ? 'success' : 'syncing') : 'idle';
         activeSegment = 's1';
         redubMode = isTranslationEditor() ? 'none' : 'results';
@@ -3374,6 +3540,7 @@
         showToast('已采用当前候选音频');
       }
       function aiFeedbackDisabledReason(seg){
+        if(reviewSubmitCompleted && !seg.aiFeedback) return '当前集已完成校对，AI译文反馈已提交，暂不支持修改';
         if(translationReviewCompleted && !seg.aiFeedback) return '当前集已完成校对，AI译文反馈已提交，暂不支持修改';
         if(seg.feedbackBlocked === 'mergeSplit') return '段落已合并/拆分，原始AI译文与当前段落无法稳定对应，暂不支持提交反馈';
         if(seg.feedbackBlocked === 'importedSrt') return '当前段落来源为导入译文SRT，且无AI润色产出，暂不支持提交AI译文反馈';
@@ -3386,7 +3553,8 @@
         const reason = aiFeedbackDisabledReason(seg);
         const disabled = reason && !saved;
         const label = saved ? '已反馈' : 'AI译文反馈';
-        const title = saved && translationReviewCompleted ? '当前集已完成校对，AI译文反馈已提交，暂不支持修改' : (saved ? '查看或修改已保存的AI译文反馈' : reason || '提交该段AI译文badcase用于模型优化');
+        const locked = saved && (translationReviewCompleted || reviewSubmitCompleted || seg.aiFeedback.locked);
+        const title = locked ? '当前集已完成校对，AI译文反馈已提交，暂不支持修改' : (saved ? '查看或修改已保存的AI译文反馈' : reason || '提交该段AI译文badcase用于模型优化');
         return '<button type="button" class="segmentTool aiFeedbackTool '+(saved?'saved':'')+'" data-ai-feedback="'+seg.id+'" title="'+esc(title)+'" '+(disabled?'disabled':'')+'>'+antToolbarIcon('record')+label+'</button>';
       }
       function renderCpsMetric(seg){
@@ -3410,7 +3578,7 @@
         if(reason && !seg.aiFeedback){ showToast(reason); return; }
         activeFeedbackSegmentId = segId;
         const data = seg.aiFeedback || {};
-        const readonly = translationReviewCompleted || !!data.locked;
+        const readonly = translationReviewCompleted || reviewSubmitCompleted || !!data.locked;
         feedbackDraftTags = [...(data.tags || [])];
         aiFeedbackDialog.classList.toggle('readonly', readonly);
         aiFeedbackSegmentNo.textContent = '第 ' + segNo(seg.id) + ' 段';
@@ -3427,7 +3595,6 @@
         aiFeedbackAiScore.disabled = readonly;
         aiFeedbackHumanScore.disabled = readonly;
         aiFeedbackReason.disabled = readonly;
-        root.querySelector('#aiFeedbackSave').style.display = readonly ? 'none' : '';
         root.querySelector('#aiFeedbackApply').style.display = readonly ? 'none' : '';
         root.querySelector('#aiFeedbackCancel').textContent = readonly ? '关闭' : '取消';
         renderFeedbackTags(readonly);
@@ -3452,7 +3619,7 @@
       function saveAiFeedback(applyText){
         const seg = segments.find(s => s.id === activeFeedbackSegmentId);
         if(!seg) return;
-        if(translationReviewCompleted || seg.aiFeedback?.locked){ showToast('当前集已完成校对，AI译文反馈已提交，暂不支持修改'); return; }
+        if(translationReviewCompleted || reviewSubmitCompleted || seg.aiFeedback?.locked){ showToast('当前集已完成校对，AI译文反馈已提交，暂不支持修改'); return; }
         const data = collectAiFeedback();
         if(data.error){ aiFeedbackError.textContent = data.error; return; }
         seg.aiFeedback = {
@@ -3471,31 +3638,32 @@
         showToast(applyText ? 'AI译文反馈已保存，并已应用到当前译文' : 'AI译文反馈已保存');
       }
       function completeTranslationReview(){
-        if(!isTranslationEditor()) return;
-        if(translationReviewCompleted){ showToast('当前集已完成翻译校对'); return; }
-        openModal('确认完成翻译校对？','提交后当前集将回显为“翻译校对完成”。已保存的AI译文反馈会被锁定并异步同步给算法用于模型优化，同步过程不阻断继续操作。','确认完成',()=>{
-          const ep = episodes.find(item => item.no === currentEpisode);
-          translationReviewCompleted = true;
-          feedbackSyncStatus = 'syncing';
-          currentStage = '翻译校对完成';
-          if(ep){
-            ep.stage = '翻译校对完成';
-            ep.text = '翻译校对完成';
-            ep.reviewCompleted = true;
-            ep.feedbackSynced = false;
-          }
-          segments.forEach(seg => { if(seg.aiFeedback) seg.aiFeedback.locked = true; });
-          renderEpisodeNav();
-          renderRows(activeSegment);
-          showToast('已提交翻译校对完成，AI译文反馈同步中');
-          setTimeout(()=>{
-            feedbackSyncStatus = 'success';
-            const current = episodes.find(item => item.no === currentEpisode);
-            if(current) current.feedbackSynced = true;
+        if(reviewSubmitSubmitting) return;
+        if(translationReviewCompleted || reviewSubmitCompleted){ showToast('当前集已完成校对'); return; }
+        openModal(
+          '确认完成翻译校对？',
+          '完成后，本集已保存的 AI 译文反馈将提交，提交后不再支持修改。仍可继续发起配音或进行其他操作。',
+          '确认完成校对',
+          ()=>{
+            if(reviewSubmitSubmitting || translationReviewCompleted || reviewSubmitCompleted) return;
+            reviewSubmitSubmitting = true;
             renderEpisodeNav();
-            showToast('AI译文反馈已同步');
-          }, 1600);
-        });
+            showGlobalLoading('正在提交校对结果...');
+            setTimeout(()=>{
+              const ep = episodes.find(item => item.no === currentEpisode);
+              reviewSubmitSubmitting = false;
+              reviewSubmitCompleted = true;
+              if(ep){
+                ep.reviewSubmitCompleted = true;
+              }
+              segments.forEach(seg => { if(seg.aiFeedback) seg.aiFeedback.locked = true; });
+              renderEpisodeNav();
+              hideGlobalLoading();
+              showToast('校对提交成功');
+            }, 900);
+          },
+          '取消'
+        );
       }
       function renderRows(active){
         const translationEditor = isTranslationEditor();
@@ -3544,10 +3712,17 @@
       }
       function renderQc(){ const items=qc.filter(i=>i.group===selectedGroup); const sel=qc.filter(i=>i.checked).length; root.querySelector('#batchAccept').disabled=sel===0; root.querySelector('#batchIgnore').disabled=sel===0; root.querySelector('#acceptAll').disabled=qc.length===0; listEl.innerHTML=items.length?items.map(i=>{ const d=diffPair(i.current||i.before,i.after); const stale=i.status==='stale'; return '<article class="qcCard '+(i.id===activeIssue?'active ':'')+(stale?'stale':'')+'" data-qc="'+i.id+'"><div class="qcCardHeader"><label><input type="checkbox" class="qcCheck" '+(i.checked?'checked':'')+'> <span class="qcCardTitle">'+esc(i.title)+'</span></label>'+(stale?'<span class="qcStatus">疑似失效</span>':'')+'</div><div class="qcCompare"><div><strong>当前</strong>'+d.before+'</div><div><strong>建议</strong>'+d.after+'</div><div class="qcNote">'+esc(i.note)+'</div></div><div class="qcActions"><button type="button" class="btnGhost qcIgnore">忽略</button><button type="button" class="btnPrimary qcAccept">采纳</button></div></article>'; }).join(''):'<article class="qcCard"><div class="qcNote">当前分类暂无质检提醒</div></article>'; }
       function render(){ renderRows(activeSegment); renderTypes(); renderQc(); }
+      function showGlobalLoading(text){
+        globalLoadingText.textContent = text;
+        globalLoading.classList.add('show');
+      }
+      function hideGlobalLoading(){
+        globalLoading.classList.remove('show');
+      }
       function showToast(text){ toast.textContent=text; toast.style.display='block'; setTimeout(()=>toast.style.display='none',1700); }
       function jumpToIssue(id){ const item=qc.find(q=>q.id===id); if(!item) return; selectedGroup=item.group; activeIssue=item.id; activeSegment=item.seg; updateVideo(item.seg); render(); requestAnimationFrame(()=>{ const row=rowsEl.querySelector('[data-seg="'+item.seg+'"]'); if(row) row.scrollIntoView({block:'center'}); const card=listEl.querySelector('[data-qc="'+item.id+'"]'); if(card) card.scrollIntoView({block:'nearest'}); }); }
       function remove(ids, mode){ ids.forEach(id=>{ const item=qc.find(q=>q.id===id); if(mode==='accept'&&item){ const seg=segments.find(s=>s.id===item.seg); if(seg&&(seg.source===item.before||seg.source===item.current||item.status==='stale')) seg.source=item.after; }}); qc=qc.filter(q=>!ids.includes(q.id)); if(!qc.find(q=>q.id===activeIssue)) activeIssue=qc[0]?.id||''; if(activeIssue){ const item=qc.find(q=>q.id===activeIssue); selectedGroup=item.group; activeSegment=item.seg; } render(); showToast(mode==='accept'?'已采纳质检建议':'已忽略质检提醒'); }
-      function openModal(title,text,confirm,fn){ root.querySelector('#modalTitle').textContent=title; root.querySelector('#modalText').textContent=text; root.querySelector('#modalConfirm').textContent=confirm; pending=fn; modal.style.display='flex'; }
+      function openModal(title,text,confirm,fn,cancelText='返回确认'){ root.querySelector('#modalTitle').textContent=title; root.querySelector('#modalText').textContent=text; root.querySelector('#modalConfirm').textContent=confirm; root.querySelector('#modalCancel').textContent=cancelText; pending=fn; modal.style.display='flex'; }
       function closeModal(){ pending=null; modal.style.display='none'; }
       root.addEventListener('pointerdown', e=>{
         if(beginExportSubtitleDrag(e)) return;
@@ -3624,10 +3799,6 @@
           else feedbackDraftTags.push(tag);
           aiFeedbackError.textContent = '';
           renderFeedbackTags(translationReviewCompleted);
-          return;
-        }
-        if(e.target.closest('#aiFeedbackSave')){
-          saveAiFeedback(false);
           return;
         }
         if(e.target.closest('#aiFeedbackApply')){
