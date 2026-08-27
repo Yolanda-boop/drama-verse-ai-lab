@@ -206,26 +206,29 @@
 
     .filter-card .wide { grid-column: span 2; }
 
+    .filter-card .actions-field {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-card .filter-actions-end {
+      grid-column: 1 / -1;
+      justify-self: end;
+    }
+
     .filter-card.record-filter-card {
       grid-template-columns: 1.25fr 1.1fr 1fr 1fr 1fr 1.6fr;
       align-items: end;
     }
 
-    .filter-card.record-filter-card .actions-field {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-    }
-
     .filter-card.user-filter-card {
-      grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
+      grid-template-columns: repeat(6, minmax(0, 1fr)) auto;
     }
 
     .filter-card.user-filter-card .actions-field {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 12px;
       white-space: nowrap;
     }
 
@@ -433,9 +436,25 @@
 
     td {
       background: rgba(0,0,0,.18);
+      transition: background .14s ease, border-color .14s ease, color .14s ease, box-shadow .14s ease;
     }
 
-    tr:hover td { background: rgba(255,255,255,.035); }
+    tbody tr:hover td {
+      background: rgba(92,58,176,.16);
+      border-bottom-color: rgba(155,121,255,.18);
+    }
+
+    tbody tr:hover td:first-child {
+      box-shadow: inset 3px 0 0 rgba(139,92,246,.86);
+    }
+
+    tbody tr:hover td.op-cell {
+      background: rgba(42,31,68,.96);
+    }
+
+    tbody tr:hover .name-strong {
+      color: #fff;
+    }
 
     .op-cell,
     th.op-cell {
@@ -498,29 +517,38 @@
 
     .ai-progress {
       display: inline-flex;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      max-width: 100%;
     }
 
     .ai-pill {
       display: inline-flex;
       align-items: center;
-      height: 24px;
-      padding: 0 9px;
-      border-radius: 12px;
+      justify-content: center;
+      min-width: 62px;
+      height: 22px;
+      padding: 0 7px;
+      border-radius: 6px;
       font-size: 12px;
-      font-weight: 700;
-      color: #d9ccff;
-      background: rgba(123,60,255,.25);
-      border: 1px solid rgba(132,100,255,.5);
+      line-height: 20px;
+      font-weight: 600;
+      color: #d8ccff;
+      background: rgba(123,60,255,.12);
+      border: 1px solid rgba(132,100,255,.36);
     }
 
     .ai-pill.yellow {
-      color: #ffd666;
-      background: rgba(250,173,20,.16);
-      border-color: rgba(250,173,20,.45);
+      color: #9ee9ff;
+      background: rgba(36,173,219,.1);
+      border-color: rgba(114,217,255,.34);
+    }
+
+    .ai-progress-cell {
+      overflow: visible;
+      text-overflow: clip;
     }
 
     .page-header {
@@ -2409,7 +2437,7 @@
           <svg viewBox="0 0 24 24" fill="none"><path d="M16 20v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2m14 0v-2a3 3 0 0 0-2-2.8M12 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm6 2a3 3 0 1 0-2.8-4" stroke="currentColor" stroke-width="1.8"/></svg>
           用户管理
         </button>
-        <button type="button" data-page="records">
+        <button type="button" data-page="records" class="admin-only">
           <svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16H5V4Zm4 5h6m-6 4h6m-6 4h3" stroke="currentColor" stroke-width="1.8"/></svg>
           分配记录
         </button>
@@ -2420,19 +2448,19 @@
       <section class="view" id="page-users">
         <div class="filter-card user-filter-card">
           <div class="field"><label>姓名</label><input placeholder="模糊搜索"></div>
-          <div class="field"><label>邮箱</label><input placeholder="模糊搜索"></div>
           <div class="field"><label>手机号</label><input placeholder="支持空格格式"></div>
+          <div class="field"><label>邮箱</label><input placeholder="模糊搜索"></div>
           <div class="field"><label>角色</label><select><option>请选择</option><option>外部管理员</option><option>外部校对员</option><option>普通校对员</option></select></div>
+          <div class="field admin-only"><label>供应商名称</label><input placeholder="模糊搜索"></div>
+          <div class="field admin-only"><label>所属外部管理员</label><input placeholder="搜索姓名"></div>
           <div class="field"><label>状态</label><select><option>请选择</option><option>正常</option><option>禁用</option></select></div>
-          <div class="actions-field">
+          <div class="field wide"><label>创建时间</label><input placeholder="开始日期  —  结束日期"></div>
+          <div class="actions-field filter-actions-end">
             <button class="btn clear" type="button">清空条件</button>
             <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
             <button class="btn primary create-user-btn admin-only" type="button" data-open="userModal" data-user-mode="create"><svg class="btn-icon"><use href="#icon-user-plus"></use></svg>新增外部用户</button>
             <button class="btn primary create-user-btn external-manager-only" type="button" data-open="userModal" data-user-mode="create"><svg class="btn-icon"><use href="#icon-user-plus"></use></svg>新增外部校对员</button>
           </div>
-          <div class="field wide"><label>创建时间</label><input placeholder="开始日期  —  结束日期"></div>
-          <div class="field admin-only"><label>供应商名称</label><input placeholder="模糊搜索"></div>
-          <div class="field admin-only"><label>所属外部管理员</label><input placeholder="姓名 / 手机号"></div>
         </div>
 
         <div class="table-card">
@@ -2467,11 +2495,11 @@
                 <td class="mono">-</td>
                 <td class="mono">+86 13700912231</td>
                 <td><span class="tag manager">外部管理员</span></td>
-                <td>Drama Verse</td>
+                <td>星桥译配</td>
                 <td>-</td>
                 <td><span class="tag green">正常</span></td>
                 <td class="mono">2026-08-20 10:21:56</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部管理员" data-user-name="林可" data-user-contact="phone" data-user-phone="+86 13700912231" data-user-supplier="Drama Verse">编辑用户</button></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部管理员" data-user-name="林可" data-user-contact="phone" data-user-phone="+86 13700912231" data-user-supplier="星桥译配">编辑用户</button></span></td>
               </tr>
               <tr>
                 <td class="name-strong">春鹏C</td>
@@ -2482,7 +2510,7 @@
                 <td>林可</td>
                 <td><span class="tag green">正常</span></td>
                 <td class="mono">2026-08-13 17:11:08</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏C" data-user-contact="phone" data-user-phone="+86 16601248978">编辑用户</button></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏C" data-user-contact="phone" data-user-phone="+86 16601248978" data-user-supplier="星桥译配" data-user-manager="linke">编辑用户</button></span></td>
               </tr>
               <tr>
                 <td class="name-strong">春鹏B</td>
@@ -2493,7 +2521,7 @@
                 <td>林可</td>
                 <td><span class="tag green">正常</span></td>
                 <td class="mono">2026-08-12 11:46:42</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏B" data-user-contact="phone" data-user-phone="+86 16601248979">编辑用户</button></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏B" data-user-contact="phone" data-user-phone="+86 16601248979" data-user-supplier="星桥译配" data-user-manager="linke">编辑用户</button></span></td>
               </tr>
               <tr>
                 <td class="name-strong">春鹏D</td>
@@ -2504,7 +2532,7 @@
                 <td>林可</td>
                 <td><span class="tag red">禁用</span></td>
                 <td class="mono">2026-08-14 15:58:01</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn warn">启用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏D" data-user-contact="phone" data-user-phone="+86 16601248977">编辑用户</button></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">启用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏D" data-user-contact="phone" data-user-phone="+86 16601248977" data-user-supplier="星桥译配" data-user-manager="linke">编辑用户</button></span></td>
               </tr>
               <tr class="admin-only">
                 <td class="name-strong">戴忻楠</td>
@@ -2536,10 +2564,12 @@
           <div class="field wide"><label>创建时间</label><input placeholder="开始日期  →  结束日期"></div>
           <div class="field"><label>创建人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
           <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
-          <button class="btn clear" type="button">清空条件</button>
-          <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
-          <button class="btn primary admin-only" type="button"><svg class="btn-icon"><use href="#icon-upload"></use></svg>导入剧</button>
-          <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出剧列表</button>
+          <div class="actions-field filter-actions-end">
+            <button class="btn clear" type="button">清空条件</button>
+            <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
+            <button class="btn primary admin-only" type="button"><svg class="btn-icon"><use href="#icon-upload"></use></svg>导入剧</button>
+            <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出剧列表</button>
+          </div>
         </div>
 
         <div class="table-card scrollable">
@@ -2582,7 +2612,7 @@
                   <td class="name-strong">神话缠魂，我觉醒了大圣3</td>
                   <td>中文（简体）</td>
                   <td>葡萄牙语（巴西）</td>
-                  <td><span class="ai-progress"><span class="ai-pill">翻译 3/3</span><span class="ai-pill yellow">配音 0/3</span></span></td>
+                  <td class="ai-progress-cell"><span class="ai-progress"><span class="ai-pill">翻译 3/3</span><span class="ai-pill yellow">配音 0/3</span></span></td>
                   <td>AI翻译</td>
                   <td>曹春鹏</td>
                   <td class="mono">2026-08-21 11:33:05</td>
@@ -2596,7 +2626,7 @@
                   <td class="name-strong">복수하러 우리집에 갈래?</td>
                   <td>韩语</td>
                   <td>日语</td>
-                  <td><span class="ai-progress"><span class="ai-pill">翻译 51/51</span><span class="ai-pill yellow">配音 0/51</span></span></td>
+                  <td class="ai-progress-cell"><span class="ai-progress"><span class="ai-pill">翻译 51/51</span><span class="ai-pill yellow">配音 0/51</span></span></td>
                   <td>AI翻译</td>
                   <td>杨晨</td>
                   <td class="mono">2026-08-20 20:52:05</td>
@@ -2610,7 +2640,7 @@
                   <td class="name-strong">思美人第二季</td>
                   <td>中文（简体）</td>
                   <td>英语</td>
-                  <td><span class="ai-progress"><span class="ai-pill">翻译 20/20</span><span class="ai-pill yellow">配音 20/20</span></span></td>
+                  <td class="ai-progress-cell"><span class="ai-progress"><span class="ai-pill">翻译 20/20</span><span class="ai-pill yellow">配音 20/20</span></span></td>
                   <td>AI翻译</td>
                   <td>杨晨</td>
                   <td class="mono">2026-08-20 14:03:06</td>
@@ -2830,9 +2860,11 @@
           <div class="field wide"><label>提交时间</label><input placeholder="开始日期  →  结束日期"></div>
           <div class="field"><label>提交人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
           <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
-          <button class="btn clear" type="button">清空条件</button>
-          <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
-          <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出任务列表</button>
+          <div class="actions-field filter-actions-end">
+            <button class="btn clear" type="button">清空条件</button>
+            <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
+            <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出任务列表</button>
+          </div>
         </div>
 
         <div class="table-card scrollable">
@@ -3061,7 +3093,7 @@
           <div class="field"><label>分配类型</label><select><option>请选择</option><option>外部管理员可管理</option><option>翻译且配音</option><option>仅翻译</option></select></div>
           <div class="field"><label>分配人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
           <div class="field wide"><label>分配时间</label><input placeholder="开始日期  →  结束日期"></div>
-          <div class="actions-field">
+          <div class="actions-field filter-actions-end">
             <button class="btn clear" type="button">清空条件</button>
             <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
           </div>
@@ -3283,7 +3315,7 @@
             <label>所属外部管理员</label>
             <select id="externalManagerSelect">
               <option value="">无</option>
-              <option value="linke" data-supplier="Drama Verse">林可</option>
+              <option value="linke" data-supplier="星桥译配">林可</option>
               <option value="mia" data-supplier="Mia Studio">Mia Sun</option>
             </select>
           </div>
@@ -3634,6 +3666,7 @@
     let lastSelectedUserRole = '';
     let currentEditingUserName = '';
     let exportCurrentStep = 2;
+    const currentExternalManagerSupplier = '星桥译配';
 
     function showToast(text, type = 'success') {
       toast.textContent = text;
@@ -3729,8 +3762,12 @@
         ? (trigger.dataset.userContact || (trigger.dataset.userEmail ? 'email' : 'phone'))
         : 'phone';
       contactType.value = selectedRole === '外部校对员' ? selectedContact : 'phone';
-      externalManagerSelect.value = userModalMode === 'edit' && selectedRole === '外部校对员' ? 'linke' : '';
-      supplierInput.value = selectedRole === '外部管理员' ? (trigger.dataset.userSupplier || 'Drama Verse') : '';
+      externalManagerSelect.value = userModalMode === 'edit' && selectedRole === '外部校对员'
+        ? (trigger.dataset.userManager || 'linke')
+        : '';
+      supplierInput.value = ['外部管理员', '外部校对员'].includes(selectedRole)
+        ? (trigger.dataset.userSupplier || getSelectedSupplierName() || 'Drama Verse')
+        : '';
       lastSelectedUserRole = selectedRole;
       clearUserFormErrors();
       updateUserModalTitle();
@@ -3766,19 +3803,23 @@
       const isExternalAdminRole = selectedRole === '外部管理员';
       const isExternalReviewerRole = selectedRole === '外部校对员';
       updateExternalManagerOptions(selectedRole);
-      const selectedSupplier = admin ? (getSelectedSupplierName() || 'Drama Verse') : 'Drama Verse';
+      const hasExternalManager = Boolean(externalManagerSelect?.value);
+      const selectedSupplier = admin
+        ? (hasExternalManager ? getSelectedSupplierName() : (supplierInput?.value || 'Drama Verse'))
+        : currentExternalManagerSupplier;
+      const canEditSupplier = roleEditable && (isExternalAdminRole || (isExternalReviewerRole && !hasExternalManager));
 
       adminRoleField?.classList.toggle('is-hidden', !roleEditable);
       fixedRoleField?.classList.toggle('is-hidden', roleEditable || admin);
       managerOwnerField?.classList.toggle('is-hidden', !admin || !isExternalReviewerRole);
       currentManagerField?.classList.toggle('is-hidden', admin || !isExternalReviewerRole);
-      supplierInputField?.classList.toggle('is-hidden', !roleEditable || !isExternalAdminRole);
-      if (roleEditable && isExternalAdminRole && !supplierInput.value) {
+      supplierInputField?.classList.toggle('is-hidden', !canEditSupplier);
+      if (canEditSupplier && !supplierInput.value) {
         supplierInput.value = 'Drama Verse';
       }
       supplierReadonlyField?.classList.toggle(
         'is-hidden',
-        isExternalAdminRole || !isExternalReviewerRole,
+        isExternalAdminRole || !isExternalReviewerRole || (admin && !hasExternalManager),
       );
 
       if (supplierReadonlyValue) {
@@ -3843,7 +3884,8 @@
         externalUserRole.focus();
         return false;
       }
-      if (role === '外部管理员' && !supplierInput.value) {
+      const reviewerWithoutManager = role === '外部校对员' && viewMode.value === 'admin' && !externalManagerSelect.value;
+      if ((role === '外部管理员' || reviewerWithoutManager) && !supplierInput.value) {
         setFieldError(supplierInputField, supplierError, '请选择供应商名称');
         supplierInput.focus();
         return false;
@@ -4118,7 +4160,15 @@
       clearUserFormErrors();
       updateUserModalFields();
     });
-    externalManagerSelect?.addEventListener('change', updateUserModalFields);
+    externalManagerSelect?.addEventListener('change', () => {
+      const inheritedSupplier = getSelectedSupplierName();
+      if (inheritedSupplier) {
+        supplierInput.value = inheritedSupplier;
+      } else if (!supplierInput.value) {
+        supplierInput.value = 'Drama Verse';
+      }
+      updateUserModalFields();
+    });
     externalUserName?.addEventListener('input', () => setFieldError(nameField, nameError, ''));
     supplierInput?.addEventListener('change', () => setFieldError(supplierInputField, supplierError, ''));
     contactType?.addEventListener('change', () => {
