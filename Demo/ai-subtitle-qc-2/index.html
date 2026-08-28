@@ -519,6 +519,7 @@
     #dv-real-qc-prototype .subtitleItem {
       display: grid;
       grid-template-columns: 100px 100px 56px minmax(0,1fr) minmax(0,1fr);
+      grid-auto-rows: min-content;
       min-height: 118px;
       border-bottom: 1px solid rgba(255,255,255,.08);
       background: var(--bg-container);
@@ -588,7 +589,9 @@
     #dv-real-qc-prototype .insertBtn:after { left: 100%; }
     #dv-real-qc-prototype .segmentToolbar {
       grid-column: 1 / -1;
-      min-height: 36px;
+      grid-row: 1;
+      height: 36px;
+      min-height: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -857,6 +860,27 @@
       flex-shrink: 0;
     }
     #dv-real-qc-prototype .audioRegenBar.isHidden { display: none; }
+    #dv-real-qc-prototype .audioRegenBar.isDisabled {
+      background: #202020;
+      border-bottom-color: rgba(255,255,255,.08);
+      color: var(--text-disabled);
+    }
+    #dv-real-qc-prototype .audioRegenBar.isDisabled .audioRegenIcon {
+      border-color: rgba(255,255,255,.18);
+      color: var(--text-disabled);
+    }
+    #dv-real-qc-prototype .audioRegenBar.isDisabled .audioRegenText strong,
+    #dv-real-qc-prototype .audioRegenBar.isDisabled .audioRegenSub {
+      color: var(--text-disabled);
+    }
+    #dv-real-qc-prototype .audioRegenBar.isDisabled .btnGhost,
+    #dv-real-qc-prototype .audioRegenBar.isDisabled .btnPrimary {
+      color: var(--text-disabled);
+      border-color: rgba(255,255,255,.1);
+      background: rgba(255,255,255,.03);
+      cursor: not-allowed;
+      opacity: .72;
+    }
     #dv-real-qc-prototype .editorContainer.translationEditor .audioRegenBar,
     #dv-real-qc-prototype .editorContainer.translationEditor .voiceResultPanel {
       display: none;
@@ -1978,7 +2002,7 @@
       #dv-real-qc-prototype .episodeTile { height: 32px; line-height: 30px; }
     }
   </style>
-  <div class="editorContainer" id="dvContainer">
+  <div class="editorContainer qcCollapsed" id="dvContainer">
     <div class="navbar">
       <div class="navLeft">
         <button type="button" class="backButton">← 返回</button>
@@ -2332,7 +2356,8 @@
       let activeSegment = 's1';
       let pending = null;
       let voiceSeed = 4;
-      let redubMode = 'results';
+      let redubMode = 'none';
+      let redubModeBeforeSelection = 'none';
       let batchSelectedIds = new Set();
       let selectedTimeline = null;
       let timelineDrag = null;
@@ -2424,6 +2449,7 @@
         { seg:'s6', type:'required', selected:true, kept:false, reason:'音频缺失', detail:'当前段落暂无可用配音音频，需合成后才能正常预览和导出。' }
       ];
       let audioRegenSelectMode = false;
+      let audioRegenVisibleBeforeBatchRedub = false;
       let qc = [
         { id:'q1', group:'字幕文本规范', detail:'句末标点缺失', seg:'s1', title:'第 1 段｜句末标点缺失', before:'Life is like a game of chess', after:'Life is like a game of chess.', note:'建议补充句末句号', checked:false },
         { id:'q2', group:'字幕文本规范', detail:'句末标点误用', seg:'s3', title:'第 3 段｜句末标点误用', before:'If we leave the past behind,', current:'If we leave the past behind...', after:'If we leave the past behind.', note:'目标段落文本已被手动修改，该条建议疑似失效，可继续采纳或忽略。', checked:false, status:'stale' },
@@ -3241,6 +3267,17 @@
         const detail = stats.optional
           ? '其中 '+stats.optional+' 个可选择保留当前音频，'+stats.required+' 个需要重新合成'
           : '全部为需要重新合成段落';
+        if(redubMode === 'select'){
+          audioRegenSelectMode = false;
+          if(!audioRegenVisibleBeforeBatchRedub){
+            audioRegenBar.className = 'audioRegenBar isHidden';
+            audioRegenBar.innerHTML = '';
+            return;
+          }
+          audioRegenBar.className = 'audioRegenBar isDisabled';
+          audioRegenBar.innerHTML = '<div class="audioRegenText"><span class="audioRegenIcon">!</span><span>需重新生成 <strong>'+stats.total+'</strong> 个音频片段</span><span class="audioRegenSub">当前正在选择批量重新配音范围，完成或取消后可继续处理待合成段落</span></div><div class="audioRegenActions"><button type="button" class="btnGhost" disabled>选择段落合成</button><button type="button" class="btnPrimary" disabled>合成全部</button></div>';
+          return;
+        }
         audioRegenBar.className = 'audioRegenBar';
         if(audioRegenSelectMode){
           audioRegenBar.innerHTML = '<div class="audioRegenText"><span class="audioRegenIcon">!</span><span>已选择 <strong>'+stats.selected+'</strong> 个待合成段落</span><span class="audioRegenSub">必须重新合成的段落已锁定，悬浮问号可查看变更原因</span></div><div class="audioRegenActions"><button type="button" class="btnGhost" id="audioRegenCancelInline">取消</button><button type="button" class="btnPrimary" id="audioRegenPrimaryInline" '+(stats.selected===0?'disabled':'')+'>合成本次勾选段落</button></div>';
@@ -3325,7 +3362,7 @@
           return;
         }
         const count = selectedVoiceRows().length;
-        if(!voiceRows().length){
+        if(redubMode !== 'results' || !voiceRows().length){
           voiceBatchBar.className = 'voiceBatchBar isHidden';
           voiceBatchBar.innerHTML = '';
           return;
@@ -3355,6 +3392,7 @@
       function renderVoicePanel(seg){
         if(isTranslationEditor()) return '';
         if(redubMode === 'select') return '';
+        if(redubMode !== 'results' && redubMode !== 'running') return '';
         if(!seg.voice) return '';
         if(redubMode === 'running' && !batchSelectedIds.has(seg.id)) return '';
         return '<div class="voiceResultPanel" data-voice-panel="'+seg.id+'"><div class="voiceResultHeader"><div class="voiceResultTitle">新音频结果</div><label class="voiceScope"><input type="checkbox" class="voiceScopeCheck" '+(seg.voice.checked?'checked':'')+'> 纳入批量操作</label></div><div class="candidateGrid">'+seg.voice.candidates.map((c,i)=>candidateHtml(seg,c,i)).join('')+'</div><div class="voiceRowActions"><button type="button" class="btnGhost voiceRefreshGroup" data-seg="'+seg.id+'">换一批</button><button type="button" class="btnGhost voiceCancelGroup" data-seg="'+seg.id+'">取消</button></div></div>';
@@ -3389,11 +3427,15 @@
         setTimeout(()=>{ finishVoice(seg); renderRows(activeSegment); showToast('已生成 3 个候选配音'); }, 760);
       }
       function enterBatchRedub(){
+        audioRegenVisibleBeforeBatchRedub = audioRegenStats().total > 0;
+        audioRegenSelectMode = false;
+        redubModeBeforeSelection = redubMode;
         redubMode = 'select';
-        batchSelectedIds = new Set(['s1','s2']);
+        batchSelectedIds = audioRegenVisibleBeforeBatchRedub ? new Set() : new Set(['s1','s2']);
         renderRows(activeSegment);
       }
       function enterBatchRetranslate(){
+        redubModeBeforeSelection = redubMode;
         redubMode = 'translateSelect';
         batchSelectedIds = new Set(['s1','s2']);
         renderRows(activeSegment);
@@ -3417,6 +3459,7 @@
       }
       function startBatchRedub(){
         if(!batchSelectedIds.size){ showToast('请先勾选需要重新配音的段落'); return; }
+        audioRegenVisibleBeforeBatchRedub = false;
         redubMode = 'running';
         const ids = Array.from(batchSelectedIds);
         ids.forEach(id => {
@@ -3429,6 +3472,7 @@
             const seg = segments.find(s => s.id === id);
             if(seg) finishVoice(seg);
           });
+          audioRegenVisibleBeforeBatchRedub = false;
           redubMode = 'results';
           renderRows(activeSegment);
           showToast('已生成 '+ids.length+' 句配音候选');
@@ -3596,7 +3640,7 @@
           const toolbar = active===s.id && !isBatchSelectMode() ? '<div class="segmentToolbar"><div class="segmentToolGroup">'+(translationEditor ? translationTools : dubbingTools)+'</div>'+moreMenu+'</div>' : '';
           const batchCheck = isBatchSelectMode() ? '<label class="batchRowCheck"><input type="checkbox" class="batchRowInput" data-batch-row="'+s.id+'" '+(batchSelectedIds.has(s.id)?'checked':'')+'></label>' : '';
           const audioInlineSelect = renderAudioRegenInlineControl(s.id);
-          const audioPendingTextClass = !translationEditor && !audioRegenSelectMode && getAudioRegenItem(s.id) && !getAudioRegenItem(s.id).kept ? ' audioPendingText' : '';
+          const audioPendingTextClass = !translationEditor && getAudioRegenItem(s.id) && !getAudioRegenItem(s.id).kept ? ' audioPendingText' : '';
           const cpsMetric = translationEditor ? renderCpsMetric(s) : '';
           const rowHtml = '<div class="subtitleItem '+(translationEditor?'translationRow ':'')+(active===s.id?'active ':'')+(item?'hasError ':'')+(!translationEditor&&s.voice&&!isBatchSelectMode()?'hasVoice ':'')+(isBatchSelectMode()?'batchSelectable ':'')+(!translationEditor&&audioRegenSelectMode?'audioRegenSelecting':'')+'" data-seg="'+s.id+'">'+errorBadge+toolbar+batchCheck+'<div class="speakerCell"><span class="speakerBadge '+s.cls+'">'+esc(s.speaker)+'</span></div><div class="timeCell"><span class="timeLine">'+esc(times[0]||'')+'</span><span class="timeLine">'+esc(times[1]||'')+'</span></div><div class="groupCell">'+esc(s.group)+'</div><div class="textCell sourceCell"><span class="segmentIndex">'+(index+1)+'</span><div class="sourceText">'+(source || '<span class="placeholderText">空字幕段</span>')+'</div></div><div class="textCell targetCell">'+cpsMetric+'<div class="targetSelectionWrap"><div class="targetTextWrap"><button type="button" class="targetPlayBtn targetPlayFloat" data-target-play="'+s.id+'" aria-label="播放译文片段"><svg class="targetPlayIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button><div class="targetText'+audioPendingTextClass+'">'+(esc(s.target) || '<span class="placeholderText">待输入译文</span>')+'</div></div>'+audioInlineSelect+'</div></div>'+renderVoicePanel(s)+'</div>';
           const insertHtml = canShowInsert ? '<div class="insertArea" data-insert-after="'+(index+1)+'"><button type="button" class="insertBtn"><span>＋</span>插入</button></div>' : '';
@@ -3980,7 +4024,7 @@
           return;
         }
         if(e.target.id==='voiceBatchStart'){ if(redubMode === 'translateSelect') startBatchRetranslate(); else startBatchRedub(); return; }
-        if(e.target.id==='voiceBatchCancel'){ redubMode = isTranslationEditor() ? 'none' : (voiceRows().length ? 'results' : 'none'); batchSelectedIds.clear(); renderRows(activeSegment); return; }
+        if(e.target.id==='voiceBatchCancel'){ audioRegenVisibleBeforeBatchRedub = false; redubMode = redubModeBeforeSelection; redubModeBeforeSelection = 'none'; batchSelectedIds.clear(); renderRows(activeSegment); return; }
         if(e.target.id==='voiceBatchRefresh'){ selectedVoiceRows().forEach(s=>refreshCandidates(s)); return; }
         if(e.target.id==='voiceBatchAccept'){ const rows=selectedVoiceRows().filter(s=>s.voice.candidates[s.voice.selected]?.status==='ready'); rows.forEach(s=>s.voice=null); renderRows(activeSegment); showToast('已批量采用 '+rows.length+' 个候选音频'); return; }
         if(e.target.id==='voiceBatchExit'){ voiceRows().forEach(s=>s.voice=null); redubMode='none'; renderRows(activeSegment); showToast('已退出批量抽卡结果'); return; }
