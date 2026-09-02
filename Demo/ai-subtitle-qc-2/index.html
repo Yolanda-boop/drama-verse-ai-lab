@@ -308,6 +308,81 @@
     #dv-real-qc-prototype .btnPrimary:hover { background: #7444ff; }
     #dv-real-qc-prototype .btnPrimary[disabled],
     #dv-real-qc-prototype .btnGhost[disabled] { opacity: .38; cursor: not-allowed; }
+    #dv-real-qc-prototype .reviewCompleteBtn {
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 15px;
+      border-radius: 6px;
+      font-size: 14px;
+      line-height: 32px;
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .reviewCompleteBtn:before {
+      content: "✓";
+      width: 15px;
+      height: 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.88);
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 13px;
+    }
+    #dv-real-qc-prototype .exportActionWrap { position: relative; display: inline-flex; flex-shrink: 0; }
+    #dv-real-qc-prototype .exportActionWrap .btnPrimary { display: inline-flex; align-items: center; gap: 7px; }
+    #dv-real-qc-prototype .exportActionWrap.isSrt .btnPrimary:after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(45deg) translateY(-2px);
+      opacity: .9;
+    }
+    #dv-real-qc-prototype .exportSrtMenu {
+      position: absolute;
+      right: 0;
+      top: 38px;
+      width: 150px;
+      padding: 6px;
+      display: none;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.55);
+      z-index: 32;
+    }
+    #dv-real-qc-prototype .exportActionWrap.isSrt:hover .exportSrtMenu,
+    #dv-real-qc-prototype .exportActionWrap.isSrt:focus-within .exportSrtMenu { display: grid; gap: 2px; }
+    #dv-real-qc-prototype .exportSrtItem {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: rgba(255,255,255,.86);
+      text-align: left;
+      padding: 0 9px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    #dv-real-qc-prototype .exportSrtItem:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .exportSrtIcon {
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,.72);
+      flex: 0 0 auto;
+    }
+    #dv-real-qc-prototype .exportSrtIcon svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     #dv-real-qc-prototype .saveStatus {
       position: relative;
       display: inline-flex;
@@ -2006,6 +2081,7 @@
     <div class="navbar">
       <div class="navLeft">
         <button type="button" class="backButton">← 返回</button>
+        <button type="button" class="btnPrimary reviewCompleteBtn" id="completeTranslationReview" title="提交后将标记当前集校对完成">完成校对</button>
         <div class="titleInfo">
           <h1>结算翻译配音 <span id="titleEpisode">第 12 集</span></h1>
           <div class="titleMeta"><span class="metaItem metaItemExtract" id="currentStageLabel">配音</span><span class="metaDivider"></span><span class="metaItem">英文 → 阿拉伯语</span></div>
@@ -2027,8 +2103,13 @@
         <button type="button" class="btnText" id="pronunciationDictBtn">发音纠正词典</button>
         <span class="translationReviewSync" id="translationReviewSync"></span>
         <span class="saveStatus" data-tooltip="当前修改已自动保存">已保存</span>
-        <button type="button" class="btnPrimary" id="completeTranslationReview" title="提交后将标记当前集翻译校对完成，并锁定已保存的AI译文反馈用于模型优化">完成校对</button>
-        <button type="button" class="btnPrimary" id="openExportVideo">完成并导出</button>
+        <div class="exportActionWrap" id="exportActionWrap">
+          <button type="button" class="btnPrimary" id="openExportVideo">导出</button>
+          <div class="exportSrtMenu" id="exportSrtMenu">
+            <button type="button" class="exportSrtItem" data-export-srt="zh-CN"><span class="exportSrtIcon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M12.8 8.5v3.4a1.3 1.3 0 0 1-1.3 1.3H4.1a1.3 1.3 0 0 1-1.3-1.3V4.5a1.3 1.3 0 0 1 1.3-1.3h3.4"></path><path d="M9.4 2.8h3.8v3.8M7.8 8.2l5.1-5.1"></path></svg></span>中文（简体）</button>
+            <button type="button" class="exportSrtItem" data-export-srt="tr"><span class="exportSrtIcon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M12.8 8.5v3.4a1.3 1.3 0 0 1-1.3 1.3H4.1a1.3 1.3 0 0 1-1.3-1.3V4.5a1.3 1.3 0 0 1 1.3-1.3h3.4"></path><path d="M9.4 2.8h3.8v3.8M7.8 8.2l5.1-5.1"></path></svg></span>土耳其语</button>
+          </div>
+        </div>
         <div class="navUser" aria-label="当前用户及角色">
           <span class="navAvatar">李</span>
           <span class="navUserName">李姝宜</span>
@@ -2300,6 +2381,7 @@
       const stageLabel = root.querySelector('#currentStageLabel');
       const saveStatus = root.querySelector('.saveStatus');
       const termMappingBtn = root.querySelector('#termMappingBtn');
+      const exportActionWrap = root.querySelector('#exportActionWrap');
       const openExportVideoBtn = root.querySelector('#openExportVideo');
       const completeTranslationReviewBtn = root.querySelector('#completeTranslationReview');
       const pronunciationDictBtn = root.querySelector('#pronunciationDictBtn');
@@ -3149,9 +3231,12 @@
         titleEpisode.textContent = '第 ' + ep.no + ' 集';
         stageLabel.textContent = currentStage;
         const translationEditor = isTranslationEditor();
+        const stageName = stageFamily(currentStage);
         termMappingBtn.style.display = translationEditor ? '' : 'none';
-        openExportVideoBtn.style.display = translationEditor ? 'none' : '';
-        completeTranslationReviewBtn.style.display = translationEditor ? '' : 'none';
+        exportActionWrap.classList.toggle('isSrt', translationEditor);
+        openExportVideoBtn.textContent = translationEditor ? '导出SRT' : '导出';
+        completeTranslationReviewBtn.style.display = ['翻译','配音'].includes(stageName) ? '' : 'none';
+        completeTranslationReviewBtn.title = '提交后将标记当前集' + stageName + '校对完成';
         completeTranslationReviewBtn.disabled = !!translationReviewCompleted || reviewSubmitCompleted || reviewSubmitSubmitting;
         completeTranslationReviewBtn.textContent = reviewSubmitSubmitting ? '提交中...' : (translationReviewCompleted || reviewSubmitCompleted ? '校对已完成' : '完成校对');
         pronunciationDictBtn.style.display = translationEditor ? 'none' : '';
@@ -3194,7 +3279,7 @@
         reviewSubmitSubmitting = false;
         feedbackSyncStatus = translationReviewCompleted ? (ep.feedbackSynced ? 'success' : 'syncing') : 'idle';
         activeSegment = 's1';
-        redubMode = isTranslationEditor() ? 'none' : 'results';
+        redubMode = 'none';
         batchSelectedIds.clear();
         selectedTimeline = null;
         activeIssue = qc[0]?.id || '';
@@ -3240,6 +3325,12 @@
       }
       function activeAudioRegenItems(){ return audioRegenItems.filter(item => !item.kept); }
       function getAudioRegenItem(segId){ return audioRegenItems.find(item => item.seg === segId); }
+      function resolveAudioRegenForSegment(segId){
+        const before = audioRegenItems.length;
+        audioRegenItems = audioRegenItems.filter(item => item.seg !== segId);
+        if(!activeAudioRegenItems().length) audioRegenSelectMode = false;
+        return before !== audioRegenItems.length;
+      }
       function audioRegenStats(){
         const active = activeAudioRegenItems();
         return {
@@ -3431,7 +3522,7 @@
         audioRegenSelectMode = false;
         redubModeBeforeSelection = redubMode;
         redubMode = 'select';
-        batchSelectedIds = audioRegenVisibleBeforeBatchRedub ? new Set() : new Set(['s1','s2']);
+        batchSelectedIds = new Set();
         renderRows(activeSegment);
       }
       function enterBatchRetranslate(){
@@ -3493,10 +3584,11 @@
       function acceptVoice(seg){
         const candidate = seg.voice.candidates[seg.voice.selected];
         if(!candidate || candidate.status !== 'ready'){ showToast('当前候选不可采用'); return; }
+        const resolved = resolveAudioRegenForSegment(seg.id);
         seg.voice = null;
         renderRows(activeSegment);
         updateVoiceBatch();
-        showToast('已采用当前候选音频');
+        showToast(resolved ? '已采用当前候选音频，该段已移出待合成列表' : '已采用当前候选音频');
       }
       function aiFeedbackDisabledReason(seg){
         if(reviewSubmitCompleted && !seg.aiFeedback) return '当前集已完成校对，AI译文反馈已提交，暂不支持修改';
@@ -3599,9 +3691,13 @@
       function completeTranslationReview(){
         if(reviewSubmitSubmitting) return;
         if(translationReviewCompleted || reviewSubmitCompleted){ showToast('当前集已完成校对'); return; }
+        const stageName = stageFamily(currentStage);
+        const reviewText = stageName === '配音'
+          ? '完成后，本集配音校对结果将提交，并标记为配音校对完成。仍可继续进行其他操作。'
+          : '完成后，本集已保存的 AI 译文反馈将提交，提交后不再支持修改。仍可继续发起配音或进行其他操作。';
         openModal(
-          '确认完成翻译校对？',
-          '完成后，本集已保存的 AI 译文反馈将提交，提交后不再支持修改。仍可继续发起配音或进行其他操作。',
+          '确认完成' + stageName + '校对？',
+          reviewText,
           '确认完成校对',
           ()=>{
             if(reviewSubmitSubmitting || translationReviewCompleted || reviewSubmitCompleted) return;
@@ -3764,7 +3860,16 @@
           saveAiFeedback(true);
           return;
         }
+        const exportSrt = e.target.closest('[data-export-srt]');
+        if(exportSrt){
+          showToast('已导出' + exportSrt.textContent.trim() + ' SRT');
+          return;
+        }
         if(e.target.closest('#openExportVideo')){
+          if(isTranslationEditor()){
+            openExportVideoBtn.focus();
+            return;
+          }
           openExportDialog();
           return;
         }
@@ -4026,7 +4131,14 @@
         if(e.target.id==='voiceBatchStart'){ if(redubMode === 'translateSelect') startBatchRetranslate(); else startBatchRedub(); return; }
         if(e.target.id==='voiceBatchCancel'){ audioRegenVisibleBeforeBatchRedub = false; redubMode = redubModeBeforeSelection; redubModeBeforeSelection = 'none'; batchSelectedIds.clear(); renderRows(activeSegment); return; }
         if(e.target.id==='voiceBatchRefresh'){ selectedVoiceRows().forEach(s=>refreshCandidates(s)); return; }
-        if(e.target.id==='voiceBatchAccept'){ const rows=selectedVoiceRows().filter(s=>s.voice.candidates[s.voice.selected]?.status==='ready'); rows.forEach(s=>s.voice=null); renderRows(activeSegment); showToast('已批量采用 '+rows.length+' 个候选音频'); return; }
+        if(e.target.id==='voiceBatchAccept'){
+          const rows=selectedVoiceRows().filter(s=>s.voice.candidates[s.voice.selected]?.status==='ready');
+          const resolvedCount = rows.filter(s=>resolveAudioRegenForSegment(s.id)).length;
+          rows.forEach(s=>s.voice=null);
+          renderRows(activeSegment);
+          showToast(resolvedCount ? '已批量采用 '+rows.length+' 个候选音频，'+resolvedCount+' 段已移出待合成列表' : '已批量采用 '+rows.length+' 个候选音频');
+          return;
+        }
         if(e.target.id==='voiceBatchExit'){ voiceRows().forEach(s=>s.voice=null); redubMode='none'; renderRows(activeSegment); showToast('已退出批量抽卡结果'); return; }
         if(e.target.id==='batchRetranslate'){ if(isTranslationEditor()) enterBatchRetranslate(); else showToast('发起批量重翻'); return; }
         if(e.target.id==='batchRedub'){ enterBatchRedub(); return; }
