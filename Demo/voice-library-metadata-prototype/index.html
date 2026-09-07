@@ -1,0 +1,1480 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Drama Verse 音色库元数据编辑原型</title>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page: #0d0c1c;
+      --header: #151329;
+      --panel: #242428;
+      --panel-soft: #2b2b31;
+      --row: #111022;
+      --row-hover: #19162e;
+      --line: rgba(137, 125, 205, .14);
+      --line-strong: rgba(255, 255, 255, .16);
+      --text: rgba(255, 255, 255, .92);
+      --text-2: rgba(225, 220, 255, .68);
+      --text-3: rgba(225, 220, 255, .42);
+      --brand: #8355ec;
+      --brand-2: #9b73ff;
+      --brand-soft: rgba(124, 90, 243, .15);
+      --danger: #ff526b;
+      --blue: #4f8cff;
+      --cyan: #17b6c8;
+      --purple: #7c5af3;
+      --green: #44c979;
+      --yellow: #f5c45a;
+      --shadow: 0 24px 72px rgba(0, 0, 0, .58);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--page);
+      color: var(--text);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: var(--page); color: var(--text); font-size: 14px; }
+    body.modalOpen { overflow: hidden; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .48; }
+    .page { min-height: 100vh; display: flex; flex-direction: column; background: var(--page); }
+    .header {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--header);
+    }
+    .headerLeft, .headerActions { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .headerActions { overflow-x: auto; scrollbar-width: none; }
+    .headerActions::-webkit-scrollbar { display: none; }
+    .backBtn {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: rgba(225, 220, 255, .58);
+    }
+    .backBtn:hover { color: var(--brand-2); background: rgba(124, 90, 243, .08); }
+    .title { margin: 0; font-size: 16px; font-weight: 600; white-space: nowrap; }
+    .titleSuffix { margin-left: 6px; font-size: 12px; font-weight: 400; color: var(--text-2); }
+    .btn {
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 13px;
+      border: 1px solid rgba(132, 113, 224, .26);
+      border-radius: 7px;
+      background: rgba(29, 26, 55, .72);
+      color: rgba(232, 228, 255, .78);
+      box-shadow: none;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .btnSmall {
+      height: 28px;
+      padding: 0 10px;
+      font-size: 12px;
+      border-radius: 6px;
+    }
+    .btn:hover { border-color: rgba(155, 115, 255, .48); color: #fff; background: rgba(124, 90, 243, .13); }
+    .btnPrimary {
+      border-color: #8656ef;
+      color: #fff;
+      background: linear-gradient(135deg, #6c40e8, #9655f5);
+    }
+    .btnDanger { color: var(--danger); border-color: rgba(255, 75, 105, .36); background: rgba(255, 63, 93, .05); }
+    .iconBtn {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 9px;
+      color: rgba(255,255,255,.66);
+      background: rgba(255,255,255,.04);
+    }
+    .iconBtn:hover { border-color: rgba(124,90,243,.42); color: #fff; background: rgba(124,90,243,.1); }
+    .divider { width: 1px; height: 24px; background: rgba(255,255,255,.12); }
+    .tableWrap { flex: 1; overflow: auto; }
+    table { width: 100%; min-width: 1240px; border-collapse: collapse; table-layout: fixed; }
+    thead th {
+      height: 44px;
+      padding: 0 16px;
+      color: rgba(185, 176, 236, .62);
+      font-size: 12px;
+      font-weight: 500;
+      text-align: left;
+      background: #121024;
+      border-bottom: 1px solid var(--line);
+    }
+    tbody td {
+      height: 54px;
+      padding: 5px 16px;
+      border-bottom: 1px solid rgba(137, 125, 205, .12);
+      background: var(--page);
+      color: rgba(238, 235, 255, .86);
+      font-size: 13px;
+      vertical-align: middle;
+    }
+    tbody tr:hover td { background: var(--row-hover); }
+    th:nth-child(1), td:nth-child(1) { width: 190px; }
+    th:nth-child(2), td:nth-child(2) { width: 80px; }
+    th:nth-child(3), td:nth-child(3) { width: 260px; }
+    th:nth-child(4), td:nth-child(4) { width: 260px; }
+    th:nth-child(5), td:nth-child(5) { width: 170px; }
+    th:nth-child(6), td:nth-child(6) { width: 280px; }
+    th:nth-child(7), td:nth-child(7) { width: 110px; }
+    .thWithAction { display: inline-flex; align-items: center; gap: 6px; }
+    .headerIconBtn {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: rgba(185, 176, 236, .62);
+    }
+    .headerIconBtn:hover { color: #bda4ff; background: rgba(124,90,243,.12); }
+    .headerIconBtn.loading { color: #bda4ff; pointer-events: none; }
+    .headerIconBtn.loading svg { animation: spin .85s linear infinite; }
+    .speakerCell { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .avatar {
+      width: 26px;
+      height: 26px;
+      flex: 0 0 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #fff;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .avatar.a1 { background: linear-gradient(135deg, #287dff, #5267ff); }
+    .avatar.a2 { background: linear-gradient(135deg, #8d56ff, #6248ec); }
+    .avatar.a3 { background: linear-gradient(135deg, #16aec1, #02859b); }
+    .avatar.a4 { background: linear-gradient(135deg, #d850dc, #9f3be2); }
+    .avatar.a5 { background: linear-gradient(135deg, #5952d9, #302f97); }
+    .nameText { color: #fff; font-size: 14px; font-weight: 600; }
+    .subAction { width: 18px; height: 18px; color: rgba(255,255,255,.52); }
+    .profileLine { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .expandBtn {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(124,90,243,.25);
+      border-radius: 8px;
+      background: rgba(124,90,243,.08);
+      color: rgba(194,184,239,.7);
+    }
+    .profileText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; color: #fff; }
+    .frames {
+      width: 176px;
+      display: grid;
+      grid-template-columns: repeat(3, 40px) 32px;
+      align-items: center;
+      gap: 8px;
+    }
+    .frame {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.12);
+      overflow: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at 50% 34%, rgba(255,226,203,.95) 0 12%, transparent 13%),
+        linear-gradient(135deg, rgba(96,80,67,.95), rgba(40,38,55,.92));
+    }
+    .frame:after {
+      content: "";
+      position: absolute;
+      left: 11px;
+      right: 11px;
+      bottom: 7px;
+      height: 14px;
+      border-radius: 8px 8px 3px 3px;
+      background: rgba(236,226,212,.82);
+    }
+    .frame.f2 { filter: hue-rotate(22deg); }
+    .frame.f3 { filter: hue-rotate(64deg) saturate(1.15); }
+    .frames .iconBtn { grid-column: 4; }
+    .appearanceCell { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; min-width: 0; }
+    .appearanceLink,
+    .appearanceMore {
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 2px;
+      border: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: rgba(189,164,255,.92);
+      font-size: 12px;
+      line-height: 22px;
+      white-space: nowrap;
+    }
+    .appearanceLink:hover,
+    .appearanceMore:hover { background: rgba(124,90,243,.1); color: #fff; }
+    .appearanceMore { color: rgba(255,255,255,.58); }
+    .appearanceRange {
+      max-width: 118px;
+      overflow: hidden;
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      line-height: 22px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .appearancePanel { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .appearancePanelTop { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .appearanceGrid {
+      width: 150px;
+      max-height: 86px;
+      overflow: auto;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px 6px;
+      padding-right: 4px;
+    }
+    .appearanceGrid::-webkit-scrollbar { width: 4px; }
+    .appearanceGrid::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(255,255,255,.18); }
+    .appearanceGrid .appearanceLink { justify-content: center; padding: 0; }
+    .appearanceEmpty { color: rgba(255,255,255,.42); font-size: 12px; white-space: nowrap; }
+    .appearanceLoading { display: inline-flex; align-items: center; gap: 6px; color: rgba(189,164,255,.78); font-size: 12px; }
+    .appearanceLoading svg { animation: spin .85s linear infinite; }
+    .voiceCell {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 224px) 32px;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .voiceSelect {
+      min-width: 0;
+      width: 100%;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 12px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px;
+      background: rgba(255,255,255,.035);
+      color: rgba(255,255,255,.88);
+    }
+    .voiceSelect:hover { border-color: rgba(124,90,243,.42); background: rgba(124,90,243,.08); }
+    .voiceNameInCell { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      height: 22px;
+      padding: 0 9px;
+      border: 1px solid rgba(124,90,243,.42);
+      border-radius: 999px;
+      color: #bda4ff;
+      background: rgba(124,90,243,.16);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .badgeDrifty { color: #ffd891; border-color: rgba(245,196,90,.42); background: rgba(245,196,90,.12); }
+    .ratio { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+    .ratioValue { color: #fff; font-size: 13px; font-variant-numeric: tabular-nums; }
+    .bar { width: 98px; height: 6px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.16); }
+    .bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#7c3cff,#aa78ff); }
+    .modalMask {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,.48);
+    }
+    .modalMask.show { display: flex; }
+    .voiceModal, .editModal {
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 14px;
+      background: #242428;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .voiceModal { width: min(930px, calc(100vw - 28px)); max-height: calc(100vh - 32px); display: flex; flex-direction: column; }
+    .editModal { width: min(700px, calc(100vw - 28px)); max-height: calc(100vh - 32px); display: flex; flex-direction: column; }
+    .modalHeader {
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .modalTitle { margin: 0; font-size: 15px; font-weight: 600; color: rgba(255,255,255,.92); }
+    .closeBtn {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: rgba(255,255,255,.45);
+      transition: color .18s ease, background .18s ease;
+    }
+    .closeBtn:hover { color: rgba(255,255,255,.86); background: rgba(255,255,255,.08); }
+    .closeBtn svg { width: 15px; height: 15px; }
+    .modalBody { flex: 1 1 auto; min-height: 0; padding: 12px 14px; overflow: auto; }
+    .filterPanel {
+      padding: 8px 14px 10px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+    }
+    .filterHeader { height: 28px; display: flex; align-items: center; justify-content: space-between; color: rgba(255,255,255,.45); font-size: 12px; }
+    .resetBtn { border: 0; background: transparent; color: rgba(124,90,243,.8); }
+    .filterRow { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 4px 0; border-top: 1px solid rgba(255,255,255,.07); }
+    .filterRow:first-of-type { border-top: 0; }
+    .filterCat { width: 42px; flex: 0 0 42px; text-align: right; font-size: 12px; color: rgba(255,255,255,.38); }
+    .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+    .chip {
+      min-height: 22px;
+      padding: 1px 10px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      background: rgba(255,255,255,.055);
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
+    }
+    .chip:hover { color: rgba(255,255,255,.78); background: rgba(255,255,255,.09); }
+    .chip.active {
+      border-color: rgba(124,90,243,.45);
+      color: #bda4ff;
+      background: rgba(124,90,243,.18);
+      box-shadow: 0 0 12px rgba(124,90,243,.13);
+    }
+    .searchInput, .selectLike, .formInput, .formSelect, .textarea {
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 7px;
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.9);
+      outline: none;
+    }
+    .searchInput { width: 270px; height: 26px; padding: 0 10px; font-size: 12px; }
+    .searchInput::placeholder, .textarea::placeholder { color: rgba(255,255,255,.3); font-size: 12px; }
+    .selectLike { min-width: 210px; height: 26px; display: inline-flex; align-items: center; justify-content: space-between; padding: 0 10px; color: rgba(255,255,255,.45); font-size: 12px; }
+    .voiceList { display: flex; flex-direction: column; gap: 8px; overflow: visible; padding: 2px; }
+    .voiceItem {
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 12px;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+    }
+    .voiceItem:hover { border-color: rgba(255,255,255,.1); background: rgba(255,255,255,.06); }
+    .voiceItem.selected {
+      border-color: rgba(124,90,243,.42);
+      background: linear-gradient(135deg, rgba(124,90,243,.12), rgba(124,90,243,.05));
+      box-shadow: 0 4px 20px rgba(124,90,243,.08);
+    }
+    .voiceItem.currentPinned {
+      position: sticky;
+      top: -2px;
+      z-index: 2;
+      border-color: rgba(124,90,243,.3);
+      background: #2a2933;
+      box-shadow: 0 8px 18px rgba(0,0,0,.22);
+    }
+    .voiceItem.currentPinned::after {
+      content: '';
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: -5px;
+      height: 1px;
+      background: rgba(255,255,255,.1);
+    }
+    .selectBar { width: 3px; height: 26px; flex: 0 0 3px; border-radius: 2px; background: rgba(255,255,255,.08); }
+    .voiceItem.selected .selectBar { background: linear-gradient(180deg,#b49aff,#7c5af3); box-shadow: 0 0 10px rgba(124,90,243,.5); }
+    .voiceInfo { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 5px; }
+    .voiceTitleRow { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .voiceTitle { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.92); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .noteIcon {
+      width: 13px;
+      height: 13px;
+      flex: 0 0 13px;
+      color: rgba(245,196,90,.72);
+      opacity: .82;
+    }
+    .noteTip { display: inline-flex; align-items: center; flex: 0 0 auto; }
+    .noteIcon:hover { color: #f5c45a; opacity: 1; }
+    .meta { display: flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; color: rgba(255,255,255,.56); font-size: 12px; white-space: nowrap; }
+    .genderDot { width: 6px; height: 6px; border-radius: 50%; background: #5ea6ff; flex: 0 0 6px; }
+    .genderDot.female { background: #ff82b8; }
+    .genderDot.neutral { background: #b49aff; }
+    .metaTags { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .currentBadge { color: #bda4ff; border-color: rgba(124,90,243,.42); background: rgba(124,90,243,.16); }
+    .modalFooter {
+      min-height: 56px;
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 16px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      background: rgba(20,20,22,.82);
+    }
+    .footerLeft { min-width: 0; color: #bda4ff; font-size: 13px; display: flex; align-items: center; gap: 7px; }
+    .pager { display: inline-flex; align-items: center; gap: 8px; }
+    .pageNo { width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 7px; border: 1px solid rgba(124,90,243,.65); color: #bda4ff; background: rgba(124,90,243,.15); }
+    .formGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+    .formField { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+    .formField.full { grid-column: 1 / -1; }
+    .formLabel { color: rgba(255,255,255,.68); font-size: 12px; display: flex; align-items: center; gap: 5px; }
+    .required { color: #ff6577; }
+    .readonly {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border: 1px dashed rgba(255,255,255,.12);
+      border-radius: 7px;
+      background: rgba(255,255,255,.025);
+      color: rgba(255,255,255,.56);
+      cursor: default;
+      user-select: text;
+    }
+    .readonly.warn { color: #ffd891; border-color: rgba(245,196,90,.24); background: rgba(245,196,90,.08); }
+    .multiSelect {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+      min-height: 34px;
+      position: relative;
+      padding: 4px 30px 4px 8px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 7px;
+      background: rgba(255,255,255,.035);
+      cursor: pointer;
+    }
+    .multiSelect:hover { border-color: rgba(124,90,243,.34); background: rgba(255,255,255,.055); }
+    .multiSelect.open { border-color: rgba(124,90,243,.68); box-shadow: 0 0 0 2px rgba(124,90,243,.16); }
+    .selectedTags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+    }
+    .selectedTag {
+      min-height: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 1px 7px;
+      border-radius: 6px;
+      border: 1px solid rgba(124,90,243,.38);
+      background: rgba(124,90,243,.18);
+      color: #d1c4ff;
+      font-size: 12px;
+    }
+    .tagRemove {
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 50%;
+      padding: 0;
+      background: transparent;
+      color: rgba(255,255,255,.58);
+      font-size: 13px;
+      line-height: 1;
+    }
+    .tagRemove:hover { color: #fff; background: rgba(255,255,255,.12); }
+    .languageTrigger {
+      flex: 1 1 92px;
+      min-width: 92px;
+      height: 24px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
+      text-align: left;
+      outline: none;
+    }
+    .multiSelect.hasValue .languageTrigger { display: none; }
+    .languageChevron {
+      position: absolute;
+      right: 9px;
+      top: 50%;
+      width: 14px;
+      height: 14px;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,.46);
+      pointer-events: none;
+    }
+    .multiSelect.open .languageChevron { color: #bda4ff; transform: translateY(-50%) rotate(180deg); }
+    .languageDropdown {
+      position: absolute;
+      left: -1px;
+      right: -1px;
+      top: calc(100% + 4px);
+      z-index: 80;
+      display: none;
+      max-height: 216px;
+      overflow: auto;
+      padding: 4px;
+      border: 1px solid rgba(124,90,243,.42);
+      border-radius: 7px;
+      background: #232328;
+      box-shadow: 0 14px 34px rgba(0,0,0,.46);
+    }
+    .multiSelect.open .languageDropdown { display: block; }
+    .languageOption {
+      width: 100%;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      padding: 0 9px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: rgba(255,255,255,.76);
+      font-size: 12px;
+      text-align: left;
+    }
+    .languageOption:hover { color: #fff; background: rgba(124,90,243,.18); }
+    .languageEmpty {
+      height: 30px;
+      display: flex;
+      align-items: center;
+      padding: 0 9px;
+      color: rgba(255,255,255,.36);
+      font-size: 12px;
+    }
+    .optionWrap { display: flex; flex-wrap: wrap; gap: 7px; }
+    .styleHeader {
+      min-height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .styleCount { color: rgba(255,255,255,.42); font-size: 12px; }
+    .linkBtn {
+      height: 24px;
+      padding: 0 2px;
+      border: 0;
+      background: transparent;
+      color: #bda4ff;
+      font-size: 12px;
+    }
+    .linkBtn:hover { color: #fff; }
+    .styleOptions { overflow: visible; }
+    .styleActions { display: flex; align-items: center; justify-content: flex-start; }
+    .tagComposer.styleComposer { display: none; }
+    .tagComposer.styleComposer.open { display: flex; }
+    .option {
+      min-height: 28px;
+      padding: 3px 10px;
+      border: 1px solid rgba(151,139,221,.2);
+      border-radius: 7px;
+      background: rgba(18,16,39,.2);
+      color: rgba(209,202,241,.68);
+      font-size: 12px;
+    }
+    .option.active { border-color: #8259e9; background: rgba(111,66,220,.22); color: #bda4ff; }
+    .option.invalid { border-color: rgba(255,82,107,.46); color: #ff9cac; background: rgba(255,82,107,.08); }
+    .formSelect, .formInput { height: 34px; padding: 0 10px; font-size: 13px; }
+    .textarea { min-height: 78px; padding: 8px 10px; resize: vertical; font-size: 13px; }
+    .hint { color: rgba(255,255,255,.4); font-size: 12px; line-height: 18px; }
+    .fieldError { min-height: 18px; color: #ff6577; font-size: 12px; }
+    .tagComposer { display: flex; align-items: center; gap: 8px; }
+    .tagComposer .formInput { flex: 1; }
+    .toast {
+      position: fixed;
+      left: 50%;
+      top: 24px;
+      z-index: 60;
+      display: none;
+      transform: translateX(-50%);
+      padding: 10px 16px;
+      border: 1px solid rgba(124,90,243,.38);
+      border-radius: 8px;
+      background: rgba(31,28,51,.96);
+      color: #fff;
+      box-shadow: 0 10px 28px rgba(0,0,0,.42);
+      font-size: 14px;
+    }
+    .toast.show { display: block; }
+    .savingMask {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.3);
+      color: #fff;
+    }
+    .savingMask.show { display: flex; }
+    .spinner {
+      width: 26px;
+      height: 26px;
+      margin-right: 10px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,.18);
+      border-top-color: #9b73ff;
+      animation: spin .85s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    [data-tooltip] { position: relative; }
+    [data-tooltip]:hover:after {
+      content: attr(data-tooltip);
+      position: absolute;
+      z-index: 90;
+      right: 0;
+      bottom: calc(100% + 8px);
+      width: max-content;
+      max-width: min(280px, calc(100vw - 40px));
+      padding: 7px 9px;
+      border-radius: 7px;
+      background: #141416;
+      color: rgba(255,255,255,.88);
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: 12px;
+      line-height: 18px;
+      white-space: nowrap;
+      box-shadow: 0 10px 26px rgba(0,0,0,.4);
+    }
+    @media (max-width: 980px) {
+      .header { align-items: flex-start; height: auto; min-height: 54px; padding: 10px 12px; gap: 8px; }
+      .headerLeft { flex: 0 1 auto; }
+      .headerActions { flex: 1 1 auto; justify-content: flex-end; }
+      .title { max-width: 320px; overflow: hidden; text-overflow: ellipsis; }
+      table { min-width: 1100px; }
+      th:nth-child(1), td:nth-child(1) { width: 160px; }
+      th:nth-child(3), td:nth-child(3) { width: 230px; }
+      th:nth-child(4), td:nth-child(4) { width: 240px; }
+      th:nth-child(5), td:nth-child(5) { width: 160px; }
+      th:nth-child(6), td:nth-child(6) { width: 260px; }
+      .voiceCell { grid-template-columns: minmax(0, 204px) 32px; }
+      .frame:nth-child(n+3) { display: none; }
+    }
+    @media (max-width: 720px) {
+      .modalMask { padding: 10px; align-items: flex-start; }
+      .voiceModal, .editModal { width: calc(100vw - 20px); max-height: calc(100vh - 20px); }
+      .formGrid { grid-template-columns: 1fr; }
+      .headerActions .btn { padding: 0 10px; }
+      .titleSuffix { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" id="app">
+    <header class="header">
+      <div class="headerLeft">
+        <button class="backBtn" type="button" aria-label="返回"><i data-lucide="arrow-left"></i></button>
+        <h1 class="title">说话人管理 <span class="titleSuffix">（第一商贵-狗叫版 · 日语）</span></h1>
+      </div>
+      <div class="headerActions">
+        <button class="btn" type="button"><i data-lucide="plus"></i>新增说话人</button>
+        <button class="btn" type="button"><i data-lucide="combine"></i>合并说话人</button>
+        <button class="btn btnDanger" type="button"><i data-lucide="trash-2"></i>删除说话人</button>
+        <button class="btn" type="button"><i data-lucide="volume-2"></i>统一音量</button>
+        <span class="divider"></span>
+        <button class="btn" type="button"><i data-lucide="zap"></i>智能匹配音色</button>
+        <button class="btn" type="button"><i data-lucide="mic"></i>音色复刻</button>
+        <button class="btn btnPrimary" type="button">应用至全剧</button>
+      </div>
+    </header>
+
+    <section class="tableWrap" aria-label="说话人列表">
+      <table>
+        <thead>
+          <tr>
+            <th>说话人</th>
+            <th>音量</th>
+            <th>画像标签</th>
+            <th>参考截帧</th>
+            <th>
+              <span class="thWithAction">
+                出场集数
+                <button class="headerIconBtn" type="button" id="refreshAppearances" aria-label="重新检测出场集数" data-tooltip="重新检测出场集数">
+                  <i data-lucide="refresh-cw"></i>
+                </button>
+              </span>
+            </th>
+            <th>音色配置</th>
+            <th>台词占比</th>
+          </tr>
+        </thead>
+        <tbody id="speakerRows"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <div class="modalMask" id="voiceMask" aria-hidden="true">
+    <section class="voiceModal" role="dialog" aria-modal="true" aria-labelledby="voiceModalTitle">
+      <header class="modalHeader">
+        <h2 class="modalTitle" id="voiceModalTitle">选择音色</h2>
+        <button class="closeBtn" type="button" data-close-voice aria-label="关闭"><i data-lucide="x"></i></button>
+      </header>
+      <div class="modalBody">
+        <div class="filterPanel">
+          <div class="filterHeader">
+            <span>⌃ 收起筛选</span>
+            <button class="resetBtn" type="button" id="resetFilters">重置</button>
+          </div>
+          <div class="filterRow">
+            <span class="filterCat">音色名称</span>
+            <input class="searchInput" id="searchVoice" placeholder="搜索音色名称" maxlength="100">
+          </div>
+          <div class="filterRow" data-filter="gender"><span class="filterCat">性别</span><div class="chips"></div></div>
+          <div class="filterRow" data-filter="age"><span class="filterCat">年龄</span><div class="chips"></div></div>
+          <div class="filterRow"><span class="filterCat">语言</span><div class="selectLike">全部语言 <i data-lucide="chevron-down"></i></div></div>
+          <div class="filterRow"><span class="filterCat">口音</span><div class="selectLike">全部口音 <i data-lucide="chevron-down"></i></div></div>
+          <div class="filterRow" data-filter="scene"><span class="filterCat">场景</span><div class="chips"></div></div>
+          <div class="filterRow" data-filter="style"><span class="filterCat">风格</span><div class="chips"></div></div>
+          <div class="filterRow" data-filter="source"><span class="filterCat">音色来源</span><div class="chips"></div></div>
+          <div class="filterRow" data-filter="stability"><span class="filterCat">音色质量</span><div class="chips"></div></div>
+          <div class="filterRow" data-filter="provider"><span class="filterCat">供应商</span><div class="chips"></div></div>
+        </div>
+        <div class="voiceList" id="voiceList"></div>
+      </div>
+      <footer class="modalFooter">
+        <div class="footerLeft" id="selectedHint"><i data-lucide="check-circle"></i> Serious Commander</div>
+        <div class="pager">
+          <button class="iconBtn" type="button" aria-label="上一页"><i data-lucide="chevron-left"></i></button>
+          <span class="pageNo">1</span>
+          <button class="iconBtn" type="button" aria-label="下一页"><i data-lucide="chevron-right"></i></button>
+          <button class="btn" type="button" data-close-voice>取消</button>
+          <button class="btn btnPrimary" type="button" id="applyVoice">应用</button>
+        </div>
+      </footer>
+    </section>
+  </div>
+
+  <div class="modalMask" id="editMask" aria-hidden="true">
+    <section class="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+      <header class="modalHeader">
+        <h2 class="modalTitle" id="editModalTitle">编辑音色信息</h2>
+        <button class="closeBtn" type="button" data-close-edit aria-label="关闭"><i data-lucide="x"></i></button>
+      </header>
+      <div class="modalBody">
+        <form class="formGrid" id="editForm" novalidate>
+          <div class="formField">
+            <label class="formLabel">音色名称</label>
+            <div class="readonly" id="editName"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel">供应商</label>
+            <div class="readonly" id="editProvider"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>性别</label>
+            <div class="optionWrap" id="editGender"></div>
+            <div class="fieldError" data-error="gender"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>年龄</label>
+            <div class="optionWrap" id="editAge"></div>
+            <div class="fieldError" data-error="age"></div>
+          </div>
+          <div class="formField full">
+            <label class="formLabel"><span class="required">*</span>语言</label>
+            <div class="multiSelect" id="languageMultiSelect">
+              <div class="selectedTags" id="editLanguageTags"></div>
+              <button class="languageTrigger" type="button" id="languageTrigger">添加语言</button>
+              <i class="languageChevron" data-lucide="chevron-down"></i>
+              <div class="languageDropdown" id="languageDropdown"></div>
+            </div>
+            <div class="hint">支持多选，至少选择 1 个；多语言音色可同时适用于多个语种。</div>
+            <div class="fieldError" data-error="languages"></div>
+          </div>
+          <div class="formField full">
+            <label class="formLabel">口音</label>
+            <div class="optionWrap" id="editAccents"></div>
+          </div>
+          <div class="formField full">
+            <label class="formLabel"><span class="required">*</span>风格</label>
+            <div class="styleHeader">
+              <span class="styleCount" id="styleCount"></span>
+              <button class="linkBtn" type="button" id="toggleStyles">展开全部</button>
+            </div>
+            <div class="optionWrap styleOptions" id="editStyles"></div>
+            <div class="styleActions" id="styleActions">
+              <button class="btn btnSmall" type="button" id="showStyleInput">新增</button>
+            </div>
+            <div class="tagComposer styleComposer" id="styleComposer">
+              <input class="formInput" id="customStyle" placeholder="新增自定义风格标签，2-8 个字符">
+              <button class="btn btnSmall" type="button" id="addStyleConfirm">确定</button>
+              <button class="btn btnSmall" type="button" id="cancelStyleInput">取消</button>
+            </div>
+            <div class="fieldError" data-error="styles"></div>
+          </div>
+          <div class="formField full">
+            <label class="formLabel">场景</label>
+            <div class="optionWrap" id="editScenes"></div>
+            <div class="fieldError" data-error="scenes"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>音色来源</label>
+            <div class="optionWrap" id="editSource"></div>
+            <div class="fieldError" data-error="source"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>音色质量</label>
+            <div class="optionWrap" id="editStability"></div>
+            <div class="hint">用于标记稳定性，易漂移音色后续智能匹配低优推荐。</div>
+            <div class="fieldError" data-error="stability"></div>
+          </div>
+          <div class="formField full">
+            <label class="formLabel">备注</label>
+            <textarea class="textarea" id="editRemark" maxlength="200" placeholder="记录该音色使用建议、表达特点或匹配备注，最多 200 字"></textarea>
+            <div class="hint"><span id="remarkCount">0</span>/200</div>
+          </div>
+        </form>
+      </div>
+      <footer class="modalFooter">
+        <div class="footerLeft">保存后将更新全局音色库信息，已应用音色读取最新数据展示。</div>
+        <div class="pager">
+          <button class="btn" type="button" data-close-edit>取消</button>
+          <button class="btn btnPrimary" type="button" id="saveVoice">保存</button>
+        </div>
+      </footer>
+    </section>
+  </div>
+
+  <div class="savingMask" id="savingMask"><span class="spinner"></span>正在保存音色信息...</div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const dict = {
+      gender: { male: '男', female: '女', neutral: '中性' },
+      age: { young: '年轻', middle_aged: '中年', old: '老年', kid: '儿童' },
+      source: { premade: '预制音色', generated: '合成音色', cloned: '克隆音色', professional: '专业配音', famous: '名人音色', high_quality: '高音质' },
+      stability: { normal: '普通', stable: '稳定', drifty: '易漂移' }
+    };
+    const options = {
+      gender: [['male','男声'],['female','女声'],['neutral','中性']],
+      age: [['young','年轻'],['middle_aged','中年'],['old','老年'],['kid','儿童']],
+      languages: [
+        ['en','英语'],['es-419','西班牙语'],['pt-BR','葡萄牙语'],['id','印尼语'],
+        ['ja','日语'],['fr-FR','法语'],['de-DE','德语'],['th','泰语'],
+        ['ar','阿拉伯语'],['ko','韩语'],['pl','波兰语'],['it','意大利语'],
+        ['tr','土耳其语'],['vi','越南语']
+      ],
+      accentsByLanguage: {
+        ja: [['tokyo','东京口音'],['kansai','关西口音']],
+        ko: [['seoul','首尔口音']],
+        en: [['american','美式'],['british','英式']],
+        'es-419': [['latin','拉美'],['castilian','西班牙']],
+        'pt-BR': [['brazil','巴西'],['portugal','葡萄牙']],
+        id: [['jakarta','雅加达口音']],
+        'fr-FR': [['paris','巴黎口音']],
+        'de-DE': [['berlin','柏林口音']],
+        th: [['bangkok','曼谷口音']],
+        ar: [['gulf','海湾口音'],['egyptian','埃及口音']],
+        pl: [['warsaw','华沙口音']],
+        it: [['rome','罗马口音']],
+        tr: [['istanbul','伊斯坦布尔口音']],
+        vi: [['northern','北部口音'],['southern','南部口音']]
+      },
+      scenes: [['dialogue','对话访谈'],['narration','叙事旁白'],['character','角色扮演'],['social','社媒'],['education','教育'],['ads','广告'],['entertainment','娱乐']],
+      // 预设标签来自 voice_tags/system_prompt.md，其余模拟线上从 preset_voice.tags 聚合出的已有标签池。
+      styles: [
+        '亲和','稳重','强势','克制','清冷','优雅','高傲','阴冷','危险','神秘','疏离','压迫感','贵气','跳脱','市井感','权威感','少年感',
+        '专业','严肃','严谨','丰富','亲切','亲近','从容','低沉','俏皮','坚毅','力量感','治愈','清爽','信任感','冷峻','温暖','成熟',
+        '冷静','理性','热血','活泼','甜美','灵动','知性','磁性','沙哑','沧桑','平缓','自然','戏剧化','喜感','可爱','元气','端庄',
+        '柔和','明亮','厚重','干练','焦虑','哀伤','温和','清亮','慵懒','紧张','霸气','旁白感','故事感'
+      ],
+      source: [['premade','预制音色'],['generated','合成音色'],['cloned','克隆音色'],['professional','专业配音'],['famous','名人音色']],
+      provider: [['ElevenLabs','ElevenLabs'],['Gemini','Gemini'],['Qwen','Qwen'],['MiniMax','MiniMax']],
+      stability: [['drifty','易漂移'],['normal','普通'],['stable','稳定']]
+    };
+    let voices = [
+      { id: 1, name: 'Serious Commander', gender: 'male', age: 'young', languages: ['ja','ko'], accents: ['tokyo'], scenes: ['character','social'], styles: ['严肃','稳重','坚毅','权威感'], source: 'premade', provider: 'MiniMax', stability: 'stable', remark: '适合青年男性主角，短句表现稳定。' },
+      { id: 2, name: 'Considerate Senior', gender: 'male', age: 'young', languages: ['ko'], accents: ['seoul'], scenes: ['dialogue','narration'], styles: ['温柔','亲和','稳重','治愈'], source: 'premade', provider: 'MiniMax', stability: 'normal', remark: '' },
+      { id: 3, name: 'Dominant Man', gender: 'male', age: 'young', languages: ['ko'], accents: ['seoul'], scenes: ['character'], styles: ['强势','权威感','稳重','压迫感','冷峻'], source: 'high_quality', provider: 'MiniMax', stability: 'drifty', remark: '长句和强情绪时偶发漂移，建议只推荐给低占比角色。' },
+      { id: 4, name: 'Reliable Youth', gender: 'male', age: 'young', languages: ['ja','es-419'], accents: ['tokyo','latin'], scenes: ['dialogue'], styles: ['温柔','稳重','亲和','信任感','清爽'], source: 'generated', provider: 'Qwen', stability: 'normal', remark: '' },
+      { id: 5, name: 'Cold Queen', gender: 'female', age: 'young', languages: ['ja'], accents: ['tokyo'], scenes: ['character','entertainment'], styles: ['清冷','克制','高傲'], source: 'professional', provider: 'ElevenLabs', stability: 'stable', remark: '适合女性强势角色。' },
+      { id: 6, name: 'Kind Lady', gender: 'female', age: 'young', languages: ['ja','vi'], accents: ['tokyo','southern'], scenes: ['dialogue'], styles: ['亲和','亲切','温柔'], source: 'premade', provider: 'Gemini', stability: 'normal', remark: '' }
+    ];
+    const speakers = [
+      { id: 1, name: '萧云彻', volume: '-', profile: '♂ 青年男性，大约22-27岁 · 高亢坚定，沉稳有压迫感', voiceId: 1, ratio: 42.53, frames: 2, appearanceChapters: [
+        ...Array.from({ length: 80 }, (_, i) => ({
+          taskId: 91001 + i,
+          chapterId: 1001 + i,
+          sequenceNo: i + 1,
+          chapterName: `第${i + 1}集`,
+          stage: i < 50 ? 'dubbing' : 'translate',
+          firstStableId: `s-${String(i + 1).padStart(3, '0')}`
+        }))
+      ] },
+      { id: 2, name: '萧父', volume: '-', profile: '♂ 中年男性，大约45-55岁 · 低沉粗哑，威严', voiceId: 3, ratio: 25.29, frames: 2, appearanceChapters: [
+        { taskId: 91002, chapterId: 1002, sequenceNo: 2, chapterName: '第2集', stage: 'dubbing', firstStableId: 's-042' },
+        { taskId: 91005, chapterId: 1005, sequenceNo: 5, chapterName: '第5集', stage: 'dubbing', firstStableId: 's-113', stale: true }
+      ] },
+      { id: 3, name: '萧云伽', volume: '-', profile: '♂ 青年男性，大约20-25岁 · 温和清亮，书卷气', voiceId: 4, ratio: 14.94, frames: 3, appearanceChapters: [
+        { taskId: 91004, chapterId: 1004, sequenceNo: 4, chapterName: '第4集', stage: 'translate', firstStableId: 's-101' },
+        { taskId: 91009, chapterId: 1009, sequenceNo: 9, chapterName: '第9集', stage: 'translate', firstStableId: 's-245' }
+      ] },
+      { id: 4, name: '萧家二姑娘', volume: '-', profile: '♀ 青年女性，大约18-22岁 · 尖锐娇蛮，偏冷', voiceId: 5, ratio: 12.64, frames: 2, appearanceChapters: [
+        { taskId: 91006, chapterId: 1006, sequenceNo: 6, chapterName: '第6集', stage: 'proofread', firstStableId: 's-147' }
+      ] },
+      { id: 5, name: '秋雨', volume: '-', profile: '♀ 青年女性，大约18-22岁 · 温柔清脆，亲切', voiceId: 6, ratio: 4.60, frames: 1, appearanceChapters: [] }
+    ];
+    const filters = { gender: '', age: '', scene: '', style: '', source: '', stability: '', provider: '' };
+    let selectedVoiceId = 1;
+    let currentVoiceId = 1;
+    let editingVoiceId = null;
+    let editDraft = null;
+    let styleExpanded = false;
+    let styleComposerOpen = false;
+    let appearanceRefreshing = false;
+    const expandedAppearanceSpeakerIds = new Set();
+    const STYLE_COLLAPSED_COUNT = 18;
+    const FILTER_STYLE_COUNT = 12;
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+    const label = (map, value) => map[value] || value || '-';
+    const escapeAttr = (value) => String(value ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const langLabel = (code) => (options.languages.find(item => item[0] === code) || [code, code])[1];
+    const accentLabel = (code) => {
+      for (const list of Object.values(options.accentsByLanguage)) {
+        const hit = list.find(item => item[0] === code);
+        if (hit) return hit[1];
+      }
+      return code;
+    };
+    function showToast(text) {
+      const toast = $('#toast');
+      toast.textContent = text;
+      toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+    function syncIcons() {
+      if (window.lucide) window.lucide.createIcons({ attrs: { width: 16, height: 16 } });
+    }
+    function stageLabel(stage) {
+      return { proofread: '字幕提取', translate: '翻译', dubbing: '配音' }[stage] || '当前阶段';
+    }
+    function getChapterNo(chapter) {
+      return Number(chapter.sequenceNo || chapter.chapterId || 0);
+    }
+    function formatAppearanceRange(range) {
+      return range.start === range.end ? `第${range.start}集` : `第${range.start}-${range.end}集`;
+    }
+    function buildAppearanceRanges(chapters) {
+      const ordered = [...chapters].sort((a, b) => getChapterNo(a) - getChapterNo(b));
+      return ordered.reduce((ranges, chapter) => {
+        const no = getChapterNo(chapter);
+        const last = ranges[ranges.length - 1];
+        if (last && no === last.end + 1) {
+          last.end = no;
+          return ranges;
+        }
+        ranges.push({ start: no, end: no });
+        return ranges;
+      }, []);
+    }
+    function summarizeAppearances(chapters) {
+      const ranges = buildAppearanceRanges(chapters);
+      const primary = ranges.slice(0, 2).map(formatAppearanceRange).join('、');
+      const suffix = ranges.length > 2 ? '等' : '';
+      return `${primary}${suffix} · 共${chapters.length}集`;
+    }
+    function renderAppearanceButton(speaker, chapter, compact = false) {
+      const text = compact ? getChapterNo(chapter) : `第${getChapterNo(chapter)}集`;
+      return `
+        <button
+          class="appearanceLink"
+          type="button"
+          data-appearance-speaker="${speaker.id}"
+          data-appearance-chapter="${chapter.chapterId}"
+          data-tooltip="点击进入${stageLabel(chapter.stage)}编辑器，并定位到该说话人的第一句台词"
+        >${text}</button>
+      `;
+    }
+    function renderAppearanceCell(speaker) {
+      if (appearanceRefreshing) {
+        return '<div class="appearanceLoading"><i data-lucide="loader-2"></i>检测中...</div>';
+      }
+      const chapters = speaker.appearanceChapters || [];
+      if (!chapters.length) {
+        return '<span class="appearanceEmpty" data-tooltip="当前任务内暂无出场集数">暂无出场集数</span>';
+      }
+      const expanded = expandedAppearanceSpeakerIds.has(speaker.id);
+      if (chapters.length > 12) {
+        const summary = summarizeAppearances(chapters);
+        if (!expanded) {
+          return `
+            <div class="appearanceCell">
+              <span class="appearanceRange" data-tooltip="${summary}">${summary}</span>
+              <button class="appearanceMore" type="button" data-appearance-more="${speaker.id}">查看</button>
+            </div>
+          `;
+        }
+        return `
+          <div class="appearancePanel">
+            <div class="appearancePanelTop">
+              <span class="appearanceRange" data-tooltip="${summary}">${summary}</span>
+              <button class="appearanceMore" type="button" data-appearance-more="${speaker.id}">收起</button>
+            </div>
+            <div class="appearanceGrid">
+              ${chapters.map(chapter => renderAppearanceButton(speaker, chapter, true)).join('')}
+            </div>
+          </div>
+        `;
+      }
+      const visible = expanded ? chapters : chapters.slice(0, 3);
+      const chapterButtons = visible.map(chapter => renderAppearanceButton(speaker, chapter)).join('');
+      const rest = chapters.length - visible.length;
+      const more = rest > 0
+        ? `<button class="appearanceMore" type="button" data-appearance-more="${speaker.id}">+${rest}集</button>`
+        : expanded && chapters.length > 3
+          ? `<button class="appearanceMore" type="button" data-appearance-more="${speaker.id}">收起</button>`
+          : '';
+      return `<div class="appearanceCell">${chapterButtons}${more}</div>`;
+    }
+    function renderSpeakers() {
+      $('#speakerRows').innerHTML = speakers.map((s, index) => {
+        const voice = voices.find(v => v.id === s.voiceId);
+        const frameHtml = Array.from({ length: s.frames }, (_, i) => `<span class="frame f${(i % 3) + 1}"></span>`).join('');
+        return `
+          <tr>
+            <td><div class="speakerCell"><span class="avatar a${index + 1}">${index + 1}</span><span class="nameText">${s.name}</span><i class="subAction" data-lucide="pencil"></i></div></td>
+            <td>${s.volume}</td>
+            <td><div class="profileLine"><button class="expandBtn" type="button" aria-label="展开画像"><i data-lucide="chevron-right"></i></button><span class="profileText">${s.profile}</span></div></td>
+            <td><div class="frames">${frameHtml}<button class="iconBtn" type="button" aria-label="试听原声"><i data-lucide="volume-2"></i></button></div></td>
+            <td>${renderAppearanceCell(s)}</td>
+            <td><div class="voiceCell"><button class="voiceSelect" type="button" data-open-voice="${s.voiceId}"><i data-lucide="volume-2"></i><span class="voiceNameInCell">${voice?.name || '选择音色'}</span></button><button class="iconBtn" type="button" aria-label="试听音色"><i data-lucide="play"></i></button></div></td>
+            <td><div class="ratio"><span class="ratioValue">${s.ratio.toFixed(2)}%</span><span class="bar"><span style="width:${s.ratio}%"></span></span></div></td>
+          </tr>
+        `;
+      }).join('');
+      syncIcons();
+    }
+    function renderFilterRow(key, list) {
+      const wrap = document.querySelector(`[data-filter="${key}"] .chips`);
+      wrap.innerHTML = `<button class="chip ${filters[key] === '' ? 'active' : ''}" type="button" data-filter-chip="${key}" data-value="">全部</button>` +
+        list.map(item => `<button class="chip ${filters[key] === item[0] ? 'active' : ''}" type="button" data-filter-chip="${key}" data-value="${item[0]}">${item[1]}</button>`).join('');
+    }
+    function renderFilters() {
+      renderFilterRow('gender', options.gender);
+      renderFilterRow('age', options.age);
+      renderFilterRow('scene', options.scenes);
+      const filterStyles = [...new Set([filters.style, ...options.styles.slice(0, FILTER_STYLE_COUNT)].filter(Boolean))];
+      renderFilterRow('style', filterStyles.map(item => [item, item]));
+      renderFilterRow('source', options.source);
+      renderFilterRow('stability', options.stability);
+      renderFilterRow('provider', options.provider);
+    }
+    function filteredVoices() {
+      const keyword = $('#searchVoice').value.trim().toLowerCase();
+      return voices.filter(v => {
+        if (keyword && !v.name.toLowerCase().includes(keyword)) return false;
+        if (filters.gender && v.gender !== filters.gender) return false;
+        if (filters.age && v.age !== filters.age) return false;
+        if (filters.scene && !v.scenes.includes(filters.scene)) return false;
+        if (filters.style && !v.styles.includes(filters.style)) return false;
+        if (filters.source && v.source !== filters.source) return false;
+        if (filters.stability && v.stability !== filters.stability) return false;
+        if (filters.provider && v.provider !== filters.provider) return false;
+        return true;
+      });
+    }
+    function renderVoices() {
+      const list = filteredVoices();
+      const currentVoice = voices.find(v => v.id === currentVoiceId);
+      const remaining = currentVoice ? list.filter(v => v.id !== currentVoice.id) : list;
+      const orderedList = currentVoice ? [currentVoice, ...remaining] : remaining;
+      $('#voiceList').innerHTML = orderedList.map(v => {
+        const sourceText = v.source === 'high_quality' ? '-' : label(dict.source, v.source);
+        const sourceWarn = v.source === 'high_quality' ? '历史来源为“高音质”，本期不再展示为有效来源' : '';
+        const isCurrent = v.id === currentVoiceId;
+        return `
+          <div class="voiceItem ${selectedVoiceId === v.id ? 'selected' : ''} ${isCurrent ? 'currentPinned' : ''}" data-select-voice="${v.id}">
+            <span class="selectBar"></span>
+            <div class="voiceInfo">
+              <div class="voiceTitleRow">
+                <span class="voiceTitle">${v.name}</span>
+                ${v.remark ? `<span class="noteTip" data-tooltip="此处为自定义备注内容示意"><i class="noteIcon" data-lucide="message-square"></i></span>` : ''}
+              </div>
+              <div class="meta">
+                <span class="genderDot ${v.gender}"></span>
+                <span>${label(dict.gender, v.gender)}</span><span>·</span>
+                <span>${label(dict.age, v.age)}</span><span>·</span>
+                <span>${v.languages.map(langLabel).join('、')}</span><span>·</span>
+                <span data-tooltip="${sourceWarn}">${sourceText}</span><span>·</span>
+                <span>${v.provider}</span><span>·</span>
+                <span>${label(dict.stability, v.stability)}</span><span>·</span>
+                <span class="metaTags">${v.scenes.map(x => (options.scenes.find(s => s[0] === x) || [x,x])[1]).join(' ')} · ${v.styles.join(' ')}</span>
+              </div>
+            </div>
+            ${isCurrent ? '<span class="badge currentBadge">当前</span>' : ''}
+            <button class="iconBtn" type="button" data-edit-voice="${v.id}" aria-label="编辑音色信息" data-tooltip="点击编辑音色信息"><i data-lucide="pencil"></i></button>
+            <button class="iconBtn" type="button" data-play-voice="${v.id}" aria-label="试听音色"><i data-lucide="play"></i></button>
+          </div>
+        `;
+      }).join('') || '<div class="hint" style="padding:28px;text-align:center;">暂无符合筛选条件的音色</div>';
+      const voice = voices.find(v => v.id === selectedVoiceId);
+      $('#selectedHint').innerHTML = `<i data-lucide="check-circle"></i>${voice ? voice.name : '请从列表中选择一个音色'}`;
+      syncIcons();
+    }
+    function openVoiceModal(voiceId) {
+      currentVoiceId = Number(voiceId) || selectedVoiceId;
+      selectedVoiceId = currentVoiceId;
+      $('#voiceMask').classList.add('show');
+      $('#voiceMask').setAttribute('aria-hidden', 'false');
+      syncModalScrollLock();
+      renderFilters();
+      renderVoices();
+    }
+    function closeVoiceModal() {
+      $('#voiceMask').classList.remove('show');
+      $('#voiceMask').setAttribute('aria-hidden', 'true');
+      syncModalScrollLock();
+    }
+    function syncModalScrollLock() {
+      const hasOpenModal = $('#voiceMask').classList.contains('show') || $('#editMask').classList.contains('show');
+      document.body.classList.toggle('modalOpen', hasOpenModal);
+    }
+    function editVoice() {
+      return editDraft;
+    }
+    function renderOptionGroup(id, values, selected, mode, onClickName, invalidValue) {
+      const active = Array.isArray(selected) ? selected : [selected];
+      document.getElementById(id).innerHTML = values.map(item => {
+        const isActive = active.includes(item[0]);
+        const invalid = invalidValue && item[0] === invalidValue;
+        return `<button class="option ${isActive ? 'active' : ''} ${invalid ? 'invalid' : ''}" type="button" data-${onClickName}="${item[0]}" data-mode="${mode}">${item[1]}</button>`;
+      }).join('');
+    }
+    function renderStyleOptions() {
+      const v = editVoice();
+      const allStyles = [...new Set([...options.styles, ...v.styles])];
+      const visibleStyles = styleExpanded
+        ? allStyles
+        : [...new Set([...v.styles, ...allStyles.slice(0, STYLE_COLLAPSED_COUNT)])];
+      $('#editStyles').classList.toggle('expanded', styleExpanded);
+      $('#editStyles').innerHTML = visibleStyles.map(item => {
+        const isActive = v.styles.includes(item);
+        return `<button class="option ${isActive ? 'active' : ''}" type="button" data-edit-style="${item}" data-mode="multi">${item}</button>`;
+      }).join('');
+      $('#styleCount').textContent = `已选 ${v.styles.length}/8 · 标签池 ${allStyles.length}`;
+      $('#toggleStyles').textContent = styleExpanded ? '收起' : `展开全部`;
+      $('#toggleStyles').style.display = allStyles.length > STYLE_COLLAPSED_COUNT ? 'inline-flex' : 'none';
+      $('#styleActions').style.display = styleComposerOpen ? 'none' : 'flex';
+      $('#styleComposer').classList.toggle('open', styleComposerOpen);
+    }
+    function renderLanguageSelect() {
+      const v = editVoice();
+      const selected = new Set(v.languages);
+      const box = $('#languageMultiSelect');
+      box.classList.toggle('hasValue', v.languages.length > 0);
+      $('#editLanguageTags').innerHTML = v.languages.map(code => `
+        <span class="selectedTag">${langLabel(code)}<button class="tagRemove" type="button" data-remove-language="${code}" aria-label="移除${langLabel(code)}">×</button></span>
+      `).join('');
+      const available = options.languages.filter(item => !selected.has(item[0]));
+      $('#languageTrigger').textContent = v.languages.length ? '' : '添加语言';
+      $('#languageDropdown').innerHTML = available.length
+        ? available.map(item => `<button class="languageOption" type="button" data-add-language="${item[0]}">${item[1]}</button>`).join('')
+        : '<div class="languageEmpty">暂无可添加语言</div>';
+    }
+    function openEditModal(id) {
+      editingVoiceId = Number(id);
+      const source = voices.find(v => v.id === editingVoiceId);
+      if (!source) return;
+      editDraft = JSON.parse(JSON.stringify(source));
+      styleExpanded = false;
+      styleComposerOpen = false;
+      const v = editVoice();
+      $('#editName').textContent = v.name;
+      $('#editProvider').textContent = v.provider;
+      $('#editRemark').value = v.remark || '';
+      $('#remarkCount').textContent = String($('#editRemark').value.length);
+      renderEditForm();
+      $('#editMask').classList.add('show');
+      $('#editMask').setAttribute('aria-hidden', 'false');
+      syncModalScrollLock();
+      syncIcons();
+    }
+    function closeEditModal() {
+      $('#editMask').classList.remove('show');
+      $('#editMask').setAttribute('aria-hidden', 'true');
+      syncModalScrollLock();
+      clearErrors();
+      editingVoiceId = null;
+      editDraft = null;
+    }
+    function renderEditForm() {
+      const v = editVoice();
+      if (!v) return;
+      renderOptionGroup('editGender', options.gender, v.gender, 'single', 'edit-gender');
+      renderOptionGroup('editAge', options.age, v.age, 'single', 'edit-age');
+      renderLanguageSelect();
+      const allowedAccents = v.languages.flatMap(lang => options.accentsByLanguage[lang] || []);
+      const seen = new Set();
+      const accents = allowedAccents.filter(item => seen.has(item[0]) ? false : (seen.add(item[0]), true));
+      v.accents = v.accents.filter(accent => accents.some(item => item[0] === accent)).slice(0, 1);
+      renderOptionGroup('editAccents', accents, v.accents, 'single', 'edit-accent');
+      renderOptionGroup('editScenes', options.scenes, v.scenes, 'multi', 'edit-scene');
+      renderStyleOptions();
+      renderOptionGroup('editSource', options.source, v.source === 'high_quality' ? '' : v.source, 'single', 'edit-source');
+      if (v.source === 'high_quality') {
+        $('#editSource').insertAdjacentHTML('beforeend', '<span class="readonly warn">历史值：高音质，保存前需重新选择</span>');
+      }
+      renderOptionGroup('editStability', options.stability, v.stability || 'normal', 'single', 'edit-stability');
+      syncIcons();
+    }
+    function clearErrors() {
+      $$('[data-error]').forEach(el => el.textContent = '');
+    }
+    function setError(key, text) {
+      const el = document.querySelector(`[data-error="${key}"]`);
+      if (el) el.textContent = text;
+    }
+    function validateEdit() {
+      clearErrors();
+      const v = editVoice();
+      let ok = true;
+      if (!v.gender) { setError('gender', '请选择性别'); ok = false; }
+      if (!v.age) { setError('age', '请选择年龄'); ok = false; }
+      if (!v.languages.length) { setError('languages', '语言至少选择 1 个'); ok = false; }
+      if (v.scenes.length > 5) { setError('scenes', '场景最多选择 5 个'); ok = false; }
+      if (!v.styles.length) { setError('styles', '风格至少选择 1 个'); ok = false; }
+      if (v.styles.length > 8) { setError('styles', '风格最多选择 8 个'); ok = false; }
+      if (!v.source || v.source === 'high_quality') { setError('source', '请选择有效音色来源'); ok = false; }
+      if (!v.stability) { setError('stability', '请选择音色质量'); ok = false; }
+      return ok;
+    }
+    function saveEdit() {
+      const v = editVoice();
+      if (!v) return;
+      v.remark = $('#editRemark').value.trim();
+      if (!validateEdit()) return;
+      $('#savingMask').classList.add('show');
+      setTimeout(() => {
+        const index = voices.findIndex(item => item.id === editingVoiceId);
+        if (index >= 0) voices[index] = { ...voices[index], ...v };
+        $('#savingMask').classList.remove('show');
+        closeEditModal();
+        renderVoices();
+        renderSpeakers();
+        showToast('音色信息已更新');
+      }, 650);
+    }
+    document.addEventListener('click', (e) => {
+      const openBtn = e.target.closest('[data-open-voice]');
+      if (openBtn) { openVoiceModal(openBtn.dataset.openVoice); return; }
+      if (e.target.closest('[data-close-voice]')) { closeVoiceModal(); return; }
+      if (e.target.closest('[data-close-edit]')) { closeEditModal(); return; }
+      const filterChip = e.target.closest('[data-filter-chip]');
+      if (filterChip) {
+        filters[filterChip.dataset.filterChip] = filterChip.dataset.value;
+        renderFilters();
+        renderVoices();
+        return;
+      }
+      const selected = e.target.closest('[data-select-voice]');
+      if (selected && !e.target.closest('[data-edit-voice], [data-play-voice]')) {
+        selectedVoiceId = Number(selected.dataset.selectVoice);
+        renderVoices();
+        return;
+      }
+      const edit = e.target.closest('[data-edit-voice]');
+      if (edit) { openEditModal(edit.dataset.editVoice); return; }
+      const play = e.target.closest('[data-play-voice]');
+      if (play) { showToast('正在试听音色'); return; }
+      if (e.target.id === 'resetFilters') {
+        Object.keys(filters).forEach(key => filters[key] = '');
+        $('#searchVoice').value = '';
+        renderFilters();
+        renderVoices();
+        return;
+      }
+      if (e.target.id === 'applyVoice') {
+        closeVoiceModal();
+        speakers[0].voiceId = selectedVoiceId;
+        renderSpeakers();
+        showToast('音色已应用，已读取最新音色信息');
+        return;
+      }
+      const refreshAppearances = e.target.closest('#refreshAppearances');
+      if (refreshAppearances && !appearanceRefreshing) {
+        appearanceRefreshing = true;
+        refreshAppearances.classList.add('loading');
+        renderSpeakers();
+        showToast('正在重新检测出场集数...');
+        setTimeout(() => {
+          speakers.forEach((speaker) => {
+            speaker.appearanceChapters = (speaker.appearanceChapters || []).filter(chapter => !chapter.stale);
+          });
+          appearanceRefreshing = false;
+          refreshAppearances.classList.remove('loading');
+          renderSpeakers();
+          showToast('出场集数已刷新');
+        }, 900);
+        return;
+      }
+      const appearanceMore = e.target.closest('[data-appearance-more]');
+      if (appearanceMore) {
+        const speakerId = Number(appearanceMore.dataset.appearanceMore);
+        if (expandedAppearanceSpeakerIds.has(speakerId)) expandedAppearanceSpeakerIds.delete(speakerId);
+        else expandedAppearanceSpeakerIds.add(speakerId);
+        renderSpeakers();
+        return;
+      }
+      const appearanceChapter = e.target.closest('[data-appearance-chapter]');
+      if (appearanceChapter) {
+        const speakerId = Number(appearanceChapter.dataset.appearanceSpeaker);
+        const chapterId = Number(appearanceChapter.dataset.appearanceChapter);
+        const speaker = speakers.find(item => item.id === speakerId);
+        const chapter = speaker?.appearanceChapters?.find(item => item.chapterId === chapterId);
+        if (!speaker || !chapter) {
+          showToast('该说话人在当前任务内暂无出场集数');
+          return;
+        }
+        if (chapter.stale) {
+          speaker.appearanceChapters = speaker.appearanceChapters.filter(item => !item.stale);
+          renderSpeakers();
+          showToast('该说话人在当前集暂无出场，出场集数已刷新');
+          return;
+        }
+        showToast(`已进入${stageLabel(chapter.stage)}编辑器，并定位到${speaker.name}第一句台词`);
+        return;
+      }
+      const v = editVoice();
+      if (!v) return;
+      if (!e.target.closest('#languageMultiSelect')) {
+        $('#languageMultiSelect')?.classList.remove('open');
+      }
+      const addLanguage = e.target.closest('[data-add-language]');
+      if (addLanguage) {
+        if (!v.languages.includes(addLanguage.dataset.addLanguage)) v.languages.push(addLanguage.dataset.addLanguage);
+        renderEditForm();
+        validateEdit();
+        $('#languageMultiSelect').classList.add('open');
+        return;
+      }
+      const removeLanguage = e.target.closest('[data-remove-language]');
+      if (removeLanguage) {
+        v.languages = v.languages.filter(item => item !== removeLanguage.dataset.removeLanguage);
+        const allowed = new Set(v.languages.flatMap(lang => (options.accentsByLanguage[lang] || []).map(item => item[0])));
+        v.accents = v.accents.filter(item => allowed.has(item)).slice(0, 1);
+        renderEditForm();
+        validateEdit();
+        return;
+      }
+      if (e.target.closest('#languageMultiSelect')) {
+        $('#languageMultiSelect').classList.toggle('open');
+        return;
+      }
+      if (e.target.id === 'toggleStyles') {
+        styleExpanded = !styleExpanded;
+        renderEditForm();
+        return;
+      }
+      if (e.target.id === 'showStyleInput') {
+        styleComposerOpen = true;
+        renderEditForm();
+        $('#customStyle')?.focus();
+        return;
+      }
+      if (e.target.id === 'cancelStyleInput') {
+        styleComposerOpen = false;
+        $('#customStyle').value = '';
+        setError('styles', '');
+        renderEditForm();
+        return;
+      }
+      const mappings = [
+        ['edit-gender', 'gender', 'single'],
+        ['edit-age', 'age', 'single'],
+        ['edit-accent', 'accents', 'single-array'],
+        ['edit-scene', 'scenes', 'multi'],
+        ['edit-style', 'styles', 'multi'],
+        ['edit-source', 'source', 'single'],
+        ['edit-stability', 'stability', 'single']
+      ];
+      for (const [attr, field, mode] of mappings) {
+        const btn = e.target.closest(`[data-${attr}]`);
+        if (!btn) continue;
+        const value = btn.getAttribute(`data-${attr}`);
+        if (mode === 'single') v[field] = value;
+        else if (mode === 'single-array') v[field] = v[field].includes(value) ? [] : [value];
+        else {
+          const set = new Set(v[field]);
+          if (set.has(value)) set.delete(value); else set.add(value);
+          v[field] = Array.from(set);
+        }
+        renderEditForm();
+        validateEdit();
+        return;
+      }
+      if (e.target.id === 'addStyleConfirm') {
+        const input = $('#customStyle');
+        const value = input.value.trim();
+        if (value.length < 2 || value.length > 8) { setError('styles', '自定义风格标签需为 2-8 个字符'); return; }
+        if (v.styles.includes(value)) { setError('styles', '该风格标签已存在'); return; }
+        if (v.styles.length >= 8) { setError('styles', '风格最多选择 8 个'); return; }
+        if (!options.styles.includes(value)) options.styles.push(value);
+        v.styles.push(value);
+        input.value = '';
+        styleComposerOpen = false;
+        renderEditForm();
+        validateEdit();
+        return;
+      }
+      if (e.target.id === 'saveVoice') saveEdit();
+    });
+    $('#searchVoice').addEventListener('input', renderVoices);
+    $('#editRemark').addEventListener('input', (e) => {
+      $('#remarkCount').textContent = String(e.target.value.length);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if ($('#editMask').classList.contains('show')) closeEditModal();
+      else if ($('#voiceMask').classList.contains('show')) closeVoiceModal();
+    });
+    renderSpeakers();
+    renderFilters();
+    syncIcons();
+  </script>
+</body>
+</html>
