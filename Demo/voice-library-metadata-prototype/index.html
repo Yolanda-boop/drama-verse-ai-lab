@@ -356,10 +356,32 @@
       background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
     }
     .filterHeader { height: 28px; display: flex; align-items: center; justify-content: space-between; color: rgba(255,255,255,.45); font-size: 12px; }
-    .resetBtn { border: 0; background: transparent; color: rgba(124,90,243,.8); }
-    .filterRow { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 4px 0; border-top: 1px solid rgba(255,255,255,.07); }
-    .filterRow:first-of-type { border-top: 0; }
-    .filterCat { width: 42px; flex: 0 0 42px; text-align: right; font-size: 12px; color: rgba(255,255,255,.38); }
+    .filterToggle {
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.54);
+      font-size: 12px;
+    }
+    .filterToggle:hover { color: #fff; }
+    .filterToggle svg { width: 13px; height: 13px; }
+    .resetBtn { border: 0; background: transparent; color: #bda4ff; font-size: 12px; }
+    .resetBtn:hover { color: #fff; }
+    .filterPanel.collapsed { padding-bottom: 8px; }
+    .filterPanel.collapsed .filterRow,
+    .filterPanel.collapsed .filterLine { display: none; }
+    .filterRow,
+    .filterLine { min-height: 36px; padding: 4px 0; border-top: 1px solid rgba(255,255,255,.07); }
+    .filterHeader + .filterRow,
+    .filterHeader + .filterLine { border-top: 0; }
+    .filterRow { display: flex; align-items: center; gap: 10px; }
+    .filterLine { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 24px; align-items: start; }
+    .filterItem { min-width: 0; display: grid; grid-template-columns: 68px minmax(0, 1fr); column-gap: 10px; align-items: center; }
+    .filterCat { width: 68px; flex: 0 0 68px; text-align: right; font-size: 12px; color: rgba(255,255,255,.44); white-space: nowrap; }
     .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
     .chip {
       min-height: 22px;
@@ -387,7 +409,21 @@
     .searchInput { width: 270px; height: 26px; padding: 0 10px; font-size: 12px; }
     .searchInput::placeholder, .textarea::placeholder { color: rgba(255,255,255,.3); font-size: 12px; }
     .selectLike { min-width: 210px; height: 26px; display: inline-flex; align-items: center; justify-content: space-between; padding: 0 10px; color: rgba(255,255,255,.45); font-size: 12px; }
+    .filterSelect {
+      width: 210px;
+      height: 28px;
+      padding: 0 30px 0 10px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 7px;
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.82);
+      font-size: 12px;
+      outline: none;
+    }
+    .filterSelect:focus { border-color: rgba(124,90,243,.58); box-shadow: 0 0 0 2px rgba(124,90,243,.14); }
+    .filterSelect option { background: #232328; color: rgba(255,255,255,.86); }
     .voiceList { display: flex; flex-direction: column; gap: 8px; overflow: visible; padding: 2px; }
+    .voiceActions { display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto; }
     .voiceItem {
       min-height: 56px;
       display: flex;
@@ -459,6 +495,17 @@
     .formField { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
     .formField.full { grid-column: 1 / -1; }
     .formLabel { color: rgba(255,255,255,.68); font-size: 12px; display: flex; align-items: center; gap: 5px; }
+    .helpTip {
+      width: 15px;
+      height: 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,.42);
+      cursor: help;
+    }
+    .helpTip:hover { color: #bda4ff; }
+    .helpTip svg { width: 14px; height: 14px; }
     .required { color: #ff6577; }
     .readonly {
       min-height: 34px;
@@ -619,6 +666,19 @@
     .formSelect, .formInput { height: 34px; padding: 0 10px; font-size: 13px; }
     .textarea { min-height: 78px; padding: 8px 10px; resize: vertical; font-size: 13px; }
     .hint { color: rgba(255,255,255,.4); font-size: 12px; line-height: 18px; }
+    .noticeBox {
+      grid-column: 1 / -1;
+      padding: 10px 12px;
+      border: 1px solid rgba(124,90,243,.22);
+      border-radius: 10px;
+      background: rgba(124,90,243,.08);
+      color: rgba(224,216,255,.78);
+      font-size: 12px;
+      line-height: 18px;
+    }
+    .languageSummary { color: rgba(255,255,255,.72); font-size: 12px; line-height: 20px; }
+    .confirmText { color: rgba(255,255,255,.74); font-size: 13px; line-height: 22px; }
+    .confirmList { margin-top: 8px; color: #bda4ff; font-size: 13px; line-height: 20px; }
     .fieldError { min-height: 18px; color: #ff6577; font-size: 12px; }
     .tagComposer { display: flex; align-items: center; gap: 8px; }
     .tagComposer .formInput { flex: 1; }
@@ -677,6 +737,16 @@
       line-height: 18px;
       white-space: nowrap;
       box-shadow: 0 10px 26px rgba(0,0,0,.4);
+    }
+    .helpTip[data-tooltip]:hover:after {
+      left: calc(100% + 8px);
+      right: auto;
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+      width: 220px;
+      max-width: 220px;
+      white-space: normal;
     }
     @media (max-width: 980px) {
       .header { align-items: flex-start; height: auto; min-height: 54px; padding: 10px 12px; gap: 8px; }
@@ -754,22 +824,27 @@
       <div class="modalBody">
         <div class="filterPanel">
           <div class="filterHeader">
-            <span>⌃ 收起筛选</span>
+            <button class="filterToggle" type="button" id="filterToggle"><i data-lucide="chevron-up"></i><span>收起筛选</span></button>
             <button class="resetBtn" type="button" id="resetFilters">重置</button>
           </div>
           <div class="filterRow">
             <span class="filterCat">音色名称</span>
             <input class="searchInput" id="searchVoice" placeholder="搜索音色名称" maxlength="100">
           </div>
-          <div class="filterRow" data-filter="gender"><span class="filterCat">性别</span><div class="chips"></div></div>
-          <div class="filterRow" data-filter="age"><span class="filterCat">年龄</span><div class="chips"></div></div>
-          <div class="filterRow"><span class="filterCat">语言</span><div class="selectLike">全部语言 <i data-lucide="chevron-down"></i></div></div>
-          <div class="filterRow"><span class="filterCat">口音</span><div class="selectLike">全部口音 <i data-lucide="chevron-down"></i></div></div>
-          <div class="filterRow" data-filter="scene"><span class="filterCat">场景</span><div class="chips"></div></div>
+          <div class="filterLine">
+            <div class="filterItem"><span class="filterCat">语言</span><select class="filterSelect" id="filterLanguage"></select></div>
+            <div class="filterItem"><span class="filterCat">口音</span><select class="filterSelect" id="filterAccent"></select></div>
+          </div>
+          <div class="filterLine">
+            <div class="filterItem" data-filter="gender"><span class="filterCat">性别</span><div class="chips"></div></div>
+            <div class="filterItem" data-filter="age"><span class="filterCat">年龄</span><div class="chips"></div></div>
+          </div>
           <div class="filterRow" data-filter="style"><span class="filterCat">风格</span><div class="chips"></div></div>
-          <div class="filterRow" data-filter="source"><span class="filterCat">音色来源</span><div class="chips"></div></div>
-          <div class="filterRow" data-filter="stability"><span class="filterCat">音色质量</span><div class="chips"></div></div>
           <div class="filterRow" data-filter="provider"><span class="filterCat">供应商</span><div class="chips"></div></div>
+          <div class="filterRow" data-filter="voiceQuality"><span class="filterCat">音色质量</span><div class="chips"></div></div>
+          <div class="filterRow" data-filter="stability"><span class="filterCat">音色稳定性</span><div class="chips"></div></div>
+          <div class="filterRow" data-filter="emotionAbility"><span class="filterCat">情感能力</span><div class="chips"></div></div>
+          <div class="filterRow" data-filter="source"><span class="filterCat">音色来源</span><div class="chips"></div></div>
         </div>
         <div class="voiceList" id="voiceList"></div>
       </div>
@@ -803,6 +878,14 @@
             <div class="readonly" id="editProvider"></div>
           </div>
           <div class="formField">
+            <label class="formLabel">语言 <span class="helpTip" data-tooltip="同一音色在不同语种下的参数独立维护，本窗口仅编辑当前语种下的音色信息"><i data-lucide="circle-help"></i></span></label>
+            <div class="readonly" id="editLanguage"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel">口音</label>
+            <div class="optionWrap" id="editAccents"></div>
+          </div>
+          <div class="formField">
             <label class="formLabel"><span class="required">*</span>性别</label>
             <div class="optionWrap" id="editGender"></div>
             <div class="fieldError" data-error="gender"></div>
@@ -811,21 +894,6 @@
             <label class="formLabel"><span class="required">*</span>年龄</label>
             <div class="optionWrap" id="editAge"></div>
             <div class="fieldError" data-error="age"></div>
-          </div>
-          <div class="formField full">
-            <label class="formLabel"><span class="required">*</span>语言</label>
-            <div class="multiSelect" id="languageMultiSelect">
-              <div class="selectedTags" id="editLanguageTags"></div>
-              <button class="languageTrigger" type="button" id="languageTrigger">添加语言</button>
-              <i class="languageChevron" data-lucide="chevron-down"></i>
-              <div class="languageDropdown" id="languageDropdown"></div>
-            </div>
-            <div class="hint">支持多选，至少选择 1 个；多语言音色可同时适用于多个语种。</div>
-            <div class="fieldError" data-error="languages"></div>
-          </div>
-          <div class="formField full">
-            <label class="formLabel">口音</label>
-            <div class="optionWrap" id="editAccents"></div>
           </div>
           <div class="formField full">
             <label class="formLabel"><span class="required">*</span>风格</label>
@@ -844,21 +912,25 @@
             </div>
             <div class="fieldError" data-error="styles"></div>
           </div>
-          <div class="formField full">
-            <label class="formLabel">场景</label>
-            <div class="optionWrap" id="editScenes"></div>
-            <div class="fieldError" data-error="scenes"></div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>音色质量 <span class="helpTip" data-tooltip="音色素材本身是否清晰、干净，是否存在底噪或采样瑕疵"><i data-lucide="circle-help"></i></span></label>
+            <div class="optionWrap" id="editVoiceQuality"></div>
+            <div class="fieldError" data-error="voiceQuality"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>音色稳定性 <span class="helpTip" data-tooltip="TTS 合成后是否容易音色漂移、变声或长句不稳定"><i data-lucide="circle-help"></i></span></label>
+            <div class="optionWrap" id="editStability"></div>
+            <div class="fieldError" data-error="stability"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>情感能力 <span class="helpTip" data-tooltip="该音色表达情绪是否饱满，能否承载强情绪台词"><i data-lucide="circle-help"></i></span></label>
+            <div class="optionWrap" id="editEmotionAbility"></div>
+            <div class="fieldError" data-error="emotionAbility"></div>
           </div>
           <div class="formField">
             <label class="formLabel"><span class="required">*</span>音色来源</label>
             <div class="optionWrap" id="editSource"></div>
             <div class="fieldError" data-error="source"></div>
-          </div>
-          <div class="formField">
-            <label class="formLabel"><span class="required">*</span>音色质量</label>
-            <div class="optionWrap" id="editStability"></div>
-            <div class="hint">用于标记稳定性，易漂移音色后续智能匹配低优推荐。</div>
-            <div class="fieldError" data-error="stability"></div>
           </div>
           <div class="formField full">
             <label class="formLabel">备注</label>
@@ -877,6 +949,113 @@
     </section>
   </div>
 
+  <div class="modalMask" id="addLanguageMask" aria-hidden="true">
+    <section class="editModal" role="dialog" aria-modal="true" aria-labelledby="addLanguageTitle">
+      <header class="modalHeader">
+        <h2 class="modalTitle" id="addLanguageTitle">添加至新语种</h2>
+        <button class="closeBtn" type="button" data-close-add-language aria-label="关闭"><i data-lucide="x"></i></button>
+      </header>
+      <div class="modalBody">
+        <form class="formGrid" id="addLanguageForm" novalidate>
+          <div class="formField">
+            <label class="formLabel">音色名称</label>
+            <div class="readonly" id="addName"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel">供应商</label>
+            <div class="readonly" id="addProvider"></div>
+          </div>
+          <div class="formField full">
+            <label class="formLabel"><span class="required">*</span>语种</label>
+            <div class="multiSelect" id="addLanguageMultiSelect">
+              <div class="selectedTags" id="addLanguageTags"></div>
+              <button class="languageTrigger" type="button" id="addLanguageTrigger">添加语种</button>
+              <i class="languageChevron" data-lucide="chevron-down"></i>
+              <div class="languageDropdown" id="addLanguageDropdown"></div>
+            </div>
+            <div class="hint">默认选中当前任务目标语种；批量添加时，本窗口参数将作为所选语种的初始值。</div>
+            <div class="fieldError" data-error="addLanguages"></div>
+          </div>
+          <div class="noticeBox">已默认带入当前音色参数，请根据目标语种试听效果确认后保存。</div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>性别</label>
+            <div class="optionWrap" id="addGender"></div>
+            <div class="fieldError" data-error="addGender"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>年龄</label>
+            <div class="optionWrap" id="addAge"></div>
+            <div class="fieldError" data-error="addAge"></div>
+          </div>
+          <div class="formField full">
+            <label class="formLabel">口音</label>
+            <div class="optionWrap" id="addAccents"></div>
+          </div>
+          <div class="formField full">
+            <label class="formLabel"><span class="required">*</span>风格</label>
+            <div class="optionWrap styleOptions" id="addStyles"></div>
+            <div class="fieldError" data-error="addStyles"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>音色质量</label>
+            <div class="optionWrap" id="addVoiceQuality"></div>
+            <div class="fieldError" data-error="addVoiceQuality"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>音色稳定性</label>
+            <div class="optionWrap" id="addStability"></div>
+            <div class="fieldError" data-error="addStability"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>情感能力</label>
+            <div class="optionWrap" id="addEmotionAbility"></div>
+            <div class="fieldError" data-error="addEmotionAbility"></div>
+          </div>
+          <div class="formField">
+            <label class="formLabel"><span class="required">*</span>音色来源</label>
+            <div class="optionWrap" id="addSource"></div>
+            <div class="fieldError" data-error="addSource"></div>
+          </div>
+          <div class="formField full">
+            <label class="formLabel">备注</label>
+            <textarea class="textarea" id="addRemark" maxlength="200" placeholder="记录该语种下的音色使用建议，最多 200 字"></textarea>
+            <div class="hint"><span id="addRemarkCount">0</span>/200</div>
+          </div>
+        </form>
+      </div>
+      <footer class="modalFooter">
+        <div class="footerLeft">保存后为所选语种创建或更新独立的音色参数。</div>
+        <div class="pager">
+          <button class="btn" type="button" data-close-add-language>取消</button>
+          <button class="btn btnPrimary" type="button" id="saveAddLanguage">保存</button>
+        </div>
+      </footer>
+    </section>
+  </div>
+
+  <div class="modalMask" id="duplicateMask" aria-hidden="true">
+    <section class="editModal" role="dialog" aria-modal="true" aria-labelledby="duplicateTitle">
+      <header class="modalHeader">
+        <h2 class="modalTitle" id="duplicateTitle">部分语种已存在该音色</h2>
+        <button class="closeBtn" type="button" data-close-duplicate aria-label="关闭"><i data-lucide="x"></i></button>
+      </header>
+      <div class="modalBody">
+        <div class="confirmText">
+          以下语种已存在该音色信息，请选择处理方式。选择「覆盖」后，将使用当前窗口填写的字段参数覆盖对应语种下已有音色信息；选择「跳过」后，仅新增不存在的语种。
+          <div class="confirmList" id="duplicateLanguageList"></div>
+        </div>
+      </div>
+      <footer class="modalFooter">
+        <div class="footerLeft">覆盖后将影响对应语种音色库的全局展示和后续智能音色匹配。</div>
+        <div class="pager">
+          <button class="btn" type="button" data-close-duplicate>取消</button>
+          <button class="btn" type="button" id="skipDuplicateLanguages">跳过已存在语种</button>
+          <button class="btn btnPrimary" type="button" id="coverDuplicateLanguages">覆盖已存在语种</button>
+        </div>
+      </footer>
+    </section>
+  </div>
+
   <div class="savingMask" id="savingMask"><span class="spinner"></span>正在保存音色信息...</div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -884,19 +1063,23 @@
     const dict = {
       gender: { male: '男', female: '女', neutral: '中性' },
       age: { young: '年轻', middle_aged: '中年', old: '老年', kid: '儿童' },
-      source: { premade: '预制音色', generated: '合成音色', cloned: '克隆音色', professional: '专业配音', famous: '名人音色', high_quality: '高音质' },
-      stability: { normal: '普通', stable: '稳定', drifty: '易漂移' }
+      source: { premade: '预制音色', generated: '合成音色', cloned: '克隆音色', professional: '专业配音', famous: '名人音色' },
+      voiceQuality: { clean: '清晰干净', minor_flaw: '轻微瑕疵', noisy: '噪声明显' },
+      stability: { normal: '普通', stable: '稳定', drifty: '易漂移' },
+      emotionAbility: { strong: '强', medium: '中', weak: '弱' }
     };
     const options = {
       gender: [['male','男声'],['female','女声'],['neutral','中性']],
       age: [['young','年轻'],['middle_aged','中年'],['old','老年'],['kid','儿童']],
       languages: [
+        ['zh-TW','繁中'],
         ['en','英语'],['es-419','西班牙语'],['pt-BR','葡萄牙语'],['id','印尼语'],
         ['ja','日语'],['fr-FR','法语'],['de-DE','德语'],['th','泰语'],
         ['ar','阿拉伯语'],['ko','韩语'],['pl','波兰语'],['it','意大利语'],
         ['tr','土耳其语'],['vi','越南语']
       ],
       accentsByLanguage: {
+        'zh-TW': [['taipei','台北口音'],['neutral_zh_tw','繁中通用']],
         ja: [['tokyo','东京口音'],['kansai','关西口音']],
         ko: [['seoul','首尔口音']],
         en: [['american','美式'],['british','英式']],
@@ -912,7 +1095,6 @@
         tr: [['istanbul','伊斯坦布尔口音']],
         vi: [['northern','北部口音'],['southern','南部口音']]
       },
-      scenes: [['dialogue','对话访谈'],['narration','叙事旁白'],['character','角色扮演'],['social','社媒'],['education','教育'],['ads','广告'],['entertainment','娱乐']],
       // 预设标签来自 voice_tags/system_prompt.md，其余模拟线上从 preset_voice.tags 聚合出的已有标签池。
       styles: [
         '亲和','稳重','强势','克制','清冷','优雅','高傲','阴冷','危险','神秘','疏离','压迫感','贵气','跳脱','市井感','权威感','少年感',
@@ -922,15 +1104,18 @@
       ],
       source: [['premade','预制音色'],['generated','合成音色'],['cloned','克隆音色'],['professional','专业配音'],['famous','名人音色']],
       provider: [['ElevenLabs','ElevenLabs'],['Gemini','Gemini'],['Qwen','Qwen'],['MiniMax','MiniMax']],
-      stability: [['drifty','易漂移'],['normal','普通'],['stable','稳定']]
+      voiceQuality: [['clean','清晰干净'],['minor_flaw','轻微瑕疵'],['noisy','噪声明显']],
+      stability: [['stable','稳定'],['normal','普通'],['drifty','易漂移']],
+      emotionAbility: [['strong','强'],['medium','中'],['weak','弱']]
     };
+    const currentTaskLanguage = 'zh-TW';
     let voices = [
-      { id: 1, name: 'Serious Commander', gender: 'male', age: 'young', languages: ['ja','ko'], accents: ['tokyo'], scenes: ['character','social'], styles: ['严肃','稳重','坚毅','权威感'], source: 'premade', provider: 'MiniMax', stability: 'stable', remark: '适合青年男性主角，短句表现稳定。' },
-      { id: 2, name: 'Considerate Senior', gender: 'male', age: 'young', languages: ['ko'], accents: ['seoul'], scenes: ['dialogue','narration'], styles: ['温柔','亲和','稳重','治愈'], source: 'premade', provider: 'MiniMax', stability: 'normal', remark: '' },
-      { id: 3, name: 'Dominant Man', gender: 'male', age: 'young', languages: ['ko'], accents: ['seoul'], scenes: ['character'], styles: ['强势','权威感','稳重','压迫感','冷峻'], source: 'high_quality', provider: 'MiniMax', stability: 'drifty', remark: '长句和强情绪时偶发漂移，建议只推荐给低占比角色。' },
-      { id: 4, name: 'Reliable Youth', gender: 'male', age: 'young', languages: ['ja','es-419'], accents: ['tokyo','latin'], scenes: ['dialogue'], styles: ['温柔','稳重','亲和','信任感','清爽'], source: 'generated', provider: 'Qwen', stability: 'normal', remark: '' },
-      { id: 5, name: 'Cold Queen', gender: 'female', age: 'young', languages: ['ja'], accents: ['tokyo'], scenes: ['character','entertainment'], styles: ['清冷','克制','高傲'], source: 'professional', provider: 'ElevenLabs', stability: 'stable', remark: '适合女性强势角色。' },
-      { id: 6, name: 'Kind Lady', gender: 'female', age: 'young', languages: ['ja','vi'], accents: ['tokyo','southern'], scenes: ['dialogue'], styles: ['亲和','亲切','温柔'], source: 'premade', provider: 'Gemini', stability: 'normal', remark: '' }
+      { id: 1, voiceKey: 'v-serious-commander', name: 'Serious Commander', language: 'ko', gender: 'male', age: 'young', accents: ['seoul'], styles: ['严肃','稳重','坚毅','权威感'], source: 'premade', provider: 'MiniMax', voiceQuality: 'clean', stability: 'stable', emotionAbility: 'strong', remark: '韩语表现稳定，适合青年男性主角。' },
+      { id: 2, voiceKey: 'v-considerate-senior', name: 'Considerate Senior', language: 'ko', gender: 'male', age: 'young', accents: ['seoul'], styles: ['温柔','亲和','稳重','治愈'], source: 'premade', provider: 'MiniMax', voiceQuality: 'clean', stability: 'normal', emotionAbility: 'medium', remark: '' },
+      { id: 3, voiceKey: 'v-dominant-man', name: 'Dominant Man', language: 'ko', gender: 'male', age: 'young', accents: ['seoul'], styles: ['强势','权威感','稳重','压迫感','冷峻'], source: 'premade', provider: 'MiniMax', voiceQuality: 'minor_flaw', stability: 'drifty', emotionAbility: 'strong', remark: '长句和强情绪时偶发漂移，建议只推荐给低占比角色。' },
+      { id: 4, voiceKey: 'v-reliable-youth', name: 'Reliable Youth', language: 'zh-TW', gender: 'male', age: 'young', accents: [], styles: ['温柔','稳重','亲和','信任感','清爽'], source: 'generated', provider: 'Qwen', voiceQuality: 'clean', stability: 'normal', emotionAbility: 'medium', remark: '繁中已确认，可用于温和青年角色。' },
+      { id: 5, voiceKey: 'v-cold-queen', name: 'Cold Queen', language: 'ja', gender: 'female', age: 'young', accents: ['tokyo'], styles: ['清冷','克制','高傲'], source: 'professional', provider: 'ElevenLabs', voiceQuality: 'clean', stability: 'stable', emotionAbility: 'strong', remark: '适合女性强势角色。' },
+      { id: 6, voiceKey: 'v-kind-lady', name: 'Kind Lady', language: 'vi', gender: 'female', age: 'young', accents: ['southern'], styles: ['亲和','亲切','温柔'], source: 'premade', provider: 'Gemini', voiceQuality: 'noisy', stability: 'normal', emotionAbility: 'weak', remark: '' }
     ];
     const speakers = [
       { id: 1, name: '萧云彻', volume: '-', profile: '♂ 青年男性，大约22-27岁 · 高亢坚定，沉稳有压迫感', voiceId: 1, ratio: 42.53, frames: 2, appearanceChapters: [
@@ -956,13 +1141,17 @@
       ] },
       { id: 5, name: '秋雨', volume: '-', profile: '♀ 青年女性，大约18-22岁 · 温柔清脆，亲切', voiceId: 6, ratio: 4.60, frames: 1, appearanceChapters: [] }
     ];
-    const filters = { gender: '', age: '', scene: '', style: '', source: '', stability: '', provider: '' };
+    const filters = { gender: '', age: '', language: '', accent: '', style: '', source: '', voiceQuality: '', stability: '', emotionAbility: '', provider: '' };
     let selectedVoiceId = 1;
     let currentVoiceId = 1;
     let editingVoiceId = null;
+    let addingVoiceId = null;
     let editDraft = null;
+    let addDraft = null;
+    let pendingDuplicateLanguages = [];
     let styleExpanded = false;
     let styleComposerOpen = false;
+    let filterCollapsed = false;
     let appearanceRefreshing = false;
     const expandedAppearanceSpeakerIds = new Set();
     const STYLE_COLLAPSED_COUNT = 18;
@@ -1094,15 +1283,40 @@
       wrap.innerHTML = `<button class="chip ${filters[key] === '' ? 'active' : ''}" type="button" data-filter-chip="${key}" data-value="">全部</button>` +
         list.map(item => `<button class="chip ${filters[key] === item[0] ? 'active' : ''}" type="button" data-filter-chip="${key}" data-value="${item[0]}">${item[1]}</button>`).join('');
     }
+    function renderFilterSelect(id, key, list, allText) {
+      const el = document.getElementById(id);
+      el.innerHTML = `<option value="">${allText}</option>` +
+        list.map(item => `<option value="${item[0]}" ${filters[key] === item[0] ? 'selected' : ''}>${item[1]}</option>`).join('');
+    }
+    function syncFilterCollapse() {
+      const panel = document.querySelector('.filterPanel');
+      const toggle = $('#filterToggle');
+      panel.classList.toggle('collapsed', filterCollapsed);
+      toggle.innerHTML = filterCollapsed
+        ? '<i data-lucide="chevron-down"></i><span>展开筛选</span>'
+        : '<i data-lucide="chevron-up"></i><span>收起筛选</span>';
+      syncIcons();
+    }
+    function accentFilterOptions() {
+      const source = filters.language
+        ? (options.accentsByLanguage[filters.language] || [])
+        : Object.values(options.accentsByLanguage).flat();
+      const seen = new Set();
+      return source.filter(item => seen.has(item[0]) ? false : (seen.add(item[0]), true));
+    }
     function renderFilters() {
       renderFilterRow('gender', options.gender);
       renderFilterRow('age', options.age);
-      renderFilterRow('scene', options.scenes);
+      renderFilterSelect('filterLanguage', 'language', options.languages, '全部语言');
+      renderFilterSelect('filterAccent', 'accent', accentFilterOptions(), '全部口音');
       const filterStyles = [...new Set([filters.style, ...options.styles.slice(0, FILTER_STYLE_COUNT)].filter(Boolean))];
       renderFilterRow('style', filterStyles.map(item => [item, item]));
       renderFilterRow('source', options.source);
+      renderFilterRow('voiceQuality', options.voiceQuality);
       renderFilterRow('stability', options.stability);
+      renderFilterRow('emotionAbility', options.emotionAbility);
       renderFilterRow('provider', options.provider);
+      syncFilterCollapse();
     }
     function filteredVoices() {
       const keyword = $('#searchVoice').value.trim().toLowerCase();
@@ -1110,10 +1324,13 @@
         if (keyword && !v.name.toLowerCase().includes(keyword)) return false;
         if (filters.gender && v.gender !== filters.gender) return false;
         if (filters.age && v.age !== filters.age) return false;
-        if (filters.scene && !v.scenes.includes(filters.scene)) return false;
+        if (filters.language && v.language !== filters.language) return false;
+        if (filters.accent && !v.accents.includes(filters.accent)) return false;
         if (filters.style && !v.styles.includes(filters.style)) return false;
         if (filters.source && v.source !== filters.source) return false;
+        if (filters.voiceQuality && v.voiceQuality !== filters.voiceQuality) return false;
         if (filters.stability && v.stability !== filters.stability) return false;
+        if (filters.emotionAbility && v.emotionAbility !== filters.emotionAbility) return false;
         if (filters.provider && v.provider !== filters.provider) return false;
         return true;
       });
@@ -1124,8 +1341,6 @@
       const remaining = currentVoice ? list.filter(v => v.id !== currentVoice.id) : list;
       const orderedList = currentVoice ? [currentVoice, ...remaining] : remaining;
       $('#voiceList').innerHTML = orderedList.map(v => {
-        const sourceText = v.source === 'high_quality' ? '-' : label(dict.source, v.source);
-        const sourceWarn = v.source === 'high_quality' ? '历史来源为“高音质”，本期不再展示为有效来源' : '';
         const isCurrent = v.id === currentVoiceId;
         return `
           <div class="voiceItem ${selectedVoiceId === v.id ? 'selected' : ''} ${isCurrent ? 'currentPinned' : ''}" data-select-voice="${v.id}">
@@ -1139,16 +1354,21 @@
                 <span class="genderDot ${v.gender}"></span>
                 <span>${label(dict.gender, v.gender)}</span><span>·</span>
                 <span>${label(dict.age, v.age)}</span><span>·</span>
-                <span>${v.languages.map(langLabel).join('、')}</span><span>·</span>
-                <span data-tooltip="${sourceWarn}">${sourceText}</span><span>·</span>
+                <span>${langLabel(v.language)}</span><span>·</span>
+                <span>${label(dict.source, v.source)}</span><span>·</span>
                 <span>${v.provider}</span><span>·</span>
+                <span>${label(dict.voiceQuality, v.voiceQuality)}</span><span>·</span>
                 <span>${label(dict.stability, v.stability)}</span><span>·</span>
-                <span class="metaTags">${v.scenes.map(x => (options.scenes.find(s => s[0] === x) || [x,x])[1]).join(' ')} · ${v.styles.join(' ')}</span>
+                <span>情感${label(dict.emotionAbility, v.emotionAbility)}</span><span>·</span>
+                <span class="metaTags">${v.styles.join(' ')}</span>
               </div>
             </div>
             ${isCurrent ? '<span class="badge currentBadge">当前</span>' : ''}
-            <button class="iconBtn" type="button" data-edit-voice="${v.id}" aria-label="编辑音色信息" data-tooltip="点击编辑音色信息"><i data-lucide="pencil"></i></button>
-            <button class="iconBtn" type="button" data-play-voice="${v.id}" aria-label="试听音色"><i data-lucide="play"></i></button>
+            <div class="voiceActions">
+              <button class="iconBtn" type="button" data-add-language-voice="${v.id}" aria-label="添加至新语种" data-tooltip="添加至新语种"><i data-lucide="plus"></i></button>
+              <button class="iconBtn" type="button" data-edit-voice="${v.id}" aria-label="编辑音色信息" data-tooltip="点击编辑音色信息"><i data-lucide="pencil"></i></button>
+              <button class="iconBtn" type="button" data-play-voice="${v.id}" aria-label="试听音色"><i data-lucide="play"></i></button>
+            </div>
           </div>
         `;
       }).join('') || '<div class="hint" style="padding:28px;text-align:center;">暂无符合筛选条件的音色</div>';
@@ -1171,11 +1391,14 @@
       syncModalScrollLock();
     }
     function syncModalScrollLock() {
-      const hasOpenModal = $('#voiceMask').classList.contains('show') || $('#editMask').classList.contains('show');
+      const hasOpenModal = $('#voiceMask').classList.contains('show') || $('#editMask').classList.contains('show') || $('#addLanguageMask').classList.contains('show') || $('#duplicateMask').classList.contains('show');
       document.body.classList.toggle('modalOpen', hasOpenModal);
     }
     function editVoice() {
       return editDraft;
+    }
+    function addingVoice() {
+      return addDraft;
     }
     function renderOptionGroup(id, values, selected, mode, onClickName, invalidValue) {
       const active = Array.isArray(selected) ? selected : [selected];
@@ -1202,19 +1425,19 @@
       $('#styleActions').style.display = styleComposerOpen ? 'none' : 'flex';
       $('#styleComposer').classList.toggle('open', styleComposerOpen);
     }
-    function renderLanguageSelect() {
-      const v = editVoice();
-      const selected = new Set(v.languages);
-      const box = $('#languageMultiSelect');
-      box.classList.toggle('hasValue', v.languages.length > 0);
-      $('#editLanguageTags').innerHTML = v.languages.map(code => `
-        <span class="selectedTag">${langLabel(code)}<button class="tagRemove" type="button" data-remove-language="${code}" aria-label="移除${langLabel(code)}">×</button></span>
+    function renderAddLanguageSelect() {
+      const v = addingVoice();
+      const selected = new Set(v.targetLanguages);
+      const box = $('#addLanguageMultiSelect');
+      box.classList.toggle('hasValue', v.targetLanguages.length > 0);
+      $('#addLanguageTags').innerHTML = v.targetLanguages.map(code => `
+        <span class="selectedTag">${langLabel(code)}<button class="tagRemove" type="button" data-remove-target-language="${code}" aria-label="移除${langLabel(code)}">×</button></span>
       `).join('');
       const available = options.languages.filter(item => !selected.has(item[0]));
-      $('#languageTrigger').textContent = v.languages.length ? '' : '添加语言';
-      $('#languageDropdown').innerHTML = available.length
-        ? available.map(item => `<button class="languageOption" type="button" data-add-language="${item[0]}">${item[1]}</button>`).join('')
-        : '<div class="languageEmpty">暂无可添加语言</div>';
+      $('#addLanguageTrigger').textContent = v.targetLanguages.length ? '' : '添加语种';
+      $('#addLanguageDropdown').innerHTML = available.length
+        ? available.map(item => `<button class="languageOption" type="button" data-add-target-language="${item[0]}">${item[1]}</button>`).join('')
+        : '<div class="languageEmpty">暂无可添加语种</div>';
     }
     function openEditModal(id) {
       editingVoiceId = Number(id);
@@ -1226,6 +1449,7 @@
       const v = editVoice();
       $('#editName').textContent = v.name;
       $('#editProvider').textContent = v.provider;
+      $('#editLanguage').textContent = langLabel(v.language);
       $('#editRemark').value = v.remark || '';
       $('#remarkCount').textContent = String($('#editRemark').value.length);
       renderEditForm();
@@ -1247,19 +1471,16 @@
       if (!v) return;
       renderOptionGroup('editGender', options.gender, v.gender, 'single', 'edit-gender');
       renderOptionGroup('editAge', options.age, v.age, 'single', 'edit-age');
-      renderLanguageSelect();
-      const allowedAccents = v.languages.flatMap(lang => options.accentsByLanguage[lang] || []);
+      const allowedAccents = options.accentsByLanguage[v.language] || [];
       const seen = new Set();
       const accents = allowedAccents.filter(item => seen.has(item[0]) ? false : (seen.add(item[0]), true));
       v.accents = v.accents.filter(accent => accents.some(item => item[0] === accent)).slice(0, 1);
       renderOptionGroup('editAccents', accents, v.accents, 'single', 'edit-accent');
-      renderOptionGroup('editScenes', options.scenes, v.scenes, 'multi', 'edit-scene');
       renderStyleOptions();
-      renderOptionGroup('editSource', options.source, v.source === 'high_quality' ? '' : v.source, 'single', 'edit-source');
-      if (v.source === 'high_quality') {
-        $('#editSource').insertAdjacentHTML('beforeend', '<span class="readonly warn">历史值：高音质，保存前需重新选择</span>');
-      }
+      renderOptionGroup('editSource', options.source, v.source, 'single', 'edit-source');
+      renderOptionGroup('editVoiceQuality', options.voiceQuality, v.voiceQuality, 'single', 'edit-voice-quality');
       renderOptionGroup('editStability', options.stability, v.stability || 'normal', 'single', 'edit-stability');
+      renderOptionGroup('editEmotionAbility', options.emotionAbility, v.emotionAbility, 'single', 'edit-emotion-ability');
       syncIcons();
     }
     function clearErrors() {
@@ -1275,12 +1496,12 @@
       let ok = true;
       if (!v.gender) { setError('gender', '请选择性别'); ok = false; }
       if (!v.age) { setError('age', '请选择年龄'); ok = false; }
-      if (!v.languages.length) { setError('languages', '语言至少选择 1 个'); ok = false; }
-      if (v.scenes.length > 5) { setError('scenes', '场景最多选择 5 个'); ok = false; }
       if (!v.styles.length) { setError('styles', '风格至少选择 1 个'); ok = false; }
       if (v.styles.length > 8) { setError('styles', '风格最多选择 8 个'); ok = false; }
-      if (!v.source || v.source === 'high_quality') { setError('source', '请选择有效音色来源'); ok = false; }
-      if (!v.stability) { setError('stability', '请选择音色质量'); ok = false; }
+      if (!v.source) { setError('source', '请选择音色来源'); ok = false; }
+      if (!v.voiceQuality) { setError('voiceQuality', '请选择音色质量'); ok = false; }
+      if (!v.stability) { setError('stability', '请选择音色稳定性'); ok = false; }
+      if (!v.emotionAbility) { setError('emotionAbility', '请选择情感能力'); ok = false; }
       return ok;
     }
     function saveEdit() {
@@ -1299,28 +1520,161 @@
         showToast('音色信息已更新');
       }, 650);
     }
+    function openAddLanguageModal(id) {
+      addingVoiceId = Number(id);
+      const source = voices.find(v => v.id === addingVoiceId);
+      if (!source) return;
+      addDraft = JSON.parse(JSON.stringify(source));
+      addDraft.sourceLanguage = source.language;
+      addDraft.targetLanguages = [currentTaskLanguage];
+      $('#addName').textContent = source.name;
+      $('#addProvider').textContent = source.provider;
+      $('#addRemark').value = addDraft.remark || '';
+      $('#addRemarkCount').textContent = String($('#addRemark').value.length);
+      renderAddForm();
+      $('#addLanguageMask').classList.add('show');
+      $('#addLanguageMask').setAttribute('aria-hidden', 'false');
+      syncModalScrollLock();
+      syncIcons();
+    }
+    function closeAddLanguageModal() {
+      $('#addLanguageMask').classList.remove('show');
+      $('#addLanguageMask').setAttribute('aria-hidden', 'true');
+      syncModalScrollLock();
+      clearErrors();
+      addingVoiceId = null;
+      addDraft = null;
+      pendingDuplicateLanguages = [];
+    }
+    function closeDuplicateModal() {
+      $('#duplicateMask').classList.remove('show');
+      $('#duplicateMask').setAttribute('aria-hidden', 'true');
+      syncModalScrollLock();
+    }
+    function renderAddForm() {
+      const v = addingVoice();
+      if (!v) return;
+      renderAddLanguageSelect();
+      renderOptionGroup('addGender', options.gender, v.gender, 'single', 'add-gender');
+      renderOptionGroup('addAge', options.age, v.age, 'single', 'add-age');
+      const allowedAccents = v.targetLanguages.flatMap(lang => options.accentsByLanguage[lang] || []);
+      const seen = new Set();
+      const accents = allowedAccents.filter(item => seen.has(item[0]) ? false : (seen.add(item[0]), true));
+      v.accents = v.accents.filter(accent => accents.some(item => item[0] === accent)).slice(0, 1);
+      renderOptionGroup('addAccents', accents, v.accents, 'single', 'add-accent');
+      const addStyleOptions = [...new Set([...v.styles, ...options.styles.slice(0, STYLE_COLLAPSED_COUNT)])];
+      $('#addStyles').innerHTML = addStyleOptions.map(item => `<button class="option ${v.styles.includes(item) ? 'active' : ''}" type="button" data-add-style="${item}" data-mode="multi">${item}</button>`).join('');
+      renderOptionGroup('addSource', options.source, v.source, 'single', 'add-source');
+      renderOptionGroup('addVoiceQuality', options.voiceQuality, v.voiceQuality, 'single', 'add-voice-quality');
+      renderOptionGroup('addStability', options.stability, v.stability || 'normal', 'single', 'add-stability');
+      renderOptionGroup('addEmotionAbility', options.emotionAbility, v.emotionAbility, 'single', 'add-emotion-ability');
+      syncIcons();
+    }
+    function validateAddDraft() {
+      clearErrors();
+      const v = addingVoice();
+      let ok = true;
+      if (!v.targetLanguages.length) { setError('addLanguages', '至少选择 1 个语种'); ok = false; }
+      if (!v.gender) { setError('addGender', '请选择性别'); ok = false; }
+      if (!v.age) { setError('addAge', '请选择年龄'); ok = false; }
+      if (!v.styles.length) { setError('addStyles', '风格至少选择 1 个'); ok = false; }
+      if (v.styles.length > 8) { setError('addStyles', '风格最多选择 8 个'); ok = false; }
+      if (!v.source) { setError('addSource', '请选择音色来源'); ok = false; }
+      if (!v.voiceQuality) { setError('addVoiceQuality', '请选择音色质量'); ok = false; }
+      if (!v.stability) { setError('addStability', '请选择音色稳定性'); ok = false; }
+      if (!v.emotionAbility) { setError('addEmotionAbility', '请选择情感能力'); ok = false; }
+      return ok;
+    }
+    function findDuplicateLanguages(draft) {
+      return draft.targetLanguages.filter(lang => voices.some(v => v.voiceKey === draft.voiceKey && v.language === lang));
+    }
+    function saveAddLanguage() {
+      const v = addingVoice();
+      if (!v) return;
+      v.remark = $('#addRemark').value.trim();
+      if (!validateAddDraft()) return;
+      pendingDuplicateLanguages = findDuplicateLanguages(v);
+      if (pendingDuplicateLanguages.length) {
+        $('#duplicateLanguageList').textContent = pendingDuplicateLanguages.map(langLabel).join('、');
+        $('#duplicateMask').classList.add('show');
+        $('#duplicateMask').setAttribute('aria-hidden', 'false');
+        syncModalScrollLock();
+        syncIcons();
+        return;
+      }
+      commitLanguageProfiles('add-only');
+    }
+    function commitLanguageProfiles(mode) {
+      const v = addingVoice();
+      if (!v) return;
+      const duplicateSet = new Set(pendingDuplicateLanguages);
+      const targets = v.targetLanguages.filter(lang => mode === 'cover' || !duplicateSet.has(lang));
+      if (!targets.length) {
+        closeDuplicateModal();
+        showToast('所选语种均已存在该音色，未新增数据');
+        return;
+      }
+      $('#savingMask').classList.add('show');
+      setTimeout(() => {
+        targets.forEach((language) => {
+          const existingIndex = voices.findIndex(item => item.voiceKey === v.voiceKey && item.language === language);
+          const payload = {
+            ...v,
+            id: existingIndex >= 0 ? voices[existingIndex].id : Math.max(...voices.map(item => item.id)) + 1,
+            language,
+            targetLanguages: undefined,
+            sourceLanguage: undefined
+          };
+          delete payload.targetLanguages;
+          delete payload.sourceLanguage;
+          if (existingIndex >= 0) voices[existingIndex] = payload;
+          else voices.push(payload);
+          if (language === currentTaskLanguage) selectedVoiceId = payload.id;
+        });
+        $('#savingMask').classList.remove('show');
+        closeDuplicateModal();
+        closeAddLanguageModal();
+        renderVoices();
+        renderSpeakers();
+        showToast(mode === 'cover' ? '已添加/更新音色语种信息' : '已添加至所选语种音色库');
+      }, 650);
+    }
     document.addEventListener('click', (e) => {
       const openBtn = e.target.closest('[data-open-voice]');
       if (openBtn) { openVoiceModal(openBtn.dataset.openVoice); return; }
       if (e.target.closest('[data-close-voice]')) { closeVoiceModal(); return; }
       if (e.target.closest('[data-close-edit]')) { closeEditModal(); return; }
+      if (e.target.closest('[data-close-add-language]')) { closeAddLanguageModal(); return; }
+      if (e.target.closest('[data-close-duplicate]')) { closeDuplicateModal(); return; }
       const filterChip = e.target.closest('[data-filter-chip]');
       if (filterChip) {
-        filters[filterChip.dataset.filterChip] = filterChip.dataset.value;
+        const key = filterChip.dataset.filterChip;
+        filters[key] = filterChip.dataset.value;
+        if (key === 'language') {
+          const availableAccents = new Set(accentFilterOptions().map(item => item[0]));
+          if (filters.accent && !availableAccents.has(filters.accent)) filters.accent = '';
+        }
         renderFilters();
         renderVoices();
         return;
       }
       const selected = e.target.closest('[data-select-voice]');
-      if (selected && !e.target.closest('[data-edit-voice], [data-play-voice]')) {
+      if (selected && !e.target.closest('[data-add-language-voice], [data-edit-voice], [data-play-voice]')) {
         selectedVoiceId = Number(selected.dataset.selectVoice);
         renderVoices();
         return;
       }
+      const addLanguageVoice = e.target.closest('[data-add-language-voice]');
+      if (addLanguageVoice) { openAddLanguageModal(addLanguageVoice.dataset.addLanguageVoice); return; }
       const edit = e.target.closest('[data-edit-voice]');
       if (edit) { openEditModal(edit.dataset.editVoice); return; }
       const play = e.target.closest('[data-play-voice]');
       if (play) { showToast('正在试听音色'); return; }
+      if (e.target.id === 'filterToggle' || e.target.closest('#filterToggle')) {
+        filterCollapsed = !filterCollapsed;
+        syncFilterCollapse();
+        return;
+      }
       if (e.target.id === 'resetFilters') {
         Object.keys(filters).forEach(key => filters[key] = '');
         $('#searchVoice').value = '';
@@ -1379,32 +1733,65 @@
         showToast(`已进入${stageLabel(chapter.stage)}编辑器，并定位到${speaker.name}第一句台词`);
         return;
       }
+      const addTargetLanguage = e.target.closest('[data-add-target-language]');
+      if (addTargetLanguage && addingVoice()) {
+        const draft = addingVoice();
+        if (!draft.targetLanguages.includes(addTargetLanguage.dataset.addTargetLanguage)) draft.targetLanguages.push(addTargetLanguage.dataset.addTargetLanguage);
+        renderAddForm();
+        validateAddDraft();
+        $('#addLanguageMultiSelect').classList.add('open');
+        return;
+      }
+      const removeTargetLanguage = e.target.closest('[data-remove-target-language]');
+      if (removeTargetLanguage && addingVoice()) {
+        const draft = addingVoice();
+        draft.targetLanguages = draft.targetLanguages.filter(item => item !== removeTargetLanguage.dataset.removeTargetLanguage);
+        const allowed = new Set(draft.targetLanguages.flatMap(lang => (options.accentsByLanguage[lang] || []).map(item => item[0])));
+        draft.accents = draft.accents.filter(item => allowed.has(item)).slice(0, 1);
+        renderAddForm();
+        validateAddDraft();
+        return;
+      }
+      if (e.target.closest('#addLanguageMultiSelect') && addingVoice()) {
+        $('#addLanguageMultiSelect').classList.toggle('open');
+        return;
+      }
+      if (e.target.id === 'saveAddLanguage') { saveAddLanguage(); return; }
+      if (e.target.id === 'skipDuplicateLanguages') { commitLanguageProfiles('skip'); return; }
+      if (e.target.id === 'coverDuplicateLanguages') { commitLanguageProfiles('cover'); return; }
+      if (addingVoice()) {
+        if (!e.target.closest('#addLanguageMultiSelect')) {
+          $('#addLanguageMultiSelect')?.classList.remove('open');
+        }
+        const addMappings = [
+          ['add-gender', 'gender', 'single'],
+          ['add-age', 'age', 'single'],
+          ['add-accent', 'accents', 'single-array'],
+          ['add-style', 'styles', 'multi'],
+          ['add-source', 'source', 'single'],
+          ['add-voice-quality', 'voiceQuality', 'single'],
+          ['add-stability', 'stability', 'single'],
+          ['add-emotion-ability', 'emotionAbility', 'single']
+        ];
+        for (const [attr, field, mode] of addMappings) {
+          const btn = e.target.closest(`[data-${attr}]`);
+          if (!btn) continue;
+          const draft = addingVoice();
+          const value = btn.getAttribute(`data-${attr}`);
+          if (mode === 'single') draft[field] = value;
+          else if (mode === 'single-array') draft[field] = draft[field].includes(value) ? [] : [value];
+          else {
+            const set = new Set(draft[field]);
+            if (set.has(value)) set.delete(value); else set.add(value);
+            draft[field] = Array.from(set);
+          }
+          renderAddForm();
+          validateAddDraft();
+          return;
+        }
+      }
       const v = editVoice();
       if (!v) return;
-      if (!e.target.closest('#languageMultiSelect')) {
-        $('#languageMultiSelect')?.classList.remove('open');
-      }
-      const addLanguage = e.target.closest('[data-add-language]');
-      if (addLanguage) {
-        if (!v.languages.includes(addLanguage.dataset.addLanguage)) v.languages.push(addLanguage.dataset.addLanguage);
-        renderEditForm();
-        validateEdit();
-        $('#languageMultiSelect').classList.add('open');
-        return;
-      }
-      const removeLanguage = e.target.closest('[data-remove-language]');
-      if (removeLanguage) {
-        v.languages = v.languages.filter(item => item !== removeLanguage.dataset.removeLanguage);
-        const allowed = new Set(v.languages.flatMap(lang => (options.accentsByLanguage[lang] || []).map(item => item[0])));
-        v.accents = v.accents.filter(item => allowed.has(item)).slice(0, 1);
-        renderEditForm();
-        validateEdit();
-        return;
-      }
-      if (e.target.closest('#languageMultiSelect')) {
-        $('#languageMultiSelect').classList.toggle('open');
-        return;
-      }
       if (e.target.id === 'toggleStyles') {
         styleExpanded = !styleExpanded;
         renderEditForm();
@@ -1427,10 +1814,11 @@
         ['edit-gender', 'gender', 'single'],
         ['edit-age', 'age', 'single'],
         ['edit-accent', 'accents', 'single-array'],
-        ['edit-scene', 'scenes', 'multi'],
         ['edit-style', 'styles', 'multi'],
         ['edit-source', 'source', 'single'],
-        ['edit-stability', 'stability', 'single']
+        ['edit-voice-quality', 'voiceQuality', 'single'],
+        ['edit-stability', 'stability', 'single'],
+        ['edit-emotion-ability', 'emotionAbility', 'single']
       ];
       for (const [attr, field, mode] of mappings) {
         const btn = e.target.closest(`[data-${attr}]`);
@@ -1463,13 +1851,31 @@
       }
       if (e.target.id === 'saveVoice') saveEdit();
     });
+    document.addEventListener('change', (e) => {
+      if (e.target.id === 'filterLanguage') {
+        filters.language = e.target.value;
+        const availableAccents = new Set(accentFilterOptions().map(item => item[0]));
+        if (filters.accent && !availableAccents.has(filters.accent)) filters.accent = '';
+        renderFilters();
+        renderVoices();
+      }
+      if (e.target.id === 'filterAccent') {
+        filters.accent = e.target.value;
+        renderVoices();
+      }
+    });
     $('#searchVoice').addEventListener('input', renderVoices);
     $('#editRemark').addEventListener('input', (e) => {
       $('#remarkCount').textContent = String(e.target.value.length);
     });
+    $('#addRemark').addEventListener('input', (e) => {
+      $('#addRemarkCount').textContent = String(e.target.value.length);
+    });
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'Escape') return;
-      if ($('#editMask').classList.contains('show')) closeEditModal();
+      if ($('#duplicateMask').classList.contains('show')) closeDuplicateModal();
+      else if ($('#addLanguageMask').classList.contains('show')) closeAddLanguageModal();
+      else if ($('#editMask').classList.contains('show')) closeEditModal();
       else if ($('#voiceMask').classList.contains('show')) closeVoiceModal();
     });
     renderSpeakers();
