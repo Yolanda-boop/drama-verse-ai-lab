@@ -631,6 +631,29 @@
       font-size: 12px;
     }
     .optionWrap { display: flex; flex-wrap: wrap; gap: 7px; }
+    .accentMatrix {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px;
+      background: rgba(255,255,255,.035);
+    }
+    .accentRow {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+    }
+    .accentLang {
+      padding-top: 4px;
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
+      line-height: 22px;
+      text-align: right;
+      white-space: nowrap;
+    }
     .styleHeader {
       min-height: 24px;
       display: flex;
@@ -883,7 +906,7 @@
           </div>
           <div class="formField">
             <label class="formLabel">口音</label>
-            <div class="optionWrap" id="editAccents"></div>
+            <div class="readonly" id="editAccent"></div>
           </div>
           <div class="formField">
             <label class="formLabel"><span class="required">*</span>性别</label>
@@ -976,6 +999,10 @@
             <div class="hint">默认选中当前任务目标语种；批量添加时，本窗口参数将作为所选语种的初始值。</div>
             <div class="fieldError" data-error="addLanguages"></div>
           </div>
+          <div class="formField full">
+            <label class="formLabel">口音</label>
+            <div class="accentMatrix" id="addAccents"></div>
+          </div>
           <div class="noticeBox">已默认带入当前音色参数，请根据目标语种试听效果确认后保存。</div>
           <div class="formField">
             <label class="formLabel"><span class="required">*</span>性别</label>
@@ -986,10 +1013,6 @@
             <label class="formLabel"><span class="required">*</span>年龄</label>
             <div class="optionWrap" id="addAge"></div>
             <div class="fieldError" data-error="addAge"></div>
-          </div>
-          <div class="formField full">
-            <label class="formLabel">口音</label>
-            <div class="optionWrap" id="addAccents"></div>
           </div>
           <div class="formField full">
             <label class="formLabel"><span class="required">*</span>风格</label>
@@ -1439,6 +1462,39 @@
         ? available.map(item => `<button class="languageOption" type="button" data-add-target-language="${item[0]}">${item[1]}</button>`).join('')
         : '<div class="languageEmpty">暂无可添加语种</div>';
     }
+    function defaultTargetAccents(source, language) {
+      const allowed = new Set((options.accentsByLanguage[language] || []).map(item => item[0]));
+      return (source.accents || []).filter(item => allowed.has(item)).slice(0, 1);
+    }
+    function syncTargetAccents(draft) {
+      draft.targetAccents = draft.targetAccents || {};
+      draft.targetLanguages.forEach((language) => {
+        if (!draft.targetAccents[language]) draft.targetAccents[language] = defaultTargetAccents(draft, language);
+        const allowed = new Set((options.accentsByLanguage[language] || []).map(item => item[0]));
+        draft.targetAccents[language] = draft.targetAccents[language].filter(item => allowed.has(item)).slice(0, 1);
+      });
+      Object.keys(draft.targetAccents).forEach((language) => {
+        if (!draft.targetLanguages.includes(language)) delete draft.targetAccents[language];
+      });
+    }
+    function renderAddAccentGroups() {
+      const v = addingVoice();
+      syncTargetAccents(v);
+      $('#addAccents').innerHTML = v.targetLanguages.map((language) => {
+        const accents = options.accentsByLanguage[language] || [];
+        const selected = v.targetAccents[language] || [];
+        const accentOptions = accents.length
+          ? `<button class="option ${selected.length ? '' : 'active'}" type="button" data-add-target-accent="" data-accent-language="${language}">不限</button>` +
+            accents.map(item => `<button class="option ${selected.includes(item[0]) ? 'active' : ''}" type="button" data-add-target-accent="${item[0]}" data-accent-language="${language}">${item[1]}</button>`).join('')
+          : '<span class="hint">暂无可选口音</span>';
+        return `
+          <div class="accentRow">
+            <span class="accentLang">${langLabel(language)}：</span>
+            <div class="optionWrap">${accentOptions}</div>
+          </div>
+        `;
+      }).join('');
+    }
     function openEditModal(id) {
       editingVoiceId = Number(id);
       const source = voices.find(v => v.id === editingVoiceId);
@@ -1475,7 +1531,7 @@
       const seen = new Set();
       const accents = allowedAccents.filter(item => seen.has(item[0]) ? false : (seen.add(item[0]), true));
       v.accents = v.accents.filter(accent => accents.some(item => item[0] === accent)).slice(0, 1);
-      renderOptionGroup('editAccents', accents, v.accents, 'single', 'edit-accent');
+      $('#editAccent').textContent = v.accents.length ? v.accents.map(accentLabel).join('、') : '无';
       renderStyleOptions();
       renderOptionGroup('editSource', options.source, v.source, 'single', 'edit-source');
       renderOptionGroup('editVoiceQuality', options.voiceQuality, v.voiceQuality, 'single', 'edit-voice-quality');
@@ -1527,6 +1583,8 @@
       addDraft = JSON.parse(JSON.stringify(source));
       addDraft.sourceLanguage = source.language;
       addDraft.targetLanguages = [currentTaskLanguage];
+      addDraft.targetAccents = {};
+      syncTargetAccents(addDraft);
       $('#addName').textContent = source.name;
       $('#addProvider').textContent = source.provider;
       $('#addRemark').value = addDraft.remark || '';
@@ -1557,11 +1615,7 @@
       renderAddLanguageSelect();
       renderOptionGroup('addGender', options.gender, v.gender, 'single', 'add-gender');
       renderOptionGroup('addAge', options.age, v.age, 'single', 'add-age');
-      const allowedAccents = v.targetLanguages.flatMap(lang => options.accentsByLanguage[lang] || []);
-      const seen = new Set();
-      const accents = allowedAccents.filter(item => seen.has(item[0]) ? false : (seen.add(item[0]), true));
-      v.accents = v.accents.filter(accent => accents.some(item => item[0] === accent)).slice(0, 1);
-      renderOptionGroup('addAccents', accents, v.accents, 'single', 'add-accent');
+      renderAddAccentGroups();
       const addStyleOptions = [...new Set([...v.styles, ...options.styles.slice(0, STYLE_COLLAPSED_COUNT)])];
       $('#addStyles').innerHTML = addStyleOptions.map(item => `<button class="option ${v.styles.includes(item) ? 'active' : ''}" type="button" data-add-style="${item}" data-mode="multi">${item}</button>`).join('');
       renderOptionGroup('addSource', options.source, v.source, 'single', 'add-source');
@@ -1622,10 +1676,13 @@
             ...v,
             id: existingIndex >= 0 ? voices[existingIndex].id : Math.max(...voices.map(item => item.id)) + 1,
             language,
+            accents: v.targetAccents?.[language] || [],
             targetLanguages: undefined,
+            targetAccents: undefined,
             sourceLanguage: undefined
           };
           delete payload.targetLanguages;
+          delete payload.targetAccents;
           delete payload.sourceLanguage;
           if (existingIndex >= 0) voices[existingIndex] = payload;
           else voices.push(payload);
@@ -1737,6 +1794,7 @@
       if (addTargetLanguage && addingVoice()) {
         const draft = addingVoice();
         if (!draft.targetLanguages.includes(addTargetLanguage.dataset.addTargetLanguage)) draft.targetLanguages.push(addTargetLanguage.dataset.addTargetLanguage);
+        syncTargetAccents(draft);
         renderAddForm();
         validateAddDraft();
         $('#addLanguageMultiSelect').classList.add('open');
@@ -1746,8 +1804,7 @@
       if (removeTargetLanguage && addingVoice()) {
         const draft = addingVoice();
         draft.targetLanguages = draft.targetLanguages.filter(item => item !== removeTargetLanguage.dataset.removeTargetLanguage);
-        const allowed = new Set(draft.targetLanguages.flatMap(lang => (options.accentsByLanguage[lang] || []).map(item => item[0])));
-        draft.accents = draft.accents.filter(item => allowed.has(item)).slice(0, 1);
+        syncTargetAccents(draft);
         renderAddForm();
         validateAddDraft();
         return;
@@ -1759,6 +1816,17 @@
       if (e.target.id === 'saveAddLanguage') { saveAddLanguage(); return; }
       if (e.target.id === 'skipDuplicateLanguages') { commitLanguageProfiles('skip'); return; }
       if (e.target.id === 'coverDuplicateLanguages') { commitLanguageProfiles('cover'); return; }
+      const addTargetAccent = e.target.closest('[data-add-target-accent]');
+      if (addTargetAccent && addingVoice()) {
+        const draft = addingVoice();
+        const language = addTargetAccent.dataset.accentLanguage;
+        const accent = addTargetAccent.dataset.addTargetAccent;
+        draft.targetAccents = draft.targetAccents || {};
+        draft.targetAccents[language] = accent ? [accent] : [];
+        renderAddForm();
+        validateAddDraft();
+        return;
+      }
       if (addingVoice()) {
         if (!e.target.closest('#addLanguageMultiSelect')) {
           $('#addLanguageMultiSelect')?.classList.remove('open');
@@ -1766,7 +1834,6 @@
         const addMappings = [
           ['add-gender', 'gender', 'single'],
           ['add-age', 'age', 'single'],
-          ['add-accent', 'accents', 'single-array'],
           ['add-style', 'styles', 'multi'],
           ['add-source', 'source', 'single'],
           ['add-voice-quality', 'voiceQuality', 'single'],
@@ -1813,7 +1880,6 @@
       const mappings = [
         ['edit-gender', 'gender', 'single'],
         ['edit-age', 'age', 'single'],
-        ['edit-accent', 'accents', 'single-array'],
         ['edit-style', 'styles', 'multi'],
         ['edit-source', 'source', 'single'],
         ['edit-voice-quality', 'voiceQuality', 'single'],
