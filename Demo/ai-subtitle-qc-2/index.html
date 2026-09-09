@@ -571,8 +571,11 @@
     #dv-real-qc-prototype .sourceText,
     #dv-real-qc-prototype .targetText { color: var(--text-primary); font-size: 16px; font-weight: 500; line-height: 1.8; word-break: break-word; }
     #dv-real-qc-prototype .targetCell { position: relative; }
+    #dv-real-qc-prototype .targetSelectionWrap { display: grid; grid-template-columns: minmax(0,1fr); gap: 10px; align-items: flex-start; }
+    #dv-real-qc-prototype .subtitleItem.audioRegenSelecting .targetSelectionWrap { grid-template-columns: minmax(0,1fr) auto; }
     #dv-real-qc-prototype .targetTextWrap { display: flex; flex-direction: row-reverse; align-items: flex-start; justify-content: flex-end; gap: 8px; }
     #dv-real-qc-prototype .targetText { flex: 1 1 auto; min-width: 0; color: rgba(255,255,255,.86); direction: rtl; text-align: right; }
+    #dv-real-qc-prototype .targetText.audioPendingText { color: #ffd666; }
     #dv-real-qc-prototype .targetPlayFloat { opacity: 0; flex-shrink: 0; display: inline-flex; align-items: center; margin-top: 1px; transition: opacity .16s ease, color .16s ease, background .16s ease; }
     #dv-real-qc-prototype .targetCell:hover .targetPlayFloat,
     #dv-real-qc-prototype .targetCell:focus-within .targetPlayFloat { opacity: 1; }
@@ -580,6 +583,38 @@
     #dv-real-qc-prototype .targetPlayBtn:hover { color: rgba(255,255,255,.92); background: rgba(128,128,128,.2); }
     #dv-real-qc-prototype .targetPlayIcon { width: 14px; height: 14px; display: block; fill: currentColor; transform: translateX(1px); }
     #dv-real-qc-prototype .placeholderText { color: var(--text-tertiary); font-weight: 400; }
+    #dv-real-qc-prototype .aiFeedbackTool { color: #ffd666; }
+    #dv-real-qc-prototype .aiFeedbackTool.saved { color: #95de64; }
+    #dv-real-qc-prototype .audioInlineSelect {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 30px;
+      min-height: 30px;
+      align-self: flex-start;
+      margin-top: 1px;
+    }
+    #dv-real-qc-prototype .audioInlineSelect input {
+      width: 16px;
+      height: 16px;
+      accent-color: #8b5cf6;
+      cursor: pointer;
+    }
+    #dv-real-qc-prototype .audioInlineSelect input:disabled { cursor: not-allowed; opacity: .82; }
+    #dv-real-qc-prototype .audioInlineSelect.required input { accent-color: #faad14; }
+    #dv-real-qc-prototype .audioInlineHelp {
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(250,173,20,.14);
+      color: #ffd666;
+      font-size: 12px;
+      cursor: help;
+    }
     #dv-real-qc-prototype .voiceBatchBar {
       display: grid;
       grid-template-columns: minmax(0,1fr) auto;
@@ -600,6 +635,34 @@
     #dv-real-qc-prototype .voiceBatchActions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
     #dv-real-qc-prototype .voiceBatchActions .btnGhost,
     #dv-real-qc-prototype .voiceBatchActions .btnPrimary { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
+    #dv-real-qc-prototype .audioRegenBar {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 9px 16px;
+      background: rgba(250,173,20,.08);
+      border-bottom: 1px solid rgba(250,173,20,.24);
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .audioRegenBar.isHidden { display: none; }
+    #dv-real-qc-prototype .audioRegenBar.isDisabled {
+      background: #202020;
+      border-bottom-color: rgba(255,255,255,.08);
+      color: var(--text-disabled);
+    }
+    #dv-real-qc-prototype .audioRegenBar.isDisabled .audioRegenIcon {
+      border-color: rgba(255,255,255,.18);
+      color: var(--text-disabled);
+    }
+    #dv-real-qc-prototype .audioRegenText { display: flex; align-items: center; gap: 10px; min-width: 0; font-size: 13px; line-height: 20px; }
+    #dv-real-qc-prototype .audioRegenIcon { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(250,173,20,.6); color: #ffd666; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; flex: 0 0 auto; }
+    #dv-real-qc-prototype .audioRegenText strong { color: var(--text-primary); font-weight: 600; }
+    #dv-real-qc-prototype .audioRegenSub { color: var(--text-tertiary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #dv-real-qc-prototype .audioRegenActions { display: flex; align-items: center; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+    #dv-real-qc-prototype .audioRegenActions .btnGhost,
+    #dv-real-qc-prototype .audioRegenActions .btnPrimary { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
     #dv-real-qc-prototype .barSpinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.2); border-top-color: #8b5cf6; border-radius: 50%; animation: dvSpin .8s linear infinite; }
     @keyframes dvSpin { to { transform: rotate(360deg); } }
     #dv-real-qc-prototype .batchRowCheck {
@@ -882,6 +945,131 @@
     #dv-real-qc-prototype .qcActions .btnPrimary { height: 28px; line-height: 26px; padding: 0 10px; font-size: 13px; }
     #dv-real-qc-prototype .qcBatch { flex-shrink: 0; border-top: 0; border-bottom: 1px solid var(--border-color); padding: 8px 12px 10px; background: var(--bg-container); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.16); z-index: 1; }
     #dv-real-qc-prototype .qcBatch .wide { grid-column: 1 / -1; }
+    #dv-real-qc-prototype .aiFeedbackMask {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.68);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 28;
+    }
+    #dv-real-qc-prototype .aiFeedbackDialog {
+      width: min(860px, 96%);
+      max-height: min(720px, 92%);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 16px 42px rgba(0,0,0,.62);
+      overflow: hidden;
+    }
+    #dv-real-qc-prototype .aiFeedbackHeader {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--border-color);
+      background: #202020;
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .aiFeedbackHeader h3 { margin: 0; font-size: 16px; font-weight: 600; }
+    #dv-real-qc-prototype .aiFeedbackClose { width: 30px; height: 30px; border: 0; border-radius: 6px; background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 20px; line-height: 28px; }
+    #dv-real-qc-prototype .aiFeedbackClose:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .aiFeedbackBody {
+      overflow-y: auto;
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+    #dv-real-qc-prototype .aiFeedbackTopline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+    #dv-real-qc-prototype .aiFeedbackSourceBadge {
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      border-radius: 11px;
+      background: rgba(139,92,246,.1);
+      color: #c4b5fd;
+      white-space: nowrap;
+    }
+    #dv-real-qc-prototype .aiFeedbackGrid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+    #dv-real-qc-prototype .aiFeedbackField { display: grid; gap: 7px; min-width: 0; }
+    #dv-real-qc-prototype .aiFeedbackField.full { grid-column: 1 / -1; }
+    #dv-real-qc-prototype .aiFeedbackField label { color: var(--text-secondary); font-size: 13px; }
+    #dv-real-qc-prototype .aiFeedbackRequired:after { content: "*"; color: #ff7875; margin-left: 3px; }
+    #dv-real-qc-prototype .aiFeedbackStatic,
+    #dv-real-qc-prototype .aiFeedbackInput,
+    #dv-real-qc-prototype .aiFeedbackTextarea {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 6px;
+      background: rgba(255,255,255,.04);
+      color: var(--text-primary);
+      font-size: 14px;
+      line-height: 1.55;
+      box-sizing: border-box;
+    }
+    #dv-real-qc-prototype .aiFeedbackStatic { min-height: 42px; padding: 10px 11px; color: rgba(255,255,255,.84); }
+    #dv-real-qc-prototype .aiFeedbackInput { height: 34px; padding: 0 10px; }
+    #dv-real-qc-prototype .aiFeedbackTextarea { min-height: 86px; resize: vertical; padding: 9px 11px; }
+    #dv-real-qc-prototype .aiFeedbackCompareText { height: 116px; min-height: 116px; }
+    #dv-real-qc-prototype .aiFeedbackTextarea:focus,
+    #dv-real-qc-prototype .aiFeedbackInput:focus { outline: none; border-color: rgba(139,92,246,.72); box-shadow: 0 0 0 2px rgba(139,92,246,.18); }
+    #dv-real-qc-prototype .aiFeedbackTags { display: flex; flex-wrap: wrap; gap: 8px; }
+    #dv-real-qc-prototype .aiFeedbackTag {
+      height: 28px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 4px;
+      background: rgba(255,255,255,.04);
+      color: var(--text-secondary);
+      padding: 0 9px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    #dv-real-qc-prototype .aiFeedbackTag.selected { color: #fff; border-color: rgba(139,92,246,.62); background: rgba(139,92,246,.28); }
+    #dv-real-qc-prototype .aiFeedbackTag[disabled] { cursor: not-allowed; opacity: .55; }
+    #dv-real-qc-prototype .aiFeedbackNotice {
+      display: none;
+      border: 1px solid rgba(250,173,20,.32);
+      background: rgba(250,173,20,.08);
+      color: #ffd666;
+      border-radius: 6px;
+      padding: 9px 11px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    #dv-real-qc-prototype .aiFeedbackError {
+      min-height: 18px;
+      color: #ff7875;
+      font-size: 12px;
+      line-height: 18px;
+    }
+    #dv-real-qc-prototype .aiFeedbackFooter {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      border-top: 1px solid var(--border-color);
+      background: #1c1c1c;
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .aiFeedbackFooterNote { color: var(--text-tertiary); font-size: 12px; line-height: 18px; }
+    #dv-real-qc-prototype .aiFeedbackFooterActions { display: flex; align-items: center; gap: 10px; }
+    #dv-real-qc-prototype .aiFeedbackDialog.readonly .aiFeedbackInput,
+    #dv-real-qc-prototype .aiFeedbackDialog.readonly .aiFeedbackTextarea { color: var(--text-secondary); }
     #dv-real-qc-prototype .modalMask { position: absolute; inset: 0; background: rgba(0,0,0,.66); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 10; }
     #dv-real-qc-prototype .modalBox { width: min(420px, 100%); background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 8px; padding: 18px; box-shadow: 0 8px 24px rgba(0,0,0,.6); }
     #dv-real-qc-prototype .modalBox h3 { margin: 0 0 10px; font-size: 16px; font-weight: 600; }
@@ -1131,9 +1319,14 @@
       #dv-real-qc-prototype .editorContainer.qcCollapsed .qcPanel { min-height: 42px; }
       #dv-real-qc-prototype .qcRail { writing-mode: horizontal-tb; flex-direction: row; justify-content: center; padding: 8px; }
       #dv-real-qc-prototype .voiceBatchBar { grid-template-columns: 1fr; padding: 8px 12px; }
+      #dv-real-qc-prototype .audioRegenBar { grid-template-columns: 1fr; padding: 8px 12px; }
       #dv-real-qc-prototype .voiceBatchActions { justify-content: flex-start; }
+      #dv-real-qc-prototype .audioRegenActions { justify-content: flex-start; }
+      #dv-real-qc-prototype .subtitleItem.audioRegenSelecting .targetSelectionWrap { grid-template-columns: 1fr; }
+      #dv-real-qc-prototype .audioInlineSelect { justify-self: flex-end; }
       #dv-real-qc-prototype .voiceResultPanel { grid-column: 1 / -1; margin: 0 12px 16px; }
       #dv-real-qc-prototype .candidateGrid { grid-template-columns: 1fr; }
+      #dv-real-qc-prototype .aiFeedbackGrid { grid-template-columns: 1fr; }
       #dv-real-qc-prototype .episodePopover { width: 312px; }
       #dv-real-qc-prototype .episodeGrid { grid-template-columns: repeat(6, 1fr); max-height: 222px; }
       #dv-real-qc-prototype .episodeTile { height: 32px; line-height: 30px; }
@@ -1163,7 +1356,7 @@
         <button type="button" class="btnText">查找替换</button>
         <button type="button" class="btnText">发音纠正词典</button>
         <span class="saveStatus">已保存</span>
-        <button type="button" class="btnPrimary" id="primaryDoneBtn">完成并导出</button>
+        <button type="button" class="btnPrimary" id="primaryDoneBtn">导出</button>
       </div>
     </div>
     <div class="mainContent">
@@ -1183,6 +1376,7 @@
         <div class="subtitleWithQc">
           <div class="subtitleListContainer">
             <div class="header"><div class="headerSpeaker">说话人</div><div class="headerTime">时间</div><div class="headerGroup">语义组</div><div class="headerLeft">英语</div><div class="headerRight"><span class="headerTitle">阿拉伯语</span><span class="headerActions"><button type="button" class="btnGhost" id="batchRetranslate">批量重翻</button><button type="button" class="btnGhost" id="batchRedub">批量重新配音</button></span></div></div>
+            <div class="audioRegenBar" id="audioRegenBar"></div>
             <div class="voiceBatchBar" id="voiceBatchBar"></div>
             <div class="subtitleListWrapper"><div class="subtitleList" id="subtitleRows"></div></div>
           </div>
@@ -1286,6 +1480,34 @@
         </div>
       </div>
     </div>
+    <div class="aiFeedbackMask" id="aiFeedbackMask" role="dialog" aria-modal="true" aria-labelledby="aiFeedbackTitle">
+      <div class="aiFeedbackDialog" id="aiFeedbackDialog">
+        <div class="aiFeedbackHeader">
+          <h3 id="aiFeedbackTitle">AI译文反馈</h3>
+          <button type="button" class="aiFeedbackClose" id="aiFeedbackClose" aria-label="关闭">×</button>
+        </div>
+        <div class="aiFeedbackBody">
+          <div class="aiFeedbackTopline"><span id="aiFeedbackSegmentNo">第 1 段</span><span class="aiFeedbackSourceBadge" id="aiFeedbackAiSource">初始AI译文</span></div>
+          <div class="aiFeedbackNotice" id="aiFeedbackLockNotice">当前集已完成校对，AI译文反馈已提交，暂不支持修改</div>
+          <div class="aiFeedbackGrid">
+            <div class="aiFeedbackField full"><label>原文</label><div class="aiFeedbackStatic" id="aiFeedbackSource"></div></div>
+            <div class="aiFeedbackField"><label>问题AI译文</label><div class="aiFeedbackStatic aiFeedbackCompareText" id="aiFeedbackAiText"></div></div>
+            <div class="aiFeedbackField"><label class="aiFeedbackRequired">正确译文</label><textarea class="aiFeedbackTextarea aiFeedbackCompareText" id="aiFeedbackHumanText" rows="4"></textarea></div>
+            <div class="aiFeedbackField"><label class="aiFeedbackRequired">AI译文评分</label><input class="aiFeedbackInput" id="aiFeedbackAiScore" type="number" min="0" max="100" step="1" placeholder="0-100"></div>
+            <div class="aiFeedbackField"><label class="aiFeedbackRequired">正确译文评分</label><input class="aiFeedbackInput" id="aiFeedbackHumanScore" type="number" min="0" max="100" step="1" value="90"></div>
+            <div class="aiFeedbackField full"><label class="aiFeedbackRequired">问题标签</label><div class="aiFeedbackTags" id="aiFeedbackTagList"></div></div>
+            <div class="aiFeedbackField full"><label class="aiFeedbackRequired">问题描述 / 修改理由</label><textarea class="aiFeedbackTextarea" id="aiFeedbackReason" rows="3" placeholder="请描述AI译文问题和人工修改理由"></textarea><div class="aiFeedbackError" id="aiFeedbackError"></div></div>
+          </div>
+        </div>
+        <div class="aiFeedbackFooter">
+          <div class="aiFeedbackFooterNote">点击「完成校对」后，已保存的反馈将不可再修改</div>
+          <div class="aiFeedbackFooterActions">
+            <button type="button" class="btnGhost" id="aiFeedbackCancel">取消</button>
+            <button type="button" class="btnPrimary" id="aiFeedbackApply">保存反馈并应用译文</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="modalMask" id="modalMask" role="dialog" aria-modal="true"><div class="modalBox"><h3 id="modalTitle">确认操作</h3><p id="modalText"></p><div class="modalActions"><button type="button" class="btnGhost" id="modalCancel">返回确认</button><button type="button" class="btnPrimary" id="modalConfirm">确认</button></div></div></div>
     <div class="ttsFailureMask" id="ttsFailureMask" role="dialog" aria-modal="true" aria-labelledby="ttsFailureTitle">
       <div class="ttsFailureDialog">
@@ -1326,6 +1548,7 @@
       const ttsFailureRows = root.querySelector('#ttsFailureRows');
       const videoTimeEl = root.querySelector('#videoTime');
       const progressEl = root.querySelector('#videoProgress');
+      const audioRegenBar = root.querySelector('#audioRegenBar');
       const voiceBatchBar = root.querySelector('#voiceBatchBar');
       const headerActions = root.querySelector('.headerActions');
       const primaryDoneBtn = root.querySelector('#primaryDoneBtn');
@@ -1369,6 +1592,19 @@
       const styleSpaceWrapText = root.querySelector('#styleSpaceWrapText');
       const styleFont = root.querySelector('#styleFont');
       const stylePosition = root.querySelector('#stylePosition');
+      const aiFeedbackMask = root.querySelector('#aiFeedbackMask');
+      const aiFeedbackDialog = root.querySelector('#aiFeedbackDialog');
+      const aiFeedbackSegmentNo = root.querySelector('#aiFeedbackSegmentNo');
+      const aiFeedbackAiSource = root.querySelector('#aiFeedbackAiSource');
+      const aiFeedbackLockNotice = root.querySelector('#aiFeedbackLockNotice');
+      const aiFeedbackSource = root.querySelector('#aiFeedbackSource');
+      const aiFeedbackAiText = root.querySelector('#aiFeedbackAiText');
+      const aiFeedbackHumanText = root.querySelector('#aiFeedbackHumanText');
+      const aiFeedbackAiScore = root.querySelector('#aiFeedbackAiScore');
+      const aiFeedbackHumanScore = root.querySelector('#aiFeedbackHumanScore');
+      const aiFeedbackTagList = root.querySelector('#aiFeedbackTagList');
+      const aiFeedbackReason = root.querySelector('#aiFeedbackReason');
+      const aiFeedbackError = root.querySelector('#aiFeedbackError');
       let selectedGroup = '字幕文本规范';
       let activeIssue = 'q1';
       let expandedGroups = new Set(['字幕文本规范']);
@@ -1380,6 +1616,14 @@
       let voiceSeed = 4;
       let redubMode = 'results';
       let batchSelectedIds = new Set();
+      let audioRegenItems = [
+        { seg:'s1', type:'optional', selected:true, kept:false, reason:'译文文本已调整', detail:'该段已有可用配音音频，且未发生段落结构、说话人、配音参数、语气词或发音规则变更。可取消本次合成并保留上一次配音音频。' },
+        { seg:'s2', type:'optional', selected:true, kept:false, reason:'敏感词脱敏展示', detail:'系统不检测文本修改幅度。保留当前音频后，字幕展示最新译文文本，配音仍使用上一次合成结果，请确认该差异符合业务预期。' },
+        { seg:'s4', type:'required', selected:true, kept:false, reason:'段落已拆分', detail:'该段由已合成段落拆分而来，原音频无法与当前段落一一绑定。如不重新合成，可能导致字幕与配音内容、时长对不齐。' },
+        { seg:'s6', type:'required', selected:true, kept:false, reason:'音频缺失', detail:'当前段落暂无可用配音音频，需合成后才能正常预览和导出。' }
+      ];
+      let audioRegenSelectMode = false;
+      let audioRegenVisibleBeforeBatchRedub = false;
       let selectedTimeline = null;
       let activeColumn = 'target';
       let splitTarget = null;
@@ -1427,6 +1671,8 @@
       let subtitleStyleActiveTab = 'target';
       let reviewSubmitCompleted = false;
       let reviewSubmitSubmitting = false;
+      let activeFeedbackSegmentId = null;
+      let feedbackDraftTags = [];
       const episodes = Array.from({length:66}, (_,i) => {
         const no = i + 1;
         const special = {
@@ -1444,12 +1690,13 @@
         };
         return { no, status:'available', stage:'配音', issues:[2,5,9,16,28,31,49,55,61].includes(no)?1:0, text:'可编辑', ...(special[no] || {}) };
       });
+      const feedbackTagOptions = ['语义偏移','漏译/多译','语气不符','人设不符','口语自然度差','称谓/关系错误','文化表达不地道','上下文理解错误','专有名词/术语错误','标点/格式问题'];
       const segments = [
-        { id:'s1', speaker:'Elsie', cls:'third', group:'1', time:'00:00:02,240 - 00:00:03,600', source:'Life is like a game of chess', target:'الحياة مثل لعبة الشطرنج', voice:{ checked:true, selected:0, old:'原音频 00:00:01,360', candidates:[{name:'候选 1',dur:'00:00:01,420',speed:'1.00x',status:'ready',progress:'58%'},{name:'候选 2',dur:'00:00:01,510',speed:'1.08x',status:'ready',progress:'44%'},{name:'候选 3',dur:'00:00:01,390',speed:'0.96x',status:'ready',progress:'66%'}]} },
-        { id:'s2', speaker:'Elsie', cls:'third', group:'1', time:'00:00:04,679 - 00:00:06,120', source:'and we are both players in it', target:'ونحن اللاعبان فيها', voice:{ checked:true, selected:0, old:'原音频 00:00:01,441', candidates:[{name:'候选 1',dur:'00:00:01,510',speed:'1.00x',status:'ready',progress:'52%'},{name:'候选 2',dur:'00:00:01,630',speed:'1.12x',status:'ready',progress:'49%'},{name:'候选 3',dur:'--',speed:'--',status:'failed',progress:'0%',failureType:'TTS_SAFETY_BLOCKED',error:'Gemini 安全拦截：文本触发安全策略'}]} },
-        { id:'s3', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:07,040 - 00:00:08,278', source:'If we leave the past behind...', target:'إذا تركنا الماضي خلفنا،', voice:{ checked:false, selected:0, old:'原音频 00:00:01,238', candidates:[{name:'候选 1',dur:'00:00:01,320',speed:'1.00x',status:'ready',progress:'42%'},{name:'候选 2',dur:'00:00:01,280',speed:'0.98x',status:'ready',progress:'40%'},{name:'候选 3',dur:'00:00:01,470',speed:'1.16x',status:'ready',progress:'61%'}]} },
-        { id:'s4', speaker:'Aidan Rowe', cls:'alt', group:'3', time:'00:00:13,519 - 00:00:15,198', source:'W-what... what do you want?!', target:'ماذا تريد؟' },
-        { id:'s5', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:18,399 - 00:00:18,879', source:'elsie.', target:'إلسي.' },
+        { id:'s1', speaker:'Elsie', cls:'third', group:'1', time:'00:00:02,240 - 00:00:03,600', source:'Life is like a game of chess', target:'الحياة مثل لعبة الشطرنج', aiText:'الحياة تشبه لعبة شطرنج', aiSource:'初始AI译文', defaultFeedbackReason:'注意保留“棋局/博弈”的隐喻，不要译成普通游戏。', voice:{ checked:true, selected:0, old:'原音频 00:00:01,360', candidates:[{name:'候选 1',dur:'00:00:01,420',speed:'1.00x',status:'ready',progress:'58%'},{name:'候选 2',dur:'00:00:01,510',speed:'1.08x',status:'ready',progress:'44%'},{name:'候选 3',dur:'00:00:01,390',speed:'0.96x',status:'ready',progress:'66%'}]} },
+        { id:'s2', speaker:'Elsie', cls:'third', group:'1', time:'00:00:04,679 - 00:00:06,120', source:'and we are both players in it', target:'ونحن اللاعبان فيها', aiText:'ونحن كلاهما لاعبان فيها', aiSource:'初始AI译文', voice:{ checked:true, selected:0, old:'原音频 00:00:01,441', candidates:[{name:'候选 1',dur:'00:00:01,510',speed:'1.00x',status:'ready',progress:'52%'},{name:'候选 2',dur:'00:00:01,630',speed:'1.12x',status:'ready',progress:'49%'},{name:'候选 3',dur:'--',speed:'--',status:'failed',progress:'0%',failureType:'TTS_SAFETY_BLOCKED',error:'Gemini 安全拦截：文本触发安全策略'}]} },
+        { id:'s3', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:07,040 - 00:00:08,278', source:'If we leave the past behind...', target:'إذا تركنا الماضي خلفنا،', aiText:'إذا تركنا الماضي وراءنا...', aiSource:'AI润色初始译文', voice:{ checked:false, selected:0, old:'原音频 00:00:01,238', candidates:[{name:'候选 1',dur:'00:00:01,320',speed:'1.00x',status:'ready',progress:'42%'},{name:'候选 2',dur:'00:00:01,280',speed:'0.98x',status:'ready',progress:'40%'},{name:'候选 3',dur:'00:00:01,470',speed:'1.16x',status:'ready',progress:'61%'}]} },
+        { id:'s4', speaker:'Aidan Rowe', cls:'alt', group:'3', time:'00:00:13,519 - 00:00:15,198', source:'W-what... what do you want?!', target:'ماذا تريد؟', aiText:'ماذا تريد؟', aiSource:'初始AI译文', feedbackBlocked:'mergeSplit', defaultFeedbackReason:'保留惊慌语气，避免译文过于平铺直叙。' },
+        { id:'s5', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:18,399 - 00:00:18,879', source:'elsie.', target:'إلسي.', feedbackBlocked:'importedSrt' },
         { id:'s6', speaker:'Aidan Rowe', cls:'alt', group:'3', time:'00:00:22,920 - 00:00:24,879', source:'You went to His Majesty to complain', target:'ذهبت إلى جلالته لتشتكي' }
       ];
       let qc = [
@@ -1504,6 +1751,13 @@
               'M256 312a96 96 0 100-192 96 96 0 000 192zm0-132a36 36 0 110 72 36 36 0 010-72zm0 724a96 96 0 100-192 96 96 0 000 192zm0-132a36 36 0 110 72 36 36 0 010-72z',
               'M884 256h-92c-16.8 0-33.2 4.8-47.3 13.8L320.4 541.2a120.8 120.8 0 00-72.4-24.2c-66.3 0-120 53.7-120 120s53.7 120 120 120c42.8 0 80.4-22.4 101.7-56.1L774.5 430.2c5.2-3.3 11.3-5.1 17.5-5.1h92c17.7 0 32-14.3 32-32V288c0-17.7-14.3-32-32-32z',
               'M320.4 482.8l82.8-53L302.5 365.8c-14.1-9-30.5-13.8-47.3-13.8H160c-17.7 0-32 14.3-32 32v105c0 17.7 14.3 32 32 32h95.2c6.2 0 12.3-1.8 17.5-5.1l47.7-33.1zm464.1 111L607.2 480.7l-82.8 53 220.3 140.5c14.1 9 30.5 13.8 47.3 13.8h92c17.7 0 32-14.3 32-32V552c0-17.7-14.3-32-32-32h-92c-6.2 0-12.3 1.8-17.5 5.1z'
+            ]
+          },
+          record: {
+            viewBox: '64 64 896 896',
+            paths: [
+              'M832 112H192c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H232V184h560v656z',
+              'M328 292h368v72H328v-72zm0 154h368v72H328v-72zm0 154h240v72H328v-72z'
             ]
           },
           more: {
@@ -1949,7 +2203,7 @@
         headerActions.innerHTML = isDubbingStage()
           ? '<button type="button" class="btnGhost" id="batchRetranslate">批量重翻</button><button type="button" class="btnGhost" id="batchRedub">批量重新配音</button><button type="button" class="btnGhost demoFailBtn" id="ttsFailureDemo">TTS失败示例</button>'
           : '<button type="button" class="btnGhost" id="batchRetranslate">批量重翻</button>';
-        primaryDoneBtn.textContent = isDubbingStage() ? '完成并导出' : '完成校对';
+        primaryDoneBtn.textContent = isDubbingStage() ? '导出' : '完成校对';
         completeTranslationReviewBtn.style.display = ['翻译','配音'].includes(currentStage) ? '' : 'none';
         completeTranslationReviewBtn.title = '提交后将标记当前集' + currentStage + '校对完成';
         completeTranslationReviewBtn.disabled = reviewSubmitCompleted || reviewSubmitSubmitting;
@@ -1971,6 +2225,7 @@
             setTimeout(()=>{
               reviewSubmitSubmitting = false;
               reviewSubmitCompleted = true;
+              segments.forEach(seg => { if(seg.aiFeedback) seg.aiFeedback.locked = true; });
               renderHeaderActions();
               showToast(currentStage + '校对已完成');
             }, 760);
@@ -2165,6 +2420,8 @@
         currentEpisode = ep.no;
         currentStage = stage || ep.stage;
         redubMode = isDubbingStage() ? 'results' : 'none';
+        audioRegenSelectMode = false;
+        audioRegenVisibleBeforeBatchRedub = false;
         batchSelectedIds.clear();
         activeColumn = 'target';
         splitTarget = null;
@@ -2209,6 +2466,104 @@
         if(!seg) return;
         videoTimeEl.textContent = seg.time.split(' - ')[0];
         progressEl.style.setProperty('--progress-value', Math.min(86, 10 + Number(segNo(segId)) * 12) + '%');
+      }
+      function activeAudioRegenItems(){ return audioRegenItems.filter(item => !item.kept); }
+      function getAudioRegenItem(segId){ return audioRegenItems.find(item => item.seg === segId); }
+      function resolveAudioRegenForSegment(segId){
+        const before = audioRegenItems.length;
+        audioRegenItems = audioRegenItems.filter(item => item.seg !== segId);
+        if(!activeAudioRegenItems().length) audioRegenSelectMode = false;
+        return before !== audioRegenItems.length;
+      }
+      function audioRegenStats(){
+        const active = activeAudioRegenItems();
+        return {
+          total: active.length,
+          optional: active.filter(item => item.type === 'optional').length,
+          required: active.filter(item => item.type === 'required').length,
+          selected: active.filter(item => item.type === 'required' || item.selected).length,
+          kept: audioRegenItems.filter(item => item.kept).length
+        };
+      }
+      function updateAudioRegenBar(){
+        if(!isDubbingStage()){
+          audioRegenSelectMode = false;
+          audioRegenBar.className = 'audioRegenBar isHidden';
+          audioRegenBar.innerHTML = '';
+          return;
+        }
+        const stats = audioRegenStats();
+        if(!stats.total){
+          audioRegenSelectMode = false;
+          audioRegenBar.className = 'audioRegenBar isHidden';
+          audioRegenBar.innerHTML = '';
+          return;
+        }
+        const detail = stats.optional
+          ? '其中 '+stats.optional+' 个可选择保留当前音频，'+stats.required+' 个需要重新合成'
+          : '全部为需要重新合成段落';
+        if(redubMode === 'select'){
+          audioRegenSelectMode = false;
+          if(!audioRegenVisibleBeforeBatchRedub){
+            audioRegenBar.className = 'audioRegenBar isHidden';
+            audioRegenBar.innerHTML = '';
+            return;
+          }
+          audioRegenBar.className = 'audioRegenBar isDisabled';
+          audioRegenBar.innerHTML = '<div class="audioRegenText"><span class="audioRegenIcon">!</span><span>需重新生成 <strong>'+stats.total+'</strong> 个音频片段</span><span class="audioRegenSub">当前正在选择批量重新配音范围，完成或取消后可继续处理待合成段落</span></div><div class="audioRegenActions"><button type="button" class="btnGhost" disabled>选择段落合成</button><button type="button" class="btnPrimary" disabled>合成全部</button></div>';
+          return;
+        }
+        audioRegenBar.className = 'audioRegenBar';
+        if(audioRegenSelectMode){
+          audioRegenBar.innerHTML = '<div class="audioRegenText"><span class="audioRegenIcon">!</span><span>已选择 <strong>'+stats.selected+'</strong> 个待合成段落</span><span class="audioRegenSub">必须重新合成的段落已锁定，悬浮问号可查看变更原因</span></div><div class="audioRegenActions"><button type="button" class="btnGhost" id="audioRegenCancelInline">取消</button><button type="button" class="btnPrimary" id="audioRegenPrimaryInline" '+(stats.selected===0?'disabled':'')+'>合成本次勾选段落</button></div>';
+          return;
+        }
+        audioRegenBar.innerHTML = '<div class="audioRegenText"><span class="audioRegenIcon">!</span><span>需重新生成 <strong>'+stats.total+'</strong> 个音频片段</span><span class="audioRegenSub">'+detail+'</span></div><div class="audioRegenActions"><button type="button" class="btnGhost" id="openAudioRegen">选择段落合成</button><button type="button" class="btnPrimary" id="synthAllPending">合成全部</button></div>';
+      }
+      function renderAudioRegenInlineControl(segId){
+        if(!audioRegenSelectMode || !isDubbingStage()) return '';
+        const item = getAudioRegenItem(segId);
+        if(!item || item.kept) return '';
+        const required = item.type === 'required';
+        const checked = required || item.selected;
+        const tip = esc(item.reason+'：'+item.detail);
+        return '<label class="audioInlineSelect'+(required?' required':'')+'"><input type="checkbox" class="audioRegenCheck" data-audio-regen-check="'+item.seg+'" '+(checked?'checked':'')+' '+(required?'disabled':'')+'>'+(required?'<span class="audioInlineHelp" title="'+tip+'">?</span>':'')+'</label>';
+      }
+      function enterAudioRegenSelectMode(){
+        audioRegenSelectMode = true;
+        renderRows(activeSegment);
+        requestAnimationFrame(()=>{
+          const first = activeAudioRegenItems()[0];
+          const row = first ? rowsEl.querySelector('[data-seg="'+first.seg+'"]') : null;
+          if(row) row.scrollIntoView({block:'center'});
+        });
+      }
+      function cancelAudioRegenSelection(){
+        audioRegenSelectMode = false;
+        renderRows(activeSegment);
+      }
+      function synthAudioItems(ids){
+        if(!ids.length){ showToast('请先勾选需要合成的段落'); return; }
+        audioRegenSelectMode = false;
+        audioRegenItems = audioRegenItems.filter(item => !ids.includes(item.seg));
+        ids.forEach(id => {
+          const seg = segments.find(s => s.id === id);
+          if(seg) seg.needsRedub = false;
+        });
+        renderRows(activeSegment);
+        const keptCount = audioRegenItems.filter(item => item.kept).length;
+        showToast(keptCount ? '已发起 '+ids.length+' 个音频片段合成，'+keptCount+' 个段落保留当前音频' : '已发起 '+ids.length+' 个音频片段合成');
+      }
+      function applyAudioRegenSelection(){
+        const selectedIds = [];
+        audioRegenItems.forEach(item => {
+          if(item.type === 'required' || item.selected) selectedIds.push(item.seg);
+          else if(item.type === 'optional') item.kept = true;
+        });
+        synthAudioItems(selectedIds);
+      }
+      function synthAllPendingAudio(){
+        synthAudioItems(activeAudioRegenItems().map(item => item.seg));
       }
       function voiceRows(){ return isDubbingStage() ? segments.filter(s => s.voice) : []; }
       function selectedVoiceRows(){ return voiceRows().filter(s => s.voice.checked); }
@@ -2375,7 +2730,7 @@
           return;
         }
         voiceBatchBar.className = 'voiceBatchBar';
-        voiceBatchBar.innerHTML = '<div class="voiceBatchText"><span>已选择 <strong>'+count+'</strong> 个候选</span><span class="voiceBatchDivider"></span><button type="button" class="voiceBatchLink" id="voiceSelectAll">全选</button><button type="button" class="voiceBatchLink" id="voiceClearAll">清空</button></div><div class="voiceBatchActions"><button type="button" class="btnGhost" id="voiceBatchRefresh" '+(count===0?'disabled':'')+'>批量换一批</button><button type="button" class="btnPrimary" id="voiceBatchAccept" '+(count===0?'disabled':'')+'>批量采用</button><button type="button" class="btnGhost" id="voiceBatchExit">退出</button></div>';
+        voiceBatchBar.innerHTML = '<div class="voiceBatchText"><span>已选择 <strong>'+count+'</strong> 个候选</span><span class="voiceBatchDivider"></span><button type="button" class="voiceBatchLink" id="voiceSelectAll">全选</button><button type="button" class="voiceBatchLink" id="voiceClearAll">清空</button></div><div class="voiceBatchActions"><button type="button" class="btnPrimary" id="voiceBatchAccept" '+(count===0?'disabled':'')+'>批量采用</button><button type="button" class="btnGhost" id="voiceBatchExit">退出</button></div>';
       }
       function speedTone(speed){
         const rate = Number.parseFloat(String(speed).replace('x',''));
@@ -2449,6 +2804,8 @@
       }
       function enterBatchRedub(){
         if(!isDubbingStage()) return;
+        audioRegenVisibleBeforeBatchRedub = audioRegenStats().total > 0;
+        audioRegenSelectMode = false;
         redubMode = 'select';
         batchSelectedIds = new Set(['s1','s2']);
         renderRows(activeSegment);
@@ -2457,9 +2814,10 @@
         if(!batchSelectedIds.size){ showToast('请先勾选需要重新配音的段落'); return; }
         redubMode = 'running';
         const ids = Array.from(batchSelectedIds);
+        audioRegenVisibleBeforeBatchRedub = false;
         ids.forEach(id => {
           const seg = segments.find(s => s.id === id);
-          if(seg){ seg.needsRedub = false; ensureLoadingVoice(seg); }
+          if(seg){ seg.needsRedub = false; ensureLoadingVoice(seg); resolveAudioRegenForSegment(id); }
         });
         renderRows(activeSegment);
         setTimeout(()=>{
@@ -2493,9 +2851,96 @@
         const candidate = seg.voice.candidates[seg.voice.selected];
         if(!candidate || candidate.status !== 'ready'){ showToast('当前候选不可采用'); return; }
         seg.voice = null;
+        resolveAudioRegenForSegment(seg.id);
         renderRows(activeSegment);
         updateVoiceBatch();
         showToast('已采用当前候选音频');
+      }
+      function aiFeedbackDisabledReason(seg){
+        if(reviewSubmitCompleted && !seg.aiFeedback) return '当前集已完成校对，AI译文反馈已提交，暂不支持修改';
+        if(seg.feedbackBlocked === 'mergeSplit') return '段落已合并/拆分，原始AI译文与当前段落无法稳定对应，暂不支持提交反馈';
+        if(seg.feedbackBlocked === 'importedSrt') return '当前段落来源为导入译文SRT，且无AI润色产出，暂不支持提交AI译文反馈';
+        if(seg.feedbackBlocked === 'retranslated') return '该段已发起重翻，重翻结果不作为AI译文badcase，暂不支持提交反馈';
+        if(!seg.aiText) return '当前段落无可追溯的AI译文产出，暂不支持提交AI译文反馈';
+        return '';
+      }
+      function renderAiFeedbackEntry(seg){
+        if(isDubbingStage()) return '';
+        const saved = !!seg.aiFeedback;
+        const reason = aiFeedbackDisabledReason(seg);
+        const disabled = reason && !saved;
+        const label = saved ? '已反馈' : 'AI译文反馈';
+        const locked = saved && (reviewSubmitCompleted || seg.aiFeedback.locked);
+        const title = locked ? '当前集已完成校对，AI译文反馈已提交，暂不支持修改' : (saved ? '查看或修改已保存的AI译文反馈' : reason || '提交该段AI译文badcase用于模型优化');
+        return '<button type="button" class="segmentTool aiFeedbackTool '+(saved?'saved':'')+'" data-ai-feedback="'+seg.id+'" title="'+esc(title)+'" '+(disabled?'disabled':'')+'>'+antToolbarIcon('record')+label+'</button>';
+      }
+      function renderFeedbackTags(readonly){
+        aiFeedbackTagList.innerHTML = feedbackTagOptions.map(tag => '<button type="button" class="aiFeedbackTag '+(feedbackDraftTags.includes(tag)?'selected':'')+'" data-feedback-tag="'+esc(tag)+'" '+(readonly?'disabled':'')+'>'+esc(tag)+'</button>').join('');
+      }
+      function openAiFeedback(segId){
+        const seg = segments.find(s => s.id === segId);
+        if(!seg) return;
+        const reason = aiFeedbackDisabledReason(seg);
+        if(reason && !seg.aiFeedback){ showToast(reason); return; }
+        activeFeedbackSegmentId = segId;
+        const data = seg.aiFeedback || {};
+        const readonly = reviewSubmitCompleted || !!data.locked;
+        feedbackDraftTags = [...(data.tags || [])];
+        aiFeedbackDialog.classList.toggle('readonly', readonly);
+        aiFeedbackSegmentNo.textContent = '第 ' + segNo(seg.id) + ' 段';
+        aiFeedbackAiSource.textContent = data.aiSource || seg.aiSource || '初始AI译文';
+        aiFeedbackLockNotice.style.display = readonly ? 'block' : 'none';
+        aiFeedbackSource.textContent = seg.source || '空字幕段';
+        aiFeedbackAiText.textContent = data.aiText || seg.aiText || '无可追溯AI译文';
+        aiFeedbackHumanText.value = data.humanText || seg.target || '';
+        aiFeedbackAiScore.value = data.aiScore ?? '';
+        aiFeedbackHumanScore.value = data.humanScore ?? 90;
+        aiFeedbackReason.value = data.reason || seg.defaultFeedbackReason || '';
+        aiFeedbackError.textContent = '';
+        aiFeedbackHumanText.disabled = readonly;
+        aiFeedbackAiScore.disabled = readonly;
+        aiFeedbackHumanScore.disabled = readonly;
+        aiFeedbackReason.disabled = readonly;
+        root.querySelector('#aiFeedbackApply').style.display = readonly ? 'none' : '';
+        root.querySelector('#aiFeedbackCancel').textContent = readonly ? '关闭' : '取消';
+        renderFeedbackTags(readonly);
+        aiFeedbackMask.style.display = 'flex';
+      }
+      function closeAiFeedback(){
+        activeFeedbackSegmentId = null;
+        aiFeedbackMask.style.display = 'none';
+      }
+      function collectAiFeedback(){
+        const aiScore = Number(aiFeedbackAiScore.value);
+        const humanScore = Number(aiFeedbackHumanScore.value);
+        const humanText = aiFeedbackHumanText.value.trim();
+        const reason = aiFeedbackReason.value.trim();
+        if(!humanText) return { error:'请填写正确译文' };
+        if(aiFeedbackAiScore.value === '' || Number.isNaN(aiScore) || aiScore < 0 || aiScore > 100) return { error:'AI译文评分需填写0-100之间的整数' };
+        if(aiFeedbackHumanScore.value === '' || Number.isNaN(humanScore) || humanScore < 0 || humanScore > 100) return { error:'正确译文评分需填写0-100之间的整数' };
+        if(!feedbackDraftTags.length) return { error:'请选择至少一个问题标签' };
+        if(!reason) return { error:'请填写问题描述或修改理由' };
+        return { humanText, aiScore, humanScore, tags:[...feedbackDraftTags], reason };
+      }
+      function saveAiFeedback(applyText){
+        const seg = segments.find(s => s.id === activeFeedbackSegmentId);
+        if(!seg) return;
+        if(reviewSubmitCompleted || seg.aiFeedback?.locked){ showToast('当前集已完成校对，AI译文反馈已提交，暂不支持修改'); return; }
+        const data = collectAiFeedback();
+        if(data.error){ aiFeedbackError.textContent = data.error; return; }
+        seg.aiFeedback = {
+          aiText: seg.aiText,
+          aiSource: seg.aiSource || '初始AI译文',
+          humanText: data.humanText,
+          aiScore: Math.round(data.aiScore),
+          humanScore: Math.round(data.humanScore),
+          tags: data.tags,
+          reason: data.reason
+        };
+        if(applyText) seg.target = data.humanText;
+        closeAiFeedback();
+        renderRows(activeSegment);
+        showToast(applyText ? '已保存反馈并应用正确译文' : '已保存AI译文反馈');
       }
       function renderRows(active){
         renderHeaderActions();
@@ -2513,19 +2958,23 @@
           const splitReady = active===s.id && splitTarget && splitTarget.id===s.id && splitTarget.column===activeColumn && activeChars.length > 1 && String(activeText || '').trim();
           const splitTip = !String(activeText || '').trim() ? '当前激活列文本为空，暂不支持拆分' : (splitReady ? '在当前'+(activeColumn==='source'?'原文':'译文')+'光标处拆分段落' : '点击想要拆分的'+(activeColumn==='source'?'原文':'译文')+'位置');
           const splitBtn = '<button type="button" class="segmentTool" data-tool="拆分片段" '+(splitReady?'':'disabled')+' title="'+esc(splitTip)+'">'+antToolbarIcon('split')+'拆分片段</button>';
-          const translationTools = splitBtn + '<button type="button" class="segmentTool" data-tool="重翻">'+antToolbarIcon('translation')+'重翻</button>';
-          const dubbingTools = translationTools + '<button type="button" class="segmentTool" data-tool="情感调节">'+antToolbarIcon('smile')+'情感调节</button><button type="button" class="segmentTool" data-tool="语气词">'+antToolbarIcon('comment')+'语气词</button><button type="button" class="segmentTool" data-tool="重新生成配音">'+antToolbarIcon('audio')+'重新生成配音</button><button type="button" class="segmentTool" data-tool="发音纠正">'+antToolbarIcon('sound')+'发音纠正</button>';
+          const baseTranslationTools = splitBtn + '<button type="button" class="segmentTool" data-tool="重翻">'+antToolbarIcon('translation')+'重翻</button>';
+          const translationTools = baseTranslationTools + renderAiFeedbackEntry(s);
+          const dubbingTools = baseTranslationTools + '<button type="button" class="segmentTool" data-tool="情感调节">'+antToolbarIcon('smile')+'情感调节</button><button type="button" class="segmentTool" data-tool="语气词">'+antToolbarIcon('comment')+'语气词</button><button type="button" class="segmentTool" data-tool="重新生成配音">'+antToolbarIcon('audio')+'重新生成配音</button><button type="button" class="segmentTool" data-tool="发音纠正">'+antToolbarIcon('sound')+'发音纠正</button>';
           const toolbar = active===s.id && redubMode!=='select' ? '<div class="segmentToolbar"><div class="segmentToolGroup">'+(isDubbingStage()?dubbingTools:translationTools)+'</div>'+moreMenu+'</div>' : '';
           const batchCheck = redubMode === 'select' ? '<label class="batchRowCheck"><input type="checkbox" class="batchRowInput" data-batch-row="'+s.id+'" '+(batchSelectedIds.has(s.id)?'checked':'')+'></label>' : '';
+          const audioInlineSelect = renderAudioRegenInlineControl(s.id);
+          const audioPendingTextClass = isDubbingStage() && getAudioRegenItem(s.id) && !getAudioRegenItem(s.id).kept ? ' audioPendingText' : '';
           const sourceActive = active===s.id && activeColumn === 'source';
           const targetActive = active===s.id && activeColumn === 'target';
           const sourceHtml = renderEditableText(s.source, 'source', s.id, '<span class="placeholderText">空字幕段</span>');
           const targetHtml = renderEditableText(s.target, 'target', s.id, '<span class="placeholderText">待输入译文</span>');
-          const rowHtml = '<div class="subtitleItem '+(active===s.id?'active ':'')+(item?'hasError ':'')+(s.voice&&redubMode!=='select'&&isDubbingStage()?'hasVoice ':'')+(redubMode==='select'?'batchSelectable':'')+'" data-seg="'+s.id+'">'+errorBadge+toolbar+batchCheck+'<div class="speakerCell"><span class="speakerBadge '+s.cls+'">'+esc(s.speaker)+'</span></div><div class="timeCell"><span class="timeLine">'+esc(times[0]||'')+'</span><span class="timeLine">'+esc(times[1]||'')+'</span></div><div class="groupCell">'+esc(s.group)+'</div><div class="textCell sourceCell '+(sourceActive?'activeColumn':'')+'"><span class="segmentIndex">'+(index+1)+'</span><div class="sourceText" data-edit-field="source" data-seg="'+s.id+'">'+sourceHtml+'</div></div><div class="textCell targetCell '+(targetActive?'activeColumn':'')+'"><div class="targetTextWrap"><button type="button" class="targetPlayBtn targetPlayFloat" data-target-play="'+s.id+'" aria-label="播放译文片段"><svg class="targetPlayIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button><div class="targetText" data-edit-field="target" data-seg="'+s.id+'">'+targetHtml+'</div></div></div>'+renderVoicePanel(s)+'</div>';
+          const rowHtml = '<div class="subtitleItem '+(active===s.id?'active ':'')+(item?'hasError ':'')+(s.voice&&redubMode!=='select'&&isDubbingStage()?'hasVoice ':'')+(redubMode==='select'?'batchSelectable ':'')+(isDubbingStage()&&audioRegenSelectMode?'audioRegenSelecting':'')+'" data-seg="'+s.id+'">'+errorBadge+toolbar+batchCheck+'<div class="speakerCell"><span class="speakerBadge '+s.cls+'">'+esc(s.speaker)+'</span></div><div class="timeCell"><span class="timeLine">'+esc(times[0]||'')+'</span><span class="timeLine">'+esc(times[1]||'')+'</span></div><div class="groupCell">'+esc(s.group)+'</div><div class="textCell sourceCell '+(sourceActive?'activeColumn':'')+'"><span class="segmentIndex">'+(index+1)+'</span><div class="sourceText" data-edit-field="source" data-seg="'+s.id+'">'+sourceHtml+'</div></div><div class="textCell targetCell '+(targetActive?'activeColumn':'')+'"><div class="targetSelectionWrap"><div class="targetTextWrap"><button type="button" class="targetPlayBtn targetPlayFloat" data-target-play="'+s.id+'" aria-label="播放译文片段"><svg class="targetPlayIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button><div class="targetText'+audioPendingTextClass+'" data-edit-field="target" data-seg="'+s.id+'">'+targetHtml+'</div></div>'+audioInlineSelect+'</div></div>'+renderVoicePanel(s)+'</div>';
           const insertHtml = canShowInsert ? '<div class="insertArea" data-insert-after="'+(index+1)+'"><button type="button" class="insertBtn"><span>＋</span>插入</button></div>' : '';
           return rowHtml + insertHtml;
         }).join('');
         updateVoiceBatch();
+        updateAudioRegenBar();
         renderTimeline();
       }
       function renderTypes(){
@@ -2584,6 +3033,7 @@
       });
       root.addEventListener('input', e=>{
         if(e.target.closest('#subtitleStyleMask')) syncSubtitleStyleDraftFromForm();
+        if(e.target.closest('#aiFeedbackMask')) aiFeedbackError.textContent = '';
       });
       root.addEventListener('change', e=>{
         if(e.target === styleSourceEnabled){
@@ -2596,10 +3046,48 @@
         }
         if(e.target.closest('#subtitleStyleMask')) syncSubtitleStyleDraftFromForm();
         if(e.target === styleSmartCut || e.target === styleMaxLines) fillSubtitleStyleForm();
+        const audioCheck = e.target.closest('[data-audio-regen-check]');
+        if(audioCheck){
+          const item = getAudioRegenItem(audioCheck.dataset.audioRegenCheck);
+          if(item && item.type === 'optional'){
+            item.selected = audioCheck.checked;
+            renderRows(activeSegment);
+          }
+        }
       });
       root.addEventListener('click', e=>{
         if(e.target.closest('#completeTranslationReview')){
           completeTranslationReview();
+          return;
+        }
+        const feedbackEntry = e.target.closest('[data-ai-feedback]');
+        if(feedbackEntry){
+          e.stopPropagation();
+          activeSegment = feedbackEntry.dataset.aiFeedback;
+          updateVideo(activeSegment);
+          openAiFeedback(activeSegment);
+          renderRows(activeSegment);
+          return;
+        }
+        if(e.target.closest('#aiFeedbackClose') || e.target.closest('#aiFeedbackCancel')){
+          closeAiFeedback();
+          return;
+        }
+        if(e.target === aiFeedbackMask){
+          closeAiFeedback();
+          return;
+        }
+        const feedbackTag = e.target.closest('[data-feedback-tag]');
+        if(feedbackTag){
+          const tag = feedbackTag.dataset.feedbackTag;
+          if(feedbackDraftTags.includes(tag)) feedbackDraftTags = feedbackDraftTags.filter(item => item !== tag);
+          else feedbackDraftTags.push(tag);
+          aiFeedbackError.textContent = '';
+          renderFeedbackTags(reviewSubmitCompleted);
+          return;
+        }
+        if(e.target.closest('#aiFeedbackApply')){
+          saveAiFeedback(true);
           return;
         }
         if(e.target.closest('#toastAction') && toastAction){
@@ -2668,6 +3156,22 @@
         }
         if(e.target === subtitleStyleMask){
           closeSubtitleStyleDialog();
+          return;
+        }
+        if(e.target.closest('#openAudioRegen')){
+          enterAudioRegenSelectMode();
+          return;
+        }
+        if(e.target.closest('#synthAllPending')){
+          synthAllPendingAudio();
+          return;
+        }
+        if(e.target.closest('#audioRegenCancelInline')){
+          cancelAudioRegenSelection();
+          return;
+        }
+        if(e.target.closest('#audioRegenPrimaryInline')){
+          applyAudioRegenSelection();
           return;
         }
         const insertBtn=e.target.closest('[data-insert-after]');
@@ -2785,6 +3289,13 @@
           if(!segmentTool.dataset.tool) return;
           if(segmentTool.dataset.tool === '拆分片段'){ splitActiveSegment(); return; }
           if(segmentTool.dataset.tool === '重新生成配音'){ triggerSingleRedub(activeSegment); return; }
+          if(segmentTool.dataset.tool === '重翻' && currentStage === '翻译'){
+            const seg = segments.find(item => item.id === activeSegment);
+            if(seg && !seg.aiFeedback) seg.feedbackBlocked = 'retranslated';
+            renderRows(activeSegment);
+            showToast('已发起重翻，AI译文反馈已置灰');
+            return;
+          }
           showToast(segmentTool.dataset.tool === '删除' ? '打开删除段落确认' : '打开'+segmentTool.dataset.tool);
           return;
         }
@@ -2815,6 +3326,7 @@
           showToast('播放当前版本译文音频');
           return;
         }
+        if(e.target.closest('.audioInlineSelect')) return;
         const batchRow=e.target.closest('[data-batch-row]');
         if(batchRow){
           const id=batchRow.dataset.batchRow;
@@ -2846,9 +3358,8 @@
           return;
         }
         if(e.target.id==='voiceBatchStart'){ startBatchRedub(); return; }
-        if(e.target.id==='voiceBatchCancel'){ redubMode = voiceRows().length ? 'results' : 'none'; batchSelectedIds.clear(); renderRows(activeSegment); return; }
-        if(e.target.id==='voiceBatchRefresh'){ selectedVoiceRows().forEach(s=>refreshCandidates(s)); return; }
-        if(e.target.id==='voiceBatchAccept'){ const rows=selectedVoiceRows().filter(s=>s.voice.candidates[s.voice.selected]?.status==='ready'); rows.forEach(s=>s.voice=null); renderRows(activeSegment); showToast('已批量采用 '+rows.length+' 个候选音频'); return; }
+        if(e.target.id==='voiceBatchCancel'){ audioRegenVisibleBeforeBatchRedub = false; redubMode = voiceRows().length ? 'results' : 'none'; batchSelectedIds.clear(); renderRows(activeSegment); return; }
+        if(e.target.id==='voiceBatchAccept'){ const rows=selectedVoiceRows().filter(s=>s.voice.candidates[s.voice.selected]?.status==='ready'); const resolvedCount = rows.filter(s=>resolveAudioRegenForSegment(s.id)).length; rows.forEach(s=>s.voice=null); renderRows(activeSegment); showToast(resolvedCount ? '已批量采用 '+rows.length+' 个候选音频，'+resolvedCount+' 段已移出待合成列表' : '已批量采用 '+rows.length+' 个候选音频'); return; }
         if(e.target.id==='voiceBatchExit'){ voiceRows().forEach(s=>s.voice=null); redubMode='none'; renderRows(activeSegment); showToast('已退出批量抽卡结果'); return; }
         if(e.target.id==='batchRetranslate'){ showToast('发起批量重翻'); return; }
         if(e.target.id==='batchRedub'){ if(isDubbingStage()) enterBatchRedub(); return; }
