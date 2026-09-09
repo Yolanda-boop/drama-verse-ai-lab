@@ -206,29 +206,26 @@
 
     .filter-card .wide { grid-column: span 2; }
 
-    .filter-card .actions-field {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .filter-card .filter-actions-end {
-      grid-column: 1 / -1;
-      justify-self: end;
-    }
-
     .filter-card.record-filter-card {
       grid-template-columns: 1.25fr 1.1fr 1fr 1fr 1fr 1.6fr;
       align-items: end;
     }
 
+    .filter-card.record-filter-card .actions-field {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
     .filter-card.user-filter-card {
-      grid-template-columns: repeat(6, minmax(0, 1fr)) auto;
+      grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
     }
 
     .filter-card.user-filter-card .actions-field {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
       white-space: nowrap;
     }
 
@@ -237,7 +234,7 @@
     }
 
     .filter-card.task-center-filter-card {
-      grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1fr 1fr auto auto auto;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr auto auto auto;
       min-height: 118px;
     }
 
@@ -387,8 +384,8 @@
     }
 
     .wide-task-center-table {
-      width: 1930px;
-      min-width: 1930px;
+      width: 2060px;
+      min-width: 2060px;
     }
 
     .wide-task-chapter-table {
@@ -436,25 +433,9 @@
 
     td {
       background: rgba(0,0,0,.18);
-      transition: background .14s ease, border-color .14s ease, color .14s ease, box-shadow .14s ease;
     }
 
-    tbody tr:hover td {
-      background: rgba(92,58,176,.16);
-      border-bottom-color: rgba(155,121,255,.18);
-    }
-
-    tbody tr:hover td:first-child {
-      box-shadow: inset 3px 0 0 rgba(139,92,246,.86);
-    }
-
-    tbody tr:hover td.op-cell {
-      background: rgba(42,31,68,.96);
-    }
-
-    tbody tr:hover .name-strong {
-      color: #fff;
-    }
+    tr:hover td { background: rgba(255,255,255,.035); }
 
     .op-cell,
     th.op-cell {
@@ -515,40 +496,72 @@
       border-color: rgba(155,121,255,.66);
     }
 
+    .param-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 64px;
+      height: 26px;
+      padding: 0 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.055);
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 600;
+      white-space: nowrap;
+      box-sizing: border-box;
+    }
+
+    button.param-chip {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    button.param-chip:hover {
+      border-color: rgba(132,100,255,.5);
+      background: rgba(123,60,255,.13);
+      color: #eee8ff;
+    }
+
+    .param-chip.merge {
+      border-color: rgba(114,217,255,.24);
+      background: rgba(114,217,255,.075);
+      color: rgba(198,239,255,.86);
+    }
+
+    .param-chip.split {
+      border-color: rgba(167,139,250,.26);
+      background: rgba(123,60,255,.085);
+      color: rgba(226,217,255,.86);
+    }
+
     .ai-progress {
       display: inline-flex;
-      gap: 6px;
+      gap: 8px;
       align-items: center;
-      justify-content: flex-start;
-      flex-wrap: nowrap;
-      max-width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
     .ai-pill {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-width: 62px;
-      height: 22px;
-      padding: 0 7px;
-      border-radius: 6px;
+      height: 24px;
+      padding: 0 9px;
+      border-radius: 12px;
       font-size: 12px;
-      line-height: 20px;
-      font-weight: 600;
-      color: #d8ccff;
-      background: rgba(123,60,255,.12);
-      border: 1px solid rgba(132,100,255,.36);
+      font-weight: 700;
+      color: #d9ccff;
+      background: rgba(123,60,255,.25);
+      border: 1px solid rgba(132,100,255,.5);
     }
 
     .ai-pill.yellow {
-      color: #9ee9ff;
-      background: rgba(36,173,219,.1);
-      border-color: rgba(114,217,255,.34);
-    }
-
-    .ai-progress-cell {
-      overflow: visible;
-      text-overflow: clip;
+      color: #ffd666;
+      background: rgba(250,173,20,.16);
+      border-color: rgba(250,173,20,.45);
     }
 
     .page-header {
@@ -613,6 +626,17 @@
     .floating-bar strong {
       color: #eee8ff;
       font-weight: 700;
+    }
+
+    .workbench-bulk-bar {
+      left: 50%;
+      transform: translateX(-50%);
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .workbench-bulk-bar.is-hidden {
+      display: none !important;
     }
 
     .progress-cell {
@@ -1589,6 +1613,313 @@
       width: 560px;
     }
 
+    .subtitle-export-modal {
+      width: 760px;
+    }
+
+    .subtitle-export-modal .modal-body {
+      padding-top: 18px;
+    }
+
+    .subtitle-export-layout {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .subtitle-export-summary {
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      background:
+        linear-gradient(160deg, rgba(114,46,209,.18), transparent 58%),
+        rgba(255,255,255,.035);
+      display: grid;
+      align-content: start;
+      gap: 14px;
+    }
+
+    .subtitle-export-summary h3 {
+      margin: 0;
+      color: rgba(255,255,255,.92);
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 700;
+    }
+
+    .subtitle-export-summary p {
+      margin: 0;
+      color: rgba(255,255,255,.52);
+      font-size: 12px;
+      line-height: 19px;
+    }
+
+    .subtitle-export-meta {
+      display: grid;
+      gap: 8px;
+    }
+
+    .subtitle-export-meta span {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      color: rgba(255,255,255,.48);
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .subtitle-export-meta strong {
+      color: rgba(255,255,255,.86);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .subtitle-export-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .subtitle-export-option {
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: flex-start;
+      min-height: 74px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.025));
+      cursor: pointer;
+    }
+
+    .subtitle-export-option:hover {
+      border-color: rgba(132,100,255,.64);
+      background: rgba(123,60,255,.12);
+    }
+
+    .subtitle-export-option input {
+      margin-top: 4px;
+      accent-color: #7b3cff;
+    }
+
+    .subtitle-export-option.is-featured {
+      border-color: rgba(123,60,255,.42);
+      background:
+        linear-gradient(135deg, rgba(123,60,255,.16), rgba(255,255,255,.035) 56%),
+        rgba(255,255,255,.03);
+    }
+
+    .subtitle-export-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,.9);
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 600;
+    }
+
+    .subtitle-export-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 58px;
+      height: 24px;
+      padding: 0 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(132,100,255,.42);
+      background: rgba(123,60,255,.16);
+      color: #ddd2ff;
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 600;
+    }
+
+    .subtitle-export-desc {
+      display: block;
+      margin-top: 3px;
+      color: rgba(255,255,255,.52);
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .help-dot {
+      width: 16px;
+      height: 16px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.28);
+      color: rgba(255,255,255,.62);
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 700;
+      cursor: help;
+    }
+
+    .help-dot:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,.48);
+      background: rgba(255,255,255,.08);
+    }
+
+    .subtitle-validation-modal {
+      width: 760px;
+    }
+
+    .subtitle-validation-modal .modal-icon {
+      color: #ffd36a;
+      border-color: rgba(255,197,61,.68);
+      background: rgba(255,197,61,.16);
+    }
+
+    .validation-summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .validation-summary span {
+      min-height: 54px;
+      display: grid;
+      gap: 4px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.035);
+      color: rgba(255,255,255,.5);
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    .validation-summary strong {
+      color: rgba(255,255,255,.9);
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 700;
+    }
+
+    .validation-group {
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(255,255,255,.025);
+    }
+
+    .validation-group-head {
+      min-height: 42px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,197,61,.08);
+    }
+
+    .validation-group-head strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,.9);
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 700;
+    }
+
+    .validation-group-head strong::before {
+      content: "!";
+      width: 16px;
+      height: 16px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255,197,61,.2);
+      color: #ffc53d;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .validation-group-head span {
+      color: rgba(255,255,255,.52);
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 600;
+    }
+
+    .validation-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .validation-table th,
+    .validation-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      text-align: left;
+      vertical-align: top;
+      font-size: 13px;
+      line-height: 20px;
+    }
+
+    .validation-table th {
+      color: rgba(255,255,255,.42);
+      font-weight: 600;
+      background: rgba(0,0,0,.12);
+    }
+
+    .validation-table td {
+      color: rgba(255,255,255,.78);
+    }
+
+    .validation-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .validation-error-text {
+      color: #ff5b5b;
+      font-weight: 600;
+    }
+
+    .task-overview-card {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.035);
+    }
+
+    .task-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .task-overview-grid span {
+      display: grid;
+      gap: 4px;
+      min-height: 48px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: rgba(0,0,0,.16);
+      color: rgba(255,255,255,.5);
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    .task-overview-grid strong {
+      color: rgba(255,255,255,.9);
+      font-size: 13px;
+      line-height: 18px;
+      font-weight: 600;
+    }
+
     .audio-music-card {
       display: grid;
       gap: 16px;
@@ -2283,6 +2614,7 @@
     body.external .record-note.external-manager-only { display: block; }
     body.admin .standard-field.admin-only,
     body.external .standard-field.external-manager-only { display: grid; }
+    body.admin .workbench-bulk-bar { display: flex; }
     body.external .tip.external-manager-only { display: block; }
     body.admin .external-manager-only { display: none !important; }
     body.external .admin-only { display: none !important; }
@@ -2399,6 +2731,7 @@
     <symbol id="icon-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
     <symbol id="icon-video" viewBox="0 0 24 24"><path d="M15 10l5-3v10l-5-3v-4Z"/><rect x="3" y="6" width="12" height="12" rx="2"/></symbol>
     <symbol id="icon-check-square" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></symbol>
+    <symbol id="icon-alert-triangle" viewBox="0 0 24 24"><path d="M10.3 4.4 2.8 17.2A2 2 0 0 0 4.5 20h15a2 2 0 0 0 1.7-2.8L13.7 4.4a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></symbol>
     <symbol id="icon-check" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></symbol>
     <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-15.4 6.4L3 16"/><path d="M3 16h5v5"/><path d="M3 12a9 9 0 0 1 15.4-6.4L21 8"/><path d="M21 8h-5V3"/></symbol>
   </svg>
@@ -2437,7 +2770,7 @@
           <svg viewBox="0 0 24 24" fill="none"><path d="M16 20v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2m14 0v-2a3 3 0 0 0-2-2.8M12 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm6 2a3 3 0 1 0-2.8-4" stroke="currentColor" stroke-width="1.8"/></svg>
           用户管理
         </button>
-        <button type="button" data-page="records" class="admin-only">
+        <button type="button" data-page="records">
           <svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16H5V4Zm4 5h6m-6 4h6m-6 4h3" stroke="currentColor" stroke-width="1.8"/></svg>
           分配记录
         </button>
@@ -2448,19 +2781,19 @@
       <section class="view" id="page-users">
         <div class="filter-card user-filter-card">
           <div class="field"><label>姓名</label><input placeholder="模糊搜索"></div>
-          <div class="field"><label>手机号</label><input placeholder="支持空格格式"></div>
           <div class="field"><label>邮箱</label><input placeholder="模糊搜索"></div>
+          <div class="field"><label>手机号</label><input placeholder="支持空格格式"></div>
           <div class="field"><label>角色</label><select><option>请选择</option><option>外部管理员</option><option>外部校对员</option><option>普通校对员</option></select></div>
-          <div class="field admin-only"><label>供应商名称</label><input placeholder="模糊搜索"></div>
-          <div class="field admin-only"><label>所属外部管理员</label><input placeholder="搜索姓名"></div>
           <div class="field"><label>状态</label><select><option>请选择</option><option>正常</option><option>禁用</option></select></div>
-          <div class="field wide"><label>创建时间</label><input placeholder="开始日期  —  结束日期"></div>
-          <div class="actions-field filter-actions-end">
+          <div class="actions-field">
             <button class="btn clear" type="button">清空条件</button>
             <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
             <button class="btn primary create-user-btn admin-only" type="button" data-open="userModal" data-user-mode="create"><svg class="btn-icon"><use href="#icon-user-plus"></use></svg>新增外部用户</button>
             <button class="btn primary create-user-btn external-manager-only" type="button" data-open="userModal" data-user-mode="create"><svg class="btn-icon"><use href="#icon-user-plus"></use></svg>新增外部校对员</button>
           </div>
+          <div class="field wide"><label>创建时间</label><input placeholder="开始日期  —  结束日期"></div>
+          <div class="field admin-only"><label>供应商名称</label><input placeholder="模糊搜索"></div>
+          <div class="field admin-only"><label>所属外部管理员</label><input placeholder="姓名 / 手机号"></div>
         </div>
 
         <div class="table-card">
@@ -2495,11 +2828,11 @@
                 <td class="mono">-</td>
                 <td class="mono">+86 13700912231</td>
                 <td><span class="tag manager">外部管理员</span></td>
-                <td>星桥译配</td>
+                <td>Drama Verse</td>
                 <td>-</td>
                 <td><span class="tag green">正常</span></td>
                 <td class="mono">2026-08-20 10:21:56</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部管理员" data-user-name="林可" data-user-contact="phone" data-user-phone="+86 13700912231" data-user-supplier="星桥译配">编辑用户</button></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部管理员" data-user-name="林可" data-user-contact="phone" data-user-phone="+86 13700912231" data-user-supplier="Drama Verse">编辑用户</button></span></td>
               </tr>
               <tr>
                 <td class="name-strong">春鹏C</td>
@@ -2510,7 +2843,7 @@
                 <td>林可</td>
                 <td><span class="tag green">正常</span></td>
                 <td class="mono">2026-08-13 17:11:08</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏C" data-user-contact="phone" data-user-phone="+86 16601248978" data-user-supplier="星桥译配" data-user-manager="linke">编辑用户</button></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏C" data-user-contact="phone" data-user-phone="+86 16601248978">编辑用户</button></span></td>
               </tr>
               <tr>
                 <td class="name-strong">春鹏B</td>
@@ -2521,7 +2854,7 @@
                 <td>林可</td>
                 <td><span class="tag green">正常</span></td>
                 <td class="mono">2026-08-12 11:46:42</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏B" data-user-contact="phone" data-user-phone="+86 16601248979" data-user-supplier="星桥译配" data-user-manager="linke">编辑用户</button></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">禁用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏B" data-user-contact="phone" data-user-phone="+86 16601248979">编辑用户</button></span></td>
               </tr>
               <tr>
                 <td class="name-strong">春鹏D</td>
@@ -2532,7 +2865,7 @@
                 <td>林可</td>
                 <td><span class="tag red">禁用</span></td>
                 <td class="mono">2026-08-14 15:58:01</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn warn">启用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏D" data-user-contact="phone" data-user-phone="+86 16601248977" data-user-supplier="星桥译配" data-user-manager="linke">编辑用户</button></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn warn">启用</button><button class="pill-btn info">强制下线</button><button class="pill-btn primary" data-open="userModal" data-user-mode="edit" data-user-role="外部校对员" data-user-name="春鹏D" data-user-contact="phone" data-user-phone="+86 16601248977">编辑用户</button></span></td>
               </tr>
               <tr class="admin-only">
                 <td class="name-strong">戴忻楠</td>
@@ -2564,12 +2897,10 @@
           <div class="field wide"><label>创建时间</label><input placeholder="开始日期  →  结束日期"></div>
           <div class="field"><label>创建人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
           <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
-          <div class="actions-field filter-actions-end">
-            <button class="btn clear" type="button">清空条件</button>
-            <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
-            <button class="btn primary admin-only" type="button"><svg class="btn-icon"><use href="#icon-upload"></use></svg>导入剧</button>
-            <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出剧列表</button>
-          </div>
+          <button class="btn clear" type="button">清空条件</button>
+          <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
+          <button class="btn primary admin-only" type="button"><svg class="btn-icon"><use href="#icon-upload"></use></svg>导入剧</button>
+          <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出剧列表</button>
         </div>
 
         <div class="table-card scrollable">
@@ -2591,7 +2922,7 @@
               </colgroup>
               <thead>
                 <tr>
-                  <th><input type="checkbox" aria-label="选择全部剧任务"></th>
+                  <th><input type="checkbox" id="workbenchSelectAll" aria-label="选择全部剧任务"></th>
                   <th>剧 ID</th>
                   <th>剧标题</th>
                   <th>原始语言</th>
@@ -2607,12 +2938,12 @@
               </thead>
               <tbody>
                 <tr>
-                  <td><input type="checkbox" aria-label="选择神话缠魂"></td>
+                  <td><input class="workbench-row-check" type="checkbox" aria-label="选择神话缠魂" data-target-language="葡萄牙语（巴西）" data-episode-count="3"></td>
                   <td class="mono">41000004763</td>
                   <td class="name-strong">神话缠魂，我觉醒了大圣3</td>
                   <td>中文（简体）</td>
                   <td>葡萄牙语（巴西）</td>
-                  <td class="ai-progress-cell"><span class="ai-progress"><span class="ai-pill">翻译 3/3</span><span class="ai-pill yellow">配音 0/3</span></span></td>
+                  <td><span class="ai-progress"><span class="ai-pill">翻译 3/3</span><span class="ai-pill yellow">配音 0/3</span></span></td>
                   <td>AI翻译</td>
                   <td>曹春鹏</td>
                   <td class="mono">2026-08-21 11:33:05</td>
@@ -2621,12 +2952,12 @@
                   <td class="op-cell"><span class="actions"><button class="pill-btn info admin-only" data-open="assignExternalManager" data-task-type="translation_dubbing">分配</button><button class="pill-btn info external-manager-only" data-open="assignReviewer" data-task-type="translation_dubbing">分配</button><button class="pill-btn primary" data-page="episodes">查看</button></span></td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" aria-label="选择韩语剧"></td>
+                  <td><input class="workbench-row-check" type="checkbox" aria-label="选择韩语剧" data-target-language="日语" data-episode-count="51"></td>
                   <td class="mono">41000004856</td>
                   <td class="name-strong">복수하러 우리집에 갈래?</td>
                   <td>韩语</td>
                   <td>日语</td>
-                  <td class="ai-progress-cell"><span class="ai-progress"><span class="ai-pill">翻译 51/51</span><span class="ai-pill yellow">配音 0/51</span></span></td>
+                  <td><span class="ai-progress"><span class="ai-pill">翻译 51/51</span><span class="ai-pill yellow">配音 0/51</span></span></td>
                   <td>AI翻译</td>
                   <td>杨晨</td>
                   <td class="mono">2026-08-20 20:52:05</td>
@@ -2635,12 +2966,12 @@
                   <td class="op-cell"><span class="actions"><button class="pill-btn info admin-only" data-open="assignExternalManager" data-task-type="translation_dubbing">分配</button><button class="pill-btn info external-manager-only" data-open="assignReviewer" data-task-type="translation_dubbing">分配</button><button class="pill-btn primary" data-page="episodes">查看</button></span></td>
                 </tr>
                 <tr>
-                  <td><input type="checkbox" aria-label="选择思美人第二季"></td>
+                  <td><input class="workbench-row-check" type="checkbox" aria-label="选择思美人第二季" data-target-language="英语" data-episode-count="20"></td>
                   <td class="mono">41000004443</td>
                   <td class="name-strong">思美人第二季</td>
                   <td>中文（简体）</td>
                   <td>英语</td>
-                  <td class="ai-progress-cell"><span class="ai-progress"><span class="ai-pill">翻译 20/20</span><span class="ai-pill yellow">配音 20/20</span></span></td>
+                  <td><span class="ai-progress"><span class="ai-pill">翻译 20/20</span><span class="ai-pill yellow">配音 20/20</span></span></td>
                   <td>AI翻译</td>
                   <td>杨晨</td>
                   <td class="mono">2026-08-20 14:03:06</td>
@@ -2654,6 +2985,10 @@
           <div class="pagination">
             <span>共 3 条</span><span class="page-no active">1</span><select class="small-select"><option>10 条/页</option></select>
           </div>
+        </div>
+        <div class="floating-bar workbench-bulk-bar admin-only is-hidden" id="workbenchBulkBar">
+          <strong id="workbenchSelectedCount">已选 0 部剧</strong>
+          <button class="btn clear" type="button" data-open="subtitleExportModal"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出字幕</button>
         </div>
       </section>
 
@@ -2768,7 +3103,7 @@
         </div>
         <div class="floating-bar">
           <strong>已选 1 集</strong>
-          <button class="btn clear" type="button">导出字幕<svg class="btn-icon"><use href="#icon-chevron-down"></use></svg></button>
+          <button class="btn clear" type="button" data-open="subtitleExportModal">导出字幕<svg class="btn-icon"><use href="#icon-chevron-down"></use></svg></button>
           <button class="btn primary" type="button" data-open="videoExportConfirmModal" data-export-kind="mp4" data-export-range="multi" data-export-count="1"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出音视频</button>
           <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-mic"></use></svg>发起配音</button>
         </div>
@@ -2848,23 +3183,22 @@
         <div class="page-title">
           <div>
             <h1>任务中心</h1>
-            <p>保持线上导出任务列表结构，在任务维度新增音乐剥离字段和筛选。</p>
+            <p>保持线上导出任务列表结构，字幕导出任务在合成参数中展示导出维度。</p>
           </div>
         </div>
         <div class="filter-card task-center-filter-card">
           <div class="field wide"><label>剧 ID</label><input placeholder="输入 11 位剧 ID，回车添加"></div>
           <div class="field"><label>剧名</label><input placeholder="模糊搜索"></div>
+          <div class="field"><label>任务类型</label><select><option>全部</option><option>音视频合成</option><option>字幕导出</option></select></div>
           <div class="field"><label>目标语言</label><select><option>请选择</option><option>英语</option><option>日语</option><option>韩语</option><option>泰语</option><option>葡萄牙语（巴西）</option></select></div>
           <div class="field"><label>合成进度</label><select><option>请选择</option><option>全部完成</option><option>未全部完成</option></select></div>
           <div class="field"><label>音乐剥离</label><select><option>全部</option><option>启用</option><option>关闭</option></select></div>
           <div class="field wide"><label>提交时间</label><input placeholder="开始日期  →  结束日期"></div>
           <div class="field"><label>提交人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
           <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
-          <div class="actions-field filter-actions-end">
-            <button class="btn clear" type="button">清空条件</button>
-            <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
-            <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出任务列表</button>
-          </div>
+          <button class="btn clear" type="button">清空条件</button>
+          <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
+          <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出任务列表</button>
         </div>
 
         <div class="table-card scrollable">
@@ -2874,6 +3208,7 @@
               <col style="width: 100px">
               <col style="width: 130px">
               <col style="width: 250px">
+              <col style="width: 130px">
               <col style="width: 130px">
               <col style="width: 110px">
               <col style="width: 170px">
@@ -2889,6 +3224,7 @@
                 <th>任务 ID</th>
                 <th>剧 ID</th>
                 <th>剧名</th>
+                <th>任务类型</th>
                 <th>目标语言</th>
                 <th>合成参数</th>
                 <th>合成进度</th>
@@ -2905,8 +3241,9 @@
                 <td class="mono">279</td>
                 <td class="mono">41000004697</td>
                 <td class="name-strong">横刀夺爱</td>
+                <td><span class="tag manager">音视频合成</span></td>
                 <td>泰语</td>
-                <td><button class="pill-btn primary" data-open="synthesisParamsModal">查看</button></td>
+                <td><button class="param-chip" type="button" data-open="synthesisParamsModal">详情</button></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">3</strong> / 3 集已完成</span></td>
                 <td><span class="tag">关闭</span></td>
                 <td>郭凯旋</td>
@@ -2919,10 +3256,11 @@
                 <td class="mono">278</td>
                 <td class="mono">41000004856</td>
                 <td class="name-strong">복수하러 우리집에 갈래?</td>
+                <td><span class="tag">字幕导出</span></td>
                 <td>日语</td>
-                <td><button class="pill-btn primary" data-open="synthesisParamsModal">查看</button></td>
+                <td><span class="param-chip merge">整剧合并</span></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">51</strong> / 51 集已完成</span></td>
-                <td><span class="tag blue">已启用</span></td>
+                <td><span class="tag">不涉及</span></td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 16:58:15</td>
                 <td class="mono">2026-08-21 16:59:47</td>
@@ -2933,8 +3271,9 @@
                 <td class="mono">277</td>
                 <td class="mono">41000004443</td>
                 <td class="name-strong">思美人第二季</td>
+                <td><span class="tag manager">音视频合成</span></td>
                 <td>英语</td>
-                <td><button class="pill-btn primary" data-open="synthesisParamsModal">查看</button></td>
+                <td><button class="param-chip" type="button" data-open="synthesisParamsModal">详情</button></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">19</strong> / 20 集已完成</span></td>
                 <td><span class="tag blue">已启用</span></td>
                 <td>郭凯旋</td>
@@ -2947,10 +3286,11 @@
                 <td class="mono">276</td>
                 <td class="mono">41000004443</td>
                 <td class="name-strong">思美人第二季</td>
+                <td><span class="tag">字幕导出</span></td>
                 <td>英语</td>
-                <td><button class="pill-btn primary" data-open="synthesisParamsModal">查看</button></td>
+                <td><span class="param-chip split">分集导出</span></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">20</strong> / 20 集已完成</span></td>
-                <td><span class="tag">关闭</span></td>
+                <td><span class="tag">不涉及</span></td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 16:01:44</td>
                 <td class="mono">2026-08-21 16:02:35</td>
@@ -2971,8 +3311,17 @@
           <div class="breadcrumb">
             <button class="btn clear" type="button" data-page="task-center"><svg class="btn-icon"><use href="#icon-arrow-left"></use></svg>任务中心</button>
             <span>/</span>
-            <strong>《思美人第二季》合成任务</strong>
-            <span class="tag">英语</span>
+            <strong>《복수하러 우리집에 갈래?》字幕导出任务</strong>
+            <span class="tag">日语</span>
+          </div>
+        </div>
+
+        <div class="task-overview-card">
+          <div class="task-overview-grid">
+            <span>任务类型<strong>字幕导出</strong></span>
+            <span>导出维度<strong>整剧合并</strong></span>
+            <span>导出内容<strong>译文字幕</strong></span>
+            <span>时间轴处理<strong>按集序连续拼接</strong></span>
           </div>
         </div>
 
@@ -2981,11 +3330,8 @@
           <select class="small-select" aria-label="状态筛选">
             <option>全部状态</option>
             <option>排队中</option>
-            <option>擦除中</option>
-            <option>添加字幕中</option>
-            <option>音频烧录中</option>
-            <option>音乐剥离中</option>
-            <option>合成完成</option>
+            <option>处理中</option>
+            <option>导出完成</option>
             <option>失败</option>
           </select>
           <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-refresh"></use></svg>刷新</button>
@@ -2993,15 +3339,15 @@
 
         <div class="table-card scrollable">
           <div class="wide-table-scroll">
-            <table class="wide-task-chapter-table" aria-label="任务中心集任务二级列表">
+            <table class="wide-task-chapter-table" aria-label="任务中心字幕导出二级列表">
               <colgroup>
                 <col style="width: 220px">
                 <col style="width: 130px">
                 <col style="width: 140px">
-                <col style="width: 120px">
-                <col style="width: 130px">
-                <col style="width: 140px">
-                <col style="width: 180px">
+                <col style="width: 160px">
+                <col style="width: 170px">
+                <col style="width: 170px">
+                <col style="width: 160px">
                 <col style="width: 190px">
                 <col style="width: 190px">
                 <col style="width: 120px">
@@ -3011,10 +3357,10 @@
                   <th>集名称</th>
                   <th>翻译语言</th>
                   <th>状态</th>
-                  <th>视频预览</th>
-                  <th>音乐剥离</th>
-                  <th>剥离状态</th>
-                  <th>检测结果</th>
+                  <th>字幕类型</th>
+                  <th>导出维度</th>
+                  <th>时间轴处理</th>
+                  <th>文件状态</th>
                   <th>提交时间</th>
                   <th>更新时间</th>
                   <th class="op-cell">操作</th>
@@ -3023,48 +3369,48 @@
               <tbody>
                 <tr>
                   <td class="name-strong">第一集</td>
-                  <td>英语</td>
-                  <td><span class="tag green">合成完成</span></td>
-                  <td><button class="pill-btn primary">查看</button></td>
-                  <td><span class="tag blue">已启用</span></td>
-                  <td><span class="tag green">已完成</span></td>
-                  <td><button class="pill-btn info" data-open="musicParamsModal">3 段</button></td>
+                  <td>日语</td>
+                  <td><span class="tag green">导出完成</span></td>
+                  <td>译文 SRT</td>
+                  <td><span class="tag blue">整剧合并</span></td>
+                  <td>承接第 1 集时间轴</td>
+                  <td><span class="tag green">已生成</span></td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:04</td>
-                  <td class="op-cell">—</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载整剧译文 SRT">下载</button></td>
                 </tr>
                 <tr>
                   <td class="name-strong">第二集</td>
-                  <td>英语</td>
-                  <td><span class="tag green">合成完成</span></td>
-                  <td><button class="pill-btn primary">查看</button></td>
-                  <td><span class="tag blue">已启用</span></td>
-                  <td><span class="tag orange">处理中</span></td>
-                  <td><button class="pill-btn info" data-open="musicParamsModal">2 段</button></td>
+                  <td>日语</td>
+                  <td><span class="tag green">导出完成</span></td>
+                  <td>译文 SRT</td>
+                  <td><span class="tag blue">整剧合并</span></td>
+                  <td>以上一集结束时间顺延</td>
+                  <td><span class="tag green">已生成</span></td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:12</td>
                   <td class="op-cell">—</td>
                 </tr>
                 <tr>
                   <td class="name-strong">第三集</td>
-                  <td>英语</td>
-                  <td><span class="tag red">失败</span></td>
-                  <td><button class="pill-btn disabled">查看</button></td>
-                  <td><span class="tag blue">已启用</span></td>
-                  <td><span class="tag red">失败</span></td>
-                  <td><button class="pill-btn info" data-open="musicParamsModal">1 段</button></td>
+                  <td>日语</td>
+                  <td><span class="tag green">导出完成</span></td>
+                  <td>译文 SRT</td>
+                  <td><span class="tag blue">整剧合并</span></td>
+                  <td>以上一集结束时间顺延</td>
+                  <td><span class="tag green">已生成</span></td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:31</td>
-                  <td class="op-cell"><button class="pill-btn warn">重试</button></td>
+                  <td class="op-cell">—</td>
                 </tr>
                 <tr>
                   <td class="name-strong">第四集</td>
-                  <td>英语</td>
+                  <td>日语</td>
                   <td><span class="tag">排队中</span></td>
-                  <td><button class="pill-btn disabled">查看</button></td>
-                  <td><span class="tag blue">已启用</span></td>
+                  <td>译文 SRT</td>
+                  <td><span class="tag blue">整剧合并</span></td>
+                  <td>待生成</td>
                   <td><span class="tag">队列中</span></td>
-                  <td>-</td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="op-cell">—</td>
@@ -3093,7 +3439,7 @@
           <div class="field"><label>分配类型</label><select><option>请选择</option><option>外部管理员可管理</option><option>翻译且配音</option><option>仅翻译</option></select></div>
           <div class="field"><label>分配人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
           <div class="field wide"><label>分配时间</label><input placeholder="开始日期  →  结束日期"></div>
-          <div class="actions-field filter-actions-end">
+          <div class="actions-field">
             <button class="btn clear" type="button">清空条件</button>
             <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
           </div>
@@ -3315,7 +3661,7 @@
             <label>所属外部管理员</label>
             <select id="externalManagerSelect">
               <option value="">无</option>
-              <option value="linke" data-supplier="星桥译配">林可</option>
+              <option value="linke" data-supplier="Drama Verse">林可</option>
               <option value="mia" data-supplier="Mia Studio">Mia Sun</option>
             </select>
           </div>
@@ -3382,6 +3728,109 @@
       </div>
       <div class="modal-footer">
         <div class="actions"><button class="btn" type="button" data-close>取消</button><button class="btn primary" type="button" data-open="exportMediaModal" data-export-kind="mp4" data-export-range="multi" data-export-count="1">确认导出</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="subtitleExportModal" role="dialog" aria-modal="true" aria-labelledby="subtitleExportTitle">
+    <div class="modal subtitle-export-modal">
+      <div class="modal-head">
+        <div class="modal-title"><div class="modal-icon"><svg><use href="#icon-download"></use></svg></div><div><h2 id="subtitleExportTitle">导出字幕</h2><p>导出任务创建成功后将进入任务中心；字幕导出结果可在任务详情中查看导出维度。</p></div></div>
+        <button class="close" type="button" data-close aria-label="关闭"><svg class="close-icon"><use href="#icon-x"></use></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="subtitle-export-layout">
+          <div class="subtitle-export-summary">
+            <h3>本次导出</h3>
+            <div class="subtitle-export-meta">
+              <span>已选剧任务<strong id="subtitleExportBookCount">1 部</strong></span>
+              <span>目标语言数量<strong id="subtitleExportTargetLang">1 个</strong></span>
+              <span>已选集数<strong id="subtitleExportEpisodeCount">20 集</strong></span>
+            </div>
+          </div>
+          <div class="subtitle-export-list" aria-label="导出内容">
+            <label class="subtitle-export-option">
+              <input type="checkbox" checked>
+              <span>
+                <span class="subtitle-export-title">原文 SRT</span>
+                <span class="subtitle-export-desc">按所选剧任务的集数分别导出原文字幕文件。</span>
+              </span>
+              <span class="subtitle-export-badge">分集导出</span>
+            </label>
+            <label class="subtitle-export-option">
+              <input type="checkbox" checked>
+              <span>
+                <span class="subtitle-export-title">译文 SRT</span>
+                <span class="subtitle-export-desc">按所选剧任务的集数分别导出译文字幕文件。</span>
+              </span>
+              <span class="subtitle-export-badge">分集导出</span>
+            </label>
+            <label class="subtitle-export-option is-featured">
+              <input type="checkbox" checked>
+              <span>
+                <span class="subtitle-export-title">整剧译文 SRT</span>
+                <span class="subtitle-export-desc">将同一剧的各集译文字幕按集序拼接为一个 SRT 文件；拼接后使用连续时间轴，不按单集从 0 开始。</span>
+              </span>
+              <span class="subtitle-export-badge">整剧合并</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span></span>
+        <div class="actions"><button class="btn" type="button" data-close>取消</button><button class="btn primary" type="button" data-open="subtitleValidationModal">确认导出</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="subtitleValidationModal" role="dialog" aria-modal="true" aria-labelledby="subtitleValidationTitle">
+    <div class="modal subtitle-validation-modal">
+      <div class="modal-head">
+        <div class="modal-title"><div class="modal-icon"><svg><use href="#icon-alert-triangle"></use></svg></div><div><h2 id="subtitleValidationTitle">字幕导出校验结果</h2><p>所选内容暂不满足导出条件，请处理以下问题后重试</p></div></div>
+        <button class="close" type="button" data-close aria-label="关闭"><svg class="close-icon"><use href="#icon-x"></use></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="validation-summary">
+          <span>涉及剧数<strong>2 部</strong></span>
+          <span>异常集数<strong>3 集</strong></span>
+          <span>异常类型<strong>2 类</strong></span>
+        </div>
+        <div class="validation-group">
+          <div class="validation-group-head">
+            <strong>字幕时间重叠</strong>
+            <span>2 部剧 / 3 集</span>
+          </div>
+          <table class="validation-table" aria-label="字幕导出校验异常列表">
+            <colgroup>
+              <col style="width: 42%">
+              <col style="width: 28%">
+              <col style="width: 30%">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>剧</th>
+                <th>集</th>
+                <th>异常信息</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>The Fae Prince's Secret Heir</strong><br><span class="muted">葡萄牙语（巴西）</span></td>
+                <td>第一集、第三十二集</td>
+                <td><span class="validation-error-text">存在时间重叠</span></td>
+              </tr>
+              <tr>
+                <td><strong>The Fae Prince's Secret Heir</strong><br><span class="muted">英语</span></td>
+                <td>第一集</td>
+                <td><span class="validation-error-text">存在时间重叠</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span></span>
+        <div class="actions"><button class="btn primary" type="button" data-open="subtitleExportModal">返回确认</button></div>
       </div>
     </div>
   </div>
@@ -3661,12 +4110,17 @@
     const exportFooterNote = document.getElementById('exportFooterNote');
     const exportPrevBtn = document.getElementById('exportPrevBtn');
     const exportNextBtn = document.getElementById('exportNextBtn');
+    const workbenchSelectAll = document.getElementById('workbenchSelectAll');
+    const workbenchBulkBar = document.getElementById('workbenchBulkBar');
+    const workbenchSelectedCount = document.getElementById('workbenchSelectedCount');
+    const subtitleExportBookCount = document.getElementById('subtitleExportBookCount');
+    const subtitleExportTargetLang = document.getElementById('subtitleExportTargetLang');
+    const subtitleExportEpisodeCount = document.getElementById('subtitleExportEpisodeCount');
     let currentAdminTaskType = 'translation_dubbing';
     let userModalMode = 'create';
     let lastSelectedUserRole = '';
     let currentEditingUserName = '';
     let exportCurrentStep = 2;
-    const currentExternalManagerSupplier = '星桥译配';
 
     function showToast(text, type = 'success') {
       toast.textContent = text;
@@ -3675,6 +4129,40 @@
       toast.classList.add('show');
       clearTimeout(showToast.timer);
       showToast.timer = setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    function getWorkbenchCheckedRows() {
+      return Array.from(document.querySelectorAll('.workbench-row-check:checked'));
+    }
+
+    function updateWorkbenchBulkBar() {
+      const checkedRows = getWorkbenchCheckedRows();
+      const count = checkedRows.length;
+      workbenchBulkBar?.classList.toggle('is-hidden', count < 1);
+      if (workbenchSelectedCount) {
+        workbenchSelectedCount.textContent = `已选 ${count} 部剧`;
+      }
+      if (workbenchSelectAll) {
+        const rowChecks = Array.from(document.querySelectorAll('.workbench-row-check'));
+        workbenchSelectAll.checked = rowChecks.length > 0 && rowChecks.every(input => input.checked);
+        workbenchSelectAll.indeterminate = count > 0 && count < rowChecks.length;
+      }
+    }
+
+    function setupSubtitleExportModal(trigger) {
+      if (trigger?.closest?.('#subtitleValidationModal')) return;
+      const fromWorkbench = Boolean(trigger?.closest?.('#page-workbench'));
+      const checkedRows = getWorkbenchCheckedRows();
+      const selectedRows = fromWorkbench && checkedRows.length ? checkedRows : [];
+      const bookCount = selectedRows.length || 1;
+      const episodeCount = selectedRows.length
+        ? selectedRows.reduce((sum, row) => sum + Number(row.dataset.episodeCount || 0), 0)
+        : 1;
+      const languages = Array.from(new Set(selectedRows.map(row => row.dataset.targetLanguage).filter(Boolean)));
+      const languageCountText = selectedRows.length ? `${languages.length || 1} 个` : '1 个';
+      if (subtitleExportBookCount) subtitleExportBookCount.textContent = `${bookCount} 部`;
+      if (subtitleExportTargetLang) subtitleExportTargetLang.textContent = languageCountText;
+      if (subtitleExportEpisodeCount) subtitleExportEpisodeCount.textContent = `${episodeCount} 集`;
     }
 
     function switchPage(page) {
@@ -3762,12 +4250,8 @@
         ? (trigger.dataset.userContact || (trigger.dataset.userEmail ? 'email' : 'phone'))
         : 'phone';
       contactType.value = selectedRole === '外部校对员' ? selectedContact : 'phone';
-      externalManagerSelect.value = userModalMode === 'edit' && selectedRole === '外部校对员'
-        ? (trigger.dataset.userManager || 'linke')
-        : '';
-      supplierInput.value = ['外部管理员', '外部校对员'].includes(selectedRole)
-        ? (trigger.dataset.userSupplier || getSelectedSupplierName() || 'Drama Verse')
-        : '';
+      externalManagerSelect.value = userModalMode === 'edit' && selectedRole === '外部校对员' ? 'linke' : '';
+      supplierInput.value = selectedRole === '外部管理员' ? (trigger.dataset.userSupplier || 'Drama Verse') : '';
       lastSelectedUserRole = selectedRole;
       clearUserFormErrors();
       updateUserModalTitle();
@@ -3803,23 +4287,19 @@
       const isExternalAdminRole = selectedRole === '外部管理员';
       const isExternalReviewerRole = selectedRole === '外部校对员';
       updateExternalManagerOptions(selectedRole);
-      const hasExternalManager = Boolean(externalManagerSelect?.value);
-      const selectedSupplier = admin
-        ? (hasExternalManager ? getSelectedSupplierName() : (supplierInput?.value || 'Drama Verse'))
-        : currentExternalManagerSupplier;
-      const canEditSupplier = roleEditable && (isExternalAdminRole || (isExternalReviewerRole && !hasExternalManager));
+      const selectedSupplier = admin ? (getSelectedSupplierName() || 'Drama Verse') : 'Drama Verse';
 
       adminRoleField?.classList.toggle('is-hidden', !roleEditable);
       fixedRoleField?.classList.toggle('is-hidden', roleEditable || admin);
       managerOwnerField?.classList.toggle('is-hidden', !admin || !isExternalReviewerRole);
       currentManagerField?.classList.toggle('is-hidden', admin || !isExternalReviewerRole);
-      supplierInputField?.classList.toggle('is-hidden', !canEditSupplier);
-      if (canEditSupplier && !supplierInput.value) {
+      supplierInputField?.classList.toggle('is-hidden', !roleEditable || !isExternalAdminRole);
+      if (roleEditable && isExternalAdminRole && !supplierInput.value) {
         supplierInput.value = 'Drama Verse';
       }
       supplierReadonlyField?.classList.toggle(
         'is-hidden',
-        isExternalAdminRole || !isExternalReviewerRole || (admin && !hasExternalManager),
+        isExternalAdminRole || !isExternalReviewerRole,
       );
 
       if (supplierReadonlyValue) {
@@ -3884,8 +4364,7 @@
         externalUserRole.focus();
         return false;
       }
-      const reviewerWithoutManager = role === '外部校对员' && viewMode.value === 'admin' && !externalManagerSelect.value;
-      if ((role === '外部管理员' || reviewerWithoutManager) && !supplierInput.value) {
+      if (role === '外部管理员' && !supplierInput.value) {
         setFieldError(supplierInputField, supplierError, '请选择供应商名称');
         supplierInput.focus();
         return false;
@@ -4130,6 +4609,9 @@
         if (btn.dataset.open === 'audioExportModal') {
           setupAudioExportModal();
         }
+        if (btn.dataset.open === 'subtitleExportModal') {
+          setupSubtitleExportModal(btn);
+        }
         document.getElementById(btn.dataset.open)?.classList.add('show');
       });
     });
@@ -4160,15 +4642,7 @@
       clearUserFormErrors();
       updateUserModalFields();
     });
-    externalManagerSelect?.addEventListener('change', () => {
-      const inheritedSupplier = getSelectedSupplierName();
-      if (inheritedSupplier) {
-        supplierInput.value = inheritedSupplier;
-      } else if (!supplierInput.value) {
-        supplierInput.value = 'Drama Verse';
-      }
-      updateUserModalFields();
-    });
+    externalManagerSelect?.addEventListener('change', updateUserModalFields);
     externalUserName?.addEventListener('input', () => setFieldError(nameField, nameError, ''));
     supplierInput?.addEventListener('change', () => setFieldError(supplierInputField, supplierError, ''));
     contactType?.addEventListener('change', () => {
@@ -4187,6 +4661,15 @@
     externalUserEmail?.addEventListener('input', () => setFieldError(emailField, emailError, ''));
     saveExternalUser?.addEventListener('click', handleExternalUserSave);
     adminAssignRole?.addEventListener('change', updateAdminAssignMode);
+    workbenchSelectAll?.addEventListener('change', () => {
+      document.querySelectorAll('.workbench-row-check').forEach(input => {
+        input.checked = workbenchSelectAll.checked;
+      });
+      updateWorkbenchBulkBar();
+    });
+    document.querySelectorAll('.workbench-row-check').forEach(input => {
+      input.addEventListener('change', updateWorkbenchBulkBar);
+    });
     musicStripToggle?.addEventListener('change', updateMusicStripConfig);
     audioMusicStripToggle?.addEventListener('change', updateAudioMusicStripConfig);
     audioExportSubmit?.addEventListener('click', handleAudioExportSubmit);
@@ -4203,6 +4686,7 @@
     });
     viewMode.addEventListener('change', switchRole);
     switchRole();
+    updateWorkbenchBulkBar();
     updateAdminAssignMode();
     renderExportStep(2);
   </script>
