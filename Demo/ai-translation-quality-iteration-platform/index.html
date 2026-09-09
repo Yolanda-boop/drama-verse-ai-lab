@@ -1,0 +1,2326 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI质量迭代平台一期原型</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --panel-soft: #fafbff;
+      --line: #e6e8ef;
+      --line-strong: #d9dce8;
+      --text: #202333;
+      --text-sub: #6f7585;
+      --text-faint: #9aa1ad;
+      --primary: #615ced;
+      --primary-soft: #efeeff;
+      --blue: #2f7cf6;
+      --blue-soft: #edf4ff;
+      --green: #18a058;
+      --green-soft: #eaf8f0;
+      --orange: #d98513;
+      --orange-soft: #fff6e6;
+      --red: #d84242;
+      --red-soft: #fff0f0;
+      --shadow: 0 12px 36px rgba(27, 31, 54, 0.08);
+      --radius: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-width: 1180px;
+      background: var(--bg);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 224px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: #171a2b;
+      color: #c9cde0;
+      padding: 18px 14px;
+    }
+
+    .brand {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 10px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 14px;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, #817cff, #41b8ff);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .menu-label {
+      color: #788099;
+      font-size: 12px;
+      margin: 18px 10px 8px;
+    }
+
+    .menu-btn {
+      width: 100%;
+      height: 38px;
+      border: 0;
+      background: transparent;
+      color: #c9cde0;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 10px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .menu-btn:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .menu-btn.active {
+      color: #fff;
+      background: rgba(97, 92, 237, 0.25);
+    }
+
+    .menu-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.72;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .topbar {
+      height: 58px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .crumb {
+      color: var(--text-sub);
+      font-size: 13px;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-sub);
+      font-size: 13px;
+    }
+
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: grid;
+      place-items: center;
+      font-weight: 600;
+    }
+
+    .content {
+      padding: 18px 22px 28px;
+      min-width: 0;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin: 0 0 6px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .desc {
+      color: var(--text-sub);
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid var(--line-strong);
+      background: var(--panel);
+      color: var(--text);
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      border-color: #bfc4d2;
+      background: #fafbff;
+    }
+
+    .btn.primary {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn.text {
+      border: 0;
+      background: transparent;
+      color: var(--primary);
+      padding: 0 6px;
+    }
+
+    .btn.danger {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .filters,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 1px 0 rgba(27, 31, 54, 0.02);
+    }
+
+    .filters {
+      padding: 14px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(150px, 1fr)) auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    label {
+      color: var(--text-sub);
+      font-size: 12px;
+    }
+
+    input,
+    select,
+    textarea {
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+    }
+
+    input,
+    select {
+      height: 32px;
+      padding: 0 10px;
+    }
+
+    textarea {
+      padding: 10px;
+      resize: vertical;
+      min-height: 96px;
+      line-height: 1.55;
+    }
+
+    input[type="file"].file-native {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .upload-area {
+      min-height: 86px;
+      border: 1px dashed #c8ccda;
+      border-radius: 8px;
+      background: #fafbff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      cursor: pointer;
+    }
+
+    .upload-area:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .upload-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .upload-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .notice {
+      border-radius: 8px;
+      background: var(--blue-soft);
+      color: #315a9d;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .range-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 14px minmax(0, 1fr);
+      gap: 6px;
+      align-items: center;
+    }
+
+    .range-pair span {
+      color: var(--text-faint);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .select-col {
+      display: none;
+    }
+
+    #page-samples.selection-mode .select-col {
+      display: table-cell;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px 28px;
+    }
+
+    .detail-item.full {
+      grid-column: 1 / -1;
+    }
+
+    .detail-label {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    .detail-value {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(97, 92, 237, 0.12);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 13px 14px;
+    }
+
+    .stat-label {
+      color: var(--text-sub);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .stat-hint {
+      margin-top: 5px;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .panel-head {
+      height: 46px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .table-wrap {
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 980px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--text-sub);
+      font-weight: 500;
+      background: #fafbff;
+      white-space: nowrap;
+    }
+
+    td {
+      color: var(--text);
+    }
+
+    .truncate {
+      max-width: 220px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      border-radius: 999px;
+      padding: 0 8px;
+      font-size: 12px;
+      background: var(--panel-soft);
+      color: var(--text-sub);
+      border: 1px solid var(--line);
+      white-space: nowrap;
+    }
+
+    .tag.green {
+      background: var(--green-soft);
+      border-color: #bee8cf;
+      color: var(--green);
+    }
+
+    .tag.blue {
+      background: var(--blue-soft);
+      border-color: #cfe0ff;
+      color: var(--blue);
+    }
+
+    .tag.orange {
+      background: var(--orange-soft);
+      border-color: #f4d7a8;
+      color: var(--orange);
+    }
+
+    .tag.red {
+      background: var(--red-soft);
+      border-color: #f2c5c5;
+      color: var(--red);
+    }
+
+    .fail-tag {
+      position: relative;
+      cursor: help;
+    }
+
+    .fail-tag::after {
+      content: attr(data-reason);
+      position: absolute;
+      left: 0;
+      top: calc(100% + 8px);
+      width: max-content;
+      max-width: 320px;
+      white-space: normal;
+      border-radius: 6px;
+      background: #202333;
+      color: #fff;
+      padding: 8px 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-4px);
+      transition: opacity .16s ease, transform .16s ease;
+      z-index: 50;
+    }
+
+    .fail-tag:hover::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .layout-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) 360px;
+      gap: 14px;
+    }
+
+    .step-list {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+    }
+
+    .step-no {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .step-title {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .step-text {
+      color: var(--text-sub);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .task-stage {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      padding: 14px;
+    }
+
+    .stage-card {
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+
+    .stage-card.active {
+      border-color: rgba(97, 92, 237, 0.42);
+      background: var(--primary-soft);
+    }
+
+    .stage-title {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .stage-sub {
+      color: var(--text-sub);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .drawer-mask,
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      display: none;
+      z-index: 20;
+      background: rgba(17, 20, 36, 0.38);
+    }
+
+    .drawer-mask.show,
+    .modal-mask.show {
+      display: block;
+    }
+
+    .drawer {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: min(1180px, calc(100vw - 32px));
+      max-width: calc(100vw - 32px);
+      height: 100%;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer-head,
+    .modal-head {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .drawer-title,
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .close {
+      border: 0;
+      background: transparent;
+      font-size: 22px;
+      color: var(--text-sub);
+      cursor: pointer;
+    }
+
+    .drawer-body {
+      padding: 16px 18px 24px;
+      overflow: auto;
+      flex: 1;
+    }
+
+    .modal {
+      width: 760px;
+      max-width: calc(100vw - 48px);
+      max-height: calc(100vh - 48px);
+      overflow: hidden;
+      background: var(--panel);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-body {
+      padding: 16px 18px;
+      overflow: auto;
+    }
+
+    .modal-foot {
+      padding: 12px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .form-grid .full {
+      grid-column: 1 / -1;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 14px;
+      align-items: center;
+    }
+
+    .tabs .tab-actions {
+      margin-left: auto;
+      padding-bottom: 4px;
+    }
+
+    .tab-btn {
+      height: 36px;
+      border: 0;
+      background: transparent;
+      color: var(--text-sub);
+      padding: 0 12px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .prompt-box {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .prompt-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel-soft);
+      overflow: hidden;
+    }
+
+    .prompt-card h3 {
+      font-size: 13px;
+      margin: 0;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 600;
+    }
+
+    .prompt-card pre {
+      margin: 0;
+      padding: 12px;
+      min-height: 190px;
+      white-space: pre-wrap;
+      color: var(--text-sub);
+      line-height: 1.6;
+      font-size: 12px;
+    }
+
+    .prompt-card.editing {
+      border-color: rgba(97, 92, 237, 0.5);
+      background: #fff;
+    }
+
+    .prompt-card.editing pre {
+      background: #fff;
+      outline: none;
+      box-shadow: inset 0 0 0 2px rgba(97, 92, 237, 0.12);
+    }
+
+    .loading-banner {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #cfe0ff;
+      background: var(--blue-soft);
+      color: #315a9d;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    .loading-banner.show {
+      display: flex;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(47, 124, 246, 0.22);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      flex: 0 0 auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .sample-info {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .info-cell {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-soft);
+      padding: 10px 12px;
+    }
+
+    .info-label {
+      color: var(--text-sub);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .score-hero {
+      display: grid;
+      grid-template-columns: 1.2fr repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .score-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel-soft);
+      padding: 13px;
+    }
+
+    .score-main {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--green);
+      margin: 4px 0;
+    }
+
+    .bar {
+      height: 8px;
+      background: #eef0f6;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: var(--primary);
+      border-radius: inherit;
+    }
+
+    .dimension {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr) 74px;
+      gap: 10px;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .dimension:last-child {
+      border-bottom: 0;
+    }
+
+    .compare-bars {
+      display: grid;
+      gap: 4px;
+    }
+
+    .compare-row {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr) 42px;
+      gap: 8px;
+      align-items: center;
+      color: var(--text-sub);
+      font-size: 12px;
+    }
+
+    .mini-bar {
+      height: 7px;
+      background: #eef0f6;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .mini-bar b {
+      display: block;
+      height: 100%;
+      background: var(--blue);
+    }
+
+    .compare-row.new .mini-bar b {
+      background: var(--primary);
+    }
+
+    .delta {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      color: var(--green);
+      text-align: right;
+    }
+
+    .delta.neg {
+      color: var(--red);
+    }
+
+    .empty {
+      padding: 34px 14px;
+      text-align: center;
+      color: var(--text-sub);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      top: 18px;
+      transform: translateX(-50%);
+      background: #202333;
+      color: #fff;
+      border-radius: 7px;
+      padding: 9px 14px;
+      z-index: 40;
+      font-size: 13px;
+      display: none;
+      box-shadow: var(--shadow);
+    }
+
+    .toast.show {
+      display: block;
+    }
+
+    @media (max-width: 1280px) {
+      .filters {
+        grid-template-columns: repeat(3, minmax(150px, 1fr)) auto;
+      }
+
+      .summary-grid,
+      .task-stage,
+      .score-hero {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .layout-2,
+      .prompt-box {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">AI</div>
+        <div>
+          <div class="brand-title">AI质量迭代平台</div>
+          <div class="text-small" style="font-size:12px;color:#8f96ad;">V2.2.0 一期</div>
+        </div>
+      </div>
+
+      <div class="menu-label">样本与数据</div>
+      <button class="menu-btn active" data-page="samples"><span class="menu-dot"></span>问题样本管理</button>
+      <button class="menu-btn" data-page="datasets"><span class="menu-dot"></span>数据集管理</button>
+
+      <div class="menu-label">优化任务</div>
+      <button class="menu-btn" data-page="tasks"><span class="menu-dot"></span>提示词优化任务管理</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="crumb">AI质量迭代平台 / <span id="crumbText">问题样本管理</span></div>
+      </header>
+
+      <section class="content">
+        <div class="summary-grid">
+          <div class="stat">
+            <div class="stat-label">问题样本总量</div>
+            <div class="stat-value">12,846</div>
+            <div class="stat-hint">来自 Drama Verse AI译文反馈</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">可用数据集</div>
+            <div class="stat-value">18</div>
+            <div class="stat-hint">含在线生成与本地导入</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">优化任务</div>
+            <div class="stat-value">7</div>
+            <div class="stat-hint">3 个任务已完成裁判打分</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">当前覆盖语向</div>
+            <div class="stat-value">6</div>
+            <div class="stat-hint">仅覆盖翻译系统提示词</div>
+          </div>
+        </div>
+
+        <section class="page active" id="page-samples">
+          <div class="page-head">
+            <div>
+              <h1>问题样本管理</h1>
+              <p class="desc">展示 Drama Verse 回流的 AI译文反馈原始数据，原始字段只读，可导出或加入数据集。</p>
+            </div>
+            <div class="btn-row">
+              <button class="btn" id="exportSamplesBtn">导出本地</button>
+              <button class="btn primary" id="addSamplesBtn">加入数据集</button>
+            </div>
+          </div>
+
+          <div class="filters" style="grid-template-columns: repeat(5, minmax(150px, 1fr));">
+            <div class="field">
+              <label>样本 ID</label>
+              <input placeholder="精确搜索" />
+            </div>
+            <div class="field">
+              <label>原始语言</label>
+              <select>
+                <option>全部</option>
+                <option>英语</option>
+                <option>中文</option>
+                <option>西语</option>
+                <option>阿语</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>目标语言</label>
+              <select>
+                <option>全部</option>
+                <option>西语</option>
+                <option>阿语</option>
+                <option>英语</option>
+                <option>葡语</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>剧 ID / 剧名</label>
+              <input placeholder="支持模糊搜索" />
+            </div>
+            <div class="field">
+              <label>问题类型</label>
+              <select>
+                <option>全部</option>
+                <option>语义偏移</option>
+                <option>漏译/多译</option>
+                <option>专有名词/术语错误</option>
+                <option>口语自然度差</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>AI译文来源</label>
+              <select>
+                <option>全部</option>
+                <option>平台AI翻译</option>
+                <option>AI润色</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>模型</label>
+              <select>
+                <option>全部</option>
+                <option>claude-opus-5</option>
+                <option>gpt-5.6-sol</option>
+                <option>gemini-3.1-pro-preview</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>提示词版本</label>
+              <input placeholder="输入提示词版本" />
+            </div>
+            <div class="field">
+              <label>提交时间</label>
+              <div class="range-pair">
+                <input type="date" />
+                <span>-</span>
+                <input type="date" />
+              </div>
+            </div>
+            <div class="field">
+              <label>&nbsp;</label>
+              <div class="filter-actions">
+                <button class="btn primary">查询</button>
+                <button class="btn">重置</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">问题样本列表</div>
+            </div>
+            <div class="table-wrap">
+              <table style="min-width: 1900px;">
+                <thead>
+                  <tr>
+                    <th class="select-col"><input type="checkbox" id="sampleSelectAll" /></th>
+                    <th>样本 ID</th>
+                    <th>语向</th>
+                    <th>原文</th>
+                    <th>AI译文</th>
+                    <th>正确译文</th>
+                    <th>问题类型</th>
+                    <th>AI译文评分</th>
+                    <th>正确译文评分</th>
+                    <th>质量原因</th>
+                    <th>AI译文来源</th>
+                    <th>提示词版本</th>
+                    <th>模型</th>
+                    <th>提交时间</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="select-col"><input class="sample-row-check" type="checkbox" /></td>
+                    <td>FB-240918-0012</td>
+                    <td>英语 → 西语</td>
+                    <td class="truncate">You think I came here to beg?</td>
+                    <td class="truncate">¿Crees que vine aquí a rogar?</td>
+                    <td class="truncate">¿De verdad crees que vine a suplicarte?</td>
+                    <td><span class="tag orange">语气不符</span></td>
+                    <td>42</td>
+                    <td>92</td>
+                    <td class="truncate">反问和挑衅语气不足，表达偏直译。</td>
+                    <td>平台AI翻译</td>
+                    <td>prompt-v4</td>
+                    <td>claude-opus-5</td>
+                    <td>2026-09-08 10:42</td>
+                    <td><button class="btn text" data-open-drawer="sample">详情</button></td>
+                  </tr>
+                  <tr>
+                    <td class="select-col"><input class="sample-row-check" type="checkbox" /></td>
+                    <td>FB-240918-0036</td>
+                    <td>英语 → 西语</td>
+                    <td class="truncate">The Silver Court will never forgive this.</td>
+                    <td class="truncate">La corte plateada nunca perdonará esto.</td>
+                    <td class="truncate">La Corte de Plata jamás perdonará esto.</td>
+                    <td><span class="tag red">专有名词/术语错误</span></td>
+                    <td>36</td>
+                    <td>95</td>
+                    <td class="truncate">专有名词未按剧内设定统一大写。</td>
+                    <td>AI润色</td>
+                    <td>prompt-v4</td>
+                    <td>claude-opus-5</td>
+                    <td>2026-09-08 11:06</td>
+                    <td><button class="btn text" data-open-drawer="sample">详情</button></td>
+                  </tr>
+                  <tr>
+                    <td class="select-col"><input class="sample-row-check" type="checkbox" /></td>
+                    <td>FB-240918-0051</td>
+                    <td>英语 → 阿语</td>
+                    <td class="truncate">Don't make me choose between blood and honor.</td>
+                    <td class="truncate">لا تجعلني أختار بين الدم والشرف.</td>
+                    <td class="truncate">لا تجبرني على الاختيار بين عائلتي وشرفي.</td>
+                    <td><span class="tag orange">上下文理解错误</span></td>
+                    <td>48</td>
+                    <td>90</td>
+                    <td class="truncate">blood 在上下文中指家族，而非字面血液。</td>
+                    <td>平台AI翻译</td>
+                    <td>prompt-v3</td>
+                    <td>gpt-5.6-sol</td>
+                    <td>2026-09-08 11:18</td>
+                    <td><button class="btn text" data-open-drawer="sample">详情</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-datasets">
+          <div class="page-head">
+            <div>
+              <h1>数据集管理</h1>
+              <p class="desc">管理在线生成或本地导入的数据集。V1 不做分组，仅保留自增 ID、自定义名称、系统版本号。</p>
+            </div>
+            <div class="btn-row">
+              <button class="btn" data-open-modal="importDataset">本地导入</button>
+              <button class="btn primary" data-open-modal="createDataset">新建数据集</button>
+            </div>
+          </div>
+
+          <div class="filters" style="grid-template-columns: repeat(5, minmax(150px, 1fr));">
+            <div class="field">
+              <label>数据集 ID</label>
+              <input placeholder="精确搜索" />
+            </div>
+            <div class="field">
+              <label>数据集名称</label>
+              <input placeholder="输入数据集名称" />
+            </div>
+            <div class="field">
+              <label>版本号</label>
+              <input placeholder="如 v3" />
+            </div>
+            <div class="field">
+              <label>原始语言</label>
+              <select>
+                <option>全部</option>
+                <option>英语</option>
+                <option>中文</option>
+                <option>西语</option>
+                <option>阿语</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>目标语言</label>
+              <select>
+                <option>全部</option>
+                <option>西语</option>
+                <option>阿语</option>
+                <option>英语</option>
+                <option>葡语</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>样本数量</label>
+              <div class="range-pair">
+                <input type="number" placeholder="最少" min="0" />
+                <span>-</span>
+                <input type="number" placeholder="最多" min="0" />
+              </div>
+            </div>
+            <div class="field">
+              <label>数据来源</label>
+              <select>
+                <option>全部</option>
+                <option>在线选择</option>
+                <option>本地导入</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>状态</label>
+              <select>
+                <option>全部</option>
+                <option>可用</option>
+                <option>导入中</option>
+                <option>导入失败</option>
+                <option>已归档</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>创建时间</label>
+              <div class="range-pair">
+                <input type="date" />
+                <span>-</span>
+                <input type="date" />
+              </div>
+            </div>
+            <div class="field">
+              <label>&nbsp;</label>
+              <div class="filter-actions">
+                <button class="btn primary">查询</button>
+                <button class="btn">重置</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">数据集列表</div>
+              <span class="tag">任务引用时固定到具体版本</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>数据集 ID</th>
+                    <th>数据集名称</th>
+                    <th>版本号</th>
+                    <th>语向</th>
+                    <th>样本数量</th>
+                    <th>数据来源</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>DS-1028</td>
+                    <td>英语AI剧口语自然度问题样本</td>
+                    <td>v3</td>
+                    <td>英语 → 西语</td>
+                    <td>1,280</td>
+                    <td>本地导入</td>
+                    <td><span class="tag green">可用</span></td>
+                    <td>2026-09-08 10:30</td>
+                    <td><button class="btn text" data-open-drawer="dataset">查看样本</button><button class="btn text export-dataset-btn">导出</button></td>
+                  </tr>
+                  <tr>
+                    <td>DS-1027</td>
+                    <td>英语AI剧口语自然度问题样本</td>
+                    <td>v2</td>
+                    <td>英语 → 西语</td>
+                    <td>926</td>
+                    <td>在线选择</td>
+                    <td><span class="tag green">可用</span></td>
+                    <td>2026-09-07 18:12</td>
+                    <td><button class="btn text" data-open-drawer="dataset">查看样本</button><button class="btn text export-dataset-btn">导出</button></td>
+                  </tr>
+                  <tr>
+                    <td>DS-1019</td>
+                    <td>阿语专有名词一致性问题样本</td>
+                    <td>v1</td>
+                    <td>英语 → 阿语</td>
+                    <td>642</td>
+                    <td>本地导入</td>
+                    <td><span class="tag orange">导入中</span></td>
+                    <td>2026-09-06 14:45</td>
+                    <td><button class="btn text" data-open-drawer="dataset">查看样本</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-tasks">
+          <div class="page-head">
+            <div>
+              <h1>提示词优化任务管理</h1>
+              <p class="desc">基于数据集手动创建任务，V1 仅生成 1 个翻译系统提示词候选，并可选择是否发起裁判打分。</p>
+            </div>
+            <div class="btn-row">
+              <button class="btn primary" data-open-modal="createTask">创建优化任务</button>
+            </div>
+          </div>
+
+          <div class="filters" style="grid-template-columns: repeat(4, minmax(150px, 1fr)) auto;">
+                <div class="field">
+                  <label>任务名称 / ID</label>
+                  <input placeholder="输入任务名称或ID" />
+                </div>
+                <div class="field">
+                  <label>目标语向</label>
+                  <select>
+                    <option>全部</option>
+                    <option>英语 → 西语</option>
+                    <option>英语 → 阿语</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>优化状态</label>
+                  <select>
+                    <option>全部</option>
+                    <option>待执行</option>
+                    <option>优化中</option>
+                    <option>优化成功</option>
+                    <option>优化失败</option>
+                    <option>已中止</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>裁判打分状态</label>
+                  <select>
+                    <option>全部</option>
+                    <option>未发起</option>
+                    <option>评分中</option>
+                    <option>评分完成</option>
+                    <option>评分失败</option>
+                  </select>
+                </div>
+                <button class="btn primary">查询</button>
+          </div>
+
+          <div class="panel">
+                <div class="panel-head">
+                  <div class="panel-title">优化任务列表</div>
+                  <span class="tag blue">仅翻译系统提示词</span>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>任务 ID</th>
+                        <th>任务名称</th>
+                        <th>目标语向</th>
+                        <th>数据集</th>
+                        <th>基座模型</th>
+                        <th>原提示词版本</th>
+                        <th>优化状态</th>
+                        <th>裁判打分</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>OPT-2409-018</td>
+                        <td>英译西口语自然度优化</td>
+                        <td>英语 → 西语</td>
+                        <td>DS-1028 / v3</td>
+                        <td>claude-opus-5</td>
+                        <td>prompt-v4</td>
+                        <td><span class="tag green">优化成功</span></td>
+                        <td><span class="tag green">评分完成</span></td>
+                        <td><button class="btn text" data-open-drawer="task" data-score-state="complete">详情</button></td>
+                      </tr>
+                      <tr>
+                        <td>OPT-2409-017</td>
+                        <td>阿语专有名词一致性优化</td>
+                        <td>英语 → 阿语</td>
+                        <td>DS-1019 / v1</td>
+                        <td>gpt-5.6-sol</td>
+                        <td>prompt-v3</td>
+                        <td><span class="tag orange">优化中</span></td>
+                        <td><span class="tag">未发起</span></td>
+                        <td><button class="btn text" data-open-drawer="task" data-score-state="empty">详情</button></td>
+                      </tr>
+                      <tr>
+                        <td>OPT-2409-014</td>
+                        <td>英译西术语翻译修正</td>
+                        <td>英语 → 西语</td>
+                        <td>DS-1027 / v2</td>
+                        <td>claude-opus-5</td>
+                        <td>prompt-v4</td>
+                        <td><span class="tag red fail-tag" data-reason="模型调用超时，未能生成优化后候选提示词。">优化失败</span></td>
+                        <td><span class="tag">未发起</span></td>
+                        <td><button class="btn text" data-open-drawer="task" data-score-state="empty">详情</button><button class="btn text retry-btn" data-retry="optimize">重试</button></td>
+                      </tr>
+                      <tr>
+                        <td>OPT-2409-013</td>
+                        <td>英译阿口语表达评测重跑</td>
+                        <td>英语 → 阿语</td>
+                        <td>DS-1019 / v1</td>
+                        <td>gpt-5.6-sol</td>
+                        <td>prompt-v3</td>
+                        <td><span class="tag green">优化成功</span></td>
+                        <td><span class="tag red fail-tag" data-reason="裁判服务返回异常，部分样本未完成评分。">评分失败</span></td>
+                        <td><button class="btn text" data-open-drawer="task" data-score-state="empty">详情</button><button class="btn text retry-btn" data-retry="score">重试</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="drawer-mask" id="sampleDrawer">
+    <div class="drawer">
+      <div class="drawer-head">
+        <div>
+          <div class="drawer-title">问题样本详情</div>
+          <div class="desc">FB-240918-0012</div>
+        </div>
+        <button class="close" data-close>&times;</button>
+      </div>
+      <div class="drawer-body">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <div class="detail-label">样本 ID</div>
+            <div class="detail-value">FB-240918-0012</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">剧 ID / 剧名</div>
+            <div class="detail-value">B-10086 / Queen's Bet</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">集序号</div>
+            <div class="detail-value">3</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">段落序号</div>
+            <div class="detail-value">128</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">提交人</div>
+            <div class="detail-value">Yolanda</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">提交时间</div>
+            <div class="detail-value">2026-09-08 10:42</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">语向</div>
+            <div class="detail-value">英语 → 西语</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">AI译文来源</div>
+            <div class="detail-value">平台AI翻译</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">提示词版本</div>
+            <div class="detail-value">prompt-v4</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">模型</div>
+            <div class="detail-value">claude-opus-5</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">问题类型</div>
+            <div class="detail-value">语气不符、口语自然度差</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">评分</div>
+            <div class="detail-value">AI译文评分 42 / 正确译文评分 92</div>
+          </div>
+          <div class="detail-item full">
+            <div class="detail-label">原文</div>
+            <div class="detail-value">You think I came here to beg?</div>
+          </div>
+          <div class="detail-item full">
+            <div class="detail-label">AI译文</div>
+            <div class="detail-value">¿Crees que vine aquí a rogar?</div>
+          </div>
+          <div class="detail-item full">
+            <div class="detail-label">正确译文</div>
+            <div class="detail-value">¿De verdad crees que vine a suplicarte?</div>
+          </div>
+          <div class="detail-item full">
+            <div class="detail-label">质量原因 / 备注</div>
+            <div class="detail-value">角色此处是反问和挑衅语气，AI译文表达偏直白，缺少情绪强度。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-mask" id="datasetDrawer">
+    <div class="drawer">
+      <div class="drawer-head">
+        <div>
+          <div class="drawer-title">数据集样本详情</div>
+          <div class="desc">DS-1028 / 英语AI剧口语自然度问题样本 / v3</div>
+        </div>
+        <button class="close" data-close>&times;</button>
+      </div>
+      <div class="drawer-body">
+        <div class="sample-info">
+          <div class="info-cell">
+            <div class="info-label">数据来源</div>
+            <div class="info-value">本地导入</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-label">语向</div>
+            <div class="info-value">英语 → 西语</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-label">样本数量</div>
+            <div class="info-value">1,280</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-label">文件格式</div>
+            <div class="info-value">md</div>
+          </div>
+        </div>
+
+        <div class="filters" style="grid-template-columns: repeat(3, minmax(150px, 1fr)) auto;">
+          <div class="field">
+            <label>样本 ID / 剧名</label>
+            <input placeholder="搜索样本ID、剧名" />
+          </div>
+          <div class="field">
+            <label>问题类型</label>
+            <select>
+              <option>全部</option>
+              <option>语气不符</option>
+              <option>口语自然度差</option>
+              <option>术语错误</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>评分区间</label>
+            <select>
+              <option>全部</option>
+              <option>0-40</option>
+              <option>41-70</option>
+              <option>71-100</option>
+            </select>
+          </div>
+          <button class="btn primary">查询</button>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">样本信息</div>
+            <div class="btn-row">
+              <button class="btn export-dataset-btn">导出当前数据集</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width: 1160px;">
+              <thead>
+                <tr>
+                  <th>原文</th>
+                  <th>AI译文</th>
+                  <th>正确译文</th>
+                  <th>问题类型</th>
+                  <th>AI译文评分</th>
+                  <th>正确译文评分</th>
+                  <th>质量原因</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="truncate">You think I came here to beg?</td>
+                  <td class="truncate">¿Crees que vine aquí a rogar?</td>
+                  <td class="truncate">¿De verdad crees que vine a suplicarte?</td>
+                  <td><span class="tag orange">语气不符</span></td>
+                  <td>42</td>
+                  <td>92</td>
+                  <td class="truncate">反问和挑衅语气不足，表达偏直译。</td>
+                </tr>
+                <tr>
+                  <td class="truncate">The Silver Court will never forgive this.</td>
+                  <td class="truncate">La corte plateada nunca perdonará esto.</td>
+                  <td class="truncate">La Corte de Plata jamás perdonará esto.</td>
+                  <td><span class="tag red">术语错误</span></td>
+                  <td>36</td>
+                  <td>95</td>
+                  <td class="truncate">专有名词未按剧内设定统一大写。</td>
+                </tr>
+                <tr>
+                  <td class="truncate">Say that again, and I walk out.</td>
+                  <td class="truncate">Di eso otra vez y salgo.</td>
+                  <td class="truncate">Vuelve a decirlo y me largo.</td>
+                  <td><span class="tag orange">口语自然度差</span></td>
+                  <td>45</td>
+                  <td>91</td>
+                  <td class="truncate">表达过于书面，缺少角色当下的愤怒语气。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-mask" id="taskDrawer">
+    <div class="drawer">
+      <div class="drawer-head">
+        <div>
+          <div class="drawer-title">英译西口语自然度优化</div>
+          <div class="desc">OPT-2409-018 / DS-1028 v3 / claude-opus-5</div>
+        </div>
+        <button class="close" data-close>&times;</button>
+      </div>
+      <div class="drawer-body">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="info">任务信息</button>
+          <button class="tab-btn" data-tab="prompt">提示词结果</button>
+          <button class="tab-btn" data-tab="score">裁判打分</button>
+          <div class="tab-actions">
+            <button class="btn export-score-btn">导出评分结果</button>
+          </div>
+        </div>
+
+        <div class="tab-panel active" id="tab-info">
+          <div class="task-stage">
+            <div class="stage-card active">
+              <div class="stage-title">1. 选择数据集</div>
+              <div class="stage-sub">DS-1028 / v3，1,280 条样本</div>
+            </div>
+            <div class="stage-card active">
+              <div class="stage-title">2. 编辑提示词</div>
+              <div class="stage-sub">基于线上 prompt-v4 人工调整</div>
+            </div>
+            <div class="stage-card active">
+              <div class="stage-title">3. 生成候选</div>
+              <div class="stage-sub">V1 仅生成 1 个候选提示词</div>
+            </div>
+            <div class="stage-card active">
+              <div class="stage-title">4. 裁判打分</div>
+              <div class="stage-sub">评分完成，可查看详细数据</div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">任务字段</div></div>
+            <div class="table-wrap">
+              <table>
+                <tbody>
+                  <tr><th>任务名称</th><td>英译西口语自然度优化</td><th>目标语向</th><td>英语 → 西语</td></tr>
+                  <tr><th>基座模型</th><td>claude-opus-5</td><th>原提示词版本</th><td>prompt-v4</td></tr>
+                  <tr><th>优化状态</th><td><span class="tag green">优化成功</span></td><th>裁判打分状态</th><td><span class="tag green" id="scoreStatusTag">评分完成</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-prompt">
+          <div class="prompt-box">
+            <div class="prompt-card">
+              <h3>当前线上提示词 prompt-v4</h3>
+              <pre>你是短剧字幕翻译专家。请保持剧情语义准确，译文自然流畅，并控制字幕长度适合移动端阅读...</pre>
+            </div>
+            <div class="prompt-card" id="candidatePromptCard">
+              <h3>优化后候选提示词</h3>
+              <pre id="candidatePromptText">你是面向短剧本地化的字幕翻译专家。翻译时优先保证角色语气、关系称谓和口语自然度；遇到反问、挑衅、讽刺等情绪表达时，不要机械直译...</pre>
+            </div>
+          </div>
+          <div class="loading-banner" id="scoreLoadingBanner">
+            <span class="spinner"></span>
+            <span>裁判打分中，候选提示词暂不可编辑，请等待评分完成。</span>
+          </div>
+          <div class="btn-row" style="margin-top:12px;">
+            <button class="btn" id="editCandidateBtn">编辑候选提示词</button>
+            <button class="btn primary" id="scoreBtn">发起裁判打分</button>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-score">
+          <div class="empty" id="scoreEmptyState" style="display:none;">
+            暂无评分结果，请前往【提示词结果】页发起裁判打分
+          </div>
+          <div class="empty" id="scoreLoadingState" style="display:none;">
+            <span class="spinner" style="margin:0 auto 10px;"></span>
+            <div>裁判打分中，请稍后查看评分结果</div>
+          </div>
+          <div id="scoreResultContent">
+          <div class="score-hero">
+            <div class="score-card">
+              <div class="stat-label">初步结论</div>
+              <div class="score-main">+26.9</div>
+              <div class="desc">【全剧整体评估】译文 1 - 译文 0。10 个维度中 9 个维度持平或领先。</div>
+            </div>
+            <div class="score-card">
+              <div class="stat-label">候选版本胜率</div>
+              <div class="stat-value">100%</div>
+              <div class="bar"><span style="width:100%"></span></div>
+              <div class="stat-hint">译文 1（候选版本）胜场 20 / 全部 20</div>
+            </div>
+            <div class="score-card">
+              <div class="stat-label">共识度</div>
+              <div class="stat-value">100%</div>
+              <div class="bar"><span style="width:100%"></span></div>
+              <div class="stat-hint">≥3 名裁判认为候选版本 ≥ 线上版本</div>
+            </div>
+            <div class="score-card">
+              <div class="stat-label">落后维度</div>
+              <div class="stat-value" style="font-size:16px;color:var(--orange);">CPS/时长/字符数</div>
+              <div class="stat-hint">候选提示词需要继续控制译文长度</div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-bottom:14px;">
+            <div class="panel-head">
+              <div class="panel-title">评分维度</div>
+              <span class="tag">译文 0：线上版本 / 译文 1：候选版本</span>
+            </div>
+            <div style="padding:4px 14px;">
+              <div class="dimension">
+                <div>全剧整体评估</div>
+                <div class="compare-bars">
+                  <div class="compare-row"><span>旧</span><div class="mini-bar"><b style="width:56.9%"></b></div><span>56.9</span></div>
+                  <div class="compare-row new"><span>新</span><div class="mini-bar"><b style="width:83.8%"></b></div><span>83.8</span></div>
+                </div>
+                <div class="delta">+26.9</div>
+              </div>
+              <div class="dimension">
+                <div>CPS/时长/字符数</div>
+                <div class="compare-bars">
+                  <div class="compare-row"><span>旧</span><div class="mini-bar"><b style="width:69.8%"></b></div><span>69.8</span></div>
+                  <div class="compare-row new"><span>新</span><div class="mini-bar"><b style="width:61.8%"></b></div><span>61.8</span></div>
+                </div>
+                <div class="delta neg">-8.0</div>
+              </div>
+              <div class="dimension">
+                <div>专有名词/专业术语</div>
+                <div class="compare-bars">
+                  <div class="compare-row"><span>旧</span><div class="mini-bar"><b style="width:54.9%"></b></div><span>54.9</span></div>
+                  <div class="compare-row new"><span>新</span><div class="mini-bar"><b style="width:81.1%"></b></div><span>81.1</span></div>
+                </div>
+                <div class="delta">+26.2</div>
+              </div>
+              <div class="dimension">
+                <div>语义/关系/逻辑</div>
+                <div class="compare-bars">
+                  <div class="compare-row"><span>旧</span><div class="mini-bar"><b style="width:54.1%"></b></div><span>54.1</span></div>
+                  <div class="compare-row new"><span>新</span><div class="mini-bar"><b style="width:88.2%"></b></div><span>88.2</span></div>
+                </div>
+                <div class="delta">+34.1</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-bottom:14px;">
+            <div class="panel-head">
+              <div class="panel-title">共识度</div>
+              <span class="tag">统计每部剧中认可候选版本的裁判数量分布</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>维度</th>
+                    <th>多数共识次数（≥3裁判）</th>
+                    <th>4裁判</th>
+                    <th>3裁判</th>
+                    <th>2裁判</th>
+                    <th>1裁判</th>
+                    <th>0裁判</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>全剧整体评估</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>CPS/时长/字符数</td><td>1</td><td>0</td><td>1</td><td>2</td><td>0</td><td>2</td></tr>
+                  <tr><td>合并拆分/语序/标点/大小写</td><td>5</td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>信息完整/无冗余</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>专有名词/专业术语</td><td>5</td><td>3</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>俚语/网络梗/俗语/习语</td><td>5</td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>自然/地道/本地化</td><td>3</td><td>3</td><td>0</td><td>2</td><td>0</td><td>0</td></tr>
+                  <tr><td>语义/关系/逻辑</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>一致性/连贯/流畅</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>语气/情绪/人设</td><td>5</td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>信达雅/意译</td><td>5</td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">胜率</div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>维度</th>
+                    <th>裁判组全员均分</th>
+                    <th>胜场 0 : 1</th>
+                    <th>多数共识次数</th>
+                    <th>4裁判</th>
+                    <th>3裁判</th>
+                    <th>2裁判</th>
+                    <th>1裁判</th>
+                    <th>0裁判</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>全剧整体评估</td><td>56.9 : 83.8</td><td>0 : 20</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>CPS/时长/字符数</td><td>69.8 : 61.8</td><td>13 : 7</td><td>1</td><td>0</td><td>1</td><td>2</td><td>0</td><td>2</td></tr>
+                  <tr><td>合并拆分/语序/标点/大小写</td><td>57.6 : 82.1</td><td>1 : 19</td><td>5</td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>信息完整/无冗余</td><td>61.6 : 87.2</td><td>0 : 20</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>语气/情绪/人设</td><td>65.0 : 85.5</td><td>1 : 19</td><td>5</td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="datasetFromSamples">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">加入数据集</div>
+        <button class="close" data-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field">
+            <label>处理方式</label>
+            <select>
+              <option>新建数据集</option>
+              <option>加入已有数据集</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>数据集名称</label>
+            <input value="英语AI剧口语自然度问题样本" />
+          </div>
+          <div class="field">
+            <label>版本号</label>
+            <input readonly value="系统自动生成 v4" />
+          </div>
+          <div class="field">
+            <label>样本数量</label>
+            <input readonly value="已选择 2 条" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" data-close>取消</button>
+        <button class="btn primary" data-confirm>确认加入</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="createDataset">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">新建数据集</div>
+        <button class="close" data-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field">
+            <label>数据集名称</label>
+            <input placeholder="请输入数据集名称" />
+          </div>
+          <div class="field">
+            <label>版本号</label>
+            <input readonly value="系统自动生成 v1" />
+          </div>
+          <div class="field full">
+            <label>描述</label>
+            <textarea placeholder="可选，说明数据集用途"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" data-close>取消</button>
+        <button class="btn primary" data-confirm>创建</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="importDataset">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">本地导入数据集</div>
+        <button class="close" data-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field">
+            <label>数据集名称</label>
+            <input value="英语AI剧口语自然度问题样本" />
+          </div>
+          <div class="field">
+            <label>版本号</label>
+            <input readonly value="系统自动生成 v4" />
+          </div>
+          <div class="field">
+            <label>原始语言</label>
+            <select required>
+              <option>英语</option>
+              <option>中文</option>
+              <option>西语</option>
+              <option>阿语</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>目标语言</label>
+            <select required>
+              <option>西语</option>
+              <option>阿语</option>
+              <option>英语</option>
+              <option>葡语</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label>上传文件</label>
+            <label class="upload-area">
+              <span>
+                <span class="upload-title">点击选择或拖拽上传文件</span>
+                <span class="upload-sub">支持 jsonl、md、csv，导入后统一转换为 md 样本格式</span>
+              </span>
+              <span class="btn">选择文件</span>
+              <input class="file-native" type="file" accept=".jsonl,.md,.csv" />
+            </label>
+          </div>
+          <div class="field full">
+            <label>导入说明</label>
+            <div class="notice">字段需与原始问题样本字段保持一致；平台不覆盖原始问题样本，仅生成新的数据集版本。</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" data-close>取消</button>
+        <button class="btn primary" data-confirm>开始导入</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="createTask">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">创建提示词优化任务</div>
+        <button class="close" data-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field">
+            <label>任务名称</label>
+            <input value="英译西口语自然度优化" />
+          </div>
+          <div class="field">
+            <label>原始语言</label>
+            <select required>
+              <option>英语</option>
+              <option>中文</option>
+              <option>西语</option>
+              <option>阿语</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>目标语言</label>
+            <select required>
+              <option>西语</option>
+              <option>阿语</option>
+              <option>英语</option>
+              <option>葡语</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>数据集</label>
+            <select>
+              <option>DS-1028 英语AI剧口语自然度问题样本 / v3</option>
+              <option>DS-1027 英语AI剧口语自然度问题样本 / v2</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>基座模型</label>
+            <input readonly value="claude-opus-5" />
+          </div>
+          <div class="field">
+            <label>当前线上提示词版本</label>
+            <input readonly value="prompt-v4" />
+          </div>
+          <div class="field full">
+            <label>提示词</label>
+            <textarea>你是短剧字幕翻译专家。请保持剧情语义准确，译文自然流畅，并控制字幕长度适合移动端阅读。请重点优化：角色语气、反问表达、称谓关系、口语自然度。</textarea>
+          </div>
+          <div class="field full">
+            <label>备注</label>
+            <textarea placeholder="非必填，可补充本次优化的人工说明、约束或关注问题"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" data-close>取消</button>
+        <button class="btn primary" data-confirm>创建并开始优化</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">操作成功</div>
+
+  <script>
+    const pages = {
+      samples: { el: document.getElementById('page-samples'), label: '问题样本管理' },
+      datasets: { el: document.getElementById('page-datasets'), label: '数据集管理' },
+      tasks: { el: document.getElementById('page-tasks'), label: '提示词优化任务管理' }
+    };
+
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      toast.textContent = text;
+      toast.classList.add('show');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    document.querySelectorAll('.menu-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.page;
+        document.querySelectorAll('.menu-btn').forEach(item => item.classList.remove('active'));
+        btn.classList.add('active');
+        Object.values(pages).forEach(page => page.el.classList.remove('active'));
+        pages[key].el.classList.add('active');
+        document.getElementById('crumbText').textContent = pages[key].label;
+      });
+    });
+
+    document.querySelectorAll('[data-open-modal]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const modal = document.getElementById(btn.dataset.openModal);
+        modal.classList.add('show');
+      });
+    });
+
+    document.querySelectorAll('[data-open-drawer]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const drawerMap = {
+          task: document.getElementById('taskDrawer'),
+          sample: document.getElementById('sampleDrawer'),
+          dataset: document.getElementById('datasetDrawer')
+        };
+        const drawer = drawerMap[btn.dataset.openDrawer] || document.getElementById('sampleDrawer');
+        if (btn.dataset.openDrawer === 'task') {
+          setScoreView(btn.dataset.scoreState || 'complete');
+          setPromptScoring(false);
+          setCandidateEditing(false);
+        }
+        drawer.classList.add('show');
+      });
+    });
+
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.closest('.drawer-mask, .modal-mask').classList.remove('show');
+      });
+    });
+
+    document.querySelectorAll('.modal-mask, .drawer-mask').forEach(mask => {
+      mask.addEventListener('click', event => {
+        if (event.target === mask) mask.classList.remove('show');
+      });
+    });
+
+    document.querySelectorAll('[data-confirm]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const modal = btn.closest('.modal-mask');
+        modal.classList.remove('show');
+        if (modal.id === 'datasetFromSamples' && sampleSelectionMode === 'add') {
+          exitSampleSelection();
+        }
+        showToast('操作成功，原型中已模拟提交');
+      });
+    });
+
+    const samplesPage = document.getElementById('page-samples');
+    const sampleSelectAll = document.getElementById('sampleSelectAll');
+    const sampleRowChecks = Array.from(document.querySelectorAll('.sample-row-check'));
+    const exportSamplesBtn = document.getElementById('exportSamplesBtn');
+    const addSamplesBtn = document.getElementById('addSamplesBtn');
+    let sampleSelectionMode = null;
+
+    function enterSampleSelection(mode) {
+      if (!samplesPage.classList.contains('selection-mode')) {
+        samplesPage.classList.add('selection-mode');
+        sampleSelectionMode = mode;
+        sampleSelectAll.checked = false;
+        sampleRowChecks.forEach(check => {
+          check.checked = false;
+        });
+        exportSamplesBtn.textContent = '取消';
+        addSamplesBtn.textContent = mode === 'add' ? '批量加入' : '批量导出';
+        addSamplesBtn.classList.add('primary');
+        showToast(mode === 'add' ? '请选择需要加入数据集的问题样本' : '请选择需要导出的问题样本');
+        return false;
+      }
+      return true;
+    }
+
+    function exitSampleSelection() {
+      samplesPage.classList.remove('selection-mode');
+      sampleSelectionMode = null;
+      sampleSelectAll.checked = false;
+      sampleRowChecks.forEach(check => {
+        check.checked = false;
+      });
+      exportSamplesBtn.textContent = '导出本地';
+      addSamplesBtn.textContent = '加入数据集';
+      addSamplesBtn.classList.add('primary');
+    }
+
+    sampleSelectAll.addEventListener('change', () => {
+      sampleRowChecks.forEach(check => {
+        check.checked = sampleSelectAll.checked;
+      });
+    });
+
+    sampleRowChecks.forEach(check => {
+      check.addEventListener('change', () => {
+        sampleSelectAll.checked = sampleRowChecks.every(item => item.checked);
+      });
+    });
+
+    exportSamplesBtn.addEventListener('click', () => {
+      if (samplesPage.classList.contains('selection-mode')) {
+        exitSampleSelection();
+        return;
+      }
+      if (!enterSampleSelection('export')) return;
+      const selectedCount = sampleRowChecks.filter(item => item.checked).length;
+      showToast(selectedCount ? `已生成 ${selectedCount} 条样本导出任务` : '请至少选择 1 条问题样本');
+    });
+
+    addSamplesBtn.addEventListener('click', () => {
+      if (!enterSampleSelection('add')) return;
+      const selectedCount = sampleRowChecks.filter(item => item.checked).length;
+      if (!selectedCount) {
+        showToast('请至少选择 1 条问题样本');
+        return;
+      }
+      if (sampleSelectionMode === 'export') {
+        showToast(`已生成 ${selectedCount} 条样本导出任务`);
+        exitSampleSelection();
+        return;
+      }
+      document.getElementById('datasetFromSamples').classList.add('show');
+    });
+
+    function setScoreView(state) {
+      const empty = document.getElementById('scoreEmptyState');
+      const loading = document.getElementById('scoreLoadingState');
+      const result = document.getElementById('scoreResultContent');
+      const status = document.getElementById('scoreStatusTag');
+      const isEmpty = state === 'empty';
+      const isScoring = state === 'scoring';
+      empty.style.display = isEmpty ? 'block' : 'none';
+      loading.style.display = isScoring ? 'block' : 'none';
+      result.style.display = (!isEmpty && !isScoring) ? 'block' : 'none';
+      status.textContent = isScoring ? '评分中' : (isEmpty ? '未发起' : '评分完成');
+      status.className = isScoring ? 'tag orange' : (isEmpty ? 'tag' : 'tag green');
+    }
+
+    function setCandidateEditing(isEditing) {
+      const card = document.getElementById('candidatePromptCard');
+      const text = document.getElementById('candidatePromptText');
+      const editBtn = document.getElementById('editCandidateBtn');
+      card.classList.toggle('editing', isEditing);
+      text.contentEditable = isEditing ? 'true' : 'false';
+      editBtn.textContent = isEditing ? '保存候选提示词' : '编辑候选提示词';
+      if (isEditing) {
+        text.focus();
+      }
+    }
+
+    function setPromptScoring(isScoring) {
+      const banner = document.getElementById('scoreLoadingBanner');
+      const editBtn = document.getElementById('editCandidateBtn');
+      const scoreBtn = document.getElementById('scoreBtn');
+      banner.classList.toggle('show', isScoring);
+      editBtn.disabled = isScoring;
+      scoreBtn.disabled = isScoring;
+      scoreBtn.textContent = isScoring ? '裁判打分中' : '发起裁判打分';
+      if (isScoring) {
+        setCandidateEditing(false);
+      }
+    }
+
+    document.querySelectorAll('.export-dataset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        showToast('数据集导出成功');
+      });
+    });
+
+    document.querySelectorAll('.export-score-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        showToast('评分结果导出成功');
+      });
+    });
+
+    document.querySelectorAll('.retry-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const row = btn.closest('tr');
+        const retryType = btn.dataset.retry;
+        if (retryType === 'optimize') {
+          const optimizeTag = row.children[6].querySelector('.tag');
+          optimizeTag.className = 'tag orange';
+          optimizeTag.textContent = '优化中';
+          optimizeTag.removeAttribute('data-reason');
+          showToast('已重新发起提示词优化');
+        } else {
+          const scoreTag = row.children[7].querySelector('.tag');
+          scoreTag.className = 'tag orange';
+          scoreTag.textContent = '评分中';
+          scoreTag.removeAttribute('data-reason');
+          showToast('已重新发起裁判打分');
+        }
+        btn.disabled = true;
+      });
+    });
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const drawer = btn.closest('.drawer-body');
+        drawer.querySelectorAll('.tab-btn').forEach(item => item.classList.remove('active'));
+        drawer.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+        btn.classList.add('active');
+        drawer.querySelector('#tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    document.getElementById('scoreBtn').addEventListener('click', () => {
+      setPromptScoring(true);
+      setScoreView('scoring');
+      showToast('已发起裁判打分');
+    });
+
+    document.getElementById('editCandidateBtn').addEventListener('click', () => {
+      const isEditing = document.getElementById('candidatePromptText').isContentEditable;
+      setCandidateEditing(!isEditing);
+      showToast(isEditing ? '候选提示词已保存' : '候选提示词已进入编辑状态');
+    });
+  </script>
+</body>
+</html>
