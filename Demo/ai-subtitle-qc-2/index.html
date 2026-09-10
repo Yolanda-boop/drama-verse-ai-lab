@@ -279,6 +279,57 @@
       line-height: 1;
     }
     #dv-real-qc-prototype .saveStatus { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; font-size: 12px; font-weight: 400; color: rgba(255,255,255,.3); }
+    #dv-real-qc-prototype .exportActionWrap { position: relative; display: inline-flex; flex-shrink: 0; }
+    #dv-real-qc-prototype .exportActionWrap .btnPrimary { display: inline-flex; align-items: center; gap: 7px; }
+    #dv-real-qc-prototype .exportActionWrap.hasMenu .btnPrimary:after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(45deg) translateY(-2px);
+      opacity: .9;
+    }
+    #dv-real-qc-prototype .exportSrtMenu {
+      position: absolute;
+      right: 0;
+      top: 38px;
+      width: 184px;
+      padding: 6px;
+      display: none;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.55);
+      z-index: 32;
+    }
+    #dv-real-qc-prototype .exportActionWrap.hasMenu:hover .exportSrtMenu,
+    #dv-real-qc-prototype .exportActionWrap.hasMenu:focus-within .exportSrtMenu { display: grid; gap: 2px; }
+    #dv-real-qc-prototype .exportSrtItem {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: rgba(255,255,255,.86);
+      text-align: left;
+      padding: 0 9px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    #dv-real-qc-prototype .exportSrtItem:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .exportSrtIcon {
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,.72);
+      flex: 0 0 auto;
+    }
+    #dv-real-qc-prototype .exportSrtIcon svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     #dv-real-qc-prototype .mainContent {
       display: flex;
       grid-column: 1;
@@ -1307,6 +1358,349 @@
     }
     #dv-real-qc-prototype .subtitleStyleScope { color: var(--text-tertiary); font-size: 12px; }
     #dv-real-qc-prototype .subtitleStyleActions { display: flex; align-items: center; gap: 10px; }
+    #dv-real-qc-prototype .exportVideoMask {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      z-index: 16;
+    }
+    #dv-real-qc-prototype .exportVideoDialog {
+      width: min(1080px, calc(100% - 24px));
+      height: min(720px, calc(100% - 24px));
+      max-height: calc(100% - 24px);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 18px 52px rgba(0,0,0,.66);
+      overflow: hidden;
+    }
+    #dv-real-qc-prototype .exportVideoHeader {
+      min-height: 72px;
+      display: grid;
+      grid-template-columns: 210px minmax(0,1fr) 34px;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    #dv-real-qc-prototype .exportVideoTitle { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+    #dv-real-qc-prototype .exportVideoClose {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 30px;
+    }
+    #dv-real-qc-prototype .exportVideoClose:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .exportSteps { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: 0; }
+    #dv-real-qc-prototype .exportStep {
+      position: relative;
+      display: grid;
+      grid-template-columns: 28px auto;
+      grid-template-rows: auto auto;
+      column-gap: 8px;
+      row-gap: 2px;
+      align-items: center;
+      border: 0;
+      background: transparent;
+      color: var(--text-tertiary);
+      text-align: left;
+      cursor: pointer;
+      padding: 0 18px 0 0;
+      min-width: 0;
+    }
+    #dv-real-qc-prototype .exportStep:after {
+      content: "";
+      position: absolute;
+      left: 124px;
+      right: 10px;
+      top: 15px;
+      height: 2px;
+      background: rgba(255,255,255,.16);
+    }
+    #dv-real-qc-prototype .exportStep:last-child:after { display: none; }
+    #dv-real-qc-prototype .exportStepDot {
+      grid-row: 1 / 3;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.78);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    #dv-real-qc-prototype .exportStepTitle { color: var(--text-secondary); font-weight: 600; white-space: nowrap; }
+    #dv-real-qc-prototype .exportStepDesc { color: var(--text-tertiary); font-size: 12px; white-space: nowrap; }
+    #dv-real-qc-prototype .exportStep.active .exportStepDot,
+    #dv-real-qc-prototype .exportStep.done .exportStepDot { background: var(--brand-purple); color: #fff; }
+    #dv-real-qc-prototype .exportStep.active .exportStepTitle { color: #fff; }
+    #dv-real-qc-prototype .exportStep.done .exportStepDesc,
+    #dv-real-qc-prototype .exportStep.active .exportStepDesc { color: #00ee00; }
+    #dv-real-qc-prototype .exportVideoBody { flex: 1 1 auto; min-height: 0; padding: 12px 20px 12px 14px; overflow: hidden; }
+    #dv-real-qc-prototype .exportStepView { height: 100%; min-height: 0; display: none; overflow: hidden; }
+    #dv-real-qc-prototype .exportStepView.active { display: block; }
+    #dv-real-qc-prototype .exportPlaceholder {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 8px;
+      line-height: 1.8;
+      text-align: center;
+    }
+    #dv-real-qc-prototype .exportSubtitleLayout {
+      height: 100%;
+      display: grid;
+      grid-template-columns: minmax(260px,.82fr) minmax(480px,500px);
+      gap: 18px;
+      min-height: 0;
+      overflow: hidden;
+    }
+    #dv-real-qc-prototype .exportPreviewPanel {
+      position: relative;
+      min-width: 0;
+      background: #060606;
+      border-radius: 7px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #dv-real-qc-prototype .exportVideoFrame {
+      width: min(54%, 248px);
+      min-width: 190px;
+      max-height: 96%;
+      aspect-ratio: 9/16;
+      position: relative;
+      overflow: hidden;
+      border-radius: 7px;
+      background:
+        linear-gradient(112deg, rgba(255,255,255,.08) 0 34%, rgba(0,0,0,.28) 34% 35%, rgba(0,0,0,.74) 35% 100%),
+        radial-gradient(circle at 38% 22%, rgba(255,230,190,.35), transparent 33%),
+        linear-gradient(160deg, #b99a82 0%, #923b32 45%, #171314 46%, #050505 100%);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 18px 70px rgba(0,0,0,.58);
+    }
+    #dv-real-qc-prototype .exportVideoFrame:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 28%;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,.62));
+      pointer-events: none;
+    }
+    #dv-real-qc-prototype .exportVideoControls {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 14px;
+      z-index: 3;
+      display: grid;
+      gap: 10px;
+      color: #fff;
+      font-size: 13px;
+    }
+    #dv-real-qc-prototype .exportVideoControlTop { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+    #dv-real-qc-prototype .exportVideoProgress { height: 4px; border-radius: 999px; background: rgba(255,255,255,.24); position: relative; overflow: hidden; }
+    #dv-real-qc-prototype .exportVideoProgress:before { content: ""; position: absolute; inset: 0 auto 0 0; width: 19%; background: #fff; }
+    #dv-real-qc-prototype .exportSubtitleStage { position: absolute; inset: 0; z-index: 2; }
+    #dv-real-qc-prototype .exportSubtitleBar {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      width: max-content;
+      max-width: 82%;
+      color: #fff;
+      text-align: center;
+      white-space: pre-wrap;
+      font-weight: 700;
+      line-height: 1.25;
+      text-shadow: 1px 1px 4px rgba(0,0,0,.74);
+      border: 2px solid transparent;
+      border-radius: 3px;
+      padding: 2px 4px;
+      cursor: ns-resize;
+      user-select: none;
+      display: none;
+    }
+    #dv-real-qc-prototype .exportSubtitleBar.show { display: block; }
+    #dv-real-qc-prototype .exportSubtitleBar.active { border-color: #6c39e6; background: rgba(98,36,255,.08); }
+    #dv-real-qc-prototype .exportSubtitleBar.source { color: rgba(255,255,255,.92); opacity: .95; }
+    #dv-real-qc-prototype .exportConfigPanel {
+      min-width: 0;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      margin-right: -14px;
+      padding: 2px 34px 8px 0;
+      scrollbar-gutter: stable;
+      display: grid;
+      align-content: start;
+      gap: 14px;
+    }
+    #dv-real-qc-prototype .exportConfigPanel::-webkit-scrollbar { width: 6px; }
+    #dv-real-qc-prototype .exportConfigPanel::-webkit-scrollbar-track { background: rgba(255,255,255,.04); border-radius: 999px; }
+    #dv-real-qc-prototype .exportConfigPanel::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,.28);
+      border-radius: 999px;
+      border: 1px solid rgba(26,26,26,.95);
+      background-clip: padding-box;
+    }
+    #dv-real-qc-prototype .exportConfigPanel::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.42); }
+    #dv-real-qc-prototype .exportConfigHead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    #dv-real-qc-prototype .exportConfigHead h3 { margin: 0; font-size: 16px; font-weight: 700; color: var(--text-primary); }
+    #dv-real-qc-prototype .exportResetRow { grid-template-columns: minmax(0,1fr) 168px; }
+    #dv-real-qc-prototype .exportResetInline {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+    #dv-real-qc-prototype .exportReset {
+      height: 28px;
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 4px;
+      background: rgba(255,255,255,.04);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0 8px;
+      white-space: nowrap;
+    }
+    #dv-real-qc-prototype .exportReset:hover { color: #fff; border-color: rgba(255,255,255,.28); background: rgba(255,255,255,.08); }
+    #dv-real-qc-prototype .exportReset[disabled] { color: var(--text-disabled); cursor: not-allowed; }
+    #dv-real-qc-prototype .exportReset[disabled]:hover { color: var(--text-disabled); border-color: rgba(255,255,255,.1); background: rgba(255,255,255,.03); }
+    #dv-real-qc-prototype .exportSwitchList { display: grid; gap: 8px; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,.1); }
+    #dv-real-qc-prototype .exportSwitchItem,
+    #dv-real-qc-prototype .exportConfigRow {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 168px;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+    #dv-real-qc-prototype .exportConfigRow > span { min-width: 0; }
+    #dv-real-qc-prototype .exportSwitchItem small { display: block; color: var(--text-tertiary); font-size: 12px; margin-top: 2px; line-height: 1.45; }
+    #dv-real-qc-prototype .exportSwitch {
+      justify-self: end;
+      position: relative;
+      width: 46px;
+      height: 24px;
+      border-radius: 999px;
+      border: 0;
+      background: rgba(255,255,255,.22);
+      cursor: pointer;
+      transition: background .16s ease, opacity .16s ease;
+    }
+    #dv-real-qc-prototype .exportSwitch:before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform .16s ease;
+    }
+    #dv-real-qc-prototype .exportSwitch.on { background: var(--brand-purple); }
+    #dv-real-qc-prototype .exportSwitch.on:before { transform: translateX(22px); }
+    #dv-real-qc-prototype .exportSwitch[disabled] { opacity: .35; cursor: not-allowed; }
+    #dv-real-qc-prototype .exportTabs { display: none; grid-template-columns: 1fr 1fr; gap: 6px; padding: 3px; background: rgba(255,255,255,.06); border-radius: 6px; }
+    #dv-real-qc-prototype .exportTabs.show { display: grid; }
+    #dv-real-qc-prototype .exportTab {
+      height: 32px;
+      border: 0;
+      border-radius: 4px;
+      color: var(--text-tertiary);
+      background: transparent;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    #dv-real-qc-prototype .exportTab.active { color: #fff; background: rgba(98,36,255,.55); }
+    #dv-real-qc-prototype .exportConfigRows { display: grid; gap: 12px; }
+    #dv-real-qc-prototype .exportConfigRow.disabled { opacity: .45; }
+    #dv-real-qc-prototype .exportConfigInput,
+    #dv-real-qc-prototype .exportConfigSelect {
+      width: 168px;
+      height: 28px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 4px;
+      background: #111;
+      color: var(--text-primary);
+      padding: 0 8px;
+      outline: none;
+      justify-self: end;
+      color-scheme: dark;
+    }
+    #dv-real-qc-prototype .exportConfigSelect { text-overflow: ellipsis; }
+    #dv-real-qc-prototype .exportConfigInput:focus,
+    #dv-real-qc-prototype .exportConfigSelect:focus { border-color: #6c39e6; box-shadow: 0 0 0 2px rgba(98,36,255,.2); }
+    #dv-real-qc-prototype .exportConfigInput[disabled],
+    #dv-real-qc-prototype .exportConfigSelect[disabled] { opacity: .55; cursor: not-allowed; }
+    #dv-real-qc-prototype .exportInlineHint {
+      margin-top: -2px;
+      padding: 8px 10px;
+      border: 1px solid rgba(250,173,20,.24);
+      border-radius: 6px;
+      background: rgba(250,173,20,.08);
+      color: #ffd666;
+      font-size: 12px;
+      line-height: 1.45;
+      display: none;
+    }
+    #dv-real-qc-prototype .exportInlineHint.show { display: block; }
+    #dv-real-qc-prototype .exportConfirmGrid {
+      max-width: 660px;
+      height: 100%;
+      max-height: 100%;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    #dv-real-qc-prototype .exportConfirmSection {
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      background: rgba(255,255,255,.04);
+      padding: 14px 16px;
+    }
+    #dv-real-qc-prototype .exportConfirmSection h4 { margin: 0 0 10px; font-size: 15px; color: #fff; }
+    #dv-real-qc-prototype .exportConfirmRows { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 7px 18px; }
+    #dv-real-qc-prototype .exportConfirmRows span { color: var(--text-tertiary); }
+    #dv-real-qc-prototype .exportConfirmRows strong { color: var(--text-primary); font-weight: 500; }
+    #dv-real-qc-prototype .exportVideoFooter {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 20px;
+      border-top: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+    #dv-real-qc-prototype .exportFooterNote { color: var(--text-tertiary); font-size: 12px; }
+    #dv-real-qc-prototype .exportFooterActions { display: flex; align-items: center; gap: 10px; }
     #dv-real-qc-prototype .toast { position: absolute; left: 50%; top: 72px; transform: translateX(-50%); background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); padding: 10px 14px; display: none; align-items: center; gap: 12px; z-index: 14; box-shadow: 0 4px 16px rgba(0,0,0,.6); font-size: 13px; }
     #dv-real-qc-prototype .toastAction { border: 0; border-left: 1px solid rgba(255,255,255,.18); background: transparent; color: #b9a4ff; padding: 0 0 0 12px; cursor: pointer; font-size: 13px; font-weight: 500; }
     #dv-real-qc-prototype .toastAction:hover { color: #fff; }
@@ -1356,7 +1750,13 @@
         <button type="button" class="btnText">查找替换</button>
         <button type="button" class="btnText">发音纠正词典</button>
         <span class="saveStatus">已保存</span>
-        <button type="button" class="btnPrimary" id="primaryDoneBtn">导出</button>
+        <div class="exportActionWrap" id="exportActionWrap">
+          <button type="button" class="btnPrimary" id="primaryDoneBtn">导出</button>
+          <div class="exportSrtMenu" id="exportSrtMenu">
+            <button type="button" class="exportSrtItem" data-export-video="dubbing-mp4">配音后视频（.MP4）</button>
+            <button type="button" class="exportSrtItem" data-export-srt="target">译文字幕（.SRT）</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="mainContent">
@@ -1480,6 +1880,87 @@
         </div>
       </div>
     </div>
+    <div class="exportVideoMask" id="exportVideoMask" role="dialog" aria-modal="true" aria-labelledby="exportVideoTitle">
+      <div class="exportVideoDialog">
+        <div class="exportVideoHeader">
+          <div class="exportVideoTitle" id="exportVideoTitle">导出音视频配置</div>
+          <div class="exportSteps" aria-label="导出配置步骤">
+            <button type="button" class="exportStep" data-export-step="0"><span class="exportStepDot">✓</span><span class="exportStepTitle">字幕擦除</span><span class="exportStepDesc" id="exportStepEraseDesc">已擦除</span></button>
+            <button type="button" class="exportStep" data-export-step="1"><span class="exportStepDot">2</span><span class="exportStepTitle">添加硬字幕</span><span class="exportStepDesc" id="exportStepSubtitleDesc">启用</span></button>
+            <button type="button" class="exportStep" data-export-step="2"><span class="exportStepDot">3</span><span class="exportStepTitle">确认提交</span><span class="exportStepDesc"> </span></button>
+          </div>
+          <button type="button" class="exportVideoClose" id="exportVideoClose" aria-label="关闭">×</button>
+        </div>
+        <div class="exportVideoBody">
+          <div class="exportStepView" data-export-view="0">
+            <div class="exportPlaceholder">
+              <div>
+                <strong>字幕擦除</strong><br>
+                当前剧已在内容系统配置擦除任务，导出时将沿用已擦除结果。<br>
+                本原型聚焦第 2 步「添加硬字幕」配置。
+              </div>
+            </div>
+          </div>
+          <div class="exportStepView" data-export-view="1">
+            <div class="exportSubtitleLayout">
+              <div class="exportPreviewPanel">
+                <div class="exportVideoFrame" id="exportVideoFrame">
+                  <div class="exportSubtitleStage" id="exportSubtitleStage">
+                    <div class="exportSubtitleBar source" data-export-subtitle-bar="source">Life is like a game of chess</div>
+                    <div class="exportSubtitleBar target" data-export-subtitle-bar="target">الحياة مثل لعبة الشطرنج</div>
+                  </div>
+                  <div class="exportVideoControls">
+                    <div class="exportVideoControlTop"><span>▶　0:00 / 1:05</span><span>🔊　□</span></div>
+                    <div class="exportVideoProgress" aria-hidden="true"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="exportConfigPanel">
+                <div class="exportConfigHead">
+                  <h3>添加硬字幕</h3>
+                </div>
+                <div class="exportSwitchList">
+                  <label class="exportSwitchItem">
+                    <span>添加译文硬字幕<small>按译文字幕时间轴烧录目标语字幕</small></span>
+                    <button type="button" class="exportSwitch" data-export-enabled="target" aria-label="添加译文硬字幕"></button>
+                  </label>
+                  <label class="exportSwitchItem">
+                    <span>添加原文硬字幕<small>开启后与译文同屏展示，共用译文时间轴</small></span>
+                    <button type="button" class="exportSwitch" data-export-enabled="source" aria-label="添加原文硬字幕"></button>
+                  </label>
+                </div>
+                <div class="exportTabs" id="exportTabs">
+                  <button type="button" class="exportTab" data-export-tab="target">译文字幕</button>
+                  <button type="button" class="exportTab" data-export-tab="source">原文字幕</button>
+                </div>
+                <div class="exportInlineHint" id="exportDualHint">已开启原文字幕，双语硬字幕暂不支持智能切帧展示，系统已自动关闭。</div>
+                <div class="exportConfigRows">
+                  <div class="exportConfigRow exportResetRow"><span>恢复默认</span><span class="exportResetInline"><button type="button" class="exportReset" id="exportResetActive">译文恢复</button></span></div>
+                  <label class="exportConfigRow"><span>字号</span><input class="exportConfigInput" data-export-field="fontSize" type="number" min="2" max="200" step="1"></label>
+                  <label class="exportConfigRow"><span>字间距</span><input class="exportConfigInput" data-export-field="letterSpacing" type="number" min="-10" max="20" step="1"></label>
+                  <label class="exportConfigRow"><span>换行长度</span><input class="exportConfigInput" data-export-field="lineLength" type="number" min="10" max="200" step="1"></label>
+                  <label class="exportConfigRow" id="exportSmartCutRow"><span>智能切帧展示</span><button type="button" class="exportSwitch" id="exportSmartCutSwitch" aria-label="智能切帧展示"></button></label>
+                  <label class="exportConfigRow" id="exportMaxLinesRow"><span>单帧最大行数</span><select class="exportConfigSelect" id="exportMaxLines"><option value="1">1 行</option><option value="2">2 行</option><option value="3">3 行</option></select></label>
+                  <label class="exportConfigRow"><span>仅限空格处允许换行</span><button type="button" class="exportSwitch" data-export-space-wrap aria-label="仅限空格处允许换行"></button></label>
+                  <label class="exportConfigRow"><span>字体</span><select class="exportConfigSelect" data-export-field="font"></select></label>
+                  <label class="exportConfigRow"><span>字幕位置（距底部）%</span><input class="exportConfigInput" data-export-field="position" type="number" min="0" max="100" step="0.01"></label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="exportStepView" data-export-view="2">
+            <div class="exportConfirmGrid" id="exportConfirmGrid"></div>
+          </div>
+        </div>
+        <div class="exportVideoFooter">
+          <div class="exportFooterNote" id="exportFooterNote">本次配置仅用于导出音视频任务，可在提交前继续调整</div>
+          <div class="exportFooterActions">
+            <button type="button" class="btnGhost" id="exportPrev">← 上一步</button>
+            <button type="button" class="btnPrimary" id="exportNext">下一步 →</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="aiFeedbackMask" id="aiFeedbackMask" role="dialog" aria-modal="true" aria-labelledby="aiFeedbackTitle">
       <div class="aiFeedbackDialog" id="aiFeedbackDialog">
         <div class="aiFeedbackHeader">
@@ -1552,6 +2033,22 @@
       const voiceBatchBar = root.querySelector('#voiceBatchBar');
       const headerActions = root.querySelector('.headerActions');
       const primaryDoneBtn = root.querySelector('#primaryDoneBtn');
+      const exportActionWrap = root.querySelector('#exportActionWrap');
+      const openExportVideoBtn = root.querySelector('#primaryDoneBtn');
+      const exportVideoMask = root.querySelector('#exportVideoMask');
+      const exportStepButtons = Array.from(root.querySelectorAll('[data-export-step]'));
+      const exportStepViews = Array.from(root.querySelectorAll('[data-export-view]'));
+      const exportTabs = root.querySelector('#exportTabs');
+      const exportDualHint = root.querySelector('#exportDualHint');
+      const exportSmartCutRow = root.querySelector('#exportSmartCutRow');
+      const exportMaxLinesRow = root.querySelector('#exportMaxLinesRow');
+      const exportSmartCutSwitch = root.querySelector('#exportSmartCutSwitch');
+      const exportMaxLines = root.querySelector('#exportMaxLines');
+      const exportConfirmGrid = root.querySelector('#exportConfirmGrid');
+      const exportFooterNote = root.querySelector('#exportFooterNote');
+      const exportPrev = root.querySelector('#exportPrev');
+      const exportNext = root.querySelector('#exportNext');
+      const exportVideoFrame = root.querySelector('#exportVideoFrame');
       const completeTranslationReviewBtn = root.querySelector('#completeTranslationReview');
       const timelineAddWrap = root.querySelector('#timelineAddWrap');
       const timelineDeleteBtn = root.querySelector('#timelineDeleteBtn');
@@ -1668,6 +2165,22 @@
       let draftSourceSubtitleStyle = { ...savedSourceSubtitleStyle };
       let savedSourceSubtitleEnabled = false;
       let draftSourceSubtitleEnabled = false;
+      const exportDefaults = {
+        target: { ...subtitleStyleDefaults[currentSubtitleLanguage.code], position:31.5, lineLength:22, sample:'الحياة مثل لعبة الشطرنج', label:'字幕译文' },
+        source: { ...subtitleStyleDefaults.en, position:43, lineLength:28, sample:'Life is like a game of chess', label:'字幕原文' }
+      };
+      let exportSubtitleConfig = {
+        eraseEnabled: true,
+        targetEnabled: true,
+        sourceEnabled: false,
+        smartCut: false,
+        maxLines: 3,
+        target: { ...exportDefaults.target },
+        source: { ...exportDefaults.source }
+      };
+      let exportStep = 1;
+      let exportActiveTab = 'target';
+      let exportDrag = null;
       let subtitleStyleActiveTab = 'target';
       let reviewSubmitCompleted = false;
       let reviewSubmitSubmitting = false;
@@ -1899,6 +2412,192 @@
         savedSourceSubtitleEnabled = !!draftSourceSubtitleEnabled;
         closeSubtitleStyleDialog();
         showToast(savedSourceSubtitleEnabled ? '双语硬字幕样式已应用至编辑器预览' : '字幕样式与单帧最大行数已应用至编辑器预览');
+      }
+      function activeExportStyleKey(){
+        return exportActiveTab === 'source' && exportSubtitleConfig.sourceEnabled ? 'source' : 'target';
+      }
+      function getActiveExportStyle(){
+        const key = activeExportStyleKey();
+        exportSubtitleConfig[key] = normalizeSubtitleStyle(exportSubtitleConfig[key]);
+        return exportSubtitleConfig[key];
+      }
+      function renderExportBar(kind){
+        const bar = root.querySelector('[data-export-subtitle-bar="'+kind+'"]');
+        const enabled = kind === 'target' ? exportSubtitleConfig.targetEnabled : exportSubtitleConfig.sourceEnabled;
+        const style = normalizeSubtitleStyle(exportSubtitleConfig[kind]);
+        if(!bar) return;
+        bar.classList.toggle('show', !!enabled);
+        bar.classList.toggle('active', activeExportStyleKey() === kind);
+        bar.textContent = style.sample;
+        bar.dir = style.dir || 'ltr';
+        bar.style.bottom = style.position + '%';
+        bar.style.fontFamily = fontFamilyFromFile(style.font);
+        bar.style.fontSize = Math.max(13, Math.min(36, style.fontSize * 0.38)) + 'px';
+        bar.style.letterSpacing = (style.letterSpacing * 0.22) + 'px';
+        bar.style.maxWidth = 'min(82%, ' + Math.max(12, style.lineLength) + 'ch)';
+      }
+      function renderExportConfirm(){
+        function section(title, enabled, style){
+          if(!enabled) return '';
+          const s = normalizeSubtitleStyle(style);
+          return '<div class="exportConfirmSection"><h4>'+esc(title)+'</h4><div class="exportConfirmRows">'
+            + '<div><span>字号：</span><strong>'+s.fontSize+'</strong></div>'
+            + '<div><span>字间距：</span><strong>'+s.letterSpacing+'</strong></div>'
+            + '<div><span>换行长度：</span><strong>'+s.lineLength+'</strong></div>'
+            + '<div><span>仅限空格处允许换行：</span><strong>'+(s.spaceWrap ? '是' : '否')+'</strong></div>'
+            + '<div><span>字体：</span><strong>'+esc(s.font)+'</strong></div>'
+            + '<div><span>字幕位置：</span><strong>'+s.position+'%</strong></div>'
+            + '</div></div>';
+        }
+        const dual = exportSubtitleConfig.targetEnabled && exportSubtitleConfig.sourceEnabled;
+        const smartCutText = dual ? '不支持（双语已置灰）' : (exportSubtitleConfig.smartCut ? '开启' : '关闭');
+        const maxLinesText = exportSubtitleConfig.smartCut && !dual ? exportSubtitleConfig.maxLines + ' 行' : '不生效';
+        const html = [
+          '<div class="exportConfirmSection"><h4>字幕擦除</h4><div class="exportConfirmRows"><div><span>状态：</span><strong>已擦除</strong></div><div><span>来源：</span><strong>内容系统配置</strong></div></div></div>',
+          '<div class="exportConfirmSection"><h4>硬字幕渲染</h4><div class="exportConfirmRows">'
+            + '<div><span>添加译文硬字幕：</span><strong>'+(exportSubtitleConfig.targetEnabled ? '启用' : '关闭')+'</strong></div>'
+            + '<div><span>添加原文硬字幕：</span><strong>'+(exportSubtitleConfig.sourceEnabled ? '启用' : '关闭')+'</strong></div>'
+            + '<div><span>智能切帧展示：</span><strong>'+smartCutText+'</strong></div>'
+            + '<div><span>单帧最大行数：</span><strong>'+maxLinesText+'</strong></div>'
+            + '<div><span>时间轴规则：</span><strong>'+(dual ? '原文与译文共用译文时间轴' : '使用译文时间轴')+'</strong></div>'
+            + '</div></div>',
+          section('译文硬字幕', exportSubtitleConfig.targetEnabled, exportSubtitleConfig.target),
+          section('原文硬字幕', exportSubtitleConfig.sourceEnabled, exportSubtitleConfig.source)
+        ].filter(Boolean).join('');
+        exportConfirmGrid.innerHTML = html || '<div class="exportPlaceholder">未启用任何导出处理</div>';
+      }
+      function renderExportDialog(){
+        if(!exportSubtitleConfig.targetEnabled){
+          exportSubtitleConfig.sourceEnabled = false;
+          exportActiveTab = 'target';
+        }
+        if(exportSubtitleConfig.sourceEnabled){
+          exportSubtitleConfig.smartCut = false;
+        } else if(exportActiveTab === 'source') {
+          exportActiveTab = 'target';
+        }
+        const dual = exportSubtitleConfig.targetEnabled && exportSubtitleConfig.sourceEnabled;
+        exportStepButtons.forEach((btn, index) => {
+          btn.classList.toggle('active', index === exportStep);
+          btn.classList.toggle('done', index < exportStep);
+        });
+        exportStepViews.forEach(view => {
+          view.classList.toggle('active', Number(view.dataset.exportView) === exportStep);
+        });
+        root.querySelector('#exportStepSubtitleDesc').textContent = exportSubtitleConfig.targetEnabled ? (dual ? '双语' : '启用') : '关闭';
+        exportTabs.classList.toggle('show', dual);
+        root.querySelectorAll('[data-export-tab]').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.exportTab === activeExportStyleKey());
+        });
+        const targetSwitch = root.querySelector('[data-export-enabled="target"]');
+        const sourceSwitch = root.querySelector('[data-export-enabled="source"]');
+        const resetActiveBtn = root.querySelector('#exportResetActive');
+        targetSwitch.classList.toggle('on', exportSubtitleConfig.targetEnabled);
+        sourceSwitch.classList.toggle('on', exportSubtitleConfig.sourceEnabled);
+        sourceSwitch.disabled = !exportSubtitleConfig.targetEnabled;
+        resetActiveBtn.disabled = !exportSubtitleConfig.targetEnabled;
+        resetActiveBtn.textContent = dual
+          ? (activeExportStyleKey() === 'source' ? '原文默认' : '译文默认')
+          : '译文恢复';
+        exportDualHint.classList.toggle('show', dual);
+        exportSmartCutRow.classList.toggle('disabled', dual);
+        exportMaxLinesRow.classList.toggle('disabled', dual || !exportSubtitleConfig.smartCut);
+        exportSmartCutSwitch.classList.toggle('on', exportSubtitleConfig.smartCut);
+        exportSmartCutSwitch.disabled = dual;
+        exportMaxLines.disabled = dual || !exportSubtitleConfig.smartCut;
+        exportMaxLines.value = exportSubtitleConfig.maxLines;
+        const activeStyle = getActiveExportStyle();
+        root.querySelectorAll('[data-export-field]').forEach(field => {
+          const key = field.dataset.exportField;
+          if(key === 'font'){
+            field.innerHTML = fontOptions.map(font => '<option value="'+esc(font)+'">'+esc(font)+'</option>').join('');
+          }
+          field.value = activeStyle[key];
+        });
+        const spaceSwitch = root.querySelector('[data-export-space-wrap]');
+        spaceSwitch.classList.toggle('on', !!activeStyle.spaceWrap);
+        renderExportBar('source');
+        renderExportBar('target');
+        if(exportStep === 2) renderExportConfirm();
+        exportPrev.disabled = exportStep === 0;
+        exportNext.textContent = exportStep === 2 ? '提交合成任务' : '下一步 →';
+        exportFooterNote.textContent = dual
+          ? '双语硬字幕共用译文时间轴；智能切帧展示与单帧最大行数已置灰'
+          : '本次配置仅用于导出音视频任务，可在提交前继续调整';
+      }
+      function openExportDialog(){
+        exportStep = 1;
+        exportActiveTab = exportSubtitleConfig.sourceEnabled ? 'target' : 'target';
+        renderExportDialog();
+        exportVideoMask.style.display = 'flex';
+      }
+      function closeExportDialog(){
+        exportVideoMask.style.display = 'none';
+        exportDrag = null;
+      }
+      function updateExportFieldFromInput(input){
+        if(!input || !input.dataset.exportField) return;
+        const key = input.dataset.exportField;
+        const styleKey = activeExportStyleKey();
+        const rawValue = input.value;
+        exportSubtitleConfig[styleKey] = normalizeSubtitleStyle({
+          ...exportSubtitleConfig[styleKey],
+          [key]: key === 'font' ? rawValue : Number(rawValue)
+        });
+        renderExportDialog();
+      }
+      function resetExportStyleByKey(key){
+        if(key === 'source' && !exportSubtitleConfig.sourceEnabled) return;
+        exportSubtitleConfig[key] = { ...exportDefaults[key] };
+        exportActiveTab = key;
+        renderExportDialog();
+        showToast((key === 'source' ? '原文' : '译文') + '字幕样式已恢复默认');
+      }
+      function setExportSourceEnabled(enabled){
+        if(enabled && !exportSubtitleConfig.targetEnabled) return;
+        const wasOff = !exportSubtitleConfig.sourceEnabled;
+        exportSubtitleConfig.sourceEnabled = enabled;
+        if(enabled){
+          exportSubtitleConfig.smartCut = false;
+          exportActiveTab = 'source';
+        } else {
+          exportActiveTab = 'target';
+        }
+        renderExportDialog();
+        if(enabled && wasOff){
+          showToast('已开启原文字幕，双语硬字幕暂不支持智能切帧展示，系统已自动关闭。');
+        }
+      }
+      function beginExportSubtitleDrag(event){
+        const bar = event.target.closest('[data-export-subtitle-bar]');
+        if(!bar || !exportVideoMask.contains(bar)) return false;
+        const kind = bar.dataset.exportSubtitleBar;
+        const enabled = kind === 'target' ? exportSubtitleConfig.targetEnabled : exportSubtitleConfig.sourceEnabled;
+        if(!enabled) return false;
+        event.preventDefault();
+        event.stopPropagation();
+        exportActiveTab = kind;
+        exportDrag = {
+          kind,
+          startY: event.clientY,
+          startPosition: normalizeSubtitleStyle(exportSubtitleConfig[kind]).position
+        };
+        renderExportDialog();
+        return true;
+      }
+      function updateExportSubtitleDrag(event){
+        if(!exportDrag) return;
+        const rect = exportVideoFrame.getBoundingClientRect();
+        const dy = ((event.clientY - exportDrag.startY) / Math.max(1, rect.height)) * 100;
+        const next = Math.round(clampNum(exportDrag.startPosition - dy, 4, 96) * 100) / 100;
+        exportSubtitleConfig[exportDrag.kind] = normalizeSubtitleStyle({
+          ...exportSubtitleConfig[exportDrag.kind],
+          position: next
+        });
+        renderExportDialog();
+      }
+      function endExportSubtitleDrag(){
+        exportDrag = null;
       }
       function segNo(segId){ return String(segId).replace('s',''); }
       function diffPair(before, after){
@@ -2204,6 +2903,7 @@
           ? '<button type="button" class="btnGhost" id="batchRetranslate">批量重翻</button><button type="button" class="btnGhost" id="batchRedub">批量重新配音</button><button type="button" class="btnGhost demoFailBtn" id="ttsFailureDemo">TTS失败示例</button>'
           : '<button type="button" class="btnGhost" id="batchRetranslate">批量重翻</button>';
         primaryDoneBtn.textContent = isDubbingStage() ? '导出' : '完成校对';
+        exportActionWrap.classList.toggle('hasMenu', isDubbingStage());
         completeTranslationReviewBtn.style.display = ['翻译','配音'].includes(currentStage) ? '' : 'none';
         completeTranslationReviewBtn.title = '提交后将标记当前集' + currentStage + '校对完成';
         completeTranslationReviewBtn.disabled = reviewSubmitCompleted || reviewSubmitSubmitting;
@@ -3023,16 +3723,20 @@
       function openModal(title,text,confirm,fn){ root.querySelector('#modalTitle').textContent=title; root.querySelector('#modalText').textContent=text; root.querySelector('#modalConfirm').textContent=confirm; pending=fn; modal.style.display='flex'; }
       function closeModal(){ pending=null; modal.style.display='none'; }
       root.addEventListener('pointerdown', e=>{
+        if(beginExportSubtitleDrag(e)) return;
         beginTimelineDrag(e);
       });
       window.addEventListener('pointermove', e=>{
+        updateExportSubtitleDrag(e);
         updateTimelineDrag(e);
       });
       window.addEventListener('pointerup', ()=>{
+        endExportSubtitleDrag();
         endTimelineDrag();
       });
       root.addEventListener('input', e=>{
         if(e.target.closest('#subtitleStyleMask')) syncSubtitleStyleDraftFromForm();
+        if(e.target.closest('#exportVideoMask')) updateExportFieldFromInput(e.target);
         if(e.target.closest('#aiFeedbackMask')) aiFeedbackError.textContent = '';
       });
       root.addEventListener('change', e=>{
@@ -3046,6 +3750,11 @@
         }
         if(e.target.closest('#subtitleStyleMask')) syncSubtitleStyleDraftFromForm();
         if(e.target === styleSmartCut || e.target === styleMaxLines) fillSubtitleStyleForm();
+        if(e.target.closest('#exportVideoMask')) updateExportFieldFromInput(e.target);
+        if(e.target === exportMaxLines){
+          exportSubtitleConfig.maxLines = Number(exportMaxLines.value);
+          renderExportDialog();
+        }
         const audioCheck = e.target.closest('[data-audio-regen-check]');
         if(audioCheck){
           const item = getAudioRegenItem(audioCheck.dataset.audioRegenCheck);
@@ -3088,6 +3797,88 @@
         }
         if(e.target.closest('#aiFeedbackApply')){
           saveAiFeedback(true);
+          return;
+        }
+        const exportSrt = e.target.closest('[data-export-srt]');
+        if(exportSrt){
+          showToast('已导出' + exportSrt.textContent.trim());
+          return;
+        }
+        const exportVideoItem = e.target.closest('[data-export-video]');
+        if(exportVideoItem){
+          openExportDialog();
+          return;
+        }
+        if(e.target.closest('#openExportVideo') || e.target.closest('#primaryDoneBtn')){
+          if(isDubbingStage()) openExportDialog();
+          else completeTranslationReview();
+          return;
+        }
+        if(e.target.closest('#exportVideoClose')){
+          closeExportDialog();
+          return;
+        }
+        if(e.target === exportVideoMask){
+          closeExportDialog();
+          return;
+        }
+        const exportStepBtn = e.target.closest('[data-export-step]');
+        if(exportStepBtn){
+          exportStep = Number(exportStepBtn.dataset.exportStep);
+          renderExportDialog();
+          return;
+        }
+        const exportTabBtn = e.target.closest('[data-export-tab]');
+        if(exportTabBtn){
+          exportActiveTab = exportTabBtn.dataset.exportTab;
+          renderExportDialog();
+          return;
+        }
+        const exportEnabledBtn = e.target.closest('[data-export-enabled]');
+        if(exportEnabledBtn){
+          const key = exportEnabledBtn.dataset.exportEnabled;
+          if(key === 'target'){
+            exportSubtitleConfig.targetEnabled = !exportSubtitleConfig.targetEnabled;
+            if(!exportSubtitleConfig.targetEnabled) exportSubtitleConfig.sourceEnabled = false;
+            renderExportDialog();
+          } else {
+            setExportSourceEnabled(!exportSubtitleConfig.sourceEnabled);
+          }
+          return;
+        }
+        if(e.target.closest('#exportSmartCutSwitch')){
+          if(!exportSubtitleConfig.sourceEnabled){
+            exportSubtitleConfig.smartCut = !exportSubtitleConfig.smartCut;
+            renderExportDialog();
+          }
+          return;
+        }
+        if(e.target.closest('[data-export-space-wrap]')){
+          const key = activeExportStyleKey();
+          exportSubtitleConfig[key] = normalizeSubtitleStyle({
+            ...exportSubtitleConfig[key],
+            spaceWrap: !exportSubtitleConfig[key].spaceWrap
+          });
+          renderExportDialog();
+          return;
+        }
+        if(e.target.closest('#exportResetActive')){
+          resetExportStyleByKey(activeExportStyleKey());
+          return;
+        }
+        if(e.target.closest('#exportPrev')){
+          exportStep = Math.max(0, exportStep - 1);
+          renderExportDialog();
+          return;
+        }
+        if(e.target.closest('#exportNext')){
+          if(exportStep < 2){
+            exportStep += 1;
+            renderExportDialog();
+          } else {
+            closeExportDialog();
+            showToast(exportSubtitleConfig.sourceEnabled ? '已提交双语硬字幕配音后视频导出任务' : '已提交译文硬字幕配音后视频导出任务');
+          }
           return;
         }
         if(e.target.closest('#toastAction') && toastAction){
