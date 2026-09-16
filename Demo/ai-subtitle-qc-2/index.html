@@ -634,8 +634,14 @@
     #dv-real-qc-prototype .targetPlayBtn:hover { color: rgba(255,255,255,.92); background: rgba(128,128,128,.2); }
     #dv-real-qc-prototype .targetPlayIcon { width: 14px; height: 14px; display: block; fill: currentColor; transform: translateX(1px); }
     #dv-real-qc-prototype .placeholderText { color: var(--text-tertiary); font-weight: 400; }
-    #dv-real-qc-prototype .aiFeedbackTool { color: #ffd666; }
-    #dv-real-qc-prototype .aiFeedbackTool.saved { color: #95de64; }
+    #dv-real-qc-prototype .aiFeedbackTool,
+    #dv-real-qc-prototype .aiFeedbackTool.saved { color: rgba(255,255,255,.82); }
+    #dv-real-qc-prototype .aiFeedbackTool.warning {
+      color: #ffd666;
+      background: rgba(250,173,20,.1);
+      box-shadow: inset 0 0 0 1px rgba(250,173,20,.35);
+      border-radius: 4px;
+    }
     #dv-real-qc-prototype .audioInlineSelect {
       display: inline-flex;
       align-items: center;
@@ -1058,6 +1064,34 @@
     #dv-real-qc-prototype .aiFeedbackField { display: grid; gap: 7px; min-width: 0; }
     #dv-real-qc-prototype .aiFeedbackField.full { grid-column: 1 / -1; }
     #dv-real-qc-prototype .aiFeedbackField label { color: var(--text-secondary); font-size: 13px; }
+    #dv-real-qc-prototype .aiFeedbackFieldHeader { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0; }
+    #dv-real-qc-prototype .aiFeedbackFieldHeader label { flex-shrink: 0; }
+    #dv-real-qc-prototype .aiFeedbackFieldHint {
+      display: none;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex: 1 1 auto;
+      min-width: 0;
+      color: #ffd666;
+      font-size: 12px;
+      line-height: 1.4;
+      text-align: right;
+    }
+    #dv-real-qc-prototype .aiFeedbackFieldHint.show { display: inline-flex; }
+    #dv-real-qc-prototype .aiFeedbackFieldHint button {
+      height: 24px;
+      border: 1px solid rgba(250,173,20,.38);
+      border-radius: 4px;
+      background: rgba(250,173,20,.1);
+      color: #ffd666;
+      padding: 0 8px;
+      cursor: pointer;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    #dv-real-qc-prototype .aiFeedbackFieldHint button:hover { background: rgba(250,173,20,.18); border-color: rgba(250,173,20,.58); }
+    #dv-real-qc-prototype .aiFeedbackDialog.readonly .aiFeedbackFieldHint button { display: none; }
     #dv-real-qc-prototype .aiFeedbackRequired:after { content: "*"; color: #ff7875; margin-left: 3px; }
     #dv-real-qc-prototype .aiFeedbackStatic,
     #dv-real-qc-prototype .aiFeedbackInput,
@@ -1075,6 +1109,11 @@
     #dv-real-qc-prototype .aiFeedbackInput { height: 34px; padding: 0 10px; }
     #dv-real-qc-prototype .aiFeedbackTextarea { min-height: 86px; resize: vertical; padding: 9px 11px; }
     #dv-real-qc-prototype .aiFeedbackCompareText { height: 116px; min-height: 116px; }
+    #dv-real-qc-prototype .aiFeedbackTextarea.feedbackChanged {
+      border-color: rgba(250,173,20,.46);
+      background: rgba(250,173,20,.08);
+      box-shadow: inset 0 0 0 1px rgba(250,173,20,.1);
+    }
     #dv-real-qc-prototype .aiFeedbackTextarea:focus,
     #dv-real-qc-prototype .aiFeedbackInput:focus { outline: none; border-color: rgba(139,92,246,.72); box-shadow: 0 0 0 2px rgba(139,92,246,.18); }
     #dv-real-qc-prototype .aiFeedbackTags { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -1973,7 +2012,7 @@
           <div class="aiFeedbackGrid">
             <div class="aiFeedbackField full"><label>原文</label><div class="aiFeedbackStatic" id="aiFeedbackSource"></div></div>
             <div class="aiFeedbackField"><label>问题AI译文</label><div class="aiFeedbackStatic aiFeedbackCompareText" id="aiFeedbackAiText"></div></div>
-            <div class="aiFeedbackField"><label class="aiFeedbackRequired">正确译文</label><textarea class="aiFeedbackTextarea aiFeedbackCompareText" id="aiFeedbackHumanText" rows="4"></textarea></div>
+            <div class="aiFeedbackField"><div class="aiFeedbackFieldHeader"><label class="aiFeedbackRequired">正确译文</label><span class="aiFeedbackFieldHint" id="aiFeedbackCurrentTextHint">译文已变更，可使用最新译文<button type="button" id="aiFeedbackUseCurrent">使用最新译文</button></span></div><textarea class="aiFeedbackTextarea aiFeedbackCompareText" id="aiFeedbackHumanText" rows="4"></textarea></div>
             <div class="aiFeedbackField"><label class="aiFeedbackRequired">AI译文评分</label><input class="aiFeedbackInput" id="aiFeedbackAiScore" type="number" min="0" max="100" step="1" placeholder="0-100"></div>
             <div class="aiFeedbackField"><label class="aiFeedbackRequired">正确译文评分</label><input class="aiFeedbackInput" id="aiFeedbackHumanScore" type="number" min="0" max="100" step="1" value="90"></div>
             <div class="aiFeedbackField full"><label class="aiFeedbackRequired">问题标签</label><div class="aiFeedbackTags" id="aiFeedbackTagList"></div></div>
@@ -1984,6 +2023,7 @@
           <div class="aiFeedbackFooterNote">点击「完成校对」后，已保存的反馈将不可再修改</div>
           <div class="aiFeedbackFooterActions">
             <button type="button" class="btnGhost" id="aiFeedbackCancel">取消</button>
+            <button type="button" class="btnGhost" id="aiFeedbackSave">保存反馈</button>
             <button type="button" class="btnPrimary" id="aiFeedbackApply">保存反馈并应用译文</button>
           </div>
         </div>
@@ -2034,6 +2074,7 @@
       const headerActions = root.querySelector('.headerActions');
       const primaryDoneBtn = root.querySelector('#primaryDoneBtn');
       const exportActionWrap = root.querySelector('#exportActionWrap');
+      const exportSrtMenu = root.querySelector('#exportSrtMenu');
       const openExportVideoBtn = root.querySelector('#primaryDoneBtn');
       const exportVideoMask = root.querySelector('#exportVideoMask');
       const exportStepButtons = Array.from(root.querySelectorAll('[data-export-step]'));
@@ -2102,6 +2143,7 @@
       const aiFeedbackTagList = root.querySelector('#aiFeedbackTagList');
       const aiFeedbackReason = root.querySelector('#aiFeedbackReason');
       const aiFeedbackError = root.querySelector('#aiFeedbackError');
+      const aiFeedbackCurrentTextHint = root.querySelector('#aiFeedbackCurrentTextHint');
       let selectedGroup = '字幕文本规范';
       let activeIssue = 'q1';
       let expandedGroups = new Set(['字幕文本规范']);
@@ -2206,7 +2248,7 @@
       const feedbackTagOptions = ['语义偏移','漏译/多译','语气不符','人设不符','口语自然度差','称谓/关系错误','文化表达不地道','上下文理解错误','专有名词/术语错误','标点/格式问题'];
       const segments = [
         { id:'s1', speaker:'Elsie', cls:'third', group:'1', time:'00:00:02,240 - 00:00:03,600', source:'Life is like a game of chess', target:'الحياة مثل لعبة الشطرنج', aiText:'الحياة تشبه لعبة شطرنج', aiSource:'初始AI译文', defaultFeedbackReason:'注意保留“棋局/博弈”的隐喻，不要译成普通游戏。', voice:{ checked:true, selected:0, old:'原音频 00:00:01,360', candidates:[{name:'候选 1',dur:'00:00:01,420',speed:'1.00x',status:'ready',progress:'58%'},{name:'候选 2',dur:'00:00:01,510',speed:'1.08x',status:'ready',progress:'44%'},{name:'候选 3',dur:'00:00:01,390',speed:'0.96x',status:'ready',progress:'66%'}]} },
-        { id:'s2', speaker:'Elsie', cls:'third', group:'1', time:'00:00:04,679 - 00:00:06,120', source:'and we are both players in it', target:'ونحن اللاعبان فيها', aiText:'ونحن كلاهما لاعبان فيها', aiSource:'初始AI译文', voice:{ checked:true, selected:0, old:'原音频 00:00:01,441', candidates:[{name:'候选 1',dur:'00:00:01,510',speed:'1.00x',status:'ready',progress:'52%'},{name:'候选 2',dur:'00:00:01,630',speed:'1.12x',status:'ready',progress:'49%'},{name:'候选 3',dur:'--',speed:'--',status:'failed',progress:'0%',failureType:'TTS_SAFETY_BLOCKED',error:'Gemini 安全拦截：文本触发安全策略'}]} },
+        { id:'s2', speaker:'Elsie', cls:'third', group:'1', time:'00:00:04,679 - 00:00:06,120', source:'and we are both players in it', target:'ونحن اللاعبان فيها الآن', aiText:'ونحن كلاهما لاعبان فيها', aiSource:'初始AI译文', aiFeedback:{ aiText:'ونحن كلاهما لاعبان فيها', aiSource:'初始AI译文', humanText:'ونحن اللاعبان فيها', aiScore:62, humanScore:90, tags:['语义偏移','口语自然度差'], reason:'AI译文表达不够自然，正确译文已调整为更符合口语的表达。' }, voice:{ checked:true, selected:0, old:'原音频 00:00:01,441', candidates:[{name:'候选 1',dur:'00:00:01,510',speed:'1.00x',status:'ready',progress:'52%'},{name:'候选 2',dur:'00:00:01,630',speed:'1.12x',status:'ready',progress:'49%'},{name:'候选 3',dur:'--',speed:'--',status:'failed',progress:'0%',failureType:'TTS_SAFETY_BLOCKED',error:'Gemini 安全拦截：文本触发安全策略'}]} },
         { id:'s3', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:07,040 - 00:00:08,278', source:'If we leave the past behind...', target:'إذا تركنا الماضي خلفنا،', aiText:'إذا تركنا الماضي وراءنا...', aiSource:'AI润色初始译文', voice:{ checked:false, selected:0, old:'原音频 00:00:01,238', candidates:[{name:'候选 1',dur:'00:00:01,320',speed:'1.00x',status:'ready',progress:'42%'},{name:'候选 2',dur:'00:00:01,280',speed:'0.98x',status:'ready',progress:'40%'},{name:'候选 3',dur:'00:00:01,470',speed:'1.16x',status:'ready',progress:'61%'}]} },
         { id:'s4', speaker:'Aidan Rowe', cls:'alt', group:'3', time:'00:00:13,519 - 00:00:15,198', source:'W-what... what do you want?!', target:'ماذا تريد؟', aiText:'ماذا تريد؟', aiSource:'初始AI译文', feedbackBlocked:'mergeSplit', defaultFeedbackReason:'保留惊慌语气，避免译文过于平铺直叙。' },
         { id:'s5', speaker:'Claire Carter', cls:'', group:'2', time:'00:00:18,399 - 00:00:18,879', source:'elsie.', target:'إلسي.', feedbackBlocked:'importedSrt' },
@@ -2902,8 +2944,12 @@
         headerActions.innerHTML = isDubbingStage()
           ? '<button type="button" class="btnGhost" id="batchRetranslate">批量重翻</button><button type="button" class="btnGhost" id="batchRedub">批量重新配音</button><button type="button" class="btnGhost demoFailBtn" id="ttsFailureDemo">TTS失败示例</button>'
           : '<button type="button" class="btnGhost" id="batchRetranslate">批量重翻</button>';
-        primaryDoneBtn.textContent = isDubbingStage() ? '导出' : '完成校对';
-        exportActionWrap.classList.toggle('hasMenu', isDubbingStage());
+        primaryDoneBtn.textContent = isDubbingStage() ? '导出' : '导出SRT';
+        primaryDoneBtn.title = isDubbingStage() ? '导出音视频' : '悬浮选择导出原文或译文SRT';
+        exportSrtMenu.innerHTML = isDubbingStage()
+          ? '<button type="button" class="exportSrtItem" data-export-video="dubbing-mp4">配音后视频（.MP4）</button><button type="button" class="exportSrtItem" data-export-srt="target">译文字幕（.SRT）</button>'
+          : '<button type="button" class="exportSrtItem" data-export-srt="source">原文字幕（英语 .SRT）</button><button type="button" class="exportSrtItem" data-export-srt="target">译文字幕（阿拉伯语 .SRT）</button>';
+        exportActionWrap.classList.add('hasMenu');
         completeTranslationReviewBtn.style.display = ['翻译','配音'].includes(currentStage) ? '' : 'none';
         completeTranslationReviewBtn.title = '提交后将标记当前集' + currentStage + '校对完成';
         completeTranslationReviewBtn.disabled = reviewSubmitCompleted || reviewSubmitSubmitting;
@@ -3564,15 +3610,22 @@
         if(!seg.aiText) return '当前段落无可追溯的AI译文产出，暂不支持提交AI译文反馈';
         return '';
       }
+      function normalizeFeedbackText(text){
+        return String(text || '').replace(/\s+/g, ' ').trim();
+      }
+      function isAiFeedbackTextChanged(seg){
+        return !!seg.aiFeedback && normalizeFeedbackText(seg.target) !== normalizeFeedbackText(seg.aiFeedback.humanText);
+      }
       function renderAiFeedbackEntry(seg){
         if(isDubbingStage()) return '';
         const saved = !!seg.aiFeedback;
         const reason = aiFeedbackDisabledReason(seg);
         const disabled = reason && !saved;
-        const label = saved ? '已反馈' : 'AI译文反馈';
         const locked = saved && (reviewSubmitCompleted || seg.aiFeedback.locked);
-        const title = locked ? '当前集已完成校对，AI译文反馈已提交，暂不支持修改' : (saved ? '查看或修改已保存的AI译文反馈' : reason || '提交该段AI译文badcase用于模型优化');
-        return '<button type="button" class="segmentTool aiFeedbackTool '+(saved?'saved':'')+'" data-ai-feedback="'+seg.id+'" title="'+esc(title)+'" '+(disabled?'disabled':'')+'>'+antToolbarIcon('record')+label+'</button>';
+        const changed = saved && !locked && isAiFeedbackTextChanged(seg);
+        const label = changed ? '已反馈 · 有更新' : (saved ? '已反馈' : 'AI译文反馈');
+        const title = locked ? '当前集已完成校对，AI译文反馈已提交，暂不支持修改' : (changed ? '译文变更，请检查是否需要重新保存反馈' : (saved ? '查看或修改已保存的AI译文反馈' : reason || '提交该段AI译文badcase用于模型优化'));
+        return '<button type="button" class="segmentTool aiFeedbackTool '+(saved?'saved ':'')+(changed?'warning':'')+'" data-ai-feedback="'+seg.id+'" title="'+esc(title)+'" '+(disabled?'disabled':'')+'>'+antToolbarIcon('record')+label+'</button>';
       }
       function renderFeedbackTags(readonly){
         aiFeedbackTagList.innerHTML = feedbackTagOptions.map(tag => '<button type="button" class="aiFeedbackTag '+(feedbackDraftTags.includes(tag)?'selected':'')+'" data-feedback-tag="'+esc(tag)+'" '+(readonly?'disabled':'')+'>'+esc(tag)+'</button>').join('');
@@ -3585,11 +3638,14 @@
         activeFeedbackSegmentId = segId;
         const data = seg.aiFeedback || {};
         const readonly = reviewSubmitCompleted || !!data.locked;
+        const textChanged = isAiFeedbackTextChanged(seg);
         feedbackDraftTags = [...(data.tags || [])];
         aiFeedbackDialog.classList.toggle('readonly', readonly);
         aiFeedbackSegmentNo.textContent = '第 ' + segNo(seg.id) + ' 段';
         aiFeedbackAiSource.textContent = data.aiSource || seg.aiSource || '初始AI译文';
         aiFeedbackLockNotice.style.display = readonly ? 'block' : 'none';
+        aiFeedbackCurrentTextHint.classList.toggle('show', textChanged && !readonly);
+        aiFeedbackHumanText.classList.toggle('feedbackChanged', textChanged && !readonly);
         aiFeedbackSource.textContent = seg.source || '空字幕段';
         aiFeedbackAiText.textContent = data.aiText || seg.aiText || '无可追溯AI译文';
         aiFeedbackHumanText.value = data.humanText || seg.target || '';
@@ -3601,6 +3657,7 @@
         aiFeedbackAiScore.disabled = readonly;
         aiFeedbackHumanScore.disabled = readonly;
         aiFeedbackReason.disabled = readonly;
+        root.querySelector('#aiFeedbackSave').style.display = readonly ? 'none' : '';
         root.querySelector('#aiFeedbackApply').style.display = readonly ? 'none' : '';
         root.querySelector('#aiFeedbackCancel').textContent = readonly ? '关闭' : '取消';
         renderFeedbackTags(readonly);
@@ -3795,6 +3852,21 @@
           renderFeedbackTags(reviewSubmitCompleted);
           return;
         }
+        if(e.target.closest('#aiFeedbackUseCurrent')){
+          const seg = segments.find(s => s.id === activeFeedbackSegmentId);
+          if(seg){
+            aiFeedbackHumanText.value = seg.target || '';
+            aiFeedbackHumanText.classList.remove('feedbackChanged');
+            aiFeedbackCurrentTextHint.classList.remove('show');
+            aiFeedbackHumanText.focus();
+            aiFeedbackError.textContent = '';
+          }
+          return;
+        }
+        if(e.target.closest('#aiFeedbackSave')){
+          saveAiFeedback(false);
+          return;
+        }
         if(e.target.closest('#aiFeedbackApply')){
           saveAiFeedback(true);
           return;
@@ -3811,7 +3883,7 @@
         }
         if(e.target.closest('#openExportVideo') || e.target.closest('#primaryDoneBtn')){
           if(isDubbingStage()) openExportDialog();
-          else completeTranslationReview();
+          else primaryDoneBtn.blur();
           return;
         }
         if(e.target.closest('#exportVideoClose')){
