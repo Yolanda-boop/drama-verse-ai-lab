@@ -6,16 +6,16 @@
   <title>AI质量迭代平台一期原型</title>
   <style>
     :root {
-      --bg: #f6f7fb;
+      --bg: #f5f6fa;
       --panel: #ffffff;
-      --panel-soft: #fafbff;
-      --line: #e6e8ef;
-      --line-strong: #d9dce8;
-      --text: #202333;
-      --text-sub: #6f7585;
+      --panel-soft: #f8f9fd;
+      --line: #e8ebf2;
+      --line-strong: #d5d9e6;
+      --text: #1f2433;
+      --text-sub: #626a7c;
       --text-faint: #9aa1ad;
-      --primary: #615ced;
-      --primary-soft: #efeeff;
+      --primary: #5b5ce2;
+      --primary-soft: #f0f0ff;
       --blue: #2f7cf6;
       --blue-soft: #edf4ff;
       --green: #18a058;
@@ -24,7 +24,7 @@
       --orange-soft: #fff6e6;
       --red: #d84242;
       --red-soft: #fff0f0;
-      --shadow: 0 12px 36px rgba(27, 31, 54, 0.08);
+      --shadow: 0 14px 40px rgba(25, 30, 50, 0.10);
       --radius: 8px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
       color: var(--text);
@@ -39,6 +39,7 @@
       margin: 0;
       min-width: 1180px;
       background: var(--bg);
+      font-size: 13px;
     }
 
     button,
@@ -55,7 +56,7 @@
     }
 
     .sidebar {
-      background: #171a2b;
+      background: linear-gradient(180deg, #171a2b 0%, #121527 100%);
       color: #c9cde0;
       padding: 18px 14px;
     }
@@ -65,26 +66,52 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 0 10px 16px;
+      padding: 0 10px 14px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       margin-bottom: 14px;
     }
 
     .brand-mark {
-      width: 28px;
-      height: 28px;
-      border-radius: 7px;
-      background: linear-gradient(135deg, #817cff, #41b8ff);
-      display: grid;
-      place-items: center;
-      color: #fff;
-      font-weight: 600;
+      position: relative;
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background:
+        radial-gradient(circle at 72% 28%, rgba(255,255,255,0.92) 0 2px, transparent 3px),
+        linear-gradient(135deg, #7c74ff 0%, #4e8cff 55%, #33c6d8 100%);
+      box-shadow: 0 8px 18px rgba(72, 105, 255, 0.32), inset 0 1px 0 rgba(255,255,255,0.35);
+      flex: 0 0 auto;
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.86);
+    }
+
+    .brand-mark::before {
+      width: 14px;
+      height: 3px;
+      left: 8px;
+      top: 13px;
+      transform: rotate(-36deg);
+    }
+
+    .brand-mark::after {
+      width: 8px;
+      height: 3px;
+      left: 12px;
+      top: 16px;
+      transform: rotate(38deg);
     }
 
     .brand-title {
       font-size: 15px;
       font-weight: 600;
       color: #fff;
+      line-height: 30px;
     }
 
     .menu-label {
@@ -114,7 +141,8 @@
 
     .menu-btn.active {
       color: #fff;
-      background: rgba(97, 92, 237, 0.25);
+      background: rgba(91, 92, 226, 0.26);
+      box-shadow: inset 3px 0 0 rgba(255, 255, 255, 0.76);
     }
 
     .menu-dot {
@@ -132,7 +160,7 @@
     }
 
     .topbar {
-      height: 58px;
+      height: 56px;
       background: var(--panel);
       border-bottom: 1px solid var(--line);
       padding: 0 24px;
@@ -166,7 +194,7 @@
     }
 
     .content {
-      padding: 18px 22px 28px;
+      padding: 20px 24px 30px;
       min-width: 0;
     }
 
@@ -183,13 +211,13 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     h1 {
       font-size: 20px;
       margin: 0 0 6px;
-      font-weight: 600;
+      font-weight: 650;
       letter-spacing: 0;
     }
 
@@ -207,18 +235,20 @@
     }
 
     .btn {
-      height: 32px;
+      height: 34px;
       border-radius: 6px;
       border: 1px solid var(--line-strong);
       background: var(--panel);
       color: var(--text);
-      padding: 0 12px;
+      padding: 0 13px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
       cursor: pointer;
       white-space: nowrap;
+      font-size: 13px;
+      transition: background .16s ease, border-color .16s ease, color .16s ease, box-shadow .16s ease;
     }
 
     .btn:hover {
@@ -226,10 +256,24 @@
       background: #fafbff;
     }
 
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      background: #f3f4f8;
+      color: var(--text-faint);
+      border-color: var(--line-strong);
+    }
+
     .btn.primary {
       border-color: var(--primary);
       background: var(--primary);
       color: #fff;
+      box-shadow: 0 4px 12px rgba(91, 92, 226, 0.22);
+    }
+
+    .btn.primary:hover {
+      background: #4e50d0;
+      border-color: #4e50d0;
     }
 
     .btn.text {
@@ -249,16 +293,16 @@
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      box-shadow: 0 1px 0 rgba(27, 31, 54, 0.02);
+      box-shadow: 0 1px 2px rgba(27, 31, 54, 0.03);
     }
 
     .filters {
-      padding: 14px;
+      padding: 16px;
       display: grid;
       grid-template-columns: repeat(5, minmax(150px, 1fr)) auto;
-      gap: 12px;
-      align-items: end;
-      margin-bottom: 14px;
+      gap: 14px 12px;
+      align-items: start;
+      margin-bottom: 16px;
     }
 
     .field {
@@ -271,6 +315,7 @@
     label {
       color: var(--text-sub);
       font-size: 12px;
+      font-weight: 500;
     }
 
     input,
@@ -281,12 +326,23 @@
       color: var(--text);
       background: #fff;
       outline: none;
+      transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
     }
 
     input,
     select {
-      height: 32px;
-      padding: 0 10px;
+      height: 34px;
+      padding: 0 11px;
+      width: 100%;
+    }
+
+    select {
+      padding-right: 30px;
+      background-image: linear-gradient(45deg, transparent 50%, #8b93a7 50%), linear-gradient(135deg, #8b93a7 50%, transparent 50%);
+      background-position: calc(100% - 16px) 14px, calc(100% - 10px) 14px;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      appearance: none;
     }
 
     textarea {
@@ -365,6 +421,81 @@
       align-items: center;
     }
 
+    .multi-select {
+      position: relative;
+      min-width: 0;
+    }
+
+    .multi-select summary {
+      height: 34px;
+      list-style: none;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 11px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .multi-select summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .multi-select summary::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-right: 1.5px solid #8b93a7;
+      border-bottom: 1.5px solid #8b93a7;
+      transform: rotate(45deg) translateY(-2px);
+      flex: 0 0 auto;
+    }
+
+    .multi-select[open] summary {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(91, 92, 226, 0.12);
+    }
+
+    .multi-options {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      z-index: 30;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .multi-option {
+      height: 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 8px;
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .multi-option:hover {
+      background: var(--panel-soft);
+    }
+
+    .multi-option input {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--primary);
+    }
+
     .select-col {
       display: none;
     }
@@ -436,8 +567,8 @@
     }
 
     .panel-head {
-      height: 46px;
-      padding: 0 14px;
+      min-height: 46px;
+      padding: 0 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -451,6 +582,7 @@
 
     .table-wrap {
       overflow: auto;
+      border-radius: 0 0 var(--radius) var(--radius);
     }
 
     table {
@@ -463,20 +595,24 @@
     th,
     td {
       border-bottom: 1px solid var(--line);
-      padding: 11px 12px;
+      padding: 10px 12px;
       text-align: left;
       vertical-align: top;
     }
 
     th {
       color: var(--text-sub);
-      font-weight: 500;
-      background: #fafbff;
+      font-weight: 600;
+      background: #f8f9fd;
       white-space: nowrap;
     }
 
     td {
       color: var(--text);
+    }
+
+    tbody tr:hover td {
+      background: #fbfcff;
     }
 
     .truncate {
@@ -497,6 +633,7 @@
       color: var(--text-sub);
       border: 1px solid var(--line);
       white-space: nowrap;
+      font-weight: 500;
     }
 
     .tag.green {
@@ -723,6 +860,10 @@
 
     .form-grid .full {
       grid-column: 1 / -1;
+    }
+
+    .dataset-join-modal .field {
+      gap: 8px;
     }
 
     .tabs {
@@ -1000,11 +1141,8 @@
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
-        <div class="brand-mark">AI</div>
-        <div>
-          <div class="brand-title">AI质量迭代平台</div>
-          <div class="text-small" style="font-size:12px;color:#8f96ad;">V2.2.0 一期</div>
-        </div>
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-title">AI质量迭代平台</div>
       </div>
 
       <div class="menu-label">样本与数据</div>
@@ -1021,29 +1159,6 @@
       </header>
 
       <section class="content">
-        <div class="summary-grid">
-          <div class="stat">
-            <div class="stat-label">问题样本总量</div>
-            <div class="stat-value">12,846</div>
-            <div class="stat-hint">来自 Drama Verse AI译文反馈</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">可用数据集</div>
-            <div class="stat-value">18</div>
-            <div class="stat-hint">含在线生成与本地导入</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">优化任务</div>
-            <div class="stat-value">7</div>
-            <div class="stat-hint">3 个任务已完成裁判打分</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">当前覆盖语向</div>
-            <div class="stat-value">6</div>
-            <div class="stat-hint">仅覆盖翻译系统提示词</div>
-          </div>
-        </div>
-
         <section class="page active" id="page-samples">
           <div class="page-head">
             <div>
@@ -1087,13 +1202,15 @@
             </div>
             <div class="field">
               <label>问题类型</label>
-              <select>
-                <option>全部</option>
-                <option>语义偏移</option>
-                <option>漏译/多译</option>
-                <option>专有名词/术语错误</option>
-                <option>口语自然度差</option>
-              </select>
+              <details class="multi-select">
+                <summary>全部</summary>
+                <div class="multi-options">
+                  <label class="multi-option"><input type="checkbox" />语义偏移</label>
+                  <label class="multi-option"><input type="checkbox" />漏译/多译</label>
+                  <label class="multi-option"><input type="checkbox" />专有名词/术语错误</label>
+                  <label class="multi-option"><input type="checkbox" />口语自然度差</label>
+                </div>
+              </details>
             </div>
             <div class="field">
               <label>AI译文来源</label>
@@ -1375,41 +1492,99 @@
             </div>
           </div>
 
-          <div class="filters" style="grid-template-columns: repeat(4, minmax(150px, 1fr)) auto;">
+          <div class="filters" style="grid-template-columns: repeat(5, minmax(150px, 1fr));">
                 <div class="field">
-                  <label>任务名称 / ID</label>
-                  <input placeholder="输入任务名称或ID" />
+                  <label>任务 ID</label>
+                  <input placeholder="精确搜索任务ID" />
                 </div>
                 <div class="field">
-                  <label>目标语向</label>
+                  <label>任务名称</label>
+                  <input placeholder="输入任务名称" />
+                </div>
+                <div class="field">
+                  <label>优化对象</label>
                   <select>
                     <option>全部</option>
-                    <option>英语 → 西语</option>
-                    <option>英语 → 阿语</option>
+                    <option>集字幕翻译系统提示词</option>
                   </select>
                 </div>
                 <div class="field">
-                  <label>优化状态</label>
+                  <label>原始语言</label>
                   <select>
                     <option>全部</option>
-                    <option>待执行</option>
-                    <option>优化中</option>
-                    <option>优化成功</option>
-                    <option>优化失败</option>
-                    <option>已中止</option>
+                    <option>英语</option>
+                    <option>中文</option>
+                    <option>西语</option>
+                    <option>阿语</option>
                   </select>
+                </div>
+                <div class="field">
+                  <label>目标语言</label>
+                  <select>
+                    <option>全部</option>
+                    <option>西语</option>
+                    <option>阿语</option>
+                    <option>英语</option>
+                    <option>葡语</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>训练集</label>
+                  <select>
+                    <option>全部</option>
+                    <option>DS-1028 英语AI剧口语自然度问题样本 / v3</option>
+                    <option>DS-1027 英语AI剧口语自然度问题样本 / v2</option>
+                    <option>DS-1019 阿语专有名词一致性问题样本 / v1</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>基座模型</label>
+                  <input placeholder="输入模型名称" />
+                </div>
+                <div class="field">
+                  <label>原提示词版本</label>
+                  <input placeholder="如 prompt-v4" />
+                </div>
+                <div class="field">
+                  <label>生成状态</label>
+                  <details class="multi-select">
+                    <summary>全部</summary>
+                    <div class="multi-options">
+                      <label class="multi-option"><input type="checkbox" />待生成</label>
+                      <label class="multi-option"><input type="checkbox" />生成中</label>
+                      <label class="multi-option"><input type="checkbox" />生成成功</label>
+                      <label class="multi-option"><input type="checkbox" />生成失败</label>
+                      <label class="multi-option"><input type="checkbox" />已中止</label>
+                    </div>
+                  </details>
                 </div>
                 <div class="field">
                   <label>裁判打分状态</label>
-                  <select>
-                    <option>全部</option>
-                    <option>未发起</option>
-                    <option>评分中</option>
-                    <option>评分完成</option>
-                    <option>评分失败</option>
-                  </select>
+                  <details class="multi-select">
+                    <summary>全部</summary>
+                    <div class="multi-options">
+                      <label class="multi-option"><input type="checkbox" />未发起</label>
+                      <label class="multi-option"><input type="checkbox" />评分中</label>
+                      <label class="multi-option"><input type="checkbox" />评分完成</label>
+                      <label class="multi-option"><input type="checkbox" />评分失败</label>
+                    </div>
+                  </details>
                 </div>
-                <button class="btn primary">查询</button>
+                <div class="field">
+                  <label>创建时间</label>
+                  <div class="range-pair">
+                    <input type="date" />
+                    <span>-</span>
+                    <input type="date" />
+                  </div>
+                </div>
+                <div class="field">
+                  <label>&nbsp;</label>
+                  <div class="filter-actions">
+                    <button class="btn primary">查询</button>
+                    <button class="btn">重置</button>
+                  </div>
+                </div>
           </div>
 
           <div class="panel">
@@ -1424,10 +1599,10 @@
                         <th>任务 ID</th>
                         <th>任务名称</th>
                         <th>目标语向</th>
-                        <th>数据集</th>
+                        <th>训练集</th>
                         <th>基座模型</th>
                         <th>原提示词版本</th>
-                        <th>优化状态</th>
+                        <th>生成状态</th>
                         <th>裁判打分</th>
                         <th>操作</th>
                       </tr>
@@ -1440,7 +1615,7 @@
                         <td>DS-1028 / v3</td>
                         <td>claude-opus-5</td>
                         <td>prompt-v4</td>
-                        <td><span class="tag green">优化成功</span></td>
+                        <td><span class="tag green">生成成功</span></td>
                         <td><span class="tag green">评分完成</span></td>
                         <td><button class="btn text" data-open-drawer="task" data-score-state="complete">详情</button></td>
                       </tr>
@@ -1451,7 +1626,7 @@
                         <td>DS-1019 / v1</td>
                         <td>gpt-5.6-sol</td>
                         <td>prompt-v3</td>
-                        <td><span class="tag orange">优化中</span></td>
+                        <td><span class="tag orange">生成中</span></td>
                         <td><span class="tag">未发起</span></td>
                         <td><button class="btn text" data-open-drawer="task" data-score-state="empty">详情</button></td>
                       </tr>
@@ -1462,7 +1637,7 @@
                         <td>DS-1027 / v2</td>
                         <td>claude-opus-5</td>
                         <td>prompt-v4</td>
-                        <td><span class="tag red fail-tag" data-reason="模型调用超时，未能生成优化后候选提示词。">优化失败</span></td>
+                        <td><span class="tag red fail-tag" data-reason="模型调用超时，未能生成优化后候选提示词。">生成失败</span></td>
                         <td><span class="tag">未发起</span></td>
                         <td><button class="btn text" data-open-drawer="task" data-score-state="empty">详情</button><button class="btn text retry-btn" data-retry="optimize">重试</button></td>
                       </tr>
@@ -1473,7 +1648,7 @@
                         <td>DS-1019 / v1</td>
                         <td>gpt-5.6-sol</td>
                         <td>prompt-v3</td>
-                        <td><span class="tag green">优化成功</span></td>
+                        <td><span class="tag green">生成成功</span></td>
                         <td><span class="tag red fail-tag" data-reason="裁判服务返回异常，部分样本未完成评分。">评分失败</span></td>
                         <td><button class="btn text" data-open-drawer="task" data-score-state="empty">详情</button><button class="btn text retry-btn" data-retry="score">重试</button></td>
                       </tr>
@@ -1692,6 +1867,9 @@
           <button class="tab-btn" data-tab="prompt">提示词结果</button>
           <button class="tab-btn" data-tab="score">裁判打分</button>
           <div class="tab-actions">
+            <span id="publishCandidateTip">
+              <button class="btn primary" id="publishCandidateBtn">发布新候选提示词</button>
+            </span>
             <button class="btn export-score-btn">导出评分结果</button>
           </div>
         </div>
@@ -1699,32 +1877,63 @@
         <div class="tab-panel active" id="tab-info">
           <div class="task-stage">
             <div class="stage-card active">
-              <div class="stage-title">1. 选择数据集</div>
+              <div class="stage-title">1. 选择训练集</div>
               <div class="stage-sub">DS-1028 / v3，1,280 条样本</div>
             </div>
             <div class="stage-card active">
-              <div class="stage-title">2. 编辑提示词</div>
-              <div class="stage-sub">基于线上 prompt-v4 人工调整</div>
+              <div class="stage-title">2. 编辑元提示词</div>
+              <div class="stage-sub">提示词前缀 + 训练集 + 提示词后缀</div>
             </div>
             <div class="stage-card active">
               <div class="stage-title">3. 生成候选</div>
-              <div class="stage-sub">V1 仅生成 1 个候选提示词</div>
+              <div class="stage-sub">生成成功，V1 仅生成 1 个候选提示词</div>
             </div>
             <div class="stage-card active">
               <div class="stage-title">4. 裁判打分</div>
               <div class="stage-sub">评分完成，可查看详细数据</div>
             </div>
           </div>
-          <div class="panel">
-            <div class="panel-head"><div class="panel-title">任务字段</div></div>
+          <div class="panel" style="margin-bottom:14px;">
+            <div class="panel-head"><div class="panel-title">任务信息</div></div>
             <div class="table-wrap">
-              <table>
+              <table style="min-width: 980px;">
                 <tbody>
-                  <tr><th>任务名称</th><td>英译西口语自然度优化</td><th>目标语向</th><td>英语 → 西语</td></tr>
-                  <tr><th>基座模型</th><td>claude-opus-5</td><th>原提示词版本</th><td>prompt-v4</td></tr>
-                  <tr><th>优化状态</th><td><span class="tag green">优化成功</span></td><th>裁判打分状态</th><td><span class="tag green" id="scoreStatusTag">评分完成</span></td></tr>
+                  <tr><th>任务 ID</th><td>OPT-2409-018</td><th>任务名称</th><td>英译西口语自然度优化</td></tr>
+                  <tr><th>优化对象</th><td>集字幕翻译系统提示词</td><th>语向</th><td>英语 → 西语</td></tr>
+                  <tr><th>训练集</th><td>DS-1028 / 英语AI剧口语自然度问题样本 / v3</td><th>样本数量</th><td>1,280</td></tr>
+                  <tr><th>基座模型</th><td>claude-opus-5</td><th>线上提示词版本</th><td>prompt-v4</td></tr>
+                  <tr><th>生成状态</th><td><span class="tag green">生成成功</span></td><th>裁判打分状态</th><td><span class="tag green" id="scoreStatusTag">评分完成</span></td></tr>
+                  <tr><th>创建人</th><td>Yolanda</td><th>创建时间</th><td>2026-09-08 10:42</td></tr>
+                  <tr><th>更新时间</th><td>2026-09-08 18:20</td><th>备注</th><td>重点优化口语自然度和角色语气</td></tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">元提示词</div>
+              <div class="btn-row">
+                <button class="btn" id="metaPreviewBtn">渲染预览</button>
+                <button class="btn" id="metaSourceBtn">查看源码</button>
+              </div>
+            </div>
+            <div class="prompt-card" style="border:0;border-radius:0;">
+              <pre id="metaPromptPreview">提示词前缀：
+你是短剧字幕翻译专家。本次优化目标是提升英语到西语字幕翻译的口语自然度、角色语气一致性和本地化表达。
+
+调用训练集：
+DS-1028 英语AI剧口语自然度问题样本 / v3
+
+提示词后缀：
+请重点关注反问、挑衅、讽刺等情绪表达，避免机械直译；保持专有名词一致，并控制译文长度适合移动端字幕阅读。</pre>
+              <pre id="metaPromptSource" style="display:none;">## prompt_prefix
+你是短剧字幕翻译专家。本次优化目标是提升英语到西语字幕翻译的口语自然度、角色语气一致性和本地化表达。
+
+## dataset
+DS-1028 / v3
+
+## prompt_suffix
+请重点关注反问、挑衅、讽刺等情绪表达，避免机械直译；保持专有名词一致，并控制译文长度适合移动端字幕阅读。</pre>
             </div>
           </div>
         </div>
@@ -1759,34 +1968,33 @@
             <div>裁判打分中，请稍后查看评分结果</div>
           </div>
           <div id="scoreResultContent">
-          <div class="score-hero">
-            <div class="score-card">
-              <div class="stat-label">初步结论</div>
-              <div class="score-main">+26.9</div>
-              <div class="desc">【全剧整体评估】译文 1 - 译文 0。10 个维度中 9 个维度持平或领先。</div>
+          <div class="panel" style="margin-bottom:14px;">
+            <div class="panel-head">
+              <div class="panel-title">指标看板</div>
             </div>
-            <div class="score-card">
-              <div class="stat-label">候选版本胜率</div>
-              <div class="stat-value">100%</div>
-              <div class="bar"><span style="width:100%"></span></div>
-              <div class="stat-hint">译文 1（候选版本）胜场 20 / 全部 20</div>
-            </div>
-            <div class="score-card">
-              <div class="stat-label">共识度</div>
-              <div class="stat-value">100%</div>
-              <div class="bar"><span style="width:100%"></span></div>
-              <div class="stat-hint">≥3 名裁判认为候选版本 ≥ 线上版本</div>
-            </div>
-            <div class="score-card">
-              <div class="stat-label">落后维度</div>
-              <div class="stat-value" style="font-size:16px;color:var(--orange);">CPS/时长/字符数</div>
-              <div class="stat-hint">候选提示词需要继续控制译文长度</div>
+            <div class="table-wrap">
+              <table style="min-width: 640px;">
+                <thead>
+                  <tr>
+                    <th>指标</th>
+                    <th>当前结果</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>优化后胜出样本数</td><td>20</td></tr>
+                  <tr><td>线上胜出样本数</td><td>0</td></tr>
+                  <tr><td>平局样本数</td><td>0</td></tr>
+                  <tr><td>优化后胜率</td><td>100%</td></tr>
+                  <tr><td>共识度</td><td>100%</td></tr>
+                  <tr><td>有效评分样本数</td><td>20</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
           <div class="panel" style="margin-bottom:14px;">
             <div class="panel-head">
-              <div class="panel-title">评分维度</div>
+              <div class="panel-title">各维度评分</div>
               <span class="tag">译文 0：线上版本 / 译文 1：候选版本</span>
             </div>
             <div style="padding:4px 14px;">
@@ -1827,6 +2035,36 @@
 
           <div class="panel" style="margin-bottom:14px;">
             <div class="panel-head">
+              <div class="panel-title">胜率</div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>维度</th>
+                    <th>裁判组全员均分</th>
+                    <th>胜场 0 : 1</th>
+                    <th>多数共识次数</th>
+                    <th>4裁判</th>
+                    <th>3裁判</th>
+                    <th>2裁判</th>
+                    <th>1裁判</th>
+                    <th>0裁判</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>全剧整体评估</td><td>56.9 : 83.8</td><td>0 : 20</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>CPS/时长/字符数</td><td>69.8 : 61.8</td><td>13 : 7</td><td>1</td><td>0</td><td>1</td><td>2</td><td>0</td><td>2</td></tr>
+                  <tr><td>合并拆分/语序/标点/大小写</td><td>57.6 : 82.1</td><td>1 : 19</td><td>5</td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>信息完整/无冗余</td><td>61.6 : 87.2</td><td>0 : 20</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>语气/情绪/人设</td><td>65.0 : 85.5</td><td>1 : 19</td><td>5</td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-bottom:14px;">
+            <div class="panel-head">
               <div class="panel-title">共识度</div>
               <span class="tag">统计每部剧中认可候选版本的裁判数量分布</span>
             </div>
@@ -1862,29 +2100,42 @@
 
           <div class="panel">
             <div class="panel-head">
-              <div class="panel-title">胜率</div>
+              <div class="panel-title">测试集明细数据</div>
+              <span class="tag">支持查看样本级明细</span>
             </div>
             <div class="table-wrap">
-              <table>
+              <table style="min-width: 1120px;">
                 <thead>
                   <tr>
-                    <th>维度</th>
-                    <th>裁判组全员均分</th>
-                    <th>胜场 0 : 1</th>
-                    <th>多数共识次数</th>
-                    <th>4裁判</th>
-                    <th>3裁判</th>
-                    <th>2裁判</th>
-                    <th>1裁判</th>
-                    <th>0裁判</th>
+                    <th>剧 ID / 剧名</th>
+                    <th>集序号</th>
+                    <th>原文</th>
+                    <th>线上版本译文</th>
+                    <th>候选提示词译文</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>全剧整体评估</td><td>56.9 : 83.8</td><td>0 : 20</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-                  <tr><td>CPS/时长/字符数</td><td>69.8 : 61.8</td><td>13 : 7</td><td>1</td><td>0</td><td>1</td><td>2</td><td>0</td><td>2</td></tr>
-                  <tr><td>合并拆分/语序/标点/大小写</td><td>57.6 : 82.1</td><td>1 : 19</td><td>5</td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
-                  <tr><td>信息完整/无冗余</td><td>61.6 : 87.2</td><td>0 : 20</td><td>5</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-                  <tr><td>语气/情绪/人设</td><td>65.0 : 85.5</td><td>1 : 19</td><td>5</td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                  <tr>
+                    <td>B-10086 / Queen's Bet</td>
+                    <td>1</td>
+                    <td class="truncate">You think I came here to beg?</td>
+                    <td class="truncate">¿Crees que vine aquí a rogar?</td>
+                    <td class="truncate">¿De verdad crees que vine a suplicarte?</td>
+                  </tr>
+                  <tr>
+                    <td>B-10086 / Queen's Bet</td>
+                    <td>2</td>
+                    <td class="truncate">The Silver Court will never forgive this.</td>
+                    <td class="truncate">La corte plateada nunca perdonará esto.</td>
+                    <td class="truncate">La Corte de Plata jamás perdonará esto.</td>
+                  </tr>
+                  <tr>
+                    <td>B-10432 / Night Contract</td>
+                    <td>1</td>
+                    <td class="truncate">Say that again, and I walk out.</td>
+                    <td class="truncate">Di eso otra vez y salgo.</td>
+                    <td class="truncate">Vuelve a decirlo y me largo.</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -1896,7 +2147,7 @@
   </div>
 
   <div class="modal-mask" id="datasetFromSamples">
-    <div class="modal">
+    <div class="modal dataset-join-modal">
       <div class="modal-head">
         <div class="modal-title">加入数据集</div>
         <button class="close" data-close>&times;</button>
@@ -1905,18 +2156,26 @@
         <div class="form-grid">
           <div class="field">
             <label>处理方式</label>
-            <select>
+            <select id="datasetJoinMode">
               <option>新建数据集</option>
               <option>加入已有数据集</option>
             </select>
           </div>
-          <div class="field">
+          <div class="field" id="newDatasetNameField">
             <label>数据集名称</label>
-            <input value="英语AI剧口语自然度问题样本" />
+            <input id="newDatasetNameInput" placeholder="请输入数据集名称" />
+          </div>
+          <div class="field" id="existingDatasetNameField" style="display:none;">
+            <label>数据集名称</label>
+            <select id="existingDatasetNameSelect">
+              <option data-version="v3">英语AI剧口语自然度问题样本</option>
+              <option data-version="v2">英译西术语翻译修正样本</option>
+              <option data-version="v1">阿语专有名词一致性问题样本</option>
+            </select>
           </div>
           <div class="field">
             <label>版本号</label>
-            <input readonly value="系统自动生成 v4" />
+            <input id="datasetVersionInput" readonly value="系统自动生成" />
           </div>
           <div class="field">
             <label>样本数量</label>
@@ -1927,6 +2186,81 @@
       <div class="modal-foot">
         <button class="btn" data-close>取消</button>
         <button class="btn primary" data-confirm>确认加入</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="scoreConfigModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">发起裁判打分</div>
+        <button class="close" data-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field full">
+            <label>本地导入来源</label>
+            <label class="upload-area">
+              <span>
+                <span class="upload-title">点击选择或拖拽上传 zip 包</span>
+                <span class="upload-sub">必填，作为本次裁判打分输入</span>
+              </span>
+              <span class="btn">选择文件</span>
+              <input class="file-native" type="file" accept=".zip" required />
+            </label>
+          </div>
+          <div class="field full">
+            <label>裁判打分模型</label>
+            <input required value="claude-opus-5" />
+          </div>
+          <div class="field full">
+            <label>备注</label>
+            <textarea placeholder="非必填，可补充本次裁判打分说明"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" data-close>取消</button>
+        <button class="btn primary" data-confirm>确认发起</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="publishCandidateModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title">发布新候选提示词</div>
+        <button class="close" data-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="notice" style="margin-bottom:14px;">
+          确认发布后，该候选提示词将作为当前语向线上提示词版本。后续创建同语向提示词优化任务时，将默认读取该版本号。
+        </div>
+        <div class="detail-grid" style="margin-bottom:14px;">
+          <div class="detail-item">
+            <div class="detail-label">原始语言</div>
+            <div class="detail-value">英语</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">目标语言</div>
+            <div class="detail-value">西语</div>
+          </div>
+          <div class="detail-item full">
+            <div class="detail-label">本次裁判打分结果</div>
+            <div class="detail-value">优化后胜出样本数 20，线上胜出样本数 0，平局样本数 0，优化后胜率 100%，共识度 100%，有效评分样本数 20。</div>
+          </div>
+          <div class="detail-item full">
+            <div class="detail-label">提示词内容</div>
+            <details class="prompt-card" open>
+              <summary style="padding:10px 12px;cursor:pointer;font-size:13px;font-weight:600;">展开查看即将发布的候选系统提示词完整内容</summary>
+              <pre>你是面向短剧本地化的字幕翻译专家。翻译时优先保证角色语气、关系称谓和口语自然度；遇到反问、挑衅、讽刺等情绪表达时，不要机械直译。请结合上下文保持专有名词一致，并控制译文长度适合移动端字幕阅读。</pre>
+            </details>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" data-close>取消</button>
+        <button class="btn primary" data-confirm>确认发布</button>
       </div>
     </div>
   </div>
@@ -1945,7 +2279,7 @@
           </div>
           <div class="field">
             <label>版本号</label>
-            <input readonly value="系统自动生成 v1" />
+            <input readonly value="自增生成 v1" />
           </div>
           <div class="field full">
             <label>描述</label>
@@ -2042,6 +2376,7 @@
           <div class="field">
             <label>目标语言</label>
             <select required>
+              <option selected value="">请选择目标语言</option>
               <option>西语</option>
               <option>阿语</option>
               <option>英语</option>
@@ -2049,7 +2384,13 @@
             </select>
           </div>
           <div class="field">
-            <label>数据集</label>
+            <label>优化对象</label>
+            <select required>
+              <option selected>集字幕翻译系统提示词</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>训练集</label>
             <select>
               <option>DS-1028 英语AI剧口语自然度问题样本 / v3</option>
               <option>DS-1027 英语AI剧口语自然度问题样本 / v2</option>
@@ -2057,19 +2398,19 @@
           </div>
           <div class="field">
             <label>基座模型</label>
-            <input readonly value="claude-opus-5" />
+            <input value="claude-opus-5" />
           </div>
           <div class="field">
-            <label>当前线上提示词版本</label>
+            <label>线上提示词版本</label>
             <input readonly value="prompt-v4" />
           </div>
           <div class="field full">
-            <label>提示词</label>
-            <textarea>你是短剧字幕翻译专家。请保持剧情语义准确，译文自然流畅，并控制字幕长度适合移动端阅读。请重点优化：角色语气、反问表达、称谓关系、口语自然度。</textarea>
+            <label>提示词前缀</label>
+            <textarea>你是短剧字幕翻译专家。本次优化目标是提升英语到西语字幕翻译的口语自然度、角色语气一致性和本地化表达。请基于训练集中的原文、AI译文、正确译文、问题类型和质量原因，生成可用于线上翻译系统的提示词优化方案。</textarea>
           </div>
           <div class="field full">
-            <label>备注</label>
-            <textarea placeholder="非必填，可补充本次优化的人工说明、约束或关注问题"></textarea>
+            <label>提示词后缀</label>
+            <textarea placeholder="非必填，可补充额外约束、重点关注问题或人工说明"></textarea>
           </div>
         </div>
       </div>
@@ -2115,6 +2456,23 @@
       });
     });
 
+    const datasetJoinMode = document.getElementById('datasetJoinMode');
+    const newDatasetNameField = document.getElementById('newDatasetNameField');
+    const existingDatasetNameField = document.getElementById('existingDatasetNameField');
+    const existingDatasetNameSelect = document.getElementById('existingDatasetNameSelect');
+    const datasetVersionInput = document.getElementById('datasetVersionInput');
+
+    function updateDatasetJoinMode() {
+      const useExisting = datasetJoinMode.value === '加入已有数据集';
+      newDatasetNameField.style.display = useExisting ? 'none' : 'block';
+      existingDatasetNameField.style.display = useExisting ? 'block' : 'none';
+      datasetVersionInput.value = useExisting ? existingDatasetNameSelect.selectedOptions[0].dataset.version : '系统自动生成';
+    }
+
+    datasetJoinMode.addEventListener('change', updateDatasetJoinMode);
+    existingDatasetNameSelect.addEventListener('change', updateDatasetJoinMode);
+    updateDatasetJoinMode();
+
     document.querySelectorAll('[data-open-drawer]').forEach(btn => {
       btn.addEventListener('click', () => {
         const drawerMap = {
@@ -2127,6 +2485,7 @@
           setScoreView(btn.dataset.scoreState || 'complete');
           setPromptScoring(false);
           setCandidateEditing(false);
+          setTaskActiveTab('info');
         }
         drawer.classList.add('show');
       });
@@ -2148,6 +2507,17 @@
       btn.addEventListener('click', () => {
         const modal = btn.closest('.modal-mask');
         modal.classList.remove('show');
+        if (modal.id === 'scoreConfigModal') {
+          setPromptScoring(true);
+          setScoreView('scoring');
+          setTaskActiveTab('score');
+          showToast('已发起裁判打分');
+          return;
+        }
+        if (modal.id === 'publishCandidateModal') {
+          showToast('候选提示词发布成功，当前提示词版本为 prompt-v5');
+          return;
+        }
         if (modal.id === 'datasetFromSamples' && sampleSelectionMode === 'add') {
           exitSampleSelection();
         }
@@ -2233,6 +2603,9 @@
       const loading = document.getElementById('scoreLoadingState');
       const result = document.getElementById('scoreResultContent');
       const status = document.getElementById('scoreStatusTag');
+      const publishBtn = document.getElementById('publishCandidateBtn');
+      const publishTip = document.getElementById('publishCandidateTip');
+      const exportScoreBtns = document.querySelectorAll('.export-score-btn');
       const isEmpty = state === 'empty';
       const isScoring = state === 'scoring';
       empty.style.display = isEmpty ? 'block' : 'none';
@@ -2240,6 +2613,12 @@
       result.style.display = (!isEmpty && !isScoring) ? 'block' : 'none';
       status.textContent = isScoring ? '评分中' : (isEmpty ? '未发起' : '评分完成');
       status.className = isScoring ? 'tag orange' : (isEmpty ? 'tag' : 'tag green');
+      publishBtn.disabled = isEmpty || isScoring;
+      publishTip.title = isEmpty ? '需先存在候选提示词并完成裁判打分后可发布' : (isScoring ? '裁判打分中，暂不可发布' : '');
+      exportScoreBtns.forEach(btn => {
+        btn.disabled = isEmpty || isScoring;
+        btn.title = isEmpty ? '暂无评分结果，暂不可导出' : (isScoring ? '裁判打分中，暂不可导出' : '');
+      });
     }
 
     function setCandidateEditing(isEditing) {
@@ -2286,9 +2665,9 @@
         if (retryType === 'optimize') {
           const optimizeTag = row.children[6].querySelector('.tag');
           optimizeTag.className = 'tag orange';
-          optimizeTag.textContent = '优化中';
+          optimizeTag.textContent = '生成中';
           optimizeTag.removeAttribute('data-reason');
-          showToast('已重新发起提示词优化');
+          showToast('已重新发起提示词生成');
         } else {
           const scoreTag = row.children[7].querySelector('.tag');
           scoreTag.className = 'tag orange';
@@ -2302,18 +2681,42 @@
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const drawer = btn.closest('.drawer-body');
-        drawer.querySelectorAll('.tab-btn').forEach(item => item.classList.remove('active'));
-        drawer.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
-        btn.classList.add('active');
-        drawer.querySelector('#tab-' + btn.dataset.tab).classList.add('active');
+        setTaskActiveTab(btn.dataset.tab);
       });
     });
 
+    function setTaskActiveTab(tabKey) {
+      const drawer = document.querySelector('#taskDrawer .drawer-body');
+      drawer.querySelectorAll('.tab-btn').forEach(item => {
+        item.classList.toggle('active', item.dataset.tab === tabKey);
+      });
+      drawer.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.toggle('active', panel.id === 'tab-' + tabKey);
+      });
+      drawer.querySelector('.tab-actions').style.visibility = tabKey === 'score' ? 'visible' : 'hidden';
+    }
+
+    setTaskActiveTab('info');
+
+    function setMetaPromptView(view) {
+      const showSource = view === 'source';
+      document.getElementById('metaPromptPreview').style.display = showSource ? 'none' : 'block';
+      document.getElementById('metaPromptSource').style.display = showSource ? 'block' : 'none';
+      document.getElementById('metaPreviewBtn').classList.toggle('primary', !showSource);
+      document.getElementById('metaSourceBtn').classList.toggle('primary', showSource);
+    }
+
+    document.getElementById('metaPreviewBtn').addEventListener('click', () => setMetaPromptView('preview'));
+    document.getElementById('metaSourceBtn').addEventListener('click', () => setMetaPromptView('source'));
+    setMetaPromptView('preview');
+
     document.getElementById('scoreBtn').addEventListener('click', () => {
-      setPromptScoring(true);
-      setScoreView('scoring');
-      showToast('已发起裁判打分');
+      document.getElementById('scoreConfigModal').classList.add('show');
+    });
+
+    document.getElementById('publishCandidateBtn').addEventListener('click', () => {
+      if (document.getElementById('publishCandidateBtn').disabled) return;
+      document.getElementById('publishCandidateModal').classList.add('show');
     });
 
     document.getElementById('editCandidateBtn').addEventListener('click', () => {
