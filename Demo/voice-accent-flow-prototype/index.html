@@ -1,0 +1,1415 @@
+<div id="dv-accent-prototype">
+  <style>
+    #dv-accent-prototype {
+      --dv-bg: #050509;
+      --dv-panel: #19171f;
+      --dv-panel-deep: #0b0a10;
+      --dv-line: rgba(255, 255, 255, 0.09);
+      --dv-line-strong: rgba(255, 255, 255, 0.14);
+      --dv-text: rgba(255, 255, 255, 0.9);
+      --dv-text-soft: rgba(255, 255, 255, 0.64);
+      --dv-text-dim: rgba(255, 255, 255, 0.42);
+      --dv-purple: #6224ff;
+      --dv-purple-2: #7c5af3;
+      --dv-purple-soft: rgba(124, 90, 243, 0.16);
+      --dv-purple-line: rgba(124, 90, 243, 0.56);
+      --dv-amber: #e8a000;
+      --dv-green: #52c41a;
+      width: 100%;
+      color: var(--dv-text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    #dv-accent-prototype * {
+      box-sizing: border-box;
+    }
+
+    #dv-accent-prototype button,
+    #dv-accent-prototype select,
+    #dv-accent-prototype textarea {
+      font: inherit;
+    }
+
+    #dv-accent-prototype .proto-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 4px;
+      width: fit-content;
+      max-width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      background: rgba(7, 7, 18, 0.82);
+    }
+
+    #dv-accent-prototype .proto-tab {
+      min-height: 34px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--dv-text-soft);
+      cursor: pointer;
+    }
+
+    #dv-accent-prototype .proto-tab.is-active {
+      color: #f5f1ff;
+      background: rgba(124, 90, 243, 0.28);
+      box-shadow: inset 0 0 0 1px rgba(124, 90, 243, 0.52);
+    }
+
+    #dv-accent-prototype .screen {
+      width: 100%;
+    }
+
+    #dv-accent-prototype .screen[hidden] {
+      display: none;
+    }
+
+    #dv-accent-prototype .modal-canvas,
+    #dv-accent-prototype .app-canvas {
+      position: relative;
+      overflow: hidden;
+      min-height: 720px;
+      border-radius: 12px;
+      background:
+        radial-gradient(ellipse at 50% -8%, rgba(98, 36, 255, 0.22) 0%, rgba(98, 36, 255, 0.08) 38%, transparent 68%),
+        radial-gradient(ellipse at 90% 95%, rgba(98, 36, 255, 0.12) 0%, transparent 54%),
+        var(--dv-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    #dv-accent-prototype .mock-modal {
+      width: min(100%, 1080px);
+      margin: 28px auto;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(124, 90, 243, 0.22);
+      background: rgba(34, 34, 38, 0.92);
+      box-shadow: 0 18px 70px rgba(0, 0, 0, 0.54);
+    }
+
+    #dv-accent-prototype .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 26px;
+      border-bottom: 1px solid var(--dv-line);
+    }
+
+    #dv-accent-prototype .title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    #dv-accent-prototype .title-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      color: #d9ccff;
+      background: rgba(124, 90, 243, 0.16);
+      border: 1px solid rgba(124, 90, 243, 0.42);
+      border-radius: 8px;
+    }
+
+    #dv-accent-prototype .modal-title {
+      color: var(--dv-text);
+      font-size: 20px;
+      line-height: 28px;
+      font-weight: 600;
+    }
+
+    #dv-accent-prototype .modal-subtitle,
+    #dv-accent-prototype .panel-caption,
+    #dv-accent-prototype .hint {
+      color: var(--dv-text-soft);
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    #dv-accent-prototype .modal-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--dv-text-dim);
+      cursor: pointer;
+    }
+
+    #dv-accent-prototype .modal-close:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    #dv-accent-prototype .modal-close i,
+    #dv-accent-prototype .modal-close svg {
+      display: none;
+    }
+
+    #dv-accent-prototype .modal-close::before {
+      content: "×";
+      display: block;
+      color: currentColor;
+      font-size: 20px;
+      line-height: 1;
+      font-weight: 400;
+    }
+
+    #dv-accent-prototype .confirm-head .modal-close {
+      flex: 0 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    #dv-accent-prototype .confirm-head .modal-close:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    #dv-accent-prototype .modal-body {
+      padding: 22px 26px 26px;
+    }
+
+    #dv-accent-prototype .setup-section {
+      margin-bottom: 22px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--dv-line);
+    }
+
+    #dv-accent-prototype .form-line {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    #dv-accent-prototype .form-line:last-child,
+    #dv-accent-prototype .form-row:last-child {
+      margin-bottom: 0;
+    }
+
+    #dv-accent-prototype .line-label {
+      padding-top: 10px;
+      color: var(--dv-text-soft);
+      font-size: 15px;
+      line-height: 20px;
+      font-weight: 600;
+    }
+
+    #dv-accent-prototype .required {
+      color: #ff6b6b;
+      margin-left: 2px;
+    }
+
+    #dv-accent-prototype .radio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    #dv-accent-prototype .radio-card,
+    #dv-accent-prototype .voice-card,
+    #dv-accent-prototype .accent-card {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.035);
+      color: var(--dv-text);
+      text-align: left;
+    }
+
+    #dv-accent-prototype .radio-card {
+      flex-direction: column;
+      gap: 5px;
+      min-height: 104px;
+      padding: 13px 14px;
+    }
+
+    #dv-accent-prototype .radio-card.is-active,
+    #dv-accent-prototype .accent-card.is-active {
+      border-color: rgba(124, 90, 243, 0.68);
+      background: linear-gradient(138deg, rgba(124, 90, 243, 0.13), rgba(124, 90, 243, 0.06) 55%, rgba(124, 90, 243, 0.1));
+      box-shadow: inset 0 1px 0 rgba(180, 154, 255, 0.12);
+    }
+
+    #dv-accent-prototype .radio-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 13px;
+      line-height: 20px;
+      font-weight: 500;
+    }
+
+    #dv-accent-prototype .radio-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: rgba(255, 255, 255, 0.66);
+    }
+
+    #dv-accent-prototype .radio-card.is-active .radio-title,
+    #dv-accent-prototype .accent-card.is-active .accent-title {
+      color: #b49aff;
+    }
+
+    #dv-accent-prototype .radio-desc,
+    #dv-accent-prototype .voice-desc,
+    #dv-accent-prototype .accent-desc {
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 11px;
+      line-height: 16px;
+    }
+
+    #dv-accent-prototype .segmented {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: 100%;
+      padding: 3px;
+      background: rgba(7, 7, 18, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 7px;
+    }
+
+    #dv-accent-prototype .segmented button {
+      min-height: 34px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--dv-text-soft);
+      cursor: pointer;
+    }
+
+    #dv-accent-prototype .segmented button.is-active {
+      color: #f5f1ff;
+      background: rgba(124, 90, 243, 0.28);
+      box-shadow: inset 0 0 0 1px rgba(124, 90, 243, 0.52);
+    }
+
+    #dv-accent-prototype .config-columns {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 26px;
+    }
+
+    #dv-accent-prototype .config-panel {
+      min-width: 0;
+      padding-right: 13px;
+    }
+
+    #dv-accent-prototype .config-panel + .config-panel {
+      padding-right: 0;
+      padding-left: 13px;
+      border-left: 1px solid var(--dv-line);
+    }
+
+    #dv-accent-prototype .panel-head {
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    #dv-accent-prototype .panel-title {
+      color: var(--dv-text);
+      font-size: 15px;
+      line-height: 22px;
+      font-weight: 600;
+    }
+
+    #dv-accent-prototype .form-row {
+      margin-bottom: 18px;
+    }
+
+    #dv-accent-prototype .form-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--dv-text-soft);
+      font-size: 13px;
+      line-height: 20px;
+      font-weight: 600;
+    }
+
+    #dv-accent-prototype .fake-select,
+    #dv-accent-prototype select,
+    #dv-accent-prototype textarea {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 7px;
+      background: #08080a;
+      color: var(--dv-text);
+      outline: none;
+    }
+
+    #dv-accent-prototype select {
+      padding: 0 12px;
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.42) 50%), linear-gradient(135deg, rgba(255,255,255,0.42) 50%, transparent 50%);
+      background-position: calc(100% - 18px) 17px, calc(100% - 12px) 17px;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+    }
+
+    #dv-accent-prototype textarea {
+      resize: none;
+      min-height: 152px;
+      padding: 10px 12px;
+    }
+
+    #dv-accent-prototype .fake-select {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 12px;
+    }
+
+    #dv-accent-prototype .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      max-width: 100%;
+      padding: 2px 8px;
+      border-radius: 5px;
+      color: rgba(255,255,255,0.82);
+      background: rgba(255, 255, 255, 0.09);
+      line-height: 22px;
+    }
+
+    #dv-accent-prototype .ai-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 16px;
+      background: rgba(7, 7, 18, 0.48);
+      border: 1px solid rgba(124, 90, 243, 0.22);
+      border-radius: 9px;
+    }
+
+    #dv-accent-prototype .ai-title,
+    #dv-accent-prototype .voice-title,
+    #dv-accent-prototype .accent-title {
+      display: block;
+      color: var(--dv-text);
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 600;
+    }
+
+    #dv-accent-prototype .voice-desc,
+    #dv-accent-prototype .accent-desc {
+      display: block;
+      margin-top: 4px;
+    }
+
+    #dv-accent-prototype .switch {
+      width: 34px;
+      height: 20px;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.36);
+      border: 0;
+      padding: 2px;
+    }
+
+    #dv-accent-prototype .switch::after {
+      content: "";
+      display: block;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    #dv-accent-prototype .voice-grid,
+    #dv-accent-prototype .accent-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    #dv-accent-prototype .voice-card,
+    #dv-accent-prototype .accent-card {
+      gap: 9px;
+      align-items: flex-start;
+      padding: 12px;
+      cursor: pointer;
+    }
+
+    #dv-accent-prototype .radio-dot {
+      width: 14px;
+      height: 14px;
+      flex: 0 0 auto;
+      margin-top: 3px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    #dv-accent-prototype .is-active .radio-dot {
+      border: 4px solid var(--dv-purple);
+      background: #fff;
+    }
+
+    #dv-accent-prototype .accent-help {
+      margin-top: 8px;
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    #dv-accent-prototype .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 26px 18px;
+      border-top: 1px solid var(--dv-line);
+    }
+
+    #dv-accent-prototype .summary {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    #dv-accent-prototype .summary-label {
+      color: var(--dv-text-soft);
+      font-size: 12px;
+    }
+
+    #dv-accent-prototype .summary-pill {
+      padding: 4px 9px;
+      color: var(--dv-text);
+      background: rgba(124, 90, 243, 0.14);
+      border: 1px solid rgba(124, 90, 243, 0.3);
+      border-radius: 999px;
+      font-size: 12px;
+      line-height: 16px;
+      white-space: nowrap;
+    }
+
+    #dv-accent-prototype .footer-actions,
+    #dv-accent-prototype .action-row,
+    #dv-accent-prototype .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #dv-accent-prototype .btn {
+      min-height: 34px;
+      padding: 0 16px;
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: var(--dv-text);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    #dv-accent-prototype .btn-primary {
+      border-color: var(--dv-purple);
+      background: var(--dv-purple);
+      color: #fff;
+    }
+
+    #dv-accent-prototype .btn-purple {
+      color: #c4b5fd;
+      border-color: rgba(155, 100, 255, 0.5);
+      background: rgba(98, 36, 255, 0.18);
+    }
+
+    #dv-accent-prototype .btn-amber {
+      color: #1a0e00;
+      border-color: var(--dv-amber);
+      background: var(--dv-amber);
+      font-weight: 500;
+    }
+
+    #dv-accent-prototype .app-shell {
+      display: grid;
+      grid-template-columns: 140px minmax(0, 1fr);
+      min-height: 720px;
+      background: rgba(0, 0, 0, 0.42);
+    }
+
+    #dv-accent-prototype .side {
+      border-right: 1px solid rgba(255,255,255,0.08);
+      background: rgba(4, 4, 8, 0.72);
+    }
+
+    #dv-accent-prototype .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 54px;
+      padding: 0 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    #dv-accent-prototype .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #8f4dff, #6224ff);
+    }
+
+    #dv-accent-prototype .nav-list {
+      display: grid;
+      gap: 8px;
+      padding: 18px 10px;
+    }
+
+    #dv-accent-prototype .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: 8px;
+      color: var(--dv-text-soft);
+    }
+
+    #dv-accent-prototype .nav-item.is-active {
+      color: #d9ccff;
+      background: rgba(98, 36, 255, 0.18);
+      box-shadow: inset 3px 0 0 var(--dv-purple);
+    }
+
+    #dv-accent-prototype .main {
+      min-width: 0;
+      padding: 18px;
+    }
+
+    #dv-accent-prototype .episode-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    #dv-accent-prototype .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.72);
+      font-size: 15px;
+    }
+
+    #dv-accent-prototype .lang-meta {
+      padding: 3px 7px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.56);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    #dv-accent-prototype .quick-bar,
+    #dv-accent-prototype .table-card {
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.035);
+      box-shadow: 0 10px 48px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+
+    #dv-accent-prototype .quick-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding: 14px 18px;
+    }
+
+    #dv-accent-prototype .quick-label {
+      color: rgba(255,255,255,0.56);
+      font-weight: 600;
+    }
+
+    #dv-accent-prototype .quick-chip {
+      padding: 5px 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.82);
+      font-size: 12px;
+    }
+
+    #dv-accent-prototype .table-card {
+      overflow: hidden;
+      margin-bottom: 92px;
+    }
+
+    #dv-accent-prototype .table-scroll {
+      overflow-x: auto;
+    }
+
+    #dv-accent-prototype table {
+      width: 100%;
+      min-width: 790px;
+      border-collapse: collapse;
+      color: var(--dv-text);
+    }
+
+    #dv-accent-prototype th {
+      padding: 13px 16px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.62);
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    #dv-accent-prototype td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    #dv-accent-prototype tr.is-selected td {
+      background: rgba(98, 36, 255, 0.11);
+    }
+
+    #dv-accent-prototype th:last-child,
+    #dv-accent-prototype td:last-child {
+      background: #14111f;
+    }
+
+    #dv-accent-prototype .check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      font-size: 12px;
+    }
+
+    #dv-accent-prototype .check.is-on {
+      border-color: var(--dv-purple);
+      background: var(--dv-purple);
+    }
+
+    #dv-accent-prototype .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 7px;
+      background: rgba(82, 196, 26, 0.14);
+      color: #70e84f;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    #dv-accent-prototype .task-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(232, 160, 0, 0.45);
+      background: rgba(232, 160, 0, 0.12);
+      color: #ffd666;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    #dv-accent-prototype .row-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    #dv-accent-prototype .floating-bar {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      width: max-content;
+      max-width: calc(100% - 32px);
+      height: 56px;
+      padding: 0 8px 0 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(20, 20, 24, 0.62);
+      backdrop-filter: blur(34px) saturate(180%);
+      box-shadow: 0 16px 56px rgba(0,0,0,0.65), inset 0 0.5px 0 rgba(255,255,255,0.22);
+      z-index: 4;
+    }
+
+    #dv-accent-prototype .floating-count {
+      position: relative;
+      padding-right: 14px;
+      margin-right: 10px;
+      color: rgba(255,255,255,0.65);
+      white-space: nowrap;
+    }
+
+    #dv-accent-prototype .floating-count::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 1px;
+      height: 18px;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.12);
+    }
+
+    #dv-accent-prototype .episode-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0,0,0,0.28);
+      z-index: 6;
+    }
+
+    #dv-accent-prototype .confirm-modal {
+      width: min(100%, 520px);
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(124, 90, 243, 0.22);
+      background: rgba(34, 34, 38, 0.96);
+      box-shadow: 0 18px 70px rgba(0,0,0,0.58);
+    }
+
+    #dv-accent-prototype .confirm-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 24px 10px;
+      color: var(--dv-text);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    #dv-accent-prototype .confirm-body {
+      padding: 8px 24px 18px;
+    }
+
+    #dv-accent-prototype .confirm-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    #dv-accent-prototype .confirm-copy {
+      flex: 1;
+      min-width: 0;
+      padding-top: 2px;
+    }
+
+    #dv-accent-prototype .confirm-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      background: rgba(232, 160, 0, 0.1);
+      border: 1px solid rgba(232, 160, 0, 0.28);
+      color: var(--dv-amber);
+      box-shadow: 0 0 14px rgba(232, 160, 0, 0.12);
+    }
+
+    #dv-accent-prototype .confirm-main {
+      margin: 0 0 6px;
+      color: rgba(255,255,255,0.88);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.55;
+    }
+
+    #dv-accent-prototype .confirm-main em {
+      color: #ffd666;
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    #dv-accent-prototype .confirm-accent-field {
+      margin-left: 56px;
+      padding-top: 2px;
+    }
+
+    #dv-accent-prototype .confirm-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 8px 24px 22px;
+    }
+
+    #dv-accent-prototype .hidden-by-language {
+      display: none;
+    }
+
+    @media (max-width: 860px) {
+      #dv-accent-prototype .config-columns,
+      #dv-accent-prototype .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      #dv-accent-prototype .config-panel {
+        padding: 0;
+      }
+
+      #dv-accent-prototype .config-panel + .config-panel {
+        padding-left: 0;
+        padding-top: 18px;
+        border-top: 1px solid var(--dv-line);
+        border-left: 0;
+      }
+
+      #dv-accent-prototype .side {
+        display: none;
+      }
+
+      #dv-accent-prototype .modal-canvas,
+      #dv-accent-prototype .app-canvas,
+      #dv-accent-prototype .app-shell {
+        min-height: 680px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      #dv-accent-prototype .mock-modal {
+        margin: 10px;
+      }
+
+      #dv-accent-prototype .modal-head,
+      #dv-accent-prototype .modal-body,
+      #dv-accent-prototype .modal-footer {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      #dv-accent-prototype .form-line,
+      #dv-accent-prototype .radio-grid,
+      #dv-accent-prototype .voice-grid,
+      #dv-accent-prototype .accent-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #dv-accent-prototype .line-label {
+        padding-top: 0;
+      }
+
+      #dv-accent-prototype .modal-footer,
+      #dv-accent-prototype .episode-header,
+      #dv-accent-prototype .floating-bar,
+      #dv-accent-prototype .confirm-footer {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      #dv-accent-prototype .confirm-accent-field {
+        margin-left: 0;
+      }
+
+      #dv-accent-prototype .footer-actions,
+      #dv-accent-prototype .action-row,
+      #dv-accent-prototype .header-actions {
+        flex-wrap: wrap;
+      }
+
+      #dv-accent-prototype .floating-bar {
+        width: calc(100% - 32px);
+        height: auto;
+        padding: 12px;
+      }
+
+      #dv-accent-prototype .floating-count {
+        margin: 0;
+        padding: 0;
+      }
+
+      #dv-accent-prototype .floating-count::after {
+        display: none;
+      }
+    }
+  </style>
+
+  <div class="proto-tabs" role="tablist" aria-label="原型视图">
+    <button class="proto-tab is-active" type="button" data-view="create" aria-selected="true">创建剧任务</button>
+    <button class="proto-tab" type="button" data-view="episodes" aria-selected="false">集列表发起配音</button>
+  </div>
+
+  <section class="screen" data-panel="create">
+    <div class="modal-canvas">
+      <div class="mock-modal" role="dialog" aria-label="创建剧任务">
+        <div class="modal-head">
+          <div class="title-wrap">
+            <span class="title-icon"><i data-lucide="file-plus-2" aria-hidden="true"></i></span>
+            <span>
+              <span class="modal-title">创建剧任务</span>
+              <span class="modal-subtitle">先选择任务流，再配置素材来源与译文生成方式</span>
+            </span>
+          </div>
+          <button class="modal-close" type="button" aria-label="关闭"><i data-lucide="x" aria-hidden="true"></i></button>
+        </div>
+
+        <div class="modal-body">
+          <section class="setup-section">
+            <div class="form-line">
+              <div class="line-label">任务类型<span class="required">*</span></div>
+              <div class="radio-grid" aria-label="任务类型">
+                <div class="radio-card">
+                  <div class="radio-title"><span class="radio-icon"><i data-lucide="scan-text" aria-hidden="true"></i></span>字幕资产提取</div>
+                  <div class="radio-desc">先提取原字幕与说话人等资产，供人工前置校对使用。</div>
+                </div>
+                <div class="radio-card">
+                  <div class="radio-title"><span class="radio-icon"><i data-lucide="languages" aria-hidden="true"></i></span>仅字幕翻译</div>
+                  <div class="radio-desc">基于已提取字幕进行翻译，适用于无需配音的场景。</div>
+                </div>
+                <div class="radio-card is-active">
+                  <div class="radio-title"><span class="radio-icon"><i data-lucide="volume-2" aria-hidden="true"></i></span>翻译并配音</div>
+                  <div class="radio-desc">对字幕进行翻译后配音。</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-line">
+              <div class="line-label">处理模式<span class="required">*</span></div>
+              <div>
+                <div class="segmented" role="group" aria-label="处理模式">
+                  <button type="button">AIPE</button>
+                  <button class="is-active" type="button">智能速配</button>
+                </div>
+                <div class="hint">自动完成前置字幕资产提取、翻译与配音流转，过程中不进入人工校对</div>
+              </div>
+            </div>
+          </section>
+
+          <div class="config-columns">
+            <section class="config-panel">
+              <div class="panel-head">
+                <div class="panel-title">输入来源</div>
+                <div class="panel-caption">配置本次任务使用的剧 ID</div>
+              </div>
+              <div class="form-row">
+                <label class="form-label" for="create-drama-ids">剧 ID<span class="required">*</span></label>
+                <textarea id="create-drama-ids" aria-label="剧 ID" placeholder="每行一个剧ID，回车换行，单次上限20部"></textarea>
+                <div class="hint">剧 ID 仅允许 11 位阿拉伯数字，重复自动去重，单次上限 20 个</div>
+              </div>
+            </section>
+
+            <section class="config-panel">
+              <div class="panel-head">
+                <div class="panel-title">翻译与产出配置</div>
+                <div class="panel-caption">AI 翻译与导入译文 SRT 为二选一译文来源</div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label" for="create-target-lang">翻译到<span class="required">*</span></label>
+                <select id="create-target-lang" data-create-lang aria-label="翻译到">
+                  <option value="zh-CN">中文（简体）</option>
+                  <option value="zh-TW" selected>中文（繁体）</option>
+                  <option value="ja-JP">日语</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">译文生成方式<span class="required">*</span></label>
+                <div class="segmented" role="group" aria-label="译文生成方式">
+                  <button class="is-active" type="button">AI 翻译</button>
+                  <button type="button">导入译文 SRT</button>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="ai-card">
+                  <div>
+                    <div class="ai-title">AI译文简短化 <span style="color: rgba(255,255,255,.42); font-weight: 400;">ⓘ</span></div>
+                    <div class="hint">适合希望 AI 译文更贴近配音语速的场景；最终直接展示简短后的 AI 译文。</div>
+                  </div>
+                  <button class="switch" type="button" aria-label="AI译文简短化关闭"></button>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">配音方式<span class="required">*</span></label>
+                <div class="voice-grid">
+                  <button class="voice-card is-active" type="button">
+                    <span class="radio-dot" aria-hidden="true"></span>
+                    <span>
+                      <span class="voice-title">音色智能匹配</span>
+                      <span class="voice-desc">自动为每位说话人匹配 AI 音色，若无法匹配可能会使用复刻音色进行兜底</span>
+                    </span>
+                  </button>
+                  <button class="voice-card" type="button">
+                    <span class="radio-dot" aria-hidden="true"></span>
+                    <span>
+                      <span class="voice-title">音色复刻</span>
+                      <span class="voice-desc">克隆原声音色进行配音</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-row" data-create-accent-row>
+                <label class="form-label">配音口音<span class="required">*</span></label>
+                <div class="accent-grid" role="group" aria-label="配音口音">
+                  <button class="accent-card" type="button" data-create-accent="taiwan">
+                    <span class="radio-dot" aria-hidden="true"></span>
+                    <span>
+                      <span class="accent-title">台湾普通话</span>
+                      <span class="accent-desc">使用中文台普音色与台普 TTS 链路</span>
+                    </span>
+                  </button>
+                  <button class="accent-card" type="button" data-create-accent="standard">
+                    <span class="radio-dot" aria-hidden="true"></span>
+                    <span>
+                      <span class="accent-title">大陆普通话</span>
+                      <span class="accent-desc">使用中文普通话音色与普通话 TTS 链路</span>
+                    </span>
+                  </button>
+                </div>
+                <div class="accent-help">仅目标语言为简体中文/繁体中文时展示；只影响配音发音口音，不改变字幕语言。</div>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <div class="summary" aria-live="polite">
+            <span class="summary-label">当前配置</span>
+            <span class="summary-pill">翻译并配音</span>
+            <span class="summary-pill">智能速配</span>
+            <span class="summary-pill">AI 翻译</span>
+            <span class="summary-pill">音色智能匹配</span>
+            <span class="summary-pill" data-create-summary-accent>台湾普通话</span>
+          </div>
+          <div class="footer-actions">
+            <button class="btn" type="button">取消</button>
+            <button class="btn btn-primary" type="button">创建任务</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" data-panel="episodes" hidden>
+    <div class="app-canvas">
+      <div class="app-shell">
+        <aside class="side">
+          <div class="brand"><span class="brand-mark"><i data-lucide="audio-waveform" aria-hidden="true"></i></span>Drama Verse</div>
+          <nav class="nav-list" aria-label="主导航">
+            <div class="nav-item is-active"><i data-lucide="layout-grid" aria-hidden="true"></i>工作台</div>
+            <div class="nav-item"><i data-lucide="book-open" aria-hidden="true"></i>术语库</div>
+            <div class="nav-item"><i data-lucide="calendar-check" aria-hidden="true"></i>任务中心</div>
+            <div class="nav-item"><i data-lucide="users" aria-hidden="true"></i>用户管理</div>
+          </nav>
+        </aside>
+
+        <main class="main">
+          <header class="episode-header">
+            <div class="breadcrumb">
+              <span>← 返回</span>
+              <span>⌂ 剧列表 / Pregnant by a Fallen God</span>
+              <span class="lang-meta" data-episode-lang-label>目标语言：中文（繁体）</span>
+            </div>
+            <div class="header-actions">
+              <button class="btn" type="button"><i data-lucide="tag" aria-hidden="true"></i> AI术语映射</button>
+              <button class="btn btn-primary" type="button"><i data-lucide="users" aria-hidden="true"></i> 说话人&音色管理</button>
+            </div>
+          </header>
+
+          <div class="quick-bar">
+            <span class="quick-label">快速选择：</span>
+            <span class="quick-chip">翻译完成</span>
+            <span class="quick-chip">翻译已校对</span>
+            <span class="quick-chip">全选可配音</span>
+            <span class="quick-chip">清空选择</span>
+            <span style="flex: 1 1 auto;"></span>
+            <label class="quick-label" for="episode-target-lang">当前目标语言</label>
+            <select id="episode-target-lang" data-episode-lang style="width: 150px; min-height: 32px;">
+              <option value="zh-TW" selected>中文（繁体）</option>
+              <option value="zh-CN">中文（简体）</option>
+              <option value="en-US">英语</option>
+            </select>
+          </div>
+
+          <div class="table-card">
+            <div class="table-scroll">
+              <table aria-label="集列表">
+                <thead>
+                  <tr>
+                    <th><span class="check is-on">✓</span></th>
+                    <th>序号</th>
+                    <th>集 ID</th>
+                    <th>集名称</th>
+                    <th>任务类型</th>
+                    <th>状态</th>
+                    <th>质检提醒</th>
+                    <th>创建人</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="is-selected">
+                    <td><span class="check is-on">✓</span></td>
+                    <td>1</td>
+                    <td>873450197</td>
+                    <td><strong>第一集</strong></td>
+                    <td><span class="task-badge"><i data-lucide="volume-2" aria-hidden="true"></i>翻译并配音</span></td>
+                    <td><span class="status"><i data-lucide="circle-check" aria-hidden="true"></i>翻译完成</span></td>
+                    <td><span style="color:#ffd666;">⚠</span> 1类 / 9处</td>
+                    <td>曹春鹏</td>
+                    <td><div class="row-actions"><button class="btn btn-purple" type="button">重新翻译</button><button class="btn btn-purple" type="button">编辑</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><span class="check"></span></td>
+                    <td>2</td>
+                    <td>873450198</td>
+                    <td><strong>第二集</strong></td>
+                    <td><span class="task-badge"><i data-lucide="volume-2" aria-hidden="true"></i>翻译并配音</span></td>
+                    <td><span class="status"><i data-lucide="circle-check" aria-hidden="true"></i>翻译完成</span></td>
+                    <td><span style="color:#ffd666;">⚠</span> 1类 / 2处</td>
+                    <td>曹春鹏</td>
+                    <td><div class="row-actions"><button class="btn btn-purple" type="button">重新翻译</button><button class="btn btn-purple" type="button">编辑</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><span class="check"></span></td>
+                    <td>3</td>
+                    <td>873450199</td>
+                    <td><strong>第三集</strong></td>
+                    <td><span class="task-badge"><i data-lucide="volume-2" aria-hidden="true"></i>翻译并配音</span></td>
+                    <td><span class="status"><i data-lucide="circle-check" aria-hidden="true"></i>翻译完成</span></td>
+                    <td><span style="color:#ffd666;">⚠</span> 1类 / 1处</td>
+                    <td>曹春鹏</td>
+                    <td><div class="row-actions"><button class="btn btn-purple" type="button">重新翻译</button><button class="btn btn-purple" type="button">编辑</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><span class="check"></span></td>
+                    <td>4</td>
+                    <td>873450200</td>
+                    <td><strong>第四集</strong></td>
+                    <td><span class="task-badge"><i data-lucide="volume-2" aria-hidden="true"></i>翻译并配音</span></td>
+                    <td><span class="status"><i data-lucide="circle-check" aria-hidden="true"></i>翻译完成</span></td>
+                    <td><span style="color:#ffd666;">⚠</span> 1类 / 3处</td>
+                    <td>曹春鹏</td>
+                    <td><div class="row-actions"><button class="btn btn-purple" type="button">重新翻译</button><button class="btn btn-purple" type="button">编辑</button></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="floating-bar">
+            <span class="floating-count">已选 1 集</span>
+            <div class="action-row">
+              <button class="btn btn-purple" type="button"><i data-lucide="languages" aria-hidden="true"></i> 重新翻译</button>
+              <button class="btn btn-primary" type="button">导出字幕⌄</button>
+              <button class="btn btn-amber" type="button" data-open-confirm><i data-lucide="volume-2" aria-hidden="true"></i> 发起配音</button>
+            </div>
+          </div>
+
+          <div class="episode-overlay" data-confirm-overlay>
+            <div class="confirm-modal" role="dialog" aria-label="发起配音确认">
+              <div class="confirm-head">
+                <span>发起配音确认</span>
+                <button class="modal-close" type="button" aria-label="关闭" data-close-confirm><i data-lucide="x" aria-hidden="true"></i></button>
+              </div>
+              <div class="confirm-body">
+                <div class="confirm-row">
+                  <div class="confirm-icon"><i data-lucide="volume-2" aria-hidden="true"></i></div>
+                  <div class="confirm-copy">
+                    <p class="confirm-main">已选中 <em>1</em> 集，确认开始配音吗？</p>
+                    <p class="hint">将以译文文本为准合成音频，任务状态将更新为配音中。</p>
+                  </div>
+                </div>
+
+                <div class="form-row confirm-accent-field" data-episode-accent-row>
+                  <label class="form-label">配音口音<span class="required">*</span></label>
+                  <div class="accent-grid" role="group" aria-label="本次配音口音">
+                    <button class="accent-card" type="button" data-episode-accent="taiwan">
+                      <span class="radio-dot" aria-hidden="true"></span>
+                      <span>
+                        <span class="accent-title">台湾普通话</span>
+                        <span class="accent-desc">使用中文台普音色与台普 TTS 链路</span>
+                      </span>
+                    </button>
+                    <button class="accent-card" type="button" data-episode-accent="standard">
+                      <span class="radio-dot" aria-hidden="true"></span>
+                      <span>
+                        <span class="accent-title">大陆普通话</span>
+                        <span class="accent-desc">使用中文普通话音色与普通话 TTS 链路</span>
+                      </span>
+                    </button>
+                  </div>
+                  <div class="accent-help" data-episode-accent-help>本次发起配音默认使用台湾普通话；只影响音频发音，不改变当前译文字幕。</div>
+                </div>
+              </div>
+              <div class="confirm-footer">
+                <button class="btn" type="button" data-close-confirm>取消</button>
+                <button class="btn btn-primary" type="button">确认发起</button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      const root = document.getElementById('dv-accent-prototype');
+      const labelByLang = {
+        'zh-CN': '中文（简体）',
+        'zh-TW': '中文（繁体）',
+        'ja-JP': '日语',
+        'en-US': '英语'
+      };
+      const accentLabel = {
+        standard: '大陆普通话',
+        taiwan: '台湾普通话'
+      };
+
+      let createAccent = 'taiwan';
+      let episodeAccent = 'taiwan';
+
+      function isChinese(lang) {
+        return lang === 'zh-CN' || lang === 'zh-TW';
+      }
+
+      function defaultAccent(lang) {
+        return lang === 'zh-TW' ? 'taiwan' : 'standard';
+      }
+
+      function updateCreateAccent() {
+        const lang = root.querySelector('[data-create-lang]').value;
+        const row = root.querySelector('[data-create-accent-row]');
+        const summary = root.querySelector('[data-create-summary-accent]');
+        if (!isChinese(lang)) {
+          row.classList.add('hidden-by-language');
+          summary.classList.add('hidden-by-language');
+          return;
+        }
+        row.classList.remove('hidden-by-language');
+        summary.classList.remove('hidden-by-language');
+        root.querySelectorAll('[data-create-accent]').forEach((button) => {
+          button.classList.toggle('is-active', button.dataset.createAccent === createAccent);
+        });
+        summary.textContent = accentLabel[createAccent];
+      }
+
+      function updateEpisodeAccent() {
+        const lang = root.querySelector('[data-episode-lang]').value;
+        const row = root.querySelector('[data-episode-accent-row]');
+        const label = root.querySelector('[data-episode-lang-label]');
+        const help = root.querySelector('[data-episode-accent-help]');
+        label.textContent = '目标语言：' + labelByLang[lang];
+        if (!isChinese(lang)) {
+          row.classList.add('hidden-by-language');
+          help.textContent = '非中文目标语言不展示配音口音。';
+          return;
+        }
+        row.classList.remove('hidden-by-language');
+        root.querySelectorAll('[data-episode-accent]').forEach((button) => {
+          button.classList.toggle('is-active', button.dataset.episodeAccent === episodeAccent);
+        });
+        help.textContent = '本次发起配音默认使用' + accentLabel[episodeAccent] + '；只影响音频发音，不改变当前译文字幕。';
+      }
+
+      root.querySelectorAll('[data-view]').forEach((button) => {
+        button.addEventListener('click', () => {
+          root.querySelectorAll('[data-view]').forEach((item) => {
+            item.classList.toggle('is-active', item === button);
+            item.setAttribute('aria-selected', item === button ? 'true' : 'false');
+          });
+          root.querySelectorAll('[data-panel]').forEach((panel) => {
+            panel.hidden = panel.dataset.panel !== button.dataset.view;
+          });
+        });
+      });
+
+      root.querySelector('[data-create-lang]').addEventListener('change', (event) => {
+        createAccent = defaultAccent(event.target.value);
+        updateCreateAccent();
+      });
+
+      root.querySelectorAll('[data-create-accent]').forEach((button) => {
+        button.addEventListener('click', () => {
+          createAccent = button.dataset.createAccent;
+          updateCreateAccent();
+        });
+      });
+
+      root.querySelector('[data-episode-lang]').addEventListener('change', (event) => {
+        episodeAccent = defaultAccent(event.target.value);
+        updateEpisodeAccent();
+      });
+
+      root.querySelectorAll('[data-episode-accent]').forEach((button) => {
+        button.addEventListener('click', () => {
+          episodeAccent = button.dataset.episodeAccent;
+          updateEpisodeAccent();
+        });
+      });
+
+      root.querySelectorAll('[data-close-confirm]').forEach((button) => {
+        button.addEventListener('click', () => {
+          root.querySelector('[data-confirm-overlay]').hidden = true;
+        });
+      });
+
+      root.querySelector('[data-open-confirm]').addEventListener('click', () => {
+        root.querySelector('[data-confirm-overlay]').hidden = false;
+      });
+
+      updateCreateAccent();
+      updateEpisodeAccent();
+    })();
+  </script>
+</div>
