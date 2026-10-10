@@ -3584,7 +3584,7 @@
                 <td class="mono">2026-08-21 16:58:15</td>
                 <td class="mono">2026-08-21 16:59:47</td>
                 <td>郭凯旋</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters">查看</button><span class="task-download-wrap"><button class="pill-btn primary" type="button">下载</button><span class="task-download-menu" role="menu"><button type="button" data-submit="开始下载原文 SRT">原文 SRT</button><button type="button" data-submit="开始下载译文 SRT">译文 SRT</button><button type="button" data-submit="开始下载整剧译文 SRT">整剧译文 SRT</button></span></span></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters" data-task-detail="merge">查看</button><span class="task-download-wrap"><button class="pill-btn primary" type="button">下载</button><span class="task-download-menu" role="menu"><button type="button" data-submit="开始下载原文 SRT">原文 SRT</button><button type="button" data-submit="开始下载译文 SRT">译文 SRT</button><button type="button" data-submit="开始下载整剧译文 SRT">整剧译文 SRT</button></span></span></span></td>
               </tr>
               <tr>
                 <td class="mono">277</td>
@@ -3612,7 +3612,7 @@
                 <td class="mono">2026-08-21 16:01:44</td>
                 <td class="mono">2026-08-21 16:02:35</td>
                 <td>郭凯旋</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters">查看</button><span class="task-download-wrap"><button class="pill-btn primary" type="button">下载</button><span class="task-download-menu" role="menu"><button type="button" data-submit="开始下载原文 SRT">原文 SRT</button><button type="button" data-submit="开始下载译文 SRT">译文 SRT</button><button type="button" data-submit="开始下载整剧译文 SRT">整剧译文 SRT</button></span></span></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters" data-task-detail="split">查看</button><span class="task-download-wrap"><button class="pill-btn primary" type="button">下载</button><span class="task-download-menu" role="menu"><button type="button" data-submit="开始下载原文 SRT">原文 SRT</button><button type="button" data-submit="开始下载译文 SRT">译文 SRT</button><button type="button" data-submit="开始下载整剧译文 SRT">整剧译文 SRT</button></span></span></span></td>
               </tr>
             </tbody>
           </table>
@@ -3634,6 +3634,7 @@
             <span class="tag" id="taskDetailLanguage">日语</span>
           </nav>
           <div class="task-detail-actions">
+            <button class="btn primary" type="button" id="taskDownloadMergedBtn" data-submit="开始下载整剧字幕文件"><svg class="btn-icon"><use href="#icon-download"></use></svg>下载</button>
             <button class="btn warn is-hidden" type="button" id="taskRetryAllBtn" data-submit="已重新提交全部失败集数">全部重试</button>
           </div>
         </div>
@@ -3691,7 +3692,7 @@
                   <td>译文 SRT</td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:04</td>
-                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载整剧译文 SRT">下载</button></td>
+                  <td class="op-cell">—</td>
                 </tr>
                 <tr>
                   <td class="name-strong">第二集</td>
@@ -3699,7 +3700,7 @@
                   <td>译文 SRT</td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:12</td>
-                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第二集译文 SRT">下载</button></td>
+                  <td class="op-cell">—</td>
                 </tr>
                 <tr>
                   <td class="name-strong">第三集</td>
@@ -3707,7 +3708,7 @@
                   <td>译文 SRT</td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:31</td>
-                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第三集译文 SRT">下载</button></td>
+                  <td class="op-cell">—</td>
                 </tr>
                 <tr>
                   <td class="name-strong">第四集</td>
@@ -3715,7 +3716,7 @@
                   <td>译文 SRT</td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:47</td>
-                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第四集译文 SRT">下载</button></td>
+                  <td class="op-cell">—</td>
                 </tr>
               </tbody>
             </table>
@@ -4422,6 +4423,7 @@
     const taskDetailTargetLanguage = document.getElementById('taskDetailTargetLanguage');
     const taskDetailProgress = document.getElementById('taskDetailProgress');
     const taskRetryAllBtn = document.getElementById('taskRetryAllBtn');
+    const taskDownloadMergedBtn = document.getElementById('taskDownloadMergedBtn');
     const taskChapterRows = document.getElementById('taskChapterRows');
     const taskChapterTotal = document.getElementById('taskChapterTotal');
     let currentAdminTaskType = 'translation_dubbing';
@@ -4492,34 +4494,39 @@
     }
 
     function setupTaskChapters(trigger) {
-      const failed = trigger?.dataset?.taskDetail === 'failed';
+      const detailType = trigger?.dataset?.taskDetail || 'merge';
+      const failed = detailType === 'failed';
+      const split = detailType === 'split';
       if (taskDetailTitle) {
-        taskDetailTitle.textContent = failed ? '《落日之前爱上你》导出任务详情' : '《복수하러 우리집에 갈래?》导出任务详情';
+        taskDetailTitle.textContent = failed
+          ? '《落日之前爱上你》导出任务详情'
+          : split ? '《思美人第二季》导出任务详情' : '《복수하러 우리집에 갈래?》导出任务详情';
       }
       if (taskDetailLanguage) {
-        taskDetailLanguage.textContent = failed ? '英语' : '日语';
+        taskDetailLanguage.textContent = failed ? '英语' : split ? '英语' : '日语';
       }
       if (taskDetailTaskId) {
-        taskDetailTaskId.textContent = failed ? '280' : '278';
+        taskDetailTaskId.textContent = failed ? '280' : split ? '276' : '278';
       }
       if (taskDetailExportMode) {
-        taskDetailExportMode.textContent = failed ? '整剧合并' : '整剧合并';
+        taskDetailExportMode.textContent = split ? '分集导出' : '整剧合并';
       }
       if (taskDetailSrtDisplay) {
         taskDetailSrtDisplay.textContent = failed ? '智能切帧导出' : '按原字幕段落导出';
       }
       if (taskDetailOriginalLanguage) {
-        taskDetailOriginalLanguage.textContent = failed ? '中文（简体）' : '韩语';
+        taskDetailOriginalLanguage.textContent = failed ? '中文（简体）' : split ? '中文（简体）' : '韩语';
       }
       if (taskDetailTargetLanguage) {
-        taskDetailTargetLanguage.textContent = failed ? '英语' : '日语';
+        taskDetailTargetLanguage.textContent = failed ? '英语' : split ? '英语' : '日语';
       }
       if (taskDetailProgress) {
-        taskDetailProgress.textContent = failed ? '0 / 24 集已完成' : '51 / 51 集已完成';
+        taskDetailProgress.textContent = failed ? '0 / 24 集已完成' : split ? '20 / 20 集已完成' : '51 / 51 集已完成';
       }
       taskRetryAllBtn?.classList.toggle('is-hidden', !failed);
+      taskDownloadMergedBtn?.classList.toggle('is-hidden', failed || split);
       if (taskChapterTotal) {
-        taskChapterTotal.textContent = failed ? '共 24 条' : '共 51 条';
+        taskChapterTotal.textContent = failed ? '共 24 条' : split ? '共 20 条' : '共 51 条';
       }
       if (!taskChapterRows) return;
       taskChapterRows.innerHTML = failed ? `
@@ -4529,7 +4536,7 @@
                   <td>译文 SRT</td>
                   <td class="mono">2026-08-21 17:06:42</td>
                   <td class="mono">2026-08-21 17:07:18</td>
-                  <td class="op-cell"><button class="pill-btn warn" data-submit="已重新提交第一集字幕导出">重试</button></td>
+                  <td class="op-cell">—</td>
                 </tr>
                 <tr>
                   <td class="name-strong">第二集</td>
@@ -4537,7 +4544,7 @@
                   <td>译文 SRT</td>
                   <td class="mono">2026-08-21 17:06:42</td>
                   <td class="mono">2026-08-21 17:07:21</td>
-                  <td class="op-cell"><button class="pill-btn warn" data-submit="已重新提交第二集字幕导出">重试</button></td>
+                  <td class="op-cell">—</td>
                 </tr>
                 <tr>
                   <td class="name-strong">第三集</td>
@@ -4545,7 +4552,40 @@
                   <td>译文 SRT</td>
                   <td class="mono">2026-08-21 17:06:42</td>
                   <td class="mono">2026-08-21 17:07:25</td>
-                  <td class="op-cell"><button class="pill-btn warn" data-submit="已重新提交第三集字幕导出">重试</button></td>
+                  <td class="op-cell">—</td>
+                </tr>
+              ` : split ? `
+                <tr>
+                  <td class="name-strong">第一集</td>
+                  <td><span class="tag green">导出完成</span></td>
+                  <td>译文 SRT</td>
+                  <td class="mono">2026-08-21 16:01:44</td>
+                  <td class="mono">2026-08-21 16:02:01</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第一集译文 SRT">下载</button></td>
+                </tr>
+                <tr>
+                  <td class="name-strong">第二集</td>
+                  <td><span class="tag green">导出完成</span></td>
+                  <td>译文 SRT</td>
+                  <td class="mono">2026-08-21 16:01:44</td>
+                  <td class="mono">2026-08-21 16:02:08</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第二集译文 SRT">下载</button></td>
+                </tr>
+                <tr>
+                  <td class="name-strong">第三集</td>
+                  <td><span class="tag green">导出完成</span></td>
+                  <td>原文 SRT / 译文 SRT</td>
+                  <td class="mono">2026-08-21 16:01:44</td>
+                  <td class="mono">2026-08-21 16:02:16</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第三集字幕文件">下载</button></td>
+                </tr>
+                <tr>
+                  <td class="name-strong">第四集</td>
+                  <td><span class="tag green">导出完成</span></td>
+                  <td>原文 SRT / 译文 SRT</td>
+                  <td class="mono">2026-08-21 16:01:44</td>
+                  <td class="mono">2026-08-21 16:02:21</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第四集字幕文件">下载</button></td>
                 </tr>
               ` : `
                 <tr>
@@ -4554,7 +4594,7 @@
                   <td>译文 SRT</td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:04</td>
-                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第一集译文 SRT">下载</button></td>
+                  <td class="op-cell">—</td>
                 </tr>
                 <tr>
                   <td class="name-strong">第二集</td>
@@ -4562,7 +4602,7 @@
                   <td>译文 SRT</td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:12</td>
-                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第二集译文 SRT">下载</button></td>
+                  <td class="op-cell">—</td>
                 </tr>
                 <tr>
                   <td class="name-strong">第三集</td>
@@ -4570,7 +4610,7 @@
                   <td>译文 SRT</td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:31</td>
-                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第三集译文 SRT">下载</button></td>
+                  <td class="op-cell">—</td>
                 </tr>
                 <tr>
                   <td class="name-strong">第四集</td>
@@ -4578,7 +4618,7 @@
                   <td>译文 SRT</td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:47</td>
-                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第四集译文 SRT">下载</button></td>
+                  <td class="op-cell">—</td>
                 </tr>
               `;
     }
