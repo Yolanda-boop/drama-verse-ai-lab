@@ -184,6 +184,10 @@
     .view { display: none; }
     .view.active { display: block; }
 
+    .is-hidden {
+      display: none !important;
+    }
+
     .filter-card,
     .table-card {
       border: 1px solid var(--line);
@@ -234,13 +238,23 @@
     }
 
     .filter-card.task-center-filter-card {
-      grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr auto auto auto;
+      grid-template-columns: 1.8fr 1fr 1fr 1fr 1fr;
       min-height: 118px;
     }
 
     .filter-card.workbench-filter-card {
-      grid-template-columns: 1.7fr 1.1fr 1fr 1fr 1.1fr 1fr;
+      grid-template-columns: 1.8fr 1fr 1fr 1fr 1fr;
       align-items: end;
+    }
+
+    .filter-card.workbench-filter-card .actions-field,
+    .filter-card.task-center-filter-card .actions-field {
+      grid-column: 4 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      white-space: nowrap;
     }
 
     .filter-card.episode-quick-card {
@@ -328,6 +342,18 @@
       box-shadow: 0 0 0 2px rgba(114,46,209,.16);
     }
 
+    .btn.warn {
+      border-color: rgba(250,173,20,.38);
+      background: rgba(250,173,20,.12);
+      color: #ffd591;
+    }
+
+    .btn.warn:hover {
+      border-color: rgba(250,173,20,.58);
+      background: rgba(250,173,20,.18);
+      color: #fff1c7;
+    }
+
     .btn:disabled {
       opacity: .45;
       cursor: not-allowed;
@@ -384,13 +410,13 @@
     }
 
     .wide-task-center-table {
-      width: 2060px;
-      min-width: 2060px;
+      width: 1860px;
+      min-width: 1860px;
     }
 
     .wide-task-chapter-table {
-      width: 1680px;
-      min-width: 1680px;
+      width: 100%;
+      min-width: 760px;
     }
 
     .wide-workbench-table {
@@ -441,6 +467,10 @@
     th.op-cell {
       background: rgba(19,16,27,.92);
       text-align: center;
+    }
+
+    td.op-cell {
+      overflow: visible;
     }
 
     .name-strong { font-weight: 500; }
@@ -695,6 +725,48 @@
       background: rgba(255,255,255,.035);
       cursor: not-allowed;
       pointer-events: none;
+    }
+
+    .task-download-wrap {
+      position: relative;
+      display: inline-flex;
+    }
+
+    .task-download-wrap:hover .task-download-menu,
+    .task-download-wrap:focus-within .task-download-menu {
+      display: grid;
+    }
+
+    .task-download-menu {
+      position: absolute;
+      right: 0;
+      bottom: calc(100% + 6px);
+      z-index: 20;
+      display: none;
+      width: 154px;
+      padding: 6px 0;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: #202026;
+      box-shadow: 0 14px 30px rgba(0,0,0,.45);
+    }
+
+    .task-download-menu button {
+      width: 100%;
+      height: 32px;
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.82);
+      padding: 0 12px;
+      text-align: left;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .task-download-menu button:hover {
+      color: #fff;
+      background: rgba(123,60,255,.16);
     }
 
     .pagination {
@@ -1614,7 +1686,7 @@
     }
 
     .subtitle-export-modal {
-      width: 760px;
+      width: 820px;
     }
 
     .subtitle-export-modal .modal-body {
@@ -1623,29 +1695,26 @@
 
     .subtitle-export-layout {
       display: grid;
-      grid-template-columns: 220px minmax(0, 1fr);
-      gap: 16px;
-      align-items: stretch;
+      gap: 14px;
     }
 
     .subtitle-export-summary {
-      padding: 16px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.1);
-      background:
-        linear-gradient(160deg, rgba(114,46,209,.18), transparent 58%),
-        rgba(255,255,255,.035);
-      display: grid;
-      align-content: start;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.025);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 14px;
     }
 
     .subtitle-export-summary h3 {
       margin: 0;
-      color: rgba(255,255,255,.92);
-      font-size: 16px;
-      line-height: 24px;
-      font-weight: 700;
+      color: rgba(255,255,255,.62);
+      font-size: 13px;
+      line-height: 20px;
+      font-weight: 600;
     }
 
     .subtitle-export-summary p {
@@ -1656,30 +1725,132 @@
     }
 
     .subtitle-export-meta {
-      display: grid;
-      gap: 8px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .subtitle-export-meta span {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      padding-top: 8px;
-      border-top: 1px solid rgba(255,255,255,.08);
-      color: rgba(255,255,255,.48);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.16);
+      color: rgba(255,255,255,.42);
       font-size: 12px;
       line-height: 18px;
     }
 
     .subtitle-export-meta strong {
-      color: rgba(255,255,255,.86);
+      color: rgba(255,255,255,.68);
       font-size: 12px;
       font-weight: 600;
     }
 
     .subtitle-export-list {
       display: grid;
+      gap: 14px;
+    }
+
+    .subtitle-config-card {
+      display: grid;
       gap: 12px;
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.022));
+    }
+
+    .subtitle-section-head {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .subtitle-section-index {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+      color: #e7dcff;
+      background: rgba(123,60,255,.26);
+      border: 1px solid rgba(132,100,255,.44);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .subtitle-section-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .subtitle-section-copy strong {
+      color: rgba(255,255,255,.92);
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 700;
+    }
+
+    .subtitle-section-copy span {
+      color: rgba(255,255,255,.46);
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .subtitle-option-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .subtitle-display-card {
+      display: grid;
+      gap: 10px;
+      padding: 0;
+      border-radius: 8px;
+      border: 0;
+      background: transparent;
+    }
+
+    .subtitle-display-title {
+      color: rgba(255,255,255,.88);
+      font-size: 13px;
+      line-height: 20px;
+      font-weight: 600;
+    }
+
+    .subtitle-display-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .subtitle-display-option {
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.035);
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .subtitle-display-option:hover {
+      border-color: rgba(132,100,255,.48);
+      background: rgba(123,60,255,.1);
+    }
+
+    .subtitle-display-option input {
+      accent-color: #7b3cff;
     }
 
     .subtitle-export-option {
@@ -1687,13 +1858,17 @@
       grid-template-columns: 22px minmax(0, 1fr) auto;
       gap: 12px;
       align-items: flex-start;
-      min-height: 74px;
-      padding: 14px 16px;
+      min-height: 66px;
+      padding: 12px 14px;
       border-radius: 8px;
       border: 1px solid rgba(255,255,255,.12);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.025));
+      background: rgba(255,255,255,.035);
       cursor: pointer;
+    }
+
+    .subtitle-export-option.is-translation {
+      grid-template-columns: 22px minmax(0, 1fr);
+      cursor: default;
     }
 
     .subtitle-export-option:hover {
@@ -1704,13 +1879,6 @@
     .subtitle-export-option input {
       margin-top: 4px;
       accent-color: #7b3cff;
-    }
-
-    .subtitle-export-option.is-featured {
-      border-color: rgba(123,60,255,.42);
-      background:
-        linear-gradient(135deg, rgba(123,60,255,.16), rgba(255,255,255,.035) 56%),
-        rgba(255,255,255,.03);
     }
 
     .subtitle-export-title {
@@ -1747,6 +1915,58 @@
       line-height: 18px;
     }
 
+    .subtitle-dimension-panel {
+      grid-column: 2 / -1;
+      display: grid;
+      gap: 8px;
+      margin-top: 2px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(132,100,255,.22);
+      background: rgba(123,60,255,.075);
+    }
+
+    .subtitle-dimension-panel.is-disabled {
+      opacity: .45;
+      pointer-events: none;
+    }
+
+    .subtitle-dimension-title {
+      color: rgba(255,255,255,.62);
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 600;
+    }
+
+    .subtitle-dimension-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .subtitle-dimension-option {
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(0,0,0,.14);
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .subtitle-dimension-option:hover {
+      border-color: rgba(132,100,255,.5);
+      background: rgba(123,60,255,.14);
+    }
+
+    .subtitle-dimension-option input {
+      accent-color: #7b3cff;
+    }
+
     .help-dot {
       width: 16px;
       height: 16px;
@@ -1765,6 +1985,45 @@
       color: #fff;
       border-color: rgba(255,255,255,.48);
       background: rgba(255,255,255,.08);
+    }
+
+    .inline-help {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+
+    .inline-help-bubble {
+      position: absolute;
+      left: calc(100% + 8px);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 30;
+      display: none;
+      width: 286px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: #2a2a31;
+      color: rgba(255,255,255,.84);
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 400;
+      white-space: normal;
+      box-shadow: 0 12px 26px rgba(0,0,0,.38);
+    }
+
+    .inline-help:hover .inline-help-bubble {
+      display: block;
+    }
+
+    .subtitle-display-option .inline-help-bubble {
+      left: auto;
+      right: -8px;
+      top: auto;
+      bottom: calc(100% + 8px);
+      transform: none;
     }
 
     .subtitle-validation-modal {
@@ -1893,6 +2152,56 @@
       border-radius: 8px;
       border: 1px solid rgba(255,255,255,.1);
       background: rgba(255,255,255,.035);
+    }
+
+    .task-detail-header {
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .task-breadcrumb {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,.48);
+      font-size: 13px;
+      line-height: 20px;
+    }
+
+    .task-breadcrumb button {
+      height: 28px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: rgba(201,221,255,.86);
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .task-breadcrumb button:hover {
+      color: #fff;
+    }
+
+    .task-breadcrumb strong {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: rgba(255,255,255,.9);
+      font-weight: 600;
+    }
+
+    .task-detail-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex: 0 0 auto;
     }
 
     .task-overview-grid {
@@ -2897,10 +3206,12 @@
           <div class="field wide"><label>创建时间</label><input placeholder="开始日期  →  结束日期"></div>
           <div class="field"><label>创建人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
           <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
-          <button class="btn clear" type="button">清空条件</button>
-          <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
-          <button class="btn primary admin-only" type="button"><svg class="btn-icon"><use href="#icon-upload"></use></svg>导入剧</button>
-          <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出剧列表</button>
+          <div class="actions-field">
+            <button class="btn clear" type="button">清空条件</button>
+            <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
+            <button class="btn primary admin-only" type="button"><svg class="btn-icon"><use href="#icon-upload"></use></svg>导入剧</button>
+            <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出剧列表</button>
+          </div>
         </div>
 
         <div class="table-card scrollable">
@@ -3180,25 +3491,23 @@
       </section>
 
       <section class="view" id="page-task-center">
-        <div class="page-title">
-          <div>
-            <h1>任务中心</h1>
-            <p>保持线上导出任务列表结构，字幕导出任务在合成参数中展示导出维度。</p>
-          </div>
-        </div>
         <div class="filter-card task-center-filter-card">
           <div class="field wide"><label>剧 ID</label><input placeholder="输入 11 位剧 ID，回车添加"></div>
           <div class="field"><label>剧名</label><input placeholder="模糊搜索"></div>
-          <div class="field"><label>任务类型</label><select><option>全部</option><option>音视频合成</option><option>字幕导出</option></select></div>
           <div class="field"><label>目标语言</label><select><option>请选择</option><option>英语</option><option>日语</option><option>韩语</option><option>泰语</option><option>葡萄牙语（巴西）</option></select></div>
-          <div class="field"><label>合成进度</label><select><option>请选择</option><option>全部完成</option><option>未全部完成</option></select></div>
-          <div class="field"><label>音乐剥离</label><select><option>全部</option><option>启用</option><option>关闭</option></select></div>
+          <div class="field"><label>任务ID</label><input placeholder="输入任务 ID"></div>
+          <div class="field"><label>任务类型</label><select><option>全部</option><option>音视频合成</option><option>字幕导出</option></select></div>
+          <div class="field"><label>导出方式</label><select><option>全部</option><option>分集导出</option><option>整剧合并</option></select></div>
+          <div class="field"><label>处理进度</label><select><option>请选择</option><option>全部完成</option><option>未全部完成</option><option>失败</option></select></div>
           <div class="field wide"><label>提交时间</label><input placeholder="开始日期  →  结束日期"></div>
           <div class="field"><label>提交人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
           <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
-          <button class="btn clear" type="button">清空条件</button>
-          <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
-          <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出任务列表</button>
+          <div class="field"><label>业务线</label><select><option>请选择</option><option>DB本站</option><option>社媒</option><option>外部译配</option></select></div>
+          <div class="actions-field">
+            <button class="btn clear" type="button">清空条件</button>
+            <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
+            <button class="btn clear" type="button"><svg class="btn-icon"><use href="#icon-download"></use></svg>导出任务列表</button>
+          </div>
         </div>
 
         <div class="table-card scrollable">
@@ -3212,12 +3521,11 @@
               <col style="width: 130px">
               <col style="width: 110px">
               <col style="width: 170px">
-              <col style="width: 130px">
               <col style="width: 160px">
               <col style="width: 190px">
               <col style="width: 190px">
               <col style="width: 110px">
-              <col style="width: 150px">
+              <col style="width: 190px">
             </colgroup>
             <thead>
               <tr>
@@ -3227,8 +3535,7 @@
                 <th>任务类型</th>
                 <th>目标语言</th>
                 <th>合成参数</th>
-                <th>合成进度</th>
-                <th>音乐剥离</th>
+                <th>处理进度</th>
                 <th>提交人</th>
                 <th>提交时间</th>
                 <th>完成时间</th>
@@ -3245,12 +3552,25 @@
                 <td>泰语</td>
                 <td><button class="param-chip" type="button" data-open="synthesisParamsModal">详情</button></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">3</strong> / 3 集已完成</span></td>
-                <td><span class="tag">关闭</span></td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 17:01:34</td>
                 <td class="mono">2026-08-21 17:10:38</td>
                 <td>郭凯旋</td>
                 <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters">查看</button><button class="pill-btn primary" data-submit="开始下载任务文件">下载</button></span></td>
+              </tr>
+              <tr>
+                <td class="mono">280</td>
+                <td class="mono">41000005218</td>
+                <td class="name-strong">落日之前爱上你</td>
+                <td><span class="tag">字幕导出</span></td>
+                <td>英语</td>
+                <td><span class="param-chip merge">整剧合并</span></td>
+                <td><span class="progress-cell"><strong style="color:#ff7875">0</strong> / 24 集已完成</span></td>
+                <td>李姝宜</td>
+                <td class="mono">2026-08-21 17:06:42</td>
+                <td class="mono">-</td>
+                <td>李姝宜</td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters" data-task-detail="failed">查看</button><button class="pill-btn warn" data-submit="已重新提交字幕导出任务">重试</button></span></td>
               </tr>
               <tr>
                 <td class="mono">278</td>
@@ -3260,12 +3580,11 @@
                 <td>日语</td>
                 <td><span class="param-chip merge">整剧合并</span></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">51</strong> / 51 集已完成</span></td>
-                <td><span class="tag">不涉及</span></td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 16:58:15</td>
                 <td class="mono">2026-08-21 16:59:47</td>
                 <td>郭凯旋</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters">查看</button><button class="pill-btn primary" data-submit="开始下载任务文件">下载</button></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters">查看</button><span class="task-download-wrap"><button class="pill-btn primary" type="button">下载</button><span class="task-download-menu" role="menu"><button type="button" data-submit="开始下载原文 SRT">原文 SRT</button><button type="button" data-submit="开始下载译文 SRT">译文 SRT</button><button type="button" data-submit="开始下载整剧译文 SRT">整剧译文 SRT</button></span></span></span></td>
               </tr>
               <tr>
                 <td class="mono">277</td>
@@ -3275,7 +3594,6 @@
                 <td>英语</td>
                 <td><button class="param-chip" type="button" data-open="synthesisParamsModal">详情</button></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">19</strong> / 20 集已完成</span></td>
-                <td><span class="tag blue">已启用</span></td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 16:07:19</td>
                 <td class="mono">-</td>
@@ -3290,12 +3608,11 @@
                 <td>英语</td>
                 <td><span class="param-chip split">分集导出</span></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">20</strong> / 20 集已完成</span></td>
-                <td><span class="tag">不涉及</span></td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 16:01:44</td>
                 <td class="mono">2026-08-21 16:02:35</td>
                 <td>郭凯旋</td>
-                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters">查看</button><button class="pill-btn primary" data-submit="开始下载任务文件">下载</button></span></td>
+                <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters">查看</button><span class="task-download-wrap"><button class="pill-btn primary" type="button">下载</button><span class="task-download-menu" role="menu"><button type="button" data-submit="开始下载原文 SRT">原文 SRT</button><button type="button" data-submit="开始下载译文 SRT">译文 SRT</button><button type="button" data-submit="开始下载整剧译文 SRT">整剧译文 SRT</button></span></span></span></td>
               </tr>
             </tbody>
           </table>
@@ -3307,21 +3624,30 @@
       </section>
 
       <section class="view" id="page-task-chapters">
-        <div class="page-header">
-          <div class="breadcrumb">
-            <button class="btn clear" type="button" data-page="task-center"><svg class="btn-icon"><use href="#icon-arrow-left"></use></svg>任务中心</button>
+        <div class="task-detail-header">
+          <nav class="task-breadcrumb" aria-label="任务详情路径">
+            <button type="button" data-page="task-center">任务中心</button>
             <span>/</span>
-            <strong>《복수하러 우리집에 갈래?》字幕导出任务</strong>
-            <span class="tag">日语</span>
+            <span>字幕导出</span>
+            <span>/</span>
+            <strong id="taskDetailTitle">《복수하러 우리집에 갈래?》导出任务详情</strong>
+            <span class="tag" id="taskDetailLanguage">日语</span>
+          </nav>
+          <div class="task-detail-actions">
+            <button class="btn warn is-hidden" type="button" id="taskRetryAllBtn" data-submit="已重新提交全部失败集数">全部重试</button>
           </div>
         </div>
 
         <div class="task-overview-card">
           <div class="task-overview-grid">
+            <span>任务ID<strong id="taskDetailTaskId">278</strong></span>
             <span>任务类型<strong>字幕导出</strong></span>
-            <span>导出维度<strong>整剧合并</strong></span>
+            <span>导出方式<strong id="taskDetailExportMode">整剧合并</strong></span>
+            <span>SRT 展示方式<strong id="taskDetailSrtDisplay">按原字幕段落导出</strong></span>
+            <span>原始语言<strong id="taskDetailOriginalLanguage">韩语</strong></span>
+            <span>目标语言<strong id="taskDetailTargetLanguage">日语</strong></span>
             <span>导出内容<strong>译文字幕</strong></span>
-            <span>时间轴处理<strong>按集序连续拼接</strong></span>
+            <span>处理进度<strong id="taskDetailProgress">51 / 51 集已完成</strong></span>
           </div>
         </div>
 
@@ -3341,85 +3667,61 @@
           <div class="wide-table-scroll">
             <table class="wide-task-chapter-table" aria-label="任务中心字幕导出二级列表">
               <colgroup>
-                <col style="width: 220px">
-                <col style="width: 130px">
-                <col style="width: 140px">
-                <col style="width: 160px">
-                <col style="width: 170px">
-                <col style="width: 170px">
-                <col style="width: 160px">
-                <col style="width: 190px">
-                <col style="width: 190px">
-                <col style="width: 120px">
+                <col style="width: 25%">
+                <col style="width: 13%">
+                <col style="width: 15%">
+                <col style="width: 18%">
+                <col style="width: 18%">
+                <col style="width: 11%">
               </colgroup>
               <thead>
                 <tr>
                   <th>集名称</th>
-                  <th>翻译语言</th>
                   <th>状态</th>
                   <th>字幕类型</th>
-                  <th>导出维度</th>
-                  <th>时间轴处理</th>
-                  <th>文件状态</th>
                   <th>提交时间</th>
                   <th>更新时间</th>
                   <th class="op-cell">操作</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="taskChapterRows">
                 <tr>
                   <td class="name-strong">第一集</td>
-                  <td>日语</td>
                   <td><span class="tag green">导出完成</span></td>
                   <td>译文 SRT</td>
-                  <td><span class="tag blue">整剧合并</span></td>
-                  <td>承接第 1 集时间轴</td>
-                  <td><span class="tag green">已生成</span></td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:04</td>
                   <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载整剧译文 SRT">下载</button></td>
                 </tr>
                 <tr>
                   <td class="name-strong">第二集</td>
-                  <td>日语</td>
                   <td><span class="tag green">导出完成</span></td>
                   <td>译文 SRT</td>
-                  <td><span class="tag blue">整剧合并</span></td>
-                  <td>以上一集结束时间顺延</td>
-                  <td><span class="tag green">已生成</span></td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:12</td>
-                  <td class="op-cell">—</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第二集译文 SRT">下载</button></td>
                 </tr>
                 <tr>
                   <td class="name-strong">第三集</td>
-                  <td>日语</td>
                   <td><span class="tag green">导出完成</span></td>
                   <td>译文 SRT</td>
-                  <td><span class="tag blue">整剧合并</span></td>
-                  <td>以上一集结束时间顺延</td>
-                  <td><span class="tag green">已生成</span></td>
                   <td class="mono">2026-08-21 16:07:19</td>
                   <td class="mono">2026-08-21 16:08:31</td>
-                  <td class="op-cell">—</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第三集译文 SRT">下载</button></td>
                 </tr>
                 <tr>
                   <td class="name-strong">第四集</td>
-                  <td>日语</td>
-                  <td><span class="tag">排队中</span></td>
+                  <td><span class="tag green">导出完成</span></td>
                   <td>译文 SRT</td>
-                  <td><span class="tag blue">整剧合并</span></td>
-                  <td>待生成</td>
-                  <td><span class="tag">队列中</span></td>
                   <td class="mono">2026-08-21 16:07:19</td>
-                  <td class="mono">2026-08-21 16:07:19</td>
-                  <td class="op-cell">—</td>
+                  <td class="mono">2026-08-21 16:08:47</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第四集译文 SRT">下载</button></td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="pagination">
-            <span>共 20 条</span><span class="page-no active">1</span><select class="small-select"><option>20 条/页</option></select>
+            <span id="taskChapterTotal">共 51 条</span><span class="page-no active">1</span><select class="small-select"><option>20 条/页</option></select>
           </div>
         </div>
       </section>
@@ -3735,13 +4037,13 @@
   <div class="modal-mask" id="subtitleExportModal" role="dialog" aria-modal="true" aria-labelledby="subtitleExportTitle">
     <div class="modal subtitle-export-modal">
       <div class="modal-head">
-        <div class="modal-title"><div class="modal-icon"><svg><use href="#icon-download"></use></svg></div><div><h2 id="subtitleExportTitle">导出字幕</h2><p>导出任务创建成功后将进入任务中心；字幕导出结果可在任务详情中查看导出维度。</p></div></div>
+        <div class="modal-title"><div class="modal-icon"><svg><use href="#icon-download"></use></svg></div><div><h2 id="subtitleExportTitle">导出字幕</h2><p>导出任务创建成功后将进入任务中心；字幕导出结果可在任务详情中查看导出方式。</p></div></div>
         <button class="close" type="button" data-close aria-label="关闭"><svg class="close-icon"><use href="#icon-x"></use></svg></button>
       </div>
       <div class="modal-body">
         <div class="subtitle-export-layout">
           <div class="subtitle-export-summary">
-            <h3>本次导出</h3>
+            <h3>本次导出范围</h3>
             <div class="subtitle-export-meta">
               <span>已选剧任务<strong id="subtitleExportBookCount">1 部</strong></span>
               <span>目标语言数量<strong id="subtitleExportTargetLang">1 个</strong></span>
@@ -3749,30 +4051,54 @@
             </div>
           </div>
           <div class="subtitle-export-list" aria-label="导出内容">
-            <label class="subtitle-export-option">
-              <input type="checkbox" checked>
-              <span>
-                <span class="subtitle-export-title">原文 SRT</span>
-                <span class="subtitle-export-desc">按所选剧任务的集数分别导出原文字幕文件。</span>
-              </span>
-              <span class="subtitle-export-badge">分集导出</span>
-            </label>
-            <label class="subtitle-export-option">
-              <input type="checkbox" checked>
-              <span>
-                <span class="subtitle-export-title">译文 SRT</span>
-                <span class="subtitle-export-desc">按所选剧任务的集数分别导出译文字幕文件。</span>
-              </span>
-              <span class="subtitle-export-badge">分集导出</span>
-            </label>
-            <label class="subtitle-export-option is-featured">
-              <input type="checkbox" checked>
-              <span>
-                <span class="subtitle-export-title">整剧译文 SRT</span>
-                <span class="subtitle-export-desc">将同一剧的各集译文字幕按集序拼接为一个 SRT 文件；拼接后使用连续时间轴，不按单集从 0 开始。</span>
-              </span>
-              <span class="subtitle-export-badge">整剧合并</span>
-            </label>
+            <div class="subtitle-config-card">
+              <div class="subtitle-section-head">
+                <span class="subtitle-section-index">1</span>
+                <div class="subtitle-section-copy">
+                  <strong>导出内容</strong>
+                </div>
+              </div>
+              <div class="subtitle-option-list">
+                <label class="subtitle-export-option">
+                  <input type="checkbox" checked>
+                  <span>
+                    <span class="subtitle-export-title">原文 SRT</span>
+                    <span class="subtitle-export-desc">按所选剧任务的集数分别导出每集原文字幕文件。</span>
+                  </span>
+                  <span class="subtitle-export-badge">分集导出</span>
+                </label>
+                <div class="subtitle-export-option is-translation">
+                  <input type="checkbox" checked aria-label="译文 SRT">
+                  <span>
+                    <span class="subtitle-export-title">译文 SRT</span>
+                    <span class="subtitle-export-desc">导出目标语言译文字幕，支持一集一个 SRT 或按剧维度拼接为一个 SRT 文件。</span>
+                  </span>
+                  <div class="subtitle-dimension-panel" aria-label="译文导出方式">
+                    <div class="subtitle-dimension-title">译文导出方式</div>
+                    <div class="subtitle-dimension-options">
+                      <label class="subtitle-dimension-option"><input type="checkbox" name="subtitleTranslationMode" value="split" checked>分集导出</label>
+                      <label class="subtitle-dimension-option"><input type="checkbox" name="subtitleTranslationMode" value="merge">整剧合并</label>
+                    </div>
+                    <span class="subtitle-export-desc">整剧合并会将同一剧各集译文按集序拼接为一个 SRT，并使用连续时间轴。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="subtitle-config-card">
+              <div class="subtitle-section-head">
+                <span class="subtitle-section-index">2</span>
+                <div class="subtitle-section-copy">
+                  <strong>SRT 展示方式</strong>
+                  <span>控制 SRT 文本是否按原字幕段落输出，或按当前字幕预览样式智能切帧后输出。</span>
+                </div>
+              </div>
+              <div class="subtitle-display-card" aria-label="SRT 展示方式">
+                <div class="subtitle-display-options">
+                  <label class="subtitle-display-option"><input type="radio" name="subtitleDisplayMode" value="origin" checked>按原字幕段落导出</label>
+                  <label class="subtitle-display-option"><input type="radio" name="subtitleDisplayMode" value="smart">智能切帧导出（按当前字幕预览样式）<span class="inline-help"><span class="help-dot">?</span><span class="inline-help-bubble">按照编辑器预览硬字幕样式配置参数，超过单帧最大行数的字幕段自动切分为多个展示片段</span></span></label>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -4002,36 +4328,7 @@
             <div class="params-row"><span>字体</span><span>NotoNaskhArabic-Regular.ttf</span></div>
             <div class="params-row"><span>字幕位置</span><span>距底部 31.5%</span></div>
           </div>
-          <div class="params-stage">
-            <div class="params-stage-head"><strong>阶段 3：音乐剥离</strong><span class="tag blue">已启用</span></div>
-            <div class="params-row"><span>处理范围</span><span>仅处理检测到的音乐片段，不覆盖配音音频</span></div>
-            <div class="params-row"><span>处理动作</span><span>自动检测疑似歌曲/音乐片段，优先剥离主旋律</span></div>
-            <div class="params-row"><span>保留目标</span><span>对白、环境音、特效音</span></div>
-            <div class="params-row"><span>任务流转</span><span>异步进入任务中心；单集检测结果可在二级列表查看</span></div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-mask" id="musicParamsModal" role="dialog" aria-modal="true" aria-labelledby="musicParamsTitle">
-    <div class="modal small">
-      <div class="modal-head">
-        <div class="modal-title"><div class="modal-icon"><svg><use href="#icon-music"></use></svg></div><div><h2 id="musicParamsTitle">音乐剥离检测明细</h2><p>查看该集任务的检测片段和处理结果</p></div></div>
-        <button class="close" type="button" data-close aria-label="关闭"><svg class="close-icon"><use href="#icon-x"></use></svg></button>
-      </div>
-      <div class="modal-body">
-        <div class="standard-form">
-          <div class="segment-list music-detail-list" aria-label="被剥离音乐片段时间">
-            <div class="segment-row"><span class="mono">00:12.4-00:28.8</span></div>
-            <div class="segment-row"><span class="mono">01:13.1-01:31.5</span></div>
-            <div class="segment-row"><span class="mono">02:46.0-02:58.0</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <span></span>
-        <div class="actions"><button class="btn primary" type="button" data-close>关闭</button></div>
       </div>
     </div>
   </div>
@@ -4116,6 +4413,17 @@
     const subtitleExportBookCount = document.getElementById('subtitleExportBookCount');
     const subtitleExportTargetLang = document.getElementById('subtitleExportTargetLang');
     const subtitleExportEpisodeCount = document.getElementById('subtitleExportEpisodeCount');
+    const taskDetailTitle = document.getElementById('taskDetailTitle');
+    const taskDetailLanguage = document.getElementById('taskDetailLanguage');
+    const taskDetailTaskId = document.getElementById('taskDetailTaskId');
+    const taskDetailExportMode = document.getElementById('taskDetailExportMode');
+    const taskDetailSrtDisplay = document.getElementById('taskDetailSrtDisplay');
+    const taskDetailOriginalLanguage = document.getElementById('taskDetailOriginalLanguage');
+    const taskDetailTargetLanguage = document.getElementById('taskDetailTargetLanguage');
+    const taskDetailProgress = document.getElementById('taskDetailProgress');
+    const taskRetryAllBtn = document.getElementById('taskRetryAllBtn');
+    const taskChapterRows = document.getElementById('taskChapterRows');
+    const taskChapterTotal = document.getElementById('taskChapterTotal');
     let currentAdminTaskType = 'translation_dubbing';
     let userModalMode = 'create';
     let lastSelectedUserRole = '';
@@ -4163,6 +4471,116 @@
       if (subtitleExportBookCount) subtitleExportBookCount.textContent = `${bookCount} 部`;
       if (subtitleExportTargetLang) subtitleExportTargetLang.textContent = languageCountText;
       if (subtitleExportEpisodeCount) subtitleExportEpisodeCount.textContent = `${episodeCount} 集`;
+      const originDisplayMode = document.querySelector('#subtitleExportModal input[name="subtitleDisplayMode"][value="origin"]');
+      const splitTranslationMode = document.querySelector('#subtitleExportModal input[name="subtitleTranslationMode"][value="split"]');
+      const mergeTranslationMode = document.querySelector('#subtitleExportModal input[name="subtitleTranslationMode"][value="merge"]');
+      const translationCheckbox = document.querySelector('#subtitleExportModal .subtitle-export-option.is-translation > input[type="checkbox"]');
+      if (originDisplayMode) originDisplayMode.checked = true;
+      if (splitTranslationMode) splitTranslationMode.checked = true;
+      if (mergeTranslationMode) mergeTranslationMode.checked = false;
+      if (translationCheckbox) translationCheckbox.checked = true;
+      updateSubtitleTranslationModeState();
+    }
+
+    function updateSubtitleTranslationModeState() {
+      const translationCheckbox = document.querySelector('#subtitleExportModal .subtitle-export-option.is-translation > input[type="checkbox"]');
+      const dimensionPanel = document.querySelector('#subtitleExportModal .subtitle-dimension-panel');
+      const dimensionRadios = document.querySelectorAll('#subtitleExportModal input[name="subtitleTranslationMode"]');
+      const enabled = translationCheckbox?.checked !== false;
+      dimensionPanel?.classList.toggle('is-disabled', !enabled);
+      dimensionRadios.forEach(radio => { radio.disabled = !enabled; });
+    }
+
+    function setupTaskChapters(trigger) {
+      const failed = trigger?.dataset?.taskDetail === 'failed';
+      if (taskDetailTitle) {
+        taskDetailTitle.textContent = failed ? '《落日之前爱上你》导出任务详情' : '《복수하러 우리집에 갈래?》导出任务详情';
+      }
+      if (taskDetailLanguage) {
+        taskDetailLanguage.textContent = failed ? '英语' : '日语';
+      }
+      if (taskDetailTaskId) {
+        taskDetailTaskId.textContent = failed ? '280' : '278';
+      }
+      if (taskDetailExportMode) {
+        taskDetailExportMode.textContent = failed ? '整剧合并' : '整剧合并';
+      }
+      if (taskDetailSrtDisplay) {
+        taskDetailSrtDisplay.textContent = failed ? '智能切帧导出' : '按原字幕段落导出';
+      }
+      if (taskDetailOriginalLanguage) {
+        taskDetailOriginalLanguage.textContent = failed ? '中文（简体）' : '韩语';
+      }
+      if (taskDetailTargetLanguage) {
+        taskDetailTargetLanguage.textContent = failed ? '英语' : '日语';
+      }
+      if (taskDetailProgress) {
+        taskDetailProgress.textContent = failed ? '0 / 24 集已完成' : '51 / 51 集已完成';
+      }
+      taskRetryAllBtn?.classList.toggle('is-hidden', !failed);
+      if (taskChapterTotal) {
+        taskChapterTotal.textContent = failed ? '共 24 条' : '共 51 条';
+      }
+      if (!taskChapterRows) return;
+      taskChapterRows.innerHTML = failed ? `
+                <tr>
+                  <td class="name-strong">第一集</td>
+                  <td><span class="tag red">失败</span></td>
+                  <td>译文 SRT</td>
+                  <td class="mono">2026-08-21 17:06:42</td>
+                  <td class="mono">2026-08-21 17:07:18</td>
+                  <td class="op-cell"><button class="pill-btn warn" data-submit="已重新提交第一集字幕导出">重试</button></td>
+                </tr>
+                <tr>
+                  <td class="name-strong">第二集</td>
+                  <td><span class="tag red">失败</span></td>
+                  <td>译文 SRT</td>
+                  <td class="mono">2026-08-21 17:06:42</td>
+                  <td class="mono">2026-08-21 17:07:21</td>
+                  <td class="op-cell"><button class="pill-btn warn" data-submit="已重新提交第二集字幕导出">重试</button></td>
+                </tr>
+                <tr>
+                  <td class="name-strong">第三集</td>
+                  <td><span class="tag red">失败</span></td>
+                  <td>译文 SRT</td>
+                  <td class="mono">2026-08-21 17:06:42</td>
+                  <td class="mono">2026-08-21 17:07:25</td>
+                  <td class="op-cell"><button class="pill-btn warn" data-submit="已重新提交第三集字幕导出">重试</button></td>
+                </tr>
+              ` : `
+                <tr>
+                  <td class="name-strong">第一集</td>
+                  <td><span class="tag green">导出完成</span></td>
+                  <td>译文 SRT</td>
+                  <td class="mono">2026-08-21 16:07:19</td>
+                  <td class="mono">2026-08-21 16:08:04</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第一集译文 SRT">下载</button></td>
+                </tr>
+                <tr>
+                  <td class="name-strong">第二集</td>
+                  <td><span class="tag green">导出完成</span></td>
+                  <td>译文 SRT</td>
+                  <td class="mono">2026-08-21 16:07:19</td>
+                  <td class="mono">2026-08-21 16:08:12</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第二集译文 SRT">下载</button></td>
+                </tr>
+                <tr>
+                  <td class="name-strong">第三集</td>
+                  <td><span class="tag green">导出完成</span></td>
+                  <td>译文 SRT</td>
+                  <td class="mono">2026-08-21 16:07:19</td>
+                  <td class="mono">2026-08-21 16:08:31</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第三集译文 SRT">下载</button></td>
+                </tr>
+                <tr>
+                  <td class="name-strong">第四集</td>
+                  <td><span class="tag green">导出完成</span></td>
+                  <td>译文 SRT</td>
+                  <td class="mono">2026-08-21 16:07:19</td>
+                  <td class="mono">2026-08-21 16:08:47</td>
+                  <td class="op-cell"><button class="pill-btn primary" data-submit="开始下载第四集译文 SRT">下载</button></td>
+                </tr>
+              `;
     }
 
     function switchPage(page) {
@@ -4586,7 +5004,12 @@
     }
 
     document.querySelectorAll('[data-page]').forEach(btn => {
-      btn.addEventListener('click', () => switchPage(btn.dataset.page));
+      btn.addEventListener('click', () => {
+        if (btn.dataset.page === 'task-chapters') {
+          setupTaskChapters(btn);
+        }
+        switchPage(btn.dataset.page);
+      });
     });
     document.querySelectorAll('[data-open]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -4629,6 +5052,12 @@
         showToast(btn.dataset.submit, 'success');
       });
     });
+    taskChapterRows?.addEventListener('click', event => {
+      const submitBtn = event.target.closest('[data-submit]');
+      if (!submitBtn) return;
+      showToast(submitBtn.dataset.submit, 'success');
+    });
+    document.querySelector('#subtitleExportModal .subtitle-export-option.is-translation > input[type="checkbox"]')?.addEventListener('change', updateSubtitleTranslationModeState);
     externalUserRole?.addEventListener('change', () => {
       const nextRole = externalUserRole.value;
       if (nextRole === '外部校对员' && lastSelectedUserRole !== '外部校对员') {
