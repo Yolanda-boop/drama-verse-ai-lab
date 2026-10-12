@@ -2860,7 +2860,7 @@
     }
 
     .params-modal {
-      width: 620px;
+      width: 720px;
     }
 
     .params-stage-list {
@@ -2908,6 +2908,133 @@
     .params-row span:last-child {
       color: rgba(255,255,255,.86);
       font-size: 13px;
+    }
+
+    .params-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 12px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+
+    .params-item {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      background: rgba(0,0,0,.13);
+      border: 1px solid rgba(255,255,255,.055);
+    }
+
+    .params-item span:first-child {
+      flex: 0 0 auto;
+      color: rgba(255,255,255,.5);
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .params-item span:last-child {
+      min-width: 0;
+      color: rgba(255,255,255,.86);
+      font-size: 12px;
+      line-height: 18px;
+      text-align: right;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .params-item.full {
+      grid-column: 1 / -1;
+    }
+
+    .params-item.full span:last-child {
+      white-space: normal;
+    }
+
+    .params-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+
+    .params-switch::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.38);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.06);
+    }
+
+    .params-switch.on {
+      color: #9fffbf;
+    }
+
+    .params-switch.on::before {
+      background: #32e86d;
+      box-shadow: 0 0 0 3px rgba(50,232,109,.13);
+    }
+
+    .params-switch.off {
+      color: rgba(255,255,255,.5);
+    }
+
+    .subtitle-param-summary {
+      display: grid;
+      gap: 10px;
+    }
+
+    .subtitle-param-section {
+      display: grid;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    .subtitle-param-section:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .subtitle-param-title {
+      color: rgba(255,255,255,.56);
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 600;
+    }
+
+    .subtitle-param-values {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .subtitle-param-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(132,100,255,.3);
+      background: rgba(123,60,255,.12);
+      color: rgba(238,233,255,.9);
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 600;
+    }
+
+    .subtitle-param-pill.muted {
+      border-color: rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.64);
     }
 
     .admin-only,
@@ -3492,17 +3619,17 @@
 
       <section class="view" id="page-task-center">
         <div class="filter-card task-center-filter-card">
+          <div class="field"><label>任务ID</label><input placeholder="输入任务 ID"></div>
           <div class="field wide"><label>剧 ID</label><input placeholder="输入 11 位剧 ID，回车添加"></div>
           <div class="field"><label>剧名</label><input placeholder="模糊搜索"></div>
-          <div class="field"><label>目标语言</label><select><option>请选择</option><option>英语</option><option>日语</option><option>韩语</option><option>泰语</option><option>葡萄牙语（巴西）</option></select></div>
-          <div class="field"><label>任务ID</label><input placeholder="输入任务 ID"></div>
           <div class="field"><label>任务类型</label><select><option>全部</option><option>音视频合成</option><option>字幕导出</option></select></div>
+          <div class="field"><label>目标语言</label><select><option>请选择</option><option>英语</option><option>日语</option><option>韩语</option><option>泰语</option><option>葡萄牙语（巴西）</option></select></div>
           <div class="field"><label>导出方式</label><select><option>全部</option><option>分集导出</option><option>整剧合并</option></select></div>
           <div class="field"><label>处理进度</label><select><option>请选择</option><option>全部完成</option><option>未全部完成</option><option>失败</option></select></div>
-          <div class="field wide"><label>提交时间</label><input placeholder="开始日期  →  结束日期"></div>
           <div class="field"><label>提交人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
-          <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
+          <div class="field wide"><label>提交时间</label><input placeholder="开始日期  →  结束日期"></div>
           <div class="field"><label>业务线</label><select><option>请选择</option><option>DB本站</option><option>社媒</option><option>外部译配</option></select></div>
+          <div class="field"><label>更新人</label><input placeholder="姓名 / 邮箱 / 手机号"></div>
           <div class="actions-field">
             <button class="btn clear" type="button">清空条件</button>
             <button class="btn primary" type="button"><svg class="btn-icon"><use href="#icon-search"></use></svg>查询</button>
@@ -3525,6 +3652,7 @@
               <col style="width: 190px">
               <col style="width: 190px">
               <col style="width: 110px">
+              <col style="width: 110px">
               <col style="width: 190px">
             </colgroup>
             <thead>
@@ -3539,6 +3667,7 @@
                 <th>提交人</th>
                 <th>提交时间</th>
                 <th>完成时间</th>
+                <th>业务线</th>
                 <th>更新人</th>
                 <th class="op-cell">操作</th>
               </tr>
@@ -3555,6 +3684,7 @@
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 17:01:34</td>
                 <td class="mono">2026-08-21 17:10:38</td>
+                <td>社媒</td>
                 <td>郭凯旋</td>
                 <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters">查看</button><button class="pill-btn primary" data-submit="开始下载任务文件">下载</button></span></td>
               </tr>
@@ -3564,11 +3694,12 @@
                 <td class="name-strong">落日之前爱上你</td>
                 <td><span class="tag">字幕导出</span></td>
                 <td>英语</td>
-                <td><span class="param-chip merge">整剧合并</span></td>
+                <td><button class="param-chip" type="button" data-open="subtitleParamsModal" data-subtitle-param-mode="merge" data-subtitle-param-display="smart">详情</button></td>
                 <td><span class="progress-cell"><strong style="color:#ff7875">0</strong> / 24 集已完成</span></td>
                 <td>李姝宜</td>
                 <td class="mono">2026-08-21 17:06:42</td>
                 <td class="mono">-</td>
+                <td>社媒</td>
                 <td>李姝宜</td>
                 <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters" data-task-detail="failed">查看</button><button class="pill-btn warn" data-submit="已重新提交字幕导出任务">重试</button></span></td>
               </tr>
@@ -3578,11 +3709,12 @@
                 <td class="name-strong">복수하러 우리집에 갈래?</td>
                 <td><span class="tag">字幕导出</span></td>
                 <td>日语</td>
-                <td><span class="param-chip merge">整剧合并</span></td>
+                <td><button class="param-chip" type="button" data-open="subtitleParamsModal" data-subtitle-param-mode="merge" data-subtitle-param-display="origin">详情</button></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">51</strong> / 51 集已完成</span></td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 16:58:15</td>
                 <td class="mono">2026-08-21 16:59:47</td>
+                <td>DB本站</td>
                 <td>郭凯旋</td>
                 <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters" data-task-detail="merge">查看</button><span class="task-download-wrap"><button class="pill-btn primary" type="button">下载</button><span class="task-download-menu" role="menu"><button type="button" data-submit="开始下载原文 SRT">原文 SRT</button><button type="button" data-submit="开始下载译文 SRT">译文 SRT</button><button type="button" data-submit="开始下载整剧译文 SRT">整剧译文 SRT</button></span></span></span></td>
               </tr>
@@ -3597,6 +3729,7 @@
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 16:07:19</td>
                 <td class="mono">-</td>
+                <td>DB本站</td>
                 <td>郭凯旋</td>
                 <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters">查看</button><button class="pill-btn disabled">下载</button></span></td>
               </tr>
@@ -3606,11 +3739,12 @@
                 <td class="name-strong">思美人第二季</td>
                 <td><span class="tag">字幕导出</span></td>
                 <td>英语</td>
-                <td><span class="param-chip split">分集导出</span></td>
+                <td><button class="param-chip" type="button" data-open="subtitleParamsModal" data-subtitle-param-mode="split" data-subtitle-param-display="origin">详情</button></td>
                 <td><span class="progress-cell"><strong style="color:#32e86d">20</strong> / 20 集已完成</span></td>
                 <td>郭凯旋</td>
                 <td class="mono">2026-08-21 16:01:44</td>
                 <td class="mono">2026-08-21 16:02:35</td>
+                <td>DB本站</td>
                 <td>郭凯旋</td>
                 <td class="op-cell"><span class="actions"><button class="pill-btn info" data-page="task-chapters" data-task-detail="split">查看</button><span class="task-download-wrap"><button class="pill-btn primary" type="button">下载</button><span class="task-download-menu" role="menu"><button type="button" data-submit="开始下载原文 SRT">原文 SRT</button><button type="button" data-submit="开始下载译文 SRT">译文 SRT</button><button type="button" data-submit="开始下载整剧译文 SRT">整剧译文 SRT</button></span></span></span></td>
               </tr>
@@ -4324,10 +4458,60 @@
             <div class="params-row"><span>参数来源</span><span>任务提交时快照，不随后续默认配置变化</span></div>
           </div>
           <div class="params-stage">
-            <div class="params-stage-head"><strong>阶段 2：硬字幕渲染</strong><span class="tag green">启用</span></div>
-            <div class="params-row"><span>字幕样式</span><span>字号 90 · 字间距 0 · 换行长度 22 · 空格换行 是</span></div>
-            <div class="params-row"><span>字体</span><span>NotoNaskhArabic-Regular.ttf</span></div>
-            <div class="params-row"><span>字幕位置</span><span>距底部 31.5%</span></div>
+            <div class="params-stage-head"><strong>阶段 2：添加硬字幕</strong><span class="tag green">启用</span></div>
+            <div class="params-grid" aria-label="硬字幕配置快照">
+              <div class="params-item"><span>添加译文硬字幕</span><span class="params-switch on">已开启</span></div>
+              <div class="params-item"><span>添加原文硬字幕</span><span class="params-switch off">未开启</span></div>
+              <div class="params-item"><span>恢复默认</span><span>译文恢复</span></div>
+              <div class="params-item"><span>字号</span><span>50</span></div>
+              <div class="params-item"><span>字间距</span><span>-2</span></div>
+              <div class="params-item"><span>换行长度</span><span>20</span></div>
+              <div class="params-item"><span>智能切帧展示</span><span class="params-switch off">未开启</span></div>
+              <div class="params-item"><span>单帧最大行数</span><span>2 行</span></div>
+              <div class="params-item"><span>空格换行</span><span class="params-switch off">未开启</span></div>
+              <div class="params-item"><span>字幕位置（距底部）%</span><span>34.62</span></div>
+              <div class="params-item full"><span>字体</span><span>MiSans_Demibold.ttf</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="subtitleParamsModal" role="dialog" aria-modal="true" aria-labelledby="subtitleParamsTitle">
+    <div class="modal params-modal">
+      <div class="modal-head">
+        <div class="modal-title"><div class="modal-icon"><svg><use href="#icon-check-square"></use></svg></div><div><h2 id="subtitleParamsTitle">合成参数</h2><p>查看本次字幕导出提交时保存的配置快照</p></div></div>
+        <button class="close" type="button" data-close aria-label="关闭"><svg class="close-icon"><use href="#icon-x"></use></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="params-stage-list">
+          <div class="params-stage">
+            <div class="params-stage-head"><strong>字幕导出配置</strong><span class="tag blue">字幕导出</span></div>
+            <div class="subtitle-param-summary">
+              <div class="subtitle-param-section">
+                <div class="subtitle-param-title">导出内容</div>
+                <div class="subtitle-param-values" id="subtitleParamContents">
+                  <span class="subtitle-param-pill">原文 SRT</span>
+                  <span class="subtitle-param-pill">译文 SRT</span>
+                  <span class="subtitle-param-pill">分集导出</span>
+                </div>
+              </div>
+              <div class="subtitle-param-section">
+                <div class="subtitle-param-title">SRT 展示方式</div>
+                <div class="subtitle-param-values">
+                  <span class="subtitle-param-pill muted" id="subtitleParamDisplay">按原字幕段落导出</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="params-stage">
+            <div class="params-stage-head"><strong>范围信息</strong><span class="tag">只读快照</span></div>
+            <div class="params-grid">
+              <div class="params-item"><span>目标语言</span><span id="subtitleParamLanguage">英语</span></div>
+              <div class="params-item"><span>任务范围</span><span id="subtitleParamScope">20 集</span></div>
+              <div class="params-item full"><span>时间轴规则</span><span id="subtitleParamTimeline">整剧合并时按集序拼接，并使用连续时间轴</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -4491,6 +4675,40 @@
       const enabled = translationCheckbox?.checked !== false;
       dimensionPanel?.classList.toggle('is-disabled', !enabled);
       dimensionRadios.forEach(radio => { radio.disabled = !enabled; });
+    }
+
+    function setupSubtitleParamsModal(trigger) {
+      const mode = trigger?.dataset?.subtitleParamMode || 'split';
+      const display = trigger?.dataset?.subtitleParamDisplay || 'origin';
+      const isMerge = mode === 'merge';
+      const row = trigger?.closest('tr');
+      const cells = row ? Array.from(row.children) : [];
+      const language = cells[4]?.textContent?.trim() || '英语';
+      const progressText = cells[6]?.textContent?.replace(/\s+/g, ' ')?.trim() || (isMerge ? '51 / 51 集已完成' : '20 / 20 集已完成');
+      const scopeMatch = progressText.match(/\/\s*(\d+)\s*集/);
+      const scopeText = scopeMatch ? `${scopeMatch[1]} 集` : (isMerge ? '整剧' : '多集');
+      const content = [
+        '<span class="subtitle-param-pill">原文 SRT</span>',
+        '<span class="subtitle-param-pill">译文 SRT</span>',
+        `<span class="subtitle-param-pill">${isMerge ? '整剧合并' : '分集导出'}</span>`,
+      ].join('');
+      if (subtitleParamContents) {
+        subtitleParamContents.innerHTML = content;
+      }
+      if (subtitleParamDisplay) {
+        subtitleParamDisplay.textContent = display === 'smart' ? '智能切帧导出（按当前字幕预览样式）' : '按原字幕段落导出';
+      }
+      if (subtitleParamLanguage) {
+        subtitleParamLanguage.textContent = language;
+      }
+      if (subtitleParamScope) {
+        subtitleParamScope.textContent = scopeText;
+      }
+      if (subtitleParamTimeline) {
+        subtitleParamTimeline.textContent = isMerge
+          ? '按集序拼接为一个 SRT 文件，并使用连续时间轴'
+          : '按所选剧任务的集数分别导出，每集沿用本集字幕时间轴';
+      }
     }
 
     function setupTaskChapters(trigger) {
@@ -5074,6 +5292,9 @@
         }
         if (btn.dataset.open === 'subtitleExportModal') {
           setupSubtitleExportModal(btn);
+        }
+        if (btn.dataset.open === 'subtitleParamsModal') {
+          setupSubtitleParamsModal(btn);
         }
         document.getElementById(btn.dataset.open)?.classList.add('show');
       });
