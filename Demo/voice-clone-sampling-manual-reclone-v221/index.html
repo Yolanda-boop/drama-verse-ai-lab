@@ -16,7 +16,7 @@
 <div class="editorContainer">
   <header class="navbar"><div class="navLeft"><button class="antBtn text">‹ 返回</button><button class="antBtn primary">完成校对</button><div class="titleInfo"><h1>第一商贵 <span>第一集</span></h1><div class="titleMeta"><span class="metaItem metaItemDubbing">配音任务</span><span class="metaDivider"></span><span class="metaItem">配音校对中</span></div></div><div class="languageMeta"><span class="languageTagLabel">源</span><span>中文（简体）</span><span>→</span><span class="languageTagLabel">目标</span><span class="languageTarget">德语</span></div></div><div class="navRight"><button class="antBtn text">AI术语映射</button><button class="antBtn text">查找替换</button><button class="antBtn text">发音纠正词典</button><span class="saveStatus saveStatusSaved">已保存</span><button class="antBtn primary">导出</button><div class="userInfo">李森宜 ▾</div></div></header>
   <main class="mainContent"><aside class="videoPanel"><div class="videoHeader"><div class="tabNav"><button class="tabItem">中文（简体）</button><button class="tabItem tabItemActive">德语</button><span class="tabIndicator"></span></div></div><div class="videoWrapper"><div class="fakeVideo"><div class="subtitleOverlay">Lukas Schäfer!</div></div></div><div class="videoControls"><div class="progressBar"><span class="timeDisplay">00:00:00,000</span><div class="sliderTrack"></div><span class="timeDisplay">00:01:30,976</span></div><div class="controlsRow"><div class="controlsLeft"><button class="controlBtn">▣</button></div><div class="centerControls"><button class="controlBtn">⏮</button><button class="controlBtn">▶</button><button class="controlBtn">⏭</button></div><div class="controlsRight"><button class="controlBtn">🔊</button><span class="speedBtn">1.0x</span><button class="controlBtn">⛶</button></div></div></div></aside>
-    <section class="subtitlePanel"><div class="subtitleListContainer"><div class="subtitleHeader"><div class="headerCell headerSpeaker">说话人 ▾</div><div class="headerCell headerVolume">音量</div><div class="headerCell headerSource">中文（简体）</div><div class="headerCell headerTarget">德语</div></div><div class="subtitleListWrapper"><div class="subtitleList">
+    <section class="subtitlePanel"><div class="subtitleListContainer"><div class="batchModeToolbar" id="batchModeBar"></div><div class="subtitleHeader"><div class="headerCell headerSpeaker">说话人 ▾</div><div class="headerCell headerVolume">音量</div><div class="headerCell headerSource">中文（简体）</div><div class="headerCell headerTarget"><span class="languageLabel">德语</span><span class="batchHeaderActions"><button class="batchEntryBtn" data-batch-entry="segment" title="批量处理段落（删除 / 合并 / 切换说话人 / 调整音量）" type="button">批量处理</button><button class="batchEntryBtn" data-batch-entry="retranslate" title="批量选择译文，使用更高级模型进行重翻" type="button">批量重翻</button><button class="batchEntryBtn" data-batch-entry="redub" title="批量选择译文，进行配音抽卡" type="button">批量重新配音</button></span></div><div class="headerCell headerBatch" aria-hidden="true"></div></div><div class="subtitleListWrapper"><div class="subtitleList">
       <article class="subtitleItem active"><div class="topActionBar"><div class="topActionBarContent"><div class="actionBarLeft"><button class="actionBtn">重翻</button><button class="actionBtn" id="openSlotPopover">复刻音色</button><button class="actionBtn">情感调节</button><button class="actionBtn">重新生成配音</button><button class="actionBtn">发音纠正</button></div><button class="antBtn text">删除</button><div class="voiceSlotPopover" id="slotPopover"><div class="popoverHeader"><span>萧父 · 段落复刻音色</span></div><button class="voiceSlotOption" data-slot="base"><span><strong>跟随基础音色</strong><small>基础音色 v2 · 默认全剧使用</small></span></button><button class="voiceSlotOption selected" data-slot="phone"><span><strong>电话音色</strong></span><span class="tag phone">已选</span></button><button class="voiceSlotOption" data-slot="inner"><span><strong>内心戏音色</strong></span></button><button class="voiceSlotOption" data-slot="custom"><span><strong>自定义：疲惫低语 v1</strong><small>仅保存，未批量应用</small></span></button><div class="voiceSlotFooter"><span>只修改本段复刻音色，不切换说话人；变更后该段标记为待重新配音。</span></div></div></div></div><div class="speakerColumn"><div class="speakerCell"><button class="speakerTrigger" id="speakerTrigger"><span class="speakerIcon">●</span><span class="speakerName">萧父</span></button><div class="speakerMenu" id="speakerMenu"><div class="speakerList"><button class="speakerOption"><span class="colorTag" style="background:#2f63f3"></span><span class="optionName">Spartacus</span><span class="optionActions"><span class="optionCheck"></span><span class="optionEditBtn">✎</span><span class="editTooltip">编辑该说话人</span></span></button><button class="speakerOption active"><span class="colorTag" style="background:#8b55ff"></span><span class="optionName">Livia Aquila</span><span class="optionActions"><span class="optionCheck">✓</span><span class="optionEditBtn" data-open-speaker-page>✎</span><span class="editTooltip">编辑该说话人</span></span></button><button class="speakerOption"><span class="colorTag" style="background:#12aeb8"></span><span class="optionName">Drusus</span><span class="optionActions"><span class="optionCheck"></span><span class="optionEditBtn" data-open-speaker-page>✎</span><span class="editTooltip">编辑该说话人</span></span></button><button class="speakerOption"><span class="colorTag" style="background:#c13dd9"></span><span class="optionName">Tiberius Marcellus</span><span class="optionActions"><span class="optionCheck"></span><span class="optionEditBtn" data-open-speaker-page>✎</span><span class="editTooltip">编辑该说话人</span></span></button><button class="speakerOption"><span class="colorTag" style="background:#5141b8"></span><span class="optionName">Elara Aquila</span><span class="optionActions"><span class="optionCheck"></span><span class="optionEditBtn" data-open-speaker-page>✎</span><span class="editTooltip">编辑该说话人</span></span></button><button class="speakerOption"><span class="colorTag" style="background:#ff8a3d"></span><span class="optionName">Severus Corvinus</span><span class="optionActions"><span class="optionCheck"></span><span class="optionEditBtn" data-open-speaker-page>✎</span><span class="editTooltip">编辑该说话人</span></span></button></div><div class="dropdownFooter"><button class="speakerOption manageOption" id="openSpeakerPageFromMenu">＋说话人</button></div></div></div><span class="slotBadge override" id="rowVoiceBadge">电话音色</span></div><div class="groupColumn">1</div><div class="volumeColumn"><button class="volumeBtn">🔊</button></div><div class="leftColumn"><div class="timeRange">00:00:00,360 - 00:00:01,280</div><div class="sourceText active"><div class="textInput">萧云彻！</div><div class="playFloatBtn"><button class="playBtn">▶</button></div></div></div><div class="rightColumn"><div class="timeRange">00:00:00,244 - 00:00:01,340 <span class="metricGroup"><span class="metricBad">2.1x</span><span class="metricBad">CPS 13.7</span></span></div><div class="translatedText active"><div class="textInput">Lukas Schäfer!</div><div class="playFloatBtn"><button class="playBtn">▶</button></div></div></div></article>
       <div class="semanticMergeMarker"><button class="semanticMergePill" type="button">合并配音<span class="semanticMergeTooltip">系统自动将同说话人、语义连贯的相邻段落划为同一语义组。建议抽卡选取整组，提升译配自然度</span></button></div>
       <article class="subtitleItem"><div class="speakerColumn"><div class="speakerCell"><button class="speakerTrigger"><span class="speakerIcon">●</span><span class="speakerName">萧父</span></button></div><span class="slotBadge">基础音色</span></div><div class="groupColumn">2</div><div class="volumeColumn"><button class="volumeBtn">🔊</button></div><div class="leftColumn"><div class="timeRange">00:00:01,440 - 00:00:02,640</div><div class="sourceText"><div class="textInput">你是不是疯了你</div></div></div><div class="rightColumn"><div class="timeRange">00:00:01,440 - 00:00:02,700 <span class="metricGroup"><span class="metricBad">2.5x</span></span></div><div class="translatedText"><div class="textInput">Bist du komplett verrückt?!</div></div></div></article>
@@ -215,6 +215,50 @@
 .speechCueToken:before{content:"["}
 .speechCueToken:after{content:"]"}
 </style>
+<style id="batch-merge-selection-prototype-style">
+.batchModeToolbar{display:none;min-width:900px;min-height:40px;align-items:center;justify-content:space-between;gap:8px;padding:6px 16px;background:#2c2c2c;flex-shrink:0;animation:batchBarIn .15s ease both}
+.batchModeToolbar.open{display:flex}
+@keyframes batchBarIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.batchBarLeft,.batchBarRight{display:flex;align-items:center;gap:6px;min-width:0}
+.batchBarLeft{flex:1}
+.batchBarRight{flex-shrink:0}
+.batchToolbarCount{font-size:13px;color:var(--text-secondary);white-space:nowrap}
+.batchToolbarCount strong{color:#a78bfa;font-weight:700}
+.batchToolbarDivider{width:1px;height:14px;margin:0 4px;background:var(--border-color);flex-shrink:0}
+.batchToolbarBtn{height:24px;padding:0 6px!important;border:0;border-radius:4px;background:transparent;color:rgba(255,255,255,.68);font-size:12px;font-weight:500;line-height:24px}
+.batchToolbarBtn:hover{background:rgba(139,92,246,.12);color:#a78bfa}
+.batchToolbarBtn.primary{height:26px;padding:0 10px!important;border:1px solid #7b4cf4;background:#7b4cf4;color:#fff;font-weight:700}
+.batchToolbarBtn.primary:disabled{opacity:.45;cursor:not-allowed}
+.batchToolbarBtn.cancel{height:26px;padding:0 10px!important;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:rgba(255,255,255,.76)}
+.headerTarget{justify-content:space-between;gap:8px}
+.headerTarget .languageLabel{font-size:14px;font-weight:600;color:var(--text-primary);min-width:0}
+.batchHeaderActions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.batchEntryBtn{height:26px;padding:0 8px;border:1px solid rgba(255,255,255,.12);border-radius:5px;background:rgba(255,255,255,.025);color:rgba(255,255,255,.74);font-size:12px;font-weight:600;white-space:nowrap}
+.batchEntryBtn:hover{border-color:rgba(139,92,246,.42);background:rgba(98,36,255,.12);color:#a78bfa}
+.headerBatch{grid-area:batch;display:none;align-items:center;justify-content:center;background:var(--bg-container)}
+.subtitleHeader.headerBatchSelect{grid-template-columns:100px 56px 48px minmax(0,1fr) minmax(0,1fr) 112px;grid-template-areas:"speaker group volume source target batch"}
+.subtitleHeader.headerBatchSelect .batchHeaderActions{display:none}
+.subtitleHeader.headerBatchSelect .headerBatch{display:flex}
+.subtitleList{counter-reset:paragraphNo}
+.subtitleItem{counter-increment:paragraphNo}
+.subtitleItem:after{content:counter(paragraphNo);position:absolute;left:8px;top:5px;z-index:6;min-width:18px;height:18px;padding:0 4px;border-radius:0 0 4px 0;background:rgba(255,255,255,.08);color:rgba(255,255,255,.62);font-size:12px;font-weight:700;line-height:18px;text-align:center}
+.subtitleItem.active:after{background:rgba(139,92,246,.22);color:#e6dcff}
+.subtitleList.batchMode .subtitleItem{grid-template-columns:100px 56px 48px minmax(0,1fr) minmax(0,1fr) 112px;grid-template-areas:"actions actions actions actions actions actions" "speaker group volume source target batch"}
+.subtitleList.batchMode .subtitleItem.batchSelected{background:rgba(128,128,128,.2)}
+.subtitleList.batchMode .subtitleItem.batchSelected:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#a78bfa;border-radius:0 3px 3px 0}
+.subtitleList.batchMode .timeRange{justify-content:space-between}
+.metricGroup{flex:0 0 auto;min-width:86px;justify-content:flex-end}
+.batchSelectArea{grid-area:batch;position:relative;z-index:8;display:none;align-items:center;justify-content:flex-end;gap:7px;min-width:0;padding:0 14px 0 0;cursor:pointer}
+.subtitleList.batchMode .batchSelectArea{display:flex}
+.batchSelectCheckbox{position:absolute;opacity:0;pointer-events:none}
+.batchCheckmark{width:17px;height:17px;border:1px solid rgba(255,255,255,.48);border-radius:4px;background:#151515;box-shadow:0 0 0 1px rgba(0,0,0,.18)}
+.batchSelectCheckbox:checked+.batchCheckmark{border-color:#7b4cf4;background:#7b4cf4}
+.batchSelectCheckbox:checked+.batchCheckmark:after{content:"✓";display:block;color:#fff;font-size:12px;font-weight:800;line-height:16px;text-align:center}
+.batchMergeHint{position:relative;width:64px;height:24px;padding:0 7px;border:1px solid rgba(250,173,20,.30);border-radius:999px;background:rgba(250,173,20,.10);color:#e7c77e;font-size:12px;font-weight:600;line-height:22px;text-align:center;white-space:nowrap;visibility:hidden;opacity:0;transition:opacity .12s ease}
+.batchMergeHint.isVisible{visibility:visible;opacity:1}
+.batchMergeHint:hover:after{content:attr(data-tooltip);position:absolute;right:0;top:29px;width:286px;padding:8px 10px;border:1px solid rgba(255,255,255,.14);border-radius:6px;background:#242424;color:rgba(255,255,255,.86);font-size:12px;font-weight:400;line-height:1.5;white-space:normal;box-shadow:0 8px 22px rgba(0,0,0,.38)}
+.batchMergeHint:hover:before{content:"";position:absolute;right:18px;top:24px;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:5px solid #242424}
+</style>
 <script id="voice-clone-stable-script">
 (function(){
   const $=(s,r=document)=>r.querySelector(s);
@@ -264,6 +308,131 @@
   document.addEventListener('change',e=>{if(e.target.matches('[data-segment-check]'))updateCount()},false);
   byId('openSlotPopover')&&(byId('openSlotPopover').textContent='切换复刻音色');
   buildPopover();buildDrawer('list');byId('slotPopover')?.classList.remove('open');
+})();
+</script>
+<script id="batch-merge-selection-prototype-script">
+(function(){
+  const $=(s,r=document)=>r.querySelector(s);
+  const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  const rows=$$('.subtitleList .subtitleItem');
+  const list=$('.subtitleList');
+  const header=$('.subtitleHeader');
+  const batchBar=$('#batchModeBar');
+  if(!rows.length||!list||document.body.dataset.batchMergePrototypeReady)return;
+  document.body.dataset.batchMergePrototypeReady='1';
+  const mergeGroups=['solo-1','merge-2-3','merge-2-3','solo-4'];
+  const modeText={segment:'批量处理',retranslate:'批量重翻',redub:'批量重新配音'};
+  let currentMode=null;
+  function toast(text){const t=$('#toast');if(!t)return;t.textContent=text;t.classList.add('open');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('open'),1800)}
+  function paragraphNo(row){return row.dataset.paragraphNo||String(rows.indexOf(row)+1)}
+  function joinNos(nos){return nos.length<=1?nos[0]:nos.slice(0,-1).join('、')+'、'+nos[nos.length-1]}
+  function setupRows(){
+    rows.forEach((row,index)=>{
+      row.dataset.paragraphNo=String(index+1);
+      row.dataset.mergeGroup=mergeGroups[index]||('solo-'+(index+1));
+      row.dataset.rowLayout='batch';
+      if(!$('.batchSelectArea',row)){
+        row.insertAdjacentHTML('beforeend','<label class="batchSelectArea"><span class="batchMergeHint" aria-hidden="true">建议补选</span><input class="batchSelectCheckbox" type="checkbox" aria-label="选择第 '+(index+1)+' 段"><span class="batchCheckmark"></span></label>');
+      }
+    });
+    const checks=$$('.batchSelectCheckbox');
+    checks.forEach((check,index)=>{check.checked=index===1});
+  }
+  function groupedRows(){
+    return rows.reduce((map,row)=>{
+      const key=row.dataset.mergeGroup||'';
+      if(!map.has(key))map.set(key,[]);
+      map.get(key).push(row);
+      return map;
+    },new Map());
+  }
+  function updateHints(){
+    let selectedCount=0;
+    rows.forEach(row=>{
+      const check=$('.batchSelectCheckbox',row);
+      if(check&&check.checked)selectedCount++;
+      row.classList.toggle('batchSelected',!!(check&&check.checked));
+      row.classList.remove('hasBatchHint');
+      const hint=$('.batchMergeHint',row);
+      if(hint){
+        hint.classList.remove('isVisible');
+        hint.setAttribute('aria-hidden','true');
+      }
+    });
+    groupedRows().forEach(groupRows=>{
+      if(groupRows.length<2)return;
+      const selected=groupRows.filter(row=>$('.batchSelectCheckbox',row)?.checked);
+      if(!selected.length||selected.length===groupRows.length)return;
+      const selectedNos=joinNos(selected.map(paragraphNo));
+      groupRows.forEach(row=>{
+        const check=$('.batchSelectCheckbox',row);
+        const hint=$('.batchMergeHint',row);
+        if(!check||!hint||check.checked)return;
+        const current=paragraphNo(row);
+        hint.classList.add('isVisible');
+        hint.setAttribute('aria-hidden','false');
+        hint.textContent='建议补选';
+        hint.dataset.tooltip='第 '+current+' 段与第 '+selectedNos+' 段属于同组合并配音，建议一并选择以保持'+(currentMode==='redub'?'配音':currentMode==='retranslate'?'译文':'段落')+'连贯';
+        row.classList.add('hasBatchHint');
+      });
+    });
+    const count=$('#batchSelectedCount');
+    if(count)count.innerHTML='已选择 <strong>'+selectedCount+'</strong> 句';
+    const startBtn=$('[data-batch-cmd="start"]',batchBar);
+    if(startBtn)startBtn.disabled=selectedCount===0;
+    const segmentCount=$('#segmentBatchCount');
+    if(segmentCount)segmentCount.innerHTML='已选择 <strong>'+selectedCount+'</strong> 段';
+  }
+  function renderBatchBar(){
+    if(!batchBar||!currentMode)return;
+    const isSegment=currentMode==='segment';
+    const startText=currentMode==='redub'?'开始重配':'开始重翻';
+    batchBar.innerHTML=isSegment
+      ? '<div class="batchBarLeft"><span class="batchToolbarCount" id="segmentBatchCount">已选择 <strong>0</strong> 段</span><span class="batchToolbarDivider"></span><button class="batchToolbarBtn" data-batch-cmd="selectAll" type="button">全选</button><button class="batchToolbarBtn" data-batch-cmd="clear" type="button">清空</button><button class="batchToolbarBtn" data-batch-cmd="invert" type="button">反选</button></div><div class="batchBarRight"><button class="batchToolbarBtn" data-batch-cmd="delete" type="button">删除</button><button class="batchToolbarBtn" data-batch-cmd="merge" type="button">合并配音</button><button class="batchToolbarBtn" data-batch-cmd="speaker" type="button">切换说话人</button><button class="batchToolbarBtn" data-batch-cmd="volume" type="button">调整音量</button><button class="batchToolbarBtn cancel" data-batch-cmd="cancel" type="button">退出批量处理</button></div>'
+      : '<div class="batchBarLeft"><span class="batchToolbarCount" id="batchSelectedCount">已选择 <strong>0</strong> 句</span><span class="batchToolbarDivider"></span><button class="batchToolbarBtn" data-batch-cmd="selectAll" type="button">全选</button><button class="batchToolbarBtn" data-batch-cmd="clear" type="button">清空</button><button class="batchToolbarBtn" data-batch-cmd="invert" type="button">反选</button></div><div class="batchBarRight"><button class="batchToolbarBtn primary" data-batch-cmd="start" type="button">'+startText+'</button><button class="batchToolbarBtn cancel" data-batch-cmd="cancel" type="button">取消</button></div>';
+  }
+  function setMode(mode){
+    currentMode=mode;
+    if(!mode){
+      list.classList.remove('batchMode');
+      header?.classList.remove('headerBatchSelect');
+      batchBar?.classList.remove('open');
+      rows.forEach(row=>row.classList.remove('batchSelected','hasBatchHint'));
+      return;
+    }
+    renderBatchBar();
+    list.classList.add('batchMode');
+    header?.classList.add('headerBatchSelect');
+    batchBar?.classList.add('open');
+    updateHints();
+  }
+  setupRows();
+  setMode('redub');
+  document.addEventListener('click',function(e){
+    const target=e.target;
+    if(!target||!target.closest)return;
+    const entryBtn=target.closest('[data-batch-entry]');
+    if(entryBtn){
+      e.preventDefault();
+      setMode(entryBtn.dataset.batchEntry);
+      return;
+    }
+    const cmd=target.closest('[data-batch-cmd]');
+    if(cmd){
+      e.preventDefault();
+      const checks=$$('.batchSelectCheckbox');
+      if(cmd.dataset.batchCmd==='selectAll')checks.forEach(check=>{check.checked=true});
+      else if(cmd.dataset.batchCmd==='clear')checks.forEach(check=>{check.checked=false});
+      else if(cmd.dataset.batchCmd==='invert')checks.forEach(check=>{check.checked=!check.checked});
+      else if(cmd.dataset.batchCmd==='cancel'){setMode(null);return}
+      else if(cmd.dataset.batchCmd==='start')toast('已提交'+modeText[currentMode]+'抽卡');
+      else toast('已触发'+cmd.textContent.trim());
+      updateHints();
+    }
+  },false);
+  document.addEventListener('change',function(e){
+    if(e.target&&e.target.classList&&e.target.classList.contains('batchSelectCheckbox'))updateHints();
+  },false);
 })();
 </script>
 <script id="tts-emotion-expression-script">
