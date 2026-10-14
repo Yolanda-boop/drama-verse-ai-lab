@@ -354,6 +354,59 @@
       font-weight: 600;
     }
 
+    #dv-accent-prototype .field-label-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    #dv-accent-prototype .field-label-row .form-label {
+      margin-bottom: 0;
+    }
+
+    #dv-accent-prototype .info-tip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    #dv-accent-prototype .info-tip:hover,
+    #dv-accent-prototype .info-tip:focus {
+      border-color: rgba(124, 90, 243, 0.6);
+      color: #d9ccff;
+      outline: none;
+    }
+
+    #dv-accent-prototype .info-tip:hover::after,
+    #dv-accent-prototype .info-tip:focus::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      z-index: 12;
+      width: min(330px, 72vw);
+      padding: 8px 10px;
+      border: 1px solid rgba(124, 90, 243, 0.28);
+      border-radius: 7px;
+      background: rgba(20, 18, 28, 0.98);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.42);
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 400;
+      transform: translateX(-50%);
+    }
+
     #dv-accent-prototype .fake-select,
     #dv-accent-prototype select,
     #dv-accent-prototype textarea {
@@ -401,7 +454,8 @@
       line-height: 22px;
     }
 
-    #dv-accent-prototype .ai-card {
+    #dv-accent-prototype .ai-card,
+    #dv-accent-prototype .localize-card {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -413,6 +467,7 @@
     }
 
     #dv-accent-prototype .ai-title,
+    #dv-accent-prototype .localize-title,
     #dv-accent-prototype .voice-title,
     #dv-accent-prototype .accent-title {
       display: block;
@@ -420,6 +475,12 @@
       font-size: 14px;
       line-height: 20px;
       font-weight: 600;
+    }
+
+    #dv-accent-prototype .localize-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     #dv-accent-prototype .voice-desc,
@@ -445,6 +506,15 @@
       height: 16px;
       border-radius: 50%;
       background: #fff;
+      transition: transform 0.18s ease;
+    }
+
+    #dv-accent-prototype .switch.is-on {
+      background: var(--dv-purple);
+    }
+
+    #dv-accent-prototype .switch.is-on::after {
+      transform: translateX(14px);
     }
 
     #dv-accent-prototype .voice-grid,
@@ -764,6 +834,45 @@
       gap: 8px;
     }
 
+    #dv-accent-prototype .speaker-topline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      color: rgba(255,255,255,0.58);
+      font-size: 12px;
+    }
+
+    #dv-accent-prototype .speaker-stat {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 7px;
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.76);
+    }
+
+    #dv-accent-prototype .voice-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(124, 90, 243, 0.34);
+      background: rgba(124, 90, 243, 0.12);
+      color: #d9ccff;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    #dv-accent-prototype .score {
+      color: #70e84f;
+      font-weight: 600;
+    }
+
     #dv-accent-prototype .floating-bar {
       position: absolute;
       left: 50%;
@@ -820,6 +929,10 @@
       border: 1px solid rgba(124, 90, 243, 0.22);
       background: rgba(34, 34, 38, 0.96);
       box-shadow: 0 18px 70px rgba(0,0,0,0.58);
+    }
+
+    #dv-accent-prototype .speaker-match-modal {
+      width: min(100%, 560px);
     }
 
     #dv-accent-prototype .confirm-head {
@@ -983,6 +1096,7 @@
   <div class="proto-tabs" role="tablist" aria-label="原型视图">
     <button class="proto-tab is-active" type="button" data-view="create" aria-selected="true">创建剧任务</button>
     <button class="proto-tab" type="button" data-view="episodes" aria-selected="false">集列表发起配音</button>
+    <button class="proto-tab" type="button" data-view="speakers" aria-selected="false">说话人智能匹配</button>
   </div>
 
   <section class="screen" data-panel="create">
@@ -1061,19 +1175,38 @@
 
               <div class="form-row">
                 <label class="form-label">译文生成方式<span class="required">*</span></label>
-                <div class="segmented" role="group" aria-label="译文生成方式">
-                  <button class="is-active" type="button">AI 翻译</button>
-                  <button type="button">导入译文 SRT</button>
+                <div class="segmented" role="group" aria-label="译文生成方式" data-create-source-group>
+                  <button type="button" data-create-source="ai">AI 翻译</button>
+                  <button class="is-active" type="button" data-create-source="import">导入译文 SRT</button>
                 </div>
               </div>
 
-              <div class="form-row">
+              <div class="form-row" data-ai-shortening-row>
                 <div class="ai-card">
                   <div>
                     <div class="ai-title">AI译文简短化 <span style="color: rgba(255,255,255,.42); font-weight: 400;">ⓘ</span></div>
                     <div class="hint">适合希望 AI 译文更贴近配音语速的场景；最终直接展示简短后的 AI 译文。</div>
                   </div>
                   <button class="switch" type="button" aria-label="AI译文简短化关闭"></button>
+                </div>
+              </div>
+
+              <div class="form-row" data-localize-row>
+                <div class="localize-card">
+                  <div>
+                    <div class="localize-title-row">
+                      <span class="localize-title">本地化润色</span>
+                      <span
+                        class="info-tip"
+                        tabindex="0"
+                        role="img"
+                        aria-label="本地化润色说明"
+                        data-tip="将导入译文按目标市场表达习惯进行润色，适用于简体中文译文或由简转繁生成的繁体译文"
+                      >?</span>
+                    </div>
+                    <div class="hint">将导入译文按目标市场表达习惯进行润色</div>
+                  </div>
+                  <button class="switch is-on" type="button" aria-label="本地化润色已开启"></button>
                 </div>
               </div>
 
@@ -1126,7 +1259,8 @@
             <span class="summary-label">当前配置</span>
             <span class="summary-pill">翻译并配音</span>
             <span class="summary-pill">智能速配</span>
-            <span class="summary-pill">AI 翻译</span>
+            <span class="summary-pill" data-create-summary-source>导入译文 SRT</span>
+            <span class="summary-pill" data-create-summary-localize>本地化润色</span>
             <span class="summary-pill">音色智能匹配</span>
             <span class="summary-pill" data-create-summary-accent>台湾普通话</span>
           </div>
@@ -1302,6 +1436,150 @@
     </div>
   </section>
 
+  <section class="screen" data-panel="speakers" hidden>
+    <div class="app-canvas">
+      <div class="app-shell">
+        <aside class="side">
+          <div class="brand"><span class="brand-mark"><i data-lucide="audio-waveform" aria-hidden="true"></i></span>Drama Verse</div>
+          <nav class="nav-list" aria-label="主导航">
+            <div class="nav-item is-active"><i data-lucide="layout-grid" aria-hidden="true"></i>工作台</div>
+            <div class="nav-item"><i data-lucide="book-open" aria-hidden="true"></i>术语库</div>
+            <div class="nav-item"><i data-lucide="calendar-check" aria-hidden="true"></i>任务中心</div>
+            <div class="nav-item"><i data-lucide="users" aria-hidden="true"></i>用户管理</div>
+          </nav>
+        </aside>
+
+        <main class="main">
+          <header class="episode-header">
+            <div class="breadcrumb">
+              <span>← 返回</span>
+              <span>⌂ 剧列表 / Pregnant by a Fallen God / 说话人&音色管理</span>
+              <span class="lang-meta" data-speaker-lang-label>目标语言：中文（繁体）</span>
+            </div>
+            <div class="header-actions">
+              <button class="btn" type="button">返回集列表</button>
+              <button class="btn btn-primary" type="button" data-open-speaker-match><i data-lucide="sparkles" aria-hidden="true"></i> 智能音色匹配</button>
+            </div>
+          </header>
+
+          <div class="quick-bar">
+            <span class="quick-label">当前目标语言</span>
+            <select id="speaker-target-lang" data-speaker-lang style="width: 150px; min-height: 32px;">
+              <option value="zh-TW" selected>中文（繁体）</option>
+              <option value="zh-CN">中文（简体）</option>
+            </select>
+            <span class="quick-chip">共 12 位说话人</span>
+            <span class="quick-chip">8 位已匹配</span>
+            <span class="quick-chip">4 位待确认</span>
+          </div>
+
+          <div class="speaker-topline">
+            <span class="speaker-stat"><i data-lucide="mic-2" aria-hidden="true"></i> 按说话人维度统一管理音色</span>
+            <span class="speaker-stat"><i data-lucide="wand-sparkles" aria-hidden="true"></i> 智能匹配将按所选配音口音过滤候选音色</span>
+          </div>
+
+          <div class="table-card">
+            <div class="table-scroll">
+              <table aria-label="说话人列表">
+                <thead>
+                  <tr>
+                    <th>说话人</th>
+                    <th>角色识别</th>
+                    <th>性别</th>
+                    <th>年龄段</th>
+                    <th>当前音色</th>
+                    <th>匹配置信度</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>SPK_001</strong></td>
+                    <td>女主 / Emily</td>
+                    <td>女</td>
+                    <td>青年</td>
+                    <td><span class="voice-pill">台普女声-温柔</span></td>
+                    <td><span class="score">92%</span></td>
+                    <td><button class="btn btn-purple" type="button">试听</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>SPK_002</strong></td>
+                    <td>男主 / Daniel</td>
+                    <td>男</td>
+                    <td>青年</td>
+                    <td><span class="voice-pill">台普男声-沉稳</span></td>
+                    <td><span class="score">88%</span></td>
+                    <td><button class="btn btn-purple" type="button">试听</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>SPK_003</strong></td>
+                    <td>母亲</td>
+                    <td>女</td>
+                    <td>中年</td>
+                    <td><span class="voice-pill">待匹配</span></td>
+                    <td>--</td>
+                    <td><button class="btn btn-purple" type="button">指定</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>SPK_004</strong></td>
+                    <td>旁白</td>
+                    <td>男</td>
+                    <td>成年</td>
+                    <td><span class="voice-pill">待匹配</span></td>
+                    <td>--</td>
+                    <td><button class="btn btn-purple" type="button">指定</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="episode-overlay" data-speaker-match-overlay>
+            <div class="confirm-modal speaker-match-modal" role="dialog" aria-label="智能音色匹配">
+              <div class="confirm-head">
+                <span>匹配口音确认</span>
+                <button class="modal-close" type="button" aria-label="关闭" data-close-speaker-match><i data-lucide="x" aria-hidden="true"></i></button>
+              </div>
+              <div class="confirm-body">
+                <div class="confirm-row">
+                  <div class="confirm-icon"><i data-lucide="sparkles" aria-hidden="true"></i></div>
+                  <div class="confirm-copy">
+                    <p class="confirm-main">将为当前剧任务的说话人智能匹配音色。</p>
+                    <p class="hint">系统会按角色信息、说话人特征和配音口音筛选候选音色。</p>
+                  </div>
+                </div>
+
+                <div class="form-row" data-speaker-accent-row>
+                  <label class="form-label">配音口音<span class="required">*</span></label>
+                  <div class="accent-grid" role="group" aria-label="智能音色匹配配音口音">
+                    <button class="accent-card" type="button" data-speaker-accent="taiwan">
+                      <span class="radio-dot" aria-hidden="true"></span>
+                      <span>
+                        <span class="accent-title">台湾普通话</span>
+                        <span class="accent-desc">仅匹配中文台普音色与台普 TTS 链路。</span>
+                      </span>
+                    </button>
+                    <button class="accent-card" type="button" data-speaker-accent="standard">
+                      <span class="radio-dot" aria-hidden="true"></span>
+                      <span>
+                        <span class="accent-title">大陆普通话</span>
+                        <span class="accent-desc">仅匹配中文普通话音色与普通话 TTS 链路。</span>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="confirm-footer">
+                <button class="btn" type="button" data-close-speaker-match>取消</button>
+                <button class="btn btn-primary" type="button">开始匹配</button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
   <script>
     (function () {
       const root = document.getElementById('dv-accent-prototype');
@@ -1315,9 +1593,15 @@
         standard: '大陆普通话',
         taiwan: '台湾普通话'
       };
+      const sourceLabel = {
+        ai: 'AI 翻译',
+        import: '导入译文 SRT'
+      };
 
       let createAccent = 'taiwan';
+      let createSource = 'import';
       let episodeAccent = 'taiwan';
+      let speakerAccent = 'taiwan';
 
       function isChinese(lang) {
         return lang === 'zh-CN' || lang === 'zh-TW';
@@ -1331,13 +1615,27 @@
         const lang = root.querySelector('[data-create-lang]').value;
         const row = root.querySelector('[data-create-accent-row]');
         const summary = root.querySelector('[data-create-summary-accent]');
+        const localizeRow = root.querySelector('[data-localize-row]');
+        const localizeSummary = root.querySelector('[data-create-summary-localize]');
+        const aiShorteningRow = root.querySelector('[data-ai-shortening-row]');
+        const sourceSummary = root.querySelector('[data-create-summary-source]');
+        root.querySelectorAll('[data-create-source]').forEach((button) => {
+          button.classList.toggle('is-active', button.dataset.createSource === createSource);
+        });
+        sourceSummary.textContent = sourceLabel[createSource];
+        aiShorteningRow.classList.toggle('hidden-by-language', createSource === 'import');
         if (!isChinese(lang)) {
           row.classList.add('hidden-by-language');
           summary.classList.add('hidden-by-language');
+          localizeRow.classList.add('hidden-by-language');
+          localizeSummary.classList.add('hidden-by-language');
           return;
         }
         row.classList.remove('hidden-by-language');
         summary.classList.remove('hidden-by-language');
+        const showLocalize = lang === 'zh-TW' && createSource === 'import';
+        localizeRow.classList.toggle('hidden-by-language', !showLocalize);
+        localizeSummary.classList.toggle('hidden-by-language', !showLocalize);
         root.querySelectorAll('[data-create-accent]').forEach((button) => {
           button.classList.toggle('is-active', button.dataset.createAccent === createAccent);
         });
@@ -1362,6 +1660,19 @@
         help.textContent = '本次发起配音默认使用' + accentLabel[episodeAccent] + '；只影响音频发音，不改变当前译文字幕。';
       }
 
+      function updateSpeakerAccent() {
+        const lang = root.querySelector('[data-speaker-lang]').value;
+        const label = root.querySelector('[data-speaker-lang-label]');
+        const help = root.querySelector('[data-speaker-accent-help]');
+        label.textContent = '目标语言：' + labelByLang[lang];
+        root.querySelectorAll('[data-speaker-accent]').forEach((button) => {
+          button.classList.toggle('is-active', button.dataset.speakerAccent === speakerAccent);
+        });
+        if (help) {
+          help.textContent = '当前目标语言为' + labelByLang[lang] + '，默认使用' + accentLabel[speakerAccent] + '。';
+        }
+      }
+
       root.querySelectorAll('[data-view]').forEach((button) => {
         button.addEventListener('click', () => {
           root.querySelectorAll('[data-view]').forEach((item) => {
@@ -1377,6 +1688,13 @@
       root.querySelector('[data-create-lang]').addEventListener('change', (event) => {
         createAccent = defaultAccent(event.target.value);
         updateCreateAccent();
+      });
+
+      root.querySelectorAll('[data-create-source]').forEach((button) => {
+        button.addEventListener('click', () => {
+          createSource = button.dataset.createSource;
+          updateCreateAccent();
+        });
       });
 
       root.querySelectorAll('[data-create-accent]').forEach((button) => {
@@ -1398,6 +1716,18 @@
         });
       });
 
+      root.querySelector('[data-speaker-lang]').addEventListener('change', (event) => {
+        speakerAccent = defaultAccent(event.target.value);
+        updateSpeakerAccent();
+      });
+
+      root.querySelectorAll('[data-speaker-accent]').forEach((button) => {
+        button.addEventListener('click', () => {
+          speakerAccent = button.dataset.speakerAccent;
+          updateSpeakerAccent();
+        });
+      });
+
       root.querySelectorAll('[data-close-confirm]').forEach((button) => {
         button.addEventListener('click', () => {
           root.querySelector('[data-confirm-overlay]').hidden = true;
@@ -1408,8 +1738,19 @@
         root.querySelector('[data-confirm-overlay]').hidden = false;
       });
 
+      root.querySelectorAll('[data-close-speaker-match]').forEach((button) => {
+        button.addEventListener('click', () => {
+          root.querySelector('[data-speaker-match-overlay]').hidden = true;
+        });
+      });
+
+      root.querySelector('[data-open-speaker-match]').addEventListener('click', () => {
+        root.querySelector('[data-speaker-match-overlay]').hidden = false;
+      });
+
       updateCreateAccent();
       updateEpisodeAccent();
+      updateSpeakerAccent();
     })();
   </script>
 </div>
