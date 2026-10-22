@@ -1,0 +1,1533 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Drama Verse 翻译质检扫描 QC 1.0 Demo</title>
+  <style>
+    :root {
+      --primary-color: #ffffff;
+      --primary-bg: rgba(255, 255, 255, 0.1);
+      --bg-base: #000000;
+      --bg-container: #141414;
+      --bg-elevated: #1a1a1a;
+      --bg-elevated-hover: #262626;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.75);
+      --text-tertiary: rgba(255, 255, 255, 0.5);
+      --text-disabled: rgba(255, 255, 255, 0.3);
+      --border-color: rgba(255, 255, 255, 0.2);
+      --brand-purple: #6224ff;
+      --brand-purple-soft: #b9a4ff;
+      --accent: #7c5af3;
+      --warning: #faad14;
+      --danger: #ff7875;
+      --info: #69c0ff;
+      --success: #52c41a;
+      --radius: 6px;
+      --panel-width: 336px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      background: var(--bg-base);
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg-base);
+      color: var(--text-primary);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    ::selection {
+      background: var(--primary-bg);
+      color: var(--primary-color);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-container);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: #0a0a0a;
+      overflow: hidden;
+    }
+
+    .nav {
+      height: 48px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      background: #111;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.92);
+      white-space: nowrap;
+    }
+
+    .nav-meta {
+      color: var(--text-tertiary);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .nav-spacer {
+      flex: 1;
+    }
+
+    .stage-tag {
+      color: var(--brand-purple-soft);
+      background: rgba(98, 36, 255, 0.14);
+      border: 1px solid rgba(98, 36, 255, 0.28);
+      border-radius: 4px;
+      font-size: 12px;
+      padding: 1px 7px;
+      white-space: nowrap;
+    }
+
+    .main {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      background: var(--bg-container);
+      overflow: hidden;
+    }
+
+    .subtitle-panel {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      background: #141414;
+      overflow: hidden;
+    }
+
+    .toolbar {
+      height: 42px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      background: #141414;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .toolbar-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      margin-right: 4px;
+    }
+
+    .toolbar-muted {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn {
+      height: 28px;
+      padding: 0 10px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 13px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: rgba(255, 255, 255, 0.26);
+      background: rgba(255, 255, 255, 0.09);
+      color: rgba(255, 255, 255, 0.94);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn.primary {
+      border: 1px solid rgba(167, 139, 250, 0.4);
+      background: linear-gradient(160deg, rgba(130, 80, 255, 0.95) 0%, rgba(98, 36, 255, 1) 55%, rgba(80, 20, 220, 0.98) 100%);
+      color: rgba(255, 255, 255, 0.97);
+      font-weight: 500;
+      box-shadow:
+        0 0 0 0.5px rgba(98, 36, 255, 0.3),
+        0 4px 14px rgba(98, 36, 255, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+
+    .btn.primary:hover:not(:disabled) {
+      filter: brightness(1.14);
+      border-color: rgba(192, 162, 255, 0.55);
+      background: linear-gradient(160deg, rgba(130, 80, 255, 0.95) 0%, rgba(98, 36, 255, 1) 55%, rgba(80, 20, 220, 0.98) 100%);
+    }
+
+    .btn.text {
+      border-color: transparent;
+      background: transparent;
+      padding-inline: 8px;
+    }
+
+    .btn.danger:hover:not(:disabled) {
+      border-color: var(--danger);
+      color: var(--danger);
+      background: rgba(255, 77, 79, 0.06);
+    }
+
+    .subtitle-list {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      display: grid;
+      align-content: start;
+    }
+
+    .subtitle-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: 56px 92px minmax(0, 1fr) minmax(0, 1fr);
+      min-height: 122px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: #141414;
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .subtitle-row:hover {
+      background: #181818;
+    }
+
+    .subtitle-row.active {
+      background: #1b1724;
+      box-shadow: inset 3px 0 0 var(--brand-purple);
+    }
+
+    .row-index,
+    .row-time,
+    .source-cell,
+    .translated-cell {
+      min-width: 0;
+      padding: 12px;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .row-index {
+      color: var(--text-tertiary);
+      font-size: 12px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .row-time {
+      font-family: "JetBrains Mono", "Consolas", monospace;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.58);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .cell-label {
+      color: rgba(255, 255, 255, 0.42);
+      font-size: 11px;
+      margin-bottom: 7px;
+    }
+
+    .source-text,
+    .translated-text {
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 13px;
+      line-height: 1.65;
+      word-break: break-word;
+    }
+
+    .translated-cell {
+      position: relative;
+      border-right: 0;
+    }
+
+    .inline-mark {
+      text-decoration-line: underline;
+      text-decoration-style: wavy;
+      text-decoration-color: var(--danger);
+      text-decoration-thickness: 1.2px;
+      text-underline-offset: 3px;
+    }
+
+    .video-panel {
+      width: 330px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      background: #0a0a0a;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .video-shell {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .phone-video {
+      width: min(230px, 100%);
+      aspect-ratio: 9 / 16;
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.02)),
+        linear-gradient(145deg, #211927 0%, #08080a 45%, #111827 100%);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phone-video::before {
+      content: "";
+      position: absolute;
+      inset: 24px 22px 86px;
+      border-radius: 8px;
+      background:
+        linear-gradient(130deg, rgba(255,255,255,0.14), transparent 34%),
+        linear-gradient(180deg, #2b2232 0%, #171721 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .video-subtitle {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 62px;
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.4;
+      text-align: center;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+    }
+
+    .video-controls {
+      height: 52px;
+      flex-shrink: 0;
+      padding: 10px 14px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-tertiary);
+      font-size: 12px;
+    }
+
+    .progress {
+      height: 4px;
+      flex: 1;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.12);
+      overflow: hidden;
+    }
+
+    .progress > span {
+      display: block;
+      height: 100%;
+      width: 38%;
+      background: #fff;
+      border-radius: inherit;
+    }
+
+    .qa-panel {
+      width: var(--panel-width);
+      min-width: var(--panel-width);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-container);
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+    }
+
+    .qa-header {
+      height: 41px;
+      padding: 0 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .qa-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .qa-badge {
+      color: var(--danger);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .qa-header .btn {
+      margin-left: auto;
+      height: 26px;
+      font-size: 12px;
+    }
+
+    .scan-status {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(24, 144, 255, 0.04);
+      color: var(--info);
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .scan-status.show {
+      display: flex;
+    }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid rgba(105, 192, 255, 0.25);
+      border-top-color: var(--info);
+      animation: spin 0.9s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .qa-body {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .summary {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .summary-top {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+
+    .type-button {
+      width: 100%;
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      border: 0;
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 6px 8px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 13px;
+      line-height: 20px;
+    }
+
+    .type-button:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+    }
+
+    .type-button.active {
+      background: rgba(98, 36, 255, 0.18);
+      color: var(--text-primary);
+    }
+
+    .type-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .type-name::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--warning);
+      margin-right: 8px;
+      vertical-align: 1px;
+    }
+
+    .type-button.active .type-name::before {
+      background: var(--brand-purple-soft);
+    }
+
+    .type-count {
+      color: var(--warning);
+      font-weight: 600;
+    }
+
+    .unified-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      flex-shrink: 0;
+    }
+
+    .check {
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      background: transparent;
+      color: #fff;
+      font-size: 12px;
+      line-height: 14px;
+      text-align: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .check.checked {
+      background: var(--brand-purple);
+      border-color: var(--brand-purple);
+    }
+
+    .issue-list {
+      min-height: 0;
+    }
+
+    .empty-state {
+      padding: 32px 16px;
+      color: var(--text-tertiary);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .issue-card {
+      position: relative;
+      border: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--bg-container);
+      padding: 10px 12px 10px 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+
+    .issue-card:hover {
+      background: #181818;
+    }
+
+    .issue-card.active {
+      background: #1b1724;
+      box-shadow: inset 3px 0 0 #8b5cf6;
+    }
+
+    .issue-card.selected {
+      background: rgba(98, 36, 255, 0.08);
+      box-shadow: inset 3px 0 0 rgba(139, 92, 246, 0.55);
+    }
+
+    .issue-card .check {
+      position: absolute;
+      left: 10px;
+      top: 12px;
+    }
+
+    .issue-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .issue-title {
+      color: rgba(255, 255, 255, 0.88);
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .issue-sep {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 18px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .tag.text {
+      color: #ffd666;
+      background: rgba(250, 173, 20, 0.1);
+    }
+
+    .tag.format {
+      color: #69c0ff;
+      background: rgba(24, 144, 255, 0.1);
+    }
+
+    .tag.consistency {
+      color: #c4b5fd;
+      background: rgba(98, 36, 255, 0.14);
+    }
+
+    .issue-compare {
+      display: grid;
+      gap: 4px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .issue-compare strong {
+      color: var(--text-primary);
+      font-weight: 500;
+      margin-right: 6px;
+    }
+
+    .issue-note {
+      color: var(--text-tertiary);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .issue-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.48);
+      backdrop-filter: blur(1px) saturate(140%);
+    }
+
+    .modal-mask.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(860px, calc(100vw - 24px));
+      max-height: calc(100vh - 32px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      background: rgb(31, 31, 31);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow:
+        0 0 0 0.5px rgba(98, 36, 255, 0.1),
+        0 0 60px rgba(98, 36, 255, 0.07),
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 44px 110px rgba(0, 0, 0, 0.72),
+        inset 0 1.5px 0 rgba(255, 255, 255, 0.26),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.22),
+        inset 1px 0 0 rgba(255, 255, 255, 0.07),
+        inset -1px 0 0 rgba(255, 255, 255, 0.05);
+      animation: modalIn 0.18s ease-out;
+    }
+
+    .modal::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        158deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(167, 139, 250, 0.08) 20%,
+        rgba(96, 165, 250, 0.04) 38%,
+        rgba(255, 255, 255, 0.015) 54%,
+        transparent 70%
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .modal::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 4%;
+      right: 4%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(192, 162, 255, 0.3) 10%, rgba(255, 255, 255, 0.68) 32%, rgba(215, 195, 255, 0.88) 50%, rgba(255, 255, 255, 0.68) 68%, rgba(192, 162, 255, 0.3) 90%, transparent 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    .modal-header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-title {
+      color: rgba(255, 255, 255, 0.94);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .modal-close {
+      margin-left: auto;
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.52);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      transition: all 0.18s ease;
+    }
+
+    .modal-close:hover {
+      color: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .modal-body {
+      overflow: auto;
+      padding: 16px 20px 4px;
+    }
+
+    .notice {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 8px 10px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .config-card {
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.018);
+      padding: 0;
+      transition: all 0.15s ease;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .config-card:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .config-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      margin: 0;
+      background: rgba(255, 255, 255, 0.035);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .fake-checkbox {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.04);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      color: #fff;
+      font-size: 0;
+      line-height: 1;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .fake-checkbox.checked {
+      background: var(--brand-purple);
+      border-color: var(--brand-purple);
+      box-shadow:
+        0 0 0 2px rgba(98, 36, 255, 0.18),
+        0 4px 12px rgba(98, 36, 255, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+
+    .fake-checkbox.checked::after {
+      content: "";
+      width: 8px;
+      height: 4px;
+      border-left: 2px solid rgba(255, 255, 255, 0.95);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.95);
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+
+    .config-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.92);
+      min-width: 0;
+    }
+
+    .sub-options {
+      display: grid;
+      gap: 2px;
+      margin-top: 0;
+      padding: 8px 10px 10px 34px;
+      position: relative;
+    }
+
+    .sub-options::before {
+      content: "";
+      position: absolute;
+      left: 21px;
+      top: 12px;
+      bottom: 14px;
+      width: 1px;
+      background: linear-gradient(
+        180deg,
+        rgba(185, 164, 255, 0.28),
+        rgba(255, 255, 255, 0.07)
+      );
+    }
+
+    .sub-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 13px;
+      line-height: 20px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 100%;
+      min-height: 30px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .sub-option:hover {
+      background: rgba(255, 255, 255, 0.055);
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .sub-option .fake-checkbox {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+
+    .sub-option .fake-checkbox.checked::after {
+      width: 7px;
+      height: 4px;
+      border-left-width: 2px;
+      border-bottom-width: 2px;
+    }
+
+    .modal-footer {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 12px 20px 14px;
+      margin-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .toast {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      z-index: 50;
+      min-width: 220px;
+      max-width: min(520px, calc(100vw - 32px));
+      background: rgba(18, 18, 22, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 16px 48px rgba(0, 0, 0, 0.7);
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 13px;
+      padding: 10px 14px 10px 18px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.18s ease;
+      overflow: hidden;
+    }
+
+    .toast::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--success);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 1120px) {
+      .video-panel {
+        display: none;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .main {
+        min-width: 860px;
+        overflow-x: auto;
+      }
+
+      .config-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="nav">
+      <div class="nav-title">Drama Verse · 第 12 集编辑器</div>
+      <div class="nav-meta">《Hidden Heiress》｜英语 → 西班牙语</div>
+      <span class="stage-tag">翻译校对</span>
+      <div class="nav-spacer"></div>
+      <button class="btn text">上一集</button>
+      <button class="btn text">下一集</button>
+      <button class="btn primary">完成校对</button>
+    </header>
+
+    <main class="main">
+      <aside class="video-panel">
+        <div class="video-shell">
+          <div class="phone-video">
+            <div class="video-subtitle">Prometiste que esto quedaría entre nosotros.</div>
+          </div>
+        </div>
+        <div class="video-controls">
+          <span>01:07</span>
+          <div class="progress"><span></span></div>
+          <span>08:42</span>
+        </div>
+      </aside>
+
+      <section class="subtitle-panel">
+        <div class="toolbar">
+          <span class="toolbar-title">字幕列表</span>
+          <span class="toolbar-muted">当前共 238 段，右侧质检结果可定位到具体段落</span>
+          <div class="nav-spacer"></div>
+          <button class="btn text">查找替换</button>
+          <button class="btn text">AI 术语映射</button>
+        </div>
+
+        <div class="subtitle-list" id="subtitleList">
+          <article class="subtitle-row" data-row-id="1">
+            <div class="row-index">001</div>
+            <div class="row-time"><span>00:01:04.100</span><span>00:01:07.240</span></div>
+            <div class="source-cell">
+              <div class="cell-label">原文</div>
+              <div class="source-text">Don’t make me choose between my family and the company.</div>
+            </div>
+            <div class="translated-cell">
+              <div class="cell-label">译文</div>
+              <div class="translated-text">No me obligues a elegir entre mi familia y la compañía.</div>
+            </div>
+          </article>
+          <article class="subtitle-row has-qc" data-row-id="2">
+            <div class="row-index">002</div>
+            <div class="row-time"><span>00:01:07.360</span><span>00:01:09.900</span></div>
+            <div class="source-cell">
+              <div class="cell-label">原文</div>
+              <div class="source-text">You promised this would stay between us.</div>
+            </div>
+            <div class="translated-cell">
+              <div class="cell-label">译文</div>
+              <div class="translated-text">Prometiste que esto quedaría entre <span class="inline-mark">nosotoros</span>.</div>
+            </div>
+          </article>
+          <article class="subtitle-row has-qc" data-row-id="3">
+            <div class="row-index">003</div>
+            <div class="row-time"><span>00:01:10.240</span><span>00:01:12.520</span></div>
+            <div class="source-cell">
+              <div class="cell-label">原文</div>
+              <div class="source-text">Read the contract before you accuse me.</div>
+            </div>
+            <div class="translated-cell">
+              <div class="cell-label">译文</div>
+              <div class="translated-text"><span class="inline-mark">lee</span> el contrato antes de acusarme..</div>
+            </div>
+          </article>
+          <article class="subtitle-row" data-row-id="4">
+            <div class="row-index">004</div>
+            <div class="row-time"><span>00:01:13.100</span><span>00:01:16.820</span></div>
+            <div class="source-cell">
+              <div class="cell-label">原文</div>
+              <div class="source-text">I built this team from nothing, and I won’t watch you destroy it.</div>
+            </div>
+            <div class="translated-cell">
+              <div class="cell-label">译文</div>
+              <div class="translated-text">Levanté este equipo desde cero y no dejaré que lo destruyas.</div>
+            </div>
+          </article>
+          <article class="subtitle-row has-qc" data-row-id="5">
+            <div class="row-index">005</div>
+            <div class="row-time"><span>00:01:17.180</span><span>00:01:20.440</span></div>
+            <div class="source-cell">
+              <div class="cell-label">原文</div>
+              <div class="source-text">Mr. Langley already approved the transfer.</div>
+            </div>
+            <div class="translated-cell">
+              <div class="cell-label">译文</div>
+              <div class="translated-text">El señor Langley ya aprobó la <span class="inline-mark">transferéncia</span>.</div>
+            </div>
+          </article>
+          <article class="subtitle-row" data-row-id="6">
+            <div class="row-index">006</div>
+            <div class="row-time"><span>00:01:21.000</span><span>00:01:23.080</span></div>
+            <div class="source-cell">
+              <div class="cell-label">原文</div>
+              <div class="source-text">Then why did you hide the second signature page?</div>
+            </div>
+            <div class="translated-cell">
+              <div class="cell-label">译文</div>
+              <div class="translated-text">Entonces, ¿por qué ocultaste la segunda página de firmas?</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <aside class="qa-panel">
+        <div class="qa-header">
+          <span class="qa-title">质检提醒</span>
+          <span id="qaBadge" class="qa-badge">共 5 处</span>
+          <button id="openScanFromPanel" class="btn primary">质检扫描</button>
+        </div>
+        <div id="scanStatus" class="scan-status">
+          <span class="spinner"></span>
+          <span id="scanStatusText">正在扫描已选质检项…</span>
+        </div>
+        <div class="qa-body">
+          <div class="summary">
+            <div class="summary-top">
+              <span>异常汇总</span>
+              <span>按数量倒序</span>
+            </div>
+            <button class="type-button active" data-filter="all">
+              <span class="type-name">全部问题</span>
+              <span class="type-count">5</span>
+            </button>
+            <button class="type-button" data-filter="text">
+              <span class="type-name">内容问题</span>
+              <span class="type-count">2</span>
+            </button>
+            <button class="type-button" data-filter="format">
+              <span class="type-name">格式规范</span>
+              <span class="type-count">2</span>
+            </button>
+            <button class="type-button" data-filter="consistency">
+              <span class="type-name">一致性问题</span>
+              <span class="type-count">1</span>
+            </button>
+          </div>
+
+          <div class="unified-toolbar">
+            <button id="selectAllBtn" class="check" aria-label="全选"></button>
+            <button id="batchAdoptBtn" class="btn primary" disabled>采用所选</button>
+            <button id="batchIgnoreBtn" class="btn danger" disabled>忽略所选</button>
+          </div>
+
+          <div id="issueList" class="issue-list"></div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <div id="scanModal" class="modal-mask" role="dialog" aria-modal="true" aria-labelledby="scanModalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <div id="scanModalTitle" class="modal-title">质检扫描配置</div>
+        <button class="modal-close" id="closeScanModal" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="notice">
+          <span>ⓘ</span>
+          <span>本次扫描不会自动修改译文。扫描结果将写入右侧质检提醒面板，用户可逐条定位、采用建议或忽略。</span>
+        </div>
+
+        <div class="config-grid">
+          <section class="config-card" data-group="text">
+            <div class="config-card-head">
+              <span class="fake-checkbox checked" data-check="text">✓</span>
+              <span class="config-title">内容问题</span>
+            </div>
+            <div class="sub-options">
+              <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="spelling">✓</span><span>常见词汇错拼</span></label>
+              <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="capitalization">✓</span><span>大小写异常</span></label>
+              <label class="sub-option"><span class="fake-checkbox" data-subcheck="suspected_missing_or_extra"></span><span>疑似漏译 / 多译</span></label>
+            </div>
+          </section>
+
+          <section class="config-card" data-group="format">
+            <div class="config-card-head">
+              <span class="fake-checkbox checked" data-check="format">✓</span>
+              <span class="config-title">格式规范</span>
+            </div>
+            <div class="sub-options">
+              <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="duplicate_punctuation">✓</span><span>重复标点</span></label>
+              <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="extra_space">✓</span><span>多余空格</span></label>
+              <label class="sub-option"><span class="fake-checkbox" data-subcheck="punctuation_style"></span><span>目标语标点习惯</span></label>
+            </div>
+          </section>
+
+          <section class="config-card" data-group="consistency">
+            <div class="config-card-head">
+              <span class="fake-checkbox checked" data-check="consistency">✓</span>
+              <span class="config-title">一致性问题</span>
+            </div>
+            <div class="sub-options">
+              <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="source_translation_consistency">✓</span><span>同源文译法不一致</span></label>
+              <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="term_consistency">✓</span><span>术语译法不一致</span></label>
+            </div>
+          </section>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelScan" class="btn">取消</button>
+        <button id="startScan" class="btn primary">开始扫描</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">已完成</div>
+
+  <script>
+    const issues = [
+      {
+        id: 1,
+        row: "2",
+        category: "text",
+        typeLabel: "常见词汇错拼",
+        title: "第2段｜常见词汇错拼",
+        current: "Prometiste que esto quedaría entre nosotoros.",
+        suggestion: "Prometiste que esto quedaría entre nosotros.",
+        note: "检测到 nosotoros 疑似为 nosotros 的错拼。",
+        tag: "内容问题"
+      },
+      {
+        id: 2,
+        row: "3",
+        category: "text",
+        typeLabel: "大小写异常",
+        title: "第3段｜大小写异常",
+        current: "lee el contrato antes de acusarme..",
+        suggestion: "Lee el contrato antes de acusarme.",
+        note: "句首字母建议大写，并移除重复句号。",
+        tag: "内容问题"
+      },
+      {
+        id: 3,
+        row: "3",
+        category: "format",
+        typeLabel: "重复标点",
+        title: "第3段｜重复标点",
+        current: "Lee el contrato antes de acusarme..",
+        suggestion: "Lee el contrato antes de acusarme.",
+        note: "检测到句末连续使用多个句号。",
+        tag: "格式规范"
+      },
+      {
+        id: 4,
+        row: "5",
+        category: "format",
+        typeLabel: "目标语标点习惯",
+        title: "第5段｜目标语标点习惯",
+        current: "El señor Langley ya aprobó la transferéncia.",
+        suggestion: "El señor Langley ya aprobó la transferencia.",
+        note: "建议统一为目标语标准拼写与标点。",
+        tag: "格式规范"
+      },
+      {
+        id: 5,
+        row: "5",
+        category: "consistency",
+        typeLabel: "术语译法不一致",
+        title: "第5段｜术语译法不一致",
+        current: "transferéncia",
+        suggestion: "transferencia",
+        note: "同一术语在本集前文已使用 transferencia，建议保持一致。",
+        tag: "一致性问题"
+      }
+    ];
+
+    const state = {
+      filter: "all",
+      selected: new Set(),
+      ignored: new Set(),
+      adopted: new Set(),
+      scanning: false,
+      hasScanned: true
+    };
+
+    const issueList = document.getElementById("issueList");
+    const selectAllBtn = document.getElementById("selectAllBtn");
+    const batchAdoptBtn = document.getElementById("batchAdoptBtn");
+    const batchIgnoreBtn = document.getElementById("batchIgnoreBtn");
+    const qaBadge = document.getElementById("qaBadge");
+    const scanModal = document.getElementById("scanModal");
+    const scanStatus = document.getElementById("scanStatus");
+    const scanStatusText = document.getElementById("scanStatusText");
+    const toast = document.getElementById("toast");
+
+    function visibleIssues() {
+      return issues.filter(item => {
+        if (state.ignored.has(item.id) || state.adopted.has(item.id)) return false;
+        return state.filter === "all" || item.category === state.filter;
+      });
+    }
+
+    function issueCountByCategory(category) {
+      return issues.filter(item => !state.ignored.has(item.id) && !state.adopted.has(item.id) && (category === "all" || item.category === category)).length;
+    }
+
+    function tagClass(category) {
+      if (category === "format") return "format";
+      if (category === "consistency") return "consistency";
+      return "text";
+    }
+
+    function renderIssues() {
+      const current = visibleIssues();
+      issueList.innerHTML = "";
+      if (current.length === 0) {
+        issueList.innerHTML = '<div class="empty-state">当前分类暂无质检提醒</div>';
+      } else {
+        for (const item of current) {
+          const card = document.createElement("article");
+          card.className = "issue-card" + (state.selected.has(item.id) ? " selected" : "");
+          card.dataset.issueId = item.id;
+          card.dataset.row = item.row;
+          card.innerHTML = `
+            <button class="check ${state.selected.has(item.id) ? "checked" : ""}" aria-label="勾选">${state.selected.has(item.id) ? "✓" : ""}</button>
+            <div class="issue-header">
+              <span class="issue-title">${item.title.replace("｜", '<span class="issue-sep">｜</span>')}</span>
+              <span class="tag ${tagClass(item.category)}">${item.tag}</span>
+            </div>
+            <div class="issue-compare">
+              <div><strong>当前</strong>${item.current}</div>
+              <div><strong>建议</strong>${item.suggestion}</div>
+            </div>
+            <div class="issue-note">${item.note}</div>
+            <div class="issue-actions">
+              <button class="btn danger" data-action="ignore">忽略</button>
+              <button class="btn primary" data-action="adopt">采用建议</button>
+            </div>
+          `;
+          issueList.appendChild(card);
+        }
+      }
+      updateSummary();
+      updateBatchButtons();
+    }
+
+    function updateSummary() {
+      const total = issueCountByCategory("all");
+      qaBadge.textContent = total > 0 ? `共 ${total} 处` : "暂无异常";
+      document.querySelector('[data-filter="all"] .type-count').textContent = total;
+      document.querySelector('[data-filter="text"] .type-count').textContent = issueCountByCategory("text");
+      document.querySelector('[data-filter="format"] .type-count').textContent = issueCountByCategory("format");
+      document.querySelector('[data-filter="consistency"] .type-count').textContent = issueCountByCategory("consistency");
+    }
+
+    function updateBatchButtons() {
+      const visible = visibleIssues();
+      const selectedVisible = visible.filter(item => state.selected.has(item.id));
+      const allSelected = visible.length > 0 && selectedVisible.length === visible.length;
+      selectAllBtn.classList.toggle("checked", allSelected);
+      selectAllBtn.textContent = allSelected ? "✓" : "";
+      batchAdoptBtn.disabled = selectedVisible.length === 0;
+      batchIgnoreBtn.disabled = selectedVisible.length === 0;
+      batchAdoptBtn.textContent = selectedVisible.length ? `采用所选(${selectedVisible.length})` : "采用所选";
+      batchIgnoreBtn.textContent = selectedVisible.length ? `忽略所选(${selectedVisible.length})` : "忽略所选";
+    }
+
+    function setActiveRow(rowId) {
+      document.querySelectorAll(".subtitle-row").forEach(row => {
+        row.classList.toggle("active", row.dataset.rowId === rowId);
+      });
+      const row = document.querySelector(`.subtitle-row[data-row-id="${rowId}"]`);
+      if (row) row.scrollIntoView({ block: "center", behavior: "smooth" });
+      document.querySelectorAll(".issue-card").forEach(card => {
+        card.classList.toggle("active", card.dataset.row === rowId);
+      });
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function openModal() {
+      scanModal.classList.add("show");
+    }
+
+    function closeModal() {
+      scanModal.classList.remove("show");
+    }
+
+    function startScan() {
+      closeModal();
+      state.scanning = true;
+      scanStatus.classList.add("show");
+      scanStatusText.textContent = "正在扫描已选质检项…";
+      showToast("质检扫描已开始");
+      window.setTimeout(() => {
+        scanStatusText.textContent = "正在生成质检提醒…";
+      }, 900);
+      window.setTimeout(() => {
+        state.scanning = false;
+        state.hasScanned = true;
+        scanStatus.classList.remove("show");
+        state.ignored.clear();
+        state.adopted.clear();
+        state.selected.clear();
+        renderIssues();
+        showToast("质检扫描完成，发现 5 处问题");
+      }, 1700);
+    }
+
+    document.getElementById("openScanFromPanel").addEventListener("click", openModal);
+    document.getElementById("closeScanModal").addEventListener("click", closeModal);
+    document.getElementById("cancelScan").addEventListener("click", closeModal);
+    document.getElementById("startScan").addEventListener("click", startScan);
+    scanModal.addEventListener("click", event => {
+      if (event.target === scanModal) closeModal();
+    });
+
+    document.querySelectorAll(".type-button").forEach(button => {
+      button.addEventListener("click", () => {
+        state.filter = button.dataset.filter;
+        state.selected.clear();
+        document.querySelectorAll(".type-button").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        renderIssues();
+      });
+    });
+
+    function setCheckbox(box, checked) {
+      box.classList.toggle("checked", checked);
+      box.textContent = checked ? "✓" : "";
+    }
+
+    function syncGroupCheckbox(card) {
+      const groupBox = card.querySelector("[data-check]");
+      const subBoxes = [...card.querySelectorAll("[data-subcheck]")];
+      if (!groupBox || subBoxes.length === 0) return;
+      const allChecked = subBoxes.every(box => box.classList.contains("checked"));
+      setCheckbox(groupBox, allChecked);
+    }
+
+    document.querySelectorAll(".fake-checkbox").forEach(box => {
+      box.addEventListener("click", event => {
+        event.preventDefault();
+        event.stopPropagation();
+        const card = box.closest(".config-card");
+        const nextChecked = !box.classList.contains("checked");
+        setCheckbox(box, nextChecked);
+
+        if (box.dataset.check && card) {
+          card.querySelectorAll("[data-subcheck]").forEach(subBox => {
+            setCheckbox(subBox, nextChecked);
+          });
+          return;
+        }
+
+        if (box.dataset.subcheck && card) {
+          syncGroupCheckbox(card);
+        }
+      });
+    });
+
+    issueList.addEventListener("click", event => {
+      const card = event.target.closest(".issue-card");
+      if (!card) return;
+      const id = Number(card.dataset.issueId);
+      const row = card.dataset.row;
+      if (event.target.closest(".check")) {
+        if (state.selected.has(id)) state.selected.delete(id);
+        else state.selected.add(id);
+        renderIssues();
+        return;
+      }
+      const actionBtn = event.target.closest("[data-action]");
+      if (actionBtn) {
+        if (actionBtn.dataset.action === "ignore") {
+          state.ignored.add(id);
+          state.selected.delete(id);
+          showToast("已忽略该质检提醒");
+        }
+        if (actionBtn.dataset.action === "adopt") {
+          state.adopted.add(id);
+          state.selected.delete(id);
+          showToast("已采用建议，译文变更将按译文编辑计入 PE");
+        }
+        renderIssues();
+        return;
+      }
+      setActiveRow(row);
+    });
+
+    selectAllBtn.addEventListener("click", () => {
+      const current = visibleIssues();
+      const allSelected = current.length > 0 && current.every(item => state.selected.has(item.id));
+      if (allSelected) current.forEach(item => state.selected.delete(item.id));
+      else current.forEach(item => state.selected.add(item.id));
+      renderIssues();
+    });
+
+    batchIgnoreBtn.addEventListener("click", () => {
+      visibleIssues().forEach(item => {
+        if (state.selected.has(item.id)) {
+          state.ignored.add(item.id);
+          state.selected.delete(item.id);
+        }
+      });
+      renderIssues();
+      showToast("已忽略所选质检提醒");
+    });
+
+    batchAdoptBtn.addEventListener("click", () => {
+      visibleIssues().forEach(item => {
+        if (state.selected.has(item.id)) {
+          state.adopted.add(item.id);
+          state.selected.delete(item.id);
+        }
+      });
+      renderIssues();
+      showToast("已采用所选建议");
+    });
+
+    renderIssues();
+  </script>
+</body>
+</html>
