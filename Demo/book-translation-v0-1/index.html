@@ -1224,6 +1224,24 @@
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
     }
 
+    .quick-filter .quick-filter-clear {
+      display: none;
+      margin-left: 2px;
+      border-color: transparent;
+      color: var(--accent-text);
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .quick-filter.has-active .quick-filter-clear {
+      display: inline-flex;
+    }
+
+    .quick-filter .quick-filter-clear:hover {
+      border-color: rgba(124, 90, 243, 0.22);
+      background: rgba(98, 36, 255, 0.1);
+    }
+
     .term-filter-bar {
       display: flex;
       align-items: center;
@@ -1382,6 +1400,33 @@
 
     .language-panel-head .quick-filter {
       margin-bottom: 0;
+    }
+
+    #frText td.actions,
+    #esText td.actions,
+    #ptText td.actions,
+    #itText td.actions {
+      display: grid;
+      grid-template-columns: 76px 36px;
+      justify-content: end;
+      align-items: center;
+      column-gap: 12px;
+    }
+
+    #frText td.actions .row-retranslate,
+    #esText td.actions .row-retranslate,
+    #ptText td.actions .row-retranslate,
+    #itText td.actions .row-retranslate {
+      width: 76px;
+      padding: 0;
+    }
+
+    #frText td.actions [data-go="editor"],
+    #esText td.actions [data-go="editor"],
+    #ptText td.actions [data-go="editor"],
+    #itText td.actions [data-go="editor"] {
+      width: 36px;
+      padding: 0;
     }
 
     .term-inline-row td {
@@ -2276,6 +2321,20 @@
     .mock-option.active {
       color: #fff;
       background: #6224ff;
+    }
+
+    .multi-select .mock-option {
+      position: relative;
+      padding-right: 32px;
+    }
+
+    .multi-select .mock-option.active::after {
+      content: "✓";
+      position: absolute;
+      right: 12px;
+      color: currentColor;
+      font-size: 13px;
+      font-weight: 700;
     }
 
     .modal-row {
@@ -3530,7 +3589,7 @@
               </div>
             </div>
             <div class="field"><label>目标语言</label>
-              <div class="mock-select" data-select-name="targetLanguageCreate" data-value="法语">
+              <div class="mock-select multi-select" data-select-name="targetLanguageCreate" data-multiple="true" data-value="法语">
                 <button class="mock-select-trigger" type="button">法语</button>
                 <div class="mock-select-menu">
                   <div class="mock-option active" data-value="法语">法语</div>
@@ -5289,11 +5348,34 @@
     }
 
     function bindQuickFilters() {
-      document.querySelectorAll(".book-panel .quick-filter button").forEach((button) => {
+      document.querySelectorAll(".book-panel .quick-filter").forEach((filter) => {
+        if (!filter.querySelector(".quick-filter-clear")) {
+          const clearButton = document.createElement("button");
+          clearButton.className = "quick-filter-clear";
+          clearButton.type = "button";
+          clearButton.textContent = "清空选择";
+          filter.appendChild(clearButton);
+        }
+        filter.classList.toggle("has-active", Boolean(filter.querySelector("button.active:not(.quick-filter-clear)")));
+      });
+      document.querySelectorAll(".book-panel .quick-filter .quick-filter-clear").forEach((button) => {
+        button.addEventListener("click", () => {
+          const panel = button.closest(".book-panel");
+          const filter = button.closest(".quick-filter");
+          if (!panel || !filter) return;
+          filter.querySelectorAll("button:not(.quick-filter-clear)").forEach((item) => item.classList.remove("active"));
+          filter.classList.remove("has-active");
+          panel.querySelectorAll("tbody tr").forEach((row) => { row.style.display = ""; });
+          syncPanelSelectionAfterFilter(panel);
+        });
+      });
+      document.querySelectorAll(".book-panel .quick-filter button:not(.quick-filter-clear)").forEach((button) => {
         button.addEventListener("click", () => {
           const panel = button.closest(".book-panel");
           if (!panel) return;
-          panel.querySelectorAll(".quick-filter button").forEach((item) => item.classList.toggle("active", item === button));
+          const filter = button.closest(".quick-filter");
+          panel.querySelectorAll(".quick-filter button:not(.quick-filter-clear)").forEach((item) => item.classList.toggle("active", item === button));
+          filter?.classList.add("has-active");
           const label = button.textContent.trim();
           const matchStatuses = panel.id === "sourceText"
             ? [label]
@@ -5787,6 +5869,15 @@
       options.forEach((option) => {
         option.addEventListener("click", (event) => {
           event.stopPropagation();
+          if (select.dataset.multiple === "true") {
+            option.classList.toggle("active");
+            const selectedOptions = options.filter((item) => item.classList.contains("active"));
+            const labels = selectedOptions.map((item) => item.textContent.trim());
+            const values = selectedOptions.map((item) => item.dataset.value || item.textContent.trim());
+            trigger.textContent = labels.length ? labels.join(" / ") : "请选择目标语言";
+            select.dataset.value = values.join(",");
+            return;
+          }
           options.forEach((item) => item.classList.toggle("active", item === option));
           trigger.textContent = option.textContent.trim();
           select.dataset.value = option.dataset.value || option.textContent.trim();
