@@ -29,7 +29,35 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(124, 90, 243, 0.46) rgba(255, 255, 255, 0.045);
+    }
+
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.035);
+      border-radius: 999px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      border: 2px solid rgba(18, 18, 24, 0.94);
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(146, 120, 255, 0.74), rgba(98, 36, 255, 0.58));
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(174, 154, 255, 0.86), rgba(124, 90, 243, 0.72));
+    }
+
+    *::-webkit-scrollbar-corner {
+      background: transparent;
+    }
 
     body {
       margin: 0;
@@ -455,7 +483,44 @@
       background: var(--filter-control-bg);
       outline: none;
       padding: 0 10px;
+      color-scheme: dark;
+      font-size: 13px;
       transition: 0.18s ease;
+    }
+
+    .control::placeholder,
+    .textarea::placeholder {
+      color: rgba(255, 255, 255, 0.34);
+    }
+
+    select.control {
+      appearance: none;
+      -webkit-appearance: none;
+      padding-right: 34px;
+      color: rgba(255, 255, 255, 0.86);
+      background-color: var(--filter-control-bg);
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.62) 50%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.62) 50%, transparent 50%);
+      background-position: calc(100% - 16px) 14px, calc(100% - 11px) 14px;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+    }
+
+    select.control:hover {
+      background-color: var(--filter-control-hover-bg);
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.82) 50%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.82) 50%, transparent 50%);
+    }
+
+    select.control:focus {
+      background-color: var(--filter-control-focus-bg);
+    }
+
+    select.control option {
+      color: rgba(255, 255, 255, 0.88);
+      background: #171521;
     }
 
     .control:hover,
@@ -879,6 +944,7 @@
       color: rgba(255, 255, 255, 0.82);
     }
 
+    .required,
     #create .required {
       margin-left: 3px;
       color: #ff6b78;
@@ -993,6 +1059,653 @@
       border-color: rgba(177, 158, 255, 0.9);
       background: linear-gradient(180deg, #8c70ff 0%, #6943f2 100%);
       box-shadow: 0 12px 26px rgba(98, 36, 255, 0.42);
+    }
+
+    .source-method-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .source-method-switch button {
+      height: 34px;
+      border: 0;
+      border-radius: 8px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 650;
+      letter-spacing: 0;
+      transition: 0.18s ease;
+    }
+
+    .source-method-switch button:hover {
+      color: rgba(255, 255, 255, 0.86);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .source-method-switch button.active {
+      color: #fff;
+      background: rgba(98, 36, 255, 0.78);
+      box-shadow: 0 8px 18px rgba(98, 36, 255, 0.24);
+    }
+
+    .source-panel {
+      display: none;
+    }
+
+    .source-panel.active {
+      display: block;
+    }
+
+    .book-id-textarea {
+      height: 168px;
+      min-height: 168px;
+      resize: none;
+      line-height: 1.55;
+      padding: 10px 12px;
+    }
+
+    .range-tools {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .range-tools .control {
+      text-align: center;
+    }
+
+    .range-preview {
+      margin-top: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .range-preview table th,
+    .range-preview table td {
+      padding: 9px 10px;
+      font-size: 12.5px;
+    }
+
+    .range-preview .range-input {
+      width: 82px;
+      height: 28px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .danger-modal {
+      border-color: rgba(255, 107, 120, 0.42);
+      box-shadow: 0 24px 72px rgba(0, 0, 0, 0.68), 0 0 0 1px rgba(255, 107, 120, 0.12);
+    }
+
+    .danger-modal h3 {
+      color: #ffb8bf;
+    }
+
+    .danger-summary {
+      display: grid;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .danger-group {
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 107, 120, 0.18);
+      border-radius: 10px;
+      background: rgba(255, 107, 120, 0.07);
+    }
+
+    .danger-group strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #ffb8bf;
+      font-size: 13px;
+    }
+
+    .danger-group p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .hint-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      color: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.06);
+      font-size: 12px;
+      cursor: help;
+    }
+
+    .task-toolbar {
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      align-items: end;
+    }
+
+    #taskCenter .toolbar-actions {
+      grid-column: 1 / -1;
+      justify-content: flex-end;
+    }
+
+    #taskCenter .table-card {
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-color: rgba(124, 90, 243, 0.52) rgba(255, 255, 255, 0.045);
+      scrollbar-width: thin;
+    }
+
+    #taskCenter .table-card::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    #taskCenter .table-card::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.045);
+      border-radius: 999px;
+    }
+
+    #taskCenter .table-card::-webkit-scrollbar-thumb {
+      background: rgba(124, 90, 243, 0.52);
+      border-radius: 999px;
+    }
+
+    #taskCenter table {
+      min-width: 1680px;
+    }
+
+    #taskCenter th,
+    #taskCenter td {
+      font-size: 12.5px;
+    }
+
+    #taskCenter td:last-child,
+    #taskCenter th:last-child {
+      position: sticky;
+      right: 0;
+      z-index: 1;
+      background: #121018;
+      box-shadow: -10px 0 18px rgba(0, 0, 0, 0.22);
+    }
+
+    #taskCenter tr:hover td:last-child {
+      background: #17131f;
+    }
+
+    .task-type-tag {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 6px;
+      color: #d4c2ff;
+      border: 1px solid rgba(167, 139, 250, 0.55);
+      background: rgba(139, 92, 246, 0.18);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .task-progress-cell {
+      display: inline-flex;
+      align-items: baseline;
+      white-space: nowrap;
+    }
+
+    .task-progress-num {
+      color: #a87fff;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .task-progress-done {
+      color: #52c41a;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .task-progress-unit {
+      margin-left: 3px;
+      color: rgba(255, 255, 255, 0.42);
+      font-size: 12px;
+    }
+
+    .task-action-group {
+      display: grid;
+      grid-template-columns: 52px 52px 116px;
+      justify-content: end;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .task-action-group .btn {
+      height: 28px;
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 12px;
+      justify-content: center;
+    }
+
+    .task-action-group .download {
+      color: #fff;
+      background: rgba(120, 52, 210, 0.88);
+      border-color: rgba(120, 52, 210, 0.88);
+    }
+
+    .task-action-group .retry {
+      color: #f8d178;
+      border-color: rgba(243, 182, 66, 0.48);
+      background: rgba(243, 182, 66, 0.12);
+    }
+
+    .task-action-group .push {
+      color: rgba(143, 240, 193, 0.92);
+      border-color: rgba(82, 196, 26, 0.36);
+      background: rgba(82, 196, 26, 0.08);
+    }
+
+    .task-action-group .btn:not(.download):not(.push):not(.retry) {
+      color: rgba(255, 255, 255, 0.78);
+      border-color: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .task-action-group .btn:disabled {
+      color: rgba(255, 255, 255, 0.32) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+      background: rgba(255, 255, 255, 0.025) !important;
+      box-shadow: none !important;
+      cursor: not-allowed;
+    }
+
+    .task-module-tabs {
+      display: flex;
+      gap: 8px;
+      margin: 0 0 14px;
+    }
+
+    .task-module-tabs button {
+      height: 32px;
+      padding: 0 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.62);
+      background: rgba(255, 255, 255, 0.035);
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .task-module-tabs button.active {
+      color: #fff;
+      border-color: rgba(124, 90, 243, 0.56);
+      background: rgba(98, 36, 255, 0.22);
+    }
+
+    .task-detail-info {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.075);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.032);
+      margin-bottom: 14px;
+    }
+
+    .task-detail-item {
+      min-width: 0;
+    }
+
+    .task-detail-item label {
+      display: block;
+      color: rgba(255, 255, 255, 0.42);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+
+    .task-detail-item span {
+      display: block;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .task-detail-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .task-detail-head h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 650;
+    }
+
+    .chapter-preview-body {
+      max-height: 420px;
+      overflow: auto;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.035);
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    #taskDetail th:last-child,
+    #taskDetail td:last-child {
+      text-align: right;
+    }
+
+    #taskDetail .task-action-group {
+      grid-template-columns: 64px;
+    }
+
+    @media (max-width: 1280px) {
+      .task-toolbar {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      #taskCenter .filter.wide {
+        grid-column: span 1;
+      }
+
+      .task-detail-info {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 860px) {
+      .task-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      #taskCenter .toolbar-actions {
+        justify-content: flex-start;
+      }
+
+      .task-detail-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .task-detail-info {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .permission-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border: 1px solid rgba(248, 209, 120, 0.22);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.72);
+      background: rgba(243, 182, 66, 0.08);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .chapter-range-row {
+      display: grid;
+      grid-template-columns: 1fr 96px 96px auto;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .chapter-range-row:first-child {
+      border-top: 0;
+    }
+
+    .chapter-range-row .control {
+      height: 30px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .range-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .range-chip {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      color: rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.045);
+      font-size: 12px;
+    }
+
+    .risk-confirm {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 154, 163, 0.24);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.78);
+      background: rgba(255, 107, 120, 0.08);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .risk-confirm label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .replace-range-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .editor.reroll-mode .paragraph-reselect {
+      display: inline-flex;
+    }
+
+    .editor.reroll-mode .reroll-check-head {
+      visibility: visible;
+    }
+
+    .reroll-check-head {
+      justify-content: center;
+      visibility: hidden;
+    }
+
+    .paragraph-reselect {
+      display: none;
+    }
+
+    .paragraph-select-cell {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 16px;
+      border-left: 1px solid rgba(255, 255, 255, 0.045);
+    }
+
+    .paragraph-row.reroll-selected {
+      background: rgba(98, 36, 255, 0.14);
+      box-shadow: inset 3px 0 0 #8b73ff;
+    }
+
+    .paragraph-row.reroll-selected .para-cell.target {
+      border-color: rgba(139, 115, 255, 0.72);
+      background: rgba(98, 36, 255, 0.18);
+    }
+
+    .paragraph-row:focus-within {
+      background: rgba(98, 36, 255, 0.1);
+      box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
+    }
+
+    .paragraph-row .para-cell:focus-within {
+      border-color: rgba(139, 115, 255, 0.82);
+      background: rgba(98, 36, 255, 0.13);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 2px rgba(98, 36, 255, 0.2), 0 8px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    .reroll-panel {
+      display: none;
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 10px 14px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(180deg, #1a1d27 0%, #151820 100%);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .editor.reroll-mode .reroll-panel {
+      display: grid;
+      gap: 10px;
+    }
+
+    .reroll-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 13px;
+    }
+
+    .reroll-head .actions {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .reroll-head label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .reroll-head > span {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .reroll-panel textarea {
+      width: 100%;
+      min-height: 42px;
+      max-height: 72px;
+      resize: vertical;
+      color: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.055);
+      outline: 0;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .reroll-result {
+      display: none;
+      gap: 8px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      border: 1px solid rgba(139, 227, 255, 0.2);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.78);
+      background: rgba(78, 200, 240, 0.08);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .reroll-result.visible {
+      display: grid;
+    }
+
+    .reroll-candidate {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border: 1px solid rgba(139, 115, 255, 0.32);
+      border-radius: 8px;
+      background: rgba(98, 36, 255, 0.12);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .reroll-candidate-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .reroll-candidate-text {
+      margin: 0 0 8px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 14px;
+      line-height: 1.62;
+    }
+
+    .reroll-candidate-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .reroll-candidate-actions .btn {
+      height: 26px;
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 12px;
+    }
+
+    .reroll-batch-action {
+      display: none;
+    }
+
+    .reroll-panel.has-results .reroll-select-action {
+      display: none;
+    }
+
+    .reroll-panel.has-results .reroll-batch-action {
+      display: inline-flex;
+    }
+
+    .reroll-panel.has-results textarea {
+      display: none;
     }
 
     .upload-empty {
@@ -1476,6 +2189,29 @@
       padding: 10px 12px;
       font-size: 13px;
       line-height: 1.55;
+    }
+
+    .term-inline-select {
+      appearance: none;
+      -webkit-appearance: none;
+      padding-right: 30px;
+      background-color: rgba(255, 255, 255, 0.07);
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.62) 50%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.62) 50%, transparent 50%);
+      background-position: calc(100% - 15px) 13px, calc(100% - 10px) 13px;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      color-scheme: dark;
+    }
+
+    .term-inline-select:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .term-inline-select option {
+      color: rgba(255, 255, 255, 0.9);
+      background: #171521;
     }
 
     #novelAssets th {
@@ -2242,18 +2978,21 @@
       -webkit-appearance: none;
       padding-right: 34px;
       color-scheme: dark;
-      background:
-        linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.62) 50%) calc(100% - 18px) 15px / 6px 6px no-repeat,
-        linear-gradient(135deg, rgba(255, 255, 255, 0.62) 50%, transparent 50%) calc(100% - 14px) 15px / 6px 6px no-repeat,
-        #0d0d13;
+      background-color: #0d0d13;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.62) 50%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.62) 50%, transparent 50%);
+      background-position: calc(100% - 18px) 15px, calc(100% - 13px) 15px;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
       border-color: rgba(255, 255, 255, 0.16);
     }
 
     .modal select.control:hover {
-      background:
-        linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.78) 50%) calc(100% - 18px) 15px / 6px 6px no-repeat,
-        linear-gradient(135deg, rgba(255, 255, 255, 0.78) 50%, transparent 50%) calc(100% - 14px) 15px / 6px 6px no-repeat,
-        #12121a;
+      background-color: #12121a;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.78) 50%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.78) 50%, transparent 50%);
     }
 
     .modal select.control option {
@@ -2836,7 +3575,7 @@
 
     .editor-columns {
       display: grid;
-      grid-template-columns: 54px minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-columns: 54px minmax(0, 1fr) minmax(0, 1fr) 44px;
       height: 40px;
       flex: 0 0 auto;
       border-bottom: 1px solid rgba(255, 255, 255, 0.07);
@@ -2860,7 +3599,7 @@
 
     .paragraph-row {
       display: grid;
-      grid-template-columns: 54px minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-columns: 54px minmax(0, 1fr) minmax(0, 1fr) 44px;
       min-height: auto;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       background: #151923;
@@ -3371,12 +4110,14 @@
 
   <aside class="sidebar">
     <div class="nav-group nav-parent"><span class="nav-icon">▦</span><span>工作台</span></div>
-    <button class="nav-item nav-child"><span>短剧翻译</span></button>
+    <button class="nav-item nav-child"><span>短剧译配</span></button>
     <button class="nav-item nav-child active" data-go="projects"><span>书籍翻译</span></button>
     <div class="nav-group nav-parent"><span class="nav-icon">书</span><span>术语库</span></div>
     <button class="nav-item nav-child"><span>短剧术语库</span></button>
     <button class="nav-item nav-child" data-go="bookGlossary"><span>书籍术语库</span></button>
-    <button class="nav-item"><span class="nav-icon">任</span><span>任务中心</span></button>
+    <div class="nav-group nav-parent"><span class="nav-icon">任</span><span>任务中心</span></div>
+    <button class="nav-item nav-child"><span>短剧译配</span></button>
+    <button class="nav-item nav-child" data-go="taskCenter"><span>书籍翻译</span></button>
     <button class="nav-item"><span class="nav-icon">管</span><span>用户管理</span></button>
   </aside>
 
@@ -3458,6 +4199,150 @@
               <td>Mia</td>
               <td>2026-10-17 12:02</td>
               <td class="actions"><button class="btn text project-delete">删除项目</button><button class="btn text">查看</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="taskCenter" class="view">
+      <div class="task-module-tabs">
+        <button type="button">短剧译配</button>
+        <button class="active" type="button">书籍翻译</button>
+      </div>
+      <div class="toolbar task-toolbar">
+        <div class="filter"><label>任务ID</label><input class="control" placeholder="请输入任务ID" /></div>
+        <div class="filter"><label>书籍ID</label><input class="control" placeholder="请输入书籍ID" /></div>
+        <div class="filter"><label>原始语言</label><select class="control"><option>请选择原始语言</option><option>中文</option><option>英文</option></select></div>
+        <div class="filter"><label>目标语言</label><select class="control"><option>请选择目标语言</option><option>法语</option><option>西班牙语</option><option>葡萄牙语</option></select></div>
+        <div class="filter"><label>导出类型</label><select class="control"><option>请选择导出类型</option><option>导出原文</option><option>导出译文</option></select></div>
+        <div class="filter"><label>篇章范围</label><input class="control" placeholder="如：1-100" /></div>
+        <div class="filter"><label>处理进度</label><select class="control"><option>请选择处理进度</option><option>处理中</option><option>已完成</option><option>失败</option></select></div>
+        <div class="filter wide"><label>提交时间</label><input class="control" placeholder="请选择提交时间" /></div>
+        <div class="filter"><label>提交人</label><input class="control" placeholder="请输入提交人" /></div>
+        <div class="filter wide"><label>推送时间</label><input class="control" placeholder="请选择推送时间" /></div>
+        <div class="filter"><label>推送人</label><input class="control" placeholder="请输入推送人" /></div>
+        <div class="filter"><label>业务线</label><select class="control"><option>请选择业务线</option><option>海外书籍</option><option>GS内容中台</option></select></div>
+        <div class="toolbar-actions">
+          <button class="btn">清空条件</button>
+          <button class="btn primary">查询</button>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>任务ID</th><th>书籍ID</th><th>书籍名称</th><th>原始语言</th><th>目标语言</th><th>导出类型</th><th>篇章范围</th><th>处理进度</th><th>状态</th><th>提交人</th><th>提交时间</th><th>推送人</th><th>推送时间</th><th>业务线</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mono">BT-20261024001</span></td>
+              <td><span class="mono">BK10012</span></td>
+              <td>摄政王的白月光</td>
+              <td>中文</td>
+              <td>法语</td>
+              <td><span class="task-type-tag">导出译文</span></td>
+              <td>1-100章</td>
+              <td><span class="task-progress-cell"><span class="task-progress-done">100</span><span class="task-progress-unit">/100章</span></span></td>
+              <td><span class="tag green">已完成</span></td>
+              <td>Mia</td>
+              <td>2026-10-24 10:12</td>
+              <td>-</td>
+              <td>-</td>
+              <td>海外书籍</td>
+              <td><div class="task-action-group"><button class="btn task-detail-view">查看</button><button class="btn download">下载</button><button class="btn push task-center-push" data-push-lang="法语" data-range-start="1" data-range-end="100">推送至内容中台</button></div></td>
+            </tr>
+            <tr>
+              <td><span class="mono">BT-20261024002</span></td>
+              <td><span class="mono">BK10012</span></td>
+              <td>摄政王的白月光</td>
+              <td>中文</td>
+              <td>法语</td>
+              <td><span class="task-type-tag">导出译文</span></td>
+              <td>1-100章</td>
+              <td><span class="task-progress-cell"><span class="task-progress-num">76</span><span class="task-progress-unit">/100章</span></span></td>
+              <td><span class="tag yellow">处理中</span></td>
+              <td>Mia</td>
+              <td>2026-10-24 10:16</td>
+              <td>-</td>
+              <td>-</td>
+              <td>海外书籍</td>
+              <td><div class="task-action-group"><button class="btn task-detail-view">查看</button><button class="btn download" disabled title="任务处理中，完成后可下载">下载</button><button class="btn push task-center-push" data-push-lang="法语" data-range-start="1" data-range-end="100" disabled title="任务处理中，完成后可推送">推送至内容中台</button></div></td>
+            </tr>
+            <tr>
+              <td><span class="mono">BT-20261024003</span></td>
+              <td><span class="mono">BK10052</span></td>
+              <td>星轨婚约</td>
+              <td>中文</td>
+              <td>西班牙语</td>
+              <td><span class="task-type-tag">导出原文</span></td>
+              <td>1-80章</td>
+              <td><span class="task-progress-cell"><span class="task-progress-num">0</span><span class="task-progress-unit">/80章</span></span></td>
+              <td><span class="tag red">失败</span></td>
+              <td>Lynn</td>
+              <td>2026-10-24 10:22</td>
+              <td>-</td>
+              <td>-</td>
+              <td>GS内容中台</td>
+              <td><div class="task-action-group"><button class="btn task-detail-view">查看</button><button class="btn download" disabled title="任务失败，重试成功后可下载">下载</button><button class="btn push task-center-push" data-push-lang="西班牙语" data-range-start="1" data-range-end="80" disabled title="导出原文任务不支持推送译文">推送至内容中台</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="taskDetail" class="view">
+      <div class="task-detail-head">
+        <h2>书籍导出任务详情</h2>
+        <div class="actions">
+          <button class="btn retry" id="taskDetailRetryAll">全部重试</button>
+          <button class="btn" data-go="taskCenter">返回列表</button>
+        </div>
+      </div>
+      <div class="task-detail-info">
+        <div class="task-detail-item"><label>任务ID</label><span class="mono">BT-20261024003</span></div>
+        <div class="task-detail-item"><label>书籍ID</label><span class="mono">BK10052</span></div>
+        <div class="task-detail-item"><label>书籍名称</label><span>星轨婚约</span></div>
+        <div class="task-detail-item"><label>业务线</label><span>GS内容中台</span></div>
+        <div class="task-detail-item"><label>原始语言</label><span>中文</span></div>
+        <div class="task-detail-item"><label>目标语言</label><span>西班牙语</span></div>
+        <div class="task-detail-item"><label>导出类型</label><span>导出原文</span></div>
+        <div class="task-detail-item"><label>篇章范围</label><span>1-80章</span></div>
+        <div class="task-detail-item"><label>处理进度</label><span>0/80章</span></div>
+        <div class="task-detail-item"><label>提交人</label><span>Lynn</span></div>
+        <div class="task-detail-item"><label>提交时间</label><span>2026-10-24 10:22</span></div>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr><th>序号</th><th>章节名称</th><th>处理状态</th><th>篇章预览</th><th>更新时间</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono">1</td>
+              <td>001 楔子</td>
+              <td><span class="tag green">已完成</span></td>
+              <td><button class="btn text chapter-preview-btn" data-chapter-title="001 楔子">查看内容</button></td>
+              <td>2026-10-24 10:25</td>
+              <td><div class="task-action-group"><button class="btn download">导出</button></div></td>
+            </tr>
+            <tr>
+              <td class="mono">2</td>
+              <td>002 旧梦</td>
+              <td><span class="tag red">失败</span></td>
+              <td><button class="btn text chapter-preview-btn" data-chapter-title="002 旧梦">查看内容</button></td>
+              <td>2026-10-24 10:26</td>
+              <td><div class="task-action-group"><button class="btn retry task-row-retry">重试</button></div></td>
+            </tr>
+            <tr>
+              <td class="mono">3</td>
+              <td>003 初见王府</td>
+              <td><span class="tag red">失败</span></td>
+              <td><button class="btn text chapter-preview-btn" data-chapter-title="003 初见王府">查看内容</button></td>
+              <td>2026-10-24 10:26</td>
+              <td><div class="task-action-group"><button class="btn retry task-row-retry">重试</button></div></td>
             </tr>
           </tbody>
         </table>
@@ -3576,10 +4461,13 @@
       <div class="create-grid">
         <div class="glass section">
           <div class="section-title">
-            <div><h2>创建书籍翻译项目</h2><p>上传原文文件后，系统会保留章节文件颗粒度。</p></div>
+            <div><h2>创建书籍翻译项目</h2><p>支持从内容中台按书籍ID拉取原书，也支持本地zip导入。</p></div>
           </div>
-          <div class="form-grid">
-            <div class="field wide"><label>书籍名称<span class="required">*</span></label><input class="control" placeholder="请输入书籍名称" /></div>
+          <div class="source-method-switch" aria-label="选择创建来源">
+            <button class="active" type="button" data-source-method="platform">从中台拉取</button>
+            <button type="button" data-source-method="local">本地导入</button>
+          </div>
+          <div class="form-grid" style="margin-top:14px;">
             <div class="field"><label>原始语言</label>
               <div class="mock-select" data-select-name="sourceLanguage" data-value="中文">
                 <button class="mock-select-trigger" type="button">中文</button>
@@ -3589,7 +4477,7 @@
               </div>
             </div>
             <div class="field"><label>目标语言</label>
-              <div class="mock-select multi-select" data-select-name="targetLanguageCreate" data-multiple="true" data-value="法语">
+              <div class="mock-select" data-select-name="targetLanguageCreate" data-value="法语">
                 <button class="mock-select-trigger" type="button">法语</button>
                 <div class="mock-select-menu">
                   <div class="mock-option active" data-value="法语">法语</div>
@@ -3612,28 +4500,55 @@
         </div>
 
         <div class="glass section">
-          <div class="section-title">
-            <div><h2>上传文件</h2><p>支持上传本地 zip，解析后生成章节文件列表。</p></div>
-          </div>
-          <div id="uploadBox" class="upload-box">
-            <input id="bookZipInput" class="hidden" type="file" accept=".zip" />
-            <div id="uploadEmpty" class="upload-empty">
-              <strong>上传书籍原文压缩包</strong>
-              <p>支持本地 zip 文件，上传后将解析为章节文件列表。</p>
-              <button id="chooseZipBtn" class="btn upload-secondary-btn" type="button">选择本地 zip</button>
+          <div id="platformSourcePanel" class="source-panel active">
+            <div class="section-title">
+              <div><h2>内容中台拉取</h2><p>单次最多提交 100 个书籍ID；同一次创建仅选择一个目标语言。</p></div>
             </div>
-            <div id="uploadedSummary" class="upload-file hidden">
-              <div>
-                <strong id="uploadedFileName">book_source_20261020.zip</strong>
-                <p id="uploadedFileMeta">已上传 · 等待解析</p>
+            <div class="form-grid">
+              <div class="field wide">
+                <label>书籍ID<span class="required">*</span></label>
+                <textarea id="bookIdBatchInput" class="control book-id-textarea" placeholder="请输入书籍ID，多个书籍ID请使用回车换行&#10;示例：BK10012&#10;BK10021&#10;BK10052"></textarea>
               </div>
+              <div class="field"><label>默认起始章节</label><input id="defaultChapterStart" class="control" value="1" /></div>
+              <div class="field"><label>默认结束章节</label><input id="defaultChapterEnd" class="control" value="100" /></div>
             </div>
-            <div id="parseLoading" class="loading-inline hidden" style="margin-top:12px;"><span class="spinner"></span><span>正在解析 zip 文件，解析完成后生成下方章节文档。</span></div>
+            <div class="range-preview">
+              <table>
+                <thead><tr><th>书籍ID</th><th>章节范围</th><th>是否已存在当前书籍</th></tr></thead>
+                <tbody>
+                  <tr><td class="mono">BK10012</td><td><input class="control range-input" value="31" /> - <input class="control range-input" value="100" /></td><td><span class="tag yellow">是</span><span class="sub">已创建 1-30章</span></td></tr>
+                  <tr><td class="mono">BK10021</td><td><input class="control range-input" value="1" /> - <input class="control range-input" value="100" /></td><td><span class="tag">否</span></td></tr>
+                  <tr><td class="mono">BK10052</td><td><input class="control range-input" value="81" /> - <input class="control range-input" value="120" /></td><td><span class="tag yellow">是</span><span class="sub">已创建 1-80章</span></td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div id="parsedFileList" class="file-list hidden">
-            <div class="file-row"><span>001_楔子.docx</span><span class="tag green">可解析</span><span class="mono">12.4K</span></div>
-            <div class="file-row"><span>002_旧梦.docx</span><span class="tag green">可解析</span><span class="mono">15.8K</span></div>
-            <div class="file-row"><span>003_初见.docx</span><span class="tag green">可解析</span><span class="mono">16.1K</span></div>
+
+          <div id="localSourcePanel" class="source-panel">
+            <div class="section-title">
+              <div><h2>上传文件</h2><p>支持上传本地 zip，解析后生成章节文件列表。</p></div>
+            </div>
+            <div class="field wide" style="margin-bottom:12px;"><label>书籍名称<span class="required">*</span></label><input class="control" placeholder="请输入书籍名称" /></div>
+            <div id="uploadBox" class="upload-box">
+              <input id="bookZipInput" class="hidden" type="file" accept=".zip" />
+              <div id="uploadEmpty" class="upload-empty">
+                <strong>上传书籍原文压缩包</strong>
+                <p>支持本地 zip 文件，上传后将解析为章节文件列表。</p>
+                <button id="chooseZipBtn" class="btn upload-secondary-btn" type="button">选择本地 zip</button>
+              </div>
+              <div id="uploadedSummary" class="upload-file hidden">
+                <div>
+                  <strong id="uploadedFileName">book_source_20261020.zip</strong>
+                  <p id="uploadedFileMeta">已上传 · 等待解析</p>
+                </div>
+              </div>
+              <div id="parseLoading" class="loading-inline hidden" style="margin-top:12px;"><span class="spinner"></span><span>正在解析 zip 文件，解析完成后生成下方章节文档。</span></div>
+            </div>
+            <div id="parsedFileList" class="file-list hidden">
+              <div class="file-row"><span>001_楔子.docx</span><span class="tag green">可解析</span><span class="mono">12.4K</span></div>
+              <div class="file-row"><span>002_旧梦.docx</span><span class="tag green">可解析</span><span class="mono">15.8K</span></div>
+              <div class="file-row"><span>003_初见.docx</span><span class="tag green">可解析</span><span class="mono">16.1K</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -3641,7 +4556,7 @@
       <div class="glass section" style="margin-top:16px;">
         <div class="section-title">
           <div><h2>处理流程</h2><p>流程会根据处理模式自动调整。</p></div>
-          <button class="btn primary create-submit-btn" data-go="assets">创建项目</button>
+          <button class="btn primary create-submit-btn" id="createSubmitBtn">创建项目</button>
         </div>
         <div id="flowMtpe" class="flow mode-flow active">
           <div class="flow-step"><strong>1. 文件解析</strong><span>识别书名、简介、目录、标题、正文段落</span></div>
@@ -3663,7 +4578,7 @@
       <div class="glass section">
         <div class="section-title">
           <div><h2>摄政王的白月光</h2><p>326 个章节文件 · 中文原文 · 法语 / 西班牙语 / 葡萄牙语</p></div>
-          <div class="actions"><button class="btn primary" id="newLanguageBtn">新建翻译语向</button></div>
+          <div class="actions"><button class="btn primary" id="newLanguageBtn">创建新语向或章节</button></div>
         </div>
 
         <div class="book-tabs">
@@ -3859,7 +4774,7 @@
             <button class="menu-btn" data-go="assets"><span class="menu-icon icon-back"></span><span>返回</span></button>
             <button id="finishReviewBtn" class="menu-btn primary review-complete"><span class="menu-icon icon-check"></span><span>完成审校</span></button>
             <button class="menu-btn" id="findToggle"><span class="menu-icon icon-search"></span><span>查找替换</span></button>
-            <button class="menu-btn"><span class="menu-icon icon-refresh"></span><span>重新翻译</span></button>
+            <button class="menu-btn" id="editorRerollToggle"><span class="menu-icon icon-refresh"></span><span>重新翻译</span></button>
           </div>
         </div>
         <div class="editor-menu-right">
@@ -3869,7 +4784,7 @@
           </div>
         </div>
       </div>
-      <div id="editorShell" class="editor">
+      <div id="editorShell" class="editor qa-collapsed">
         <div class="glass chapter-rail">
           <div class="rail-title">
             <div class="rail-title-text"><strong>摄政王的白月光</strong><span>法语 · 326章节</span></div>
@@ -3883,34 +4798,51 @@
         </div>
 
         <div class="glass editor-main">
+          <div id="rerollPanel" class="reroll-panel">
+            <div class="reroll-head">
+              <span>已选 <strong id="rerollSelectedCount">0</strong> 段，将按当前书籍资产和术语译法重新生成候选译文。</span>
+              <div class="actions">
+                <button class="btn reroll-select-action" id="rerollCancelBtn">退出</button>
+                <button class="btn primary reroll-select-action" id="rerollSubmitBtn" disabled>提交抽卡</button>
+                <button class="btn reroll-batch-action" id="rerollExitBtn">退出</button>
+                <button class="btn reroll-batch-action" id="rerollBatchRefreshBtn">批量换一个</button>
+                <button class="btn primary reroll-batch-action" id="rerollBatchApplyBtn">批量采用</button>
+              </div>
+            </div>
+            <textarea id="rerollInstruction" maxlength="500" placeholder="自定义指令（非必填），如：语气更自然、减少直译、保留称谓"></textarea>
+          </div>
           <div class="editor-columns">
-            <span>#</span><span>原文</span><span>译文</span>
+            <span>#</span><span>原文</span><span>译文</span><span class="reroll-check-head"><input id="rerollCheckAll" class="row-check" type="checkbox" aria-label="全选重新翻译段落" /></span>
           </div>
           <div class="paragraph-list">
             <div class="paragraph-row">
               <div class="para-index">001</div>
               <div class="para-cell source">沈清澜醒来时，窗外的雨还未停。</div>
               <div class="para-cell target"><textarea>Lorsque Shen Qinglan se réveilla, la pluie dehors n'avait pas encore cessé.</textarea></div>
+              <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第1段重新翻译" /></div>
             </div>
             <div class="paragraph-row">
               <div class="para-index">002</div>
               <div class="para-cell source">“王爷还在书房？”她压低声音问。</div>
               <div class="para-cell target"><textarea>« Son Altesse est-elle encore dans le bureau ? » demanda-t-elle à voix basse.</textarea></div>
+              <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第2段重新翻译" /></div>
             </div>
             <div class="paragraph-row">
               <div class="para-index">003</div>
               <div class="para-cell source">侍女点了点头，却不敢多说。</div>
               <div class="para-cell target empty" data-tooltip="译文为空，请补充或重新翻译"><textarea placeholder="请输入译文"></textarea></div>
+              <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第3段重新翻译" /></div>
             </div>
             <div class="paragraph-row">
               <div class="para-index">004</div>
               <div class="para-cell source">这座王府里，每一句话都可能传到萧承煜耳中。</div>
               <div class="para-cell target"><textarea>Dans ce palais princier, chaque parole pouvait parvenir aux oreilles de Xiao Chengyu.</textarea></div>
+              <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第4段重新翻译" /></div>
             </div>
           </div>
         </div>
 
-        <div class="glass assist-panel">
+        <div class="glass assist-panel qa-panel-collapsed">
           <div class="qa-header">
             <span class="qa-title">质检提醒</span>
             <span class="qa-badge">共 1 处</span>
@@ -4057,9 +4989,19 @@
   <div id="newLanguageModal" class="modal-mask" role="dialog" aria-modal="true" aria-labelledby="newLanguageTitle">
     <div class="modal">
       <button class="modal-close-x modal-close" type="button" aria-label="关闭">×</button>
-      <h3 id="newLanguageTitle">新建翻译语向</h3>
-      <p>将使用该书籍最新资产和书籍原文内容创建新翻译任务。</p>
+      <h3 id="newLanguageTitle">创建新语向或章节</h3>
+      <p>可为当前书籍创建新的目标语向，也可为已有目标语向继续创建后续连续章节。</p>
       <div class="form-grid">
+        <div class="field wide">
+          <label>创建类型</label>
+          <div class="mock-select" data-select-name="createLanguageTaskType" data-value="new-language">
+            <button class="mock-select-trigger" type="button">新建目标语向</button>
+            <div class="mock-select-menu">
+              <div class="mock-option active" data-value="new-language">新建目标语向</div>
+              <div class="mock-option" data-value="append-chapters">已有语向追加章节</div>
+            </div>
+          </div>
+        </div>
         <div class="field wide">
           <label>目标语言</label>
           <div class="mock-select" data-select-name="targetLanguage">
@@ -4071,6 +5013,8 @@
             </div>
           </div>
         </div>
+        <div class="field"><label>起始章节</label><input class="control" value="101" /></div>
+        <div class="field"><label>结束章节</label><input class="control" value="150" /></div>
         <div class="field wide">
           <label>翻译模式</label>
           <div class="mock-select" data-select-name="translateMode">
@@ -4082,9 +5026,69 @@
           </div>
         </div>
       </div>
+      <div class="permission-note">将继承该书籍历史已确认资产；若选择已有目标语向，系统会校验章节范围不得与已创建范围重叠。</div>
+      <div class="range-chip-list">
+        <span class="range-chip">法语：1-100章已创建</span>
+        <span class="range-chip">西班牙语：1-80章已创建</span>
+        <span class="range-chip">葡萄牙语：1-40章已创建</span>
+      </div>
       <div class="actions" style="margin-top:16px;">
         <button class="btn modal-close">取消</button>
         <button class="btn primary" id="createLanguageBtn">确认创建</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="createValidationModal" class="modal-mask danger-modal" role="dialog" aria-modal="true" aria-labelledby="createValidationTitle">
+    <div class="modal wide">
+      <button class="modal-close-x modal-close" type="button" aria-label="关闭">×</button>
+      <h3 id="createValidationTitle">部分书籍任务无法创建</h3>
+      <p>以下书籍ID存在异常，请修改后重新提交；也可以跳过异常书籍，仅创建校验通过的任务。</p>
+      <div class="danger-summary">共提交 5 本书籍，3 本存在异常，2 本可继续创建。</div>
+      <div class="danger-group"><strong>书籍ID不存在</strong><span>BK10021、BK10035、BK10089</span></div>
+      <div class="danger-group"><strong>章节范围超出</strong><span>BK10052：选择 1-100，当前仅有 82 章</span></div>
+      <div class="danger-group"><strong>同语种同章节任务已存在</strong><span>BK10012：法语 1-100章</span></div>
+      <div class="actions" style="margin-top:16px;">
+        <button class="btn" id="copyCreateValidationBtn">复制异常信息</button>
+        <button class="btn modal-close">返回修改</button>
+        <button class="btn primary" id="skipCreateValidationBtn">跳过异常，继续创建 <span class="hint-icon" title="跳过异常书籍部分，并继续创建其余内容">?</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="platformPushModal" class="modal-mask" role="dialog" aria-modal="true" aria-labelledby="platformPushTitle">
+    <div class="modal">
+      <button class="modal-close-x modal-close" type="button" aria-label="关闭">×</button>
+      <h3 id="platformPushTitle">推送至内容中台</h3>
+      <p>请确认目标书籍ID和章节范围，提交后系统将异步推送当前任务的译文内容。</p>
+      <div class="form-grid">
+        <div class="field wide"><label>目标书籍ID<span class="required">*</span></label><input id="pushTargetBookId" class="control" placeholder="请输入内容中台目标书籍ID" value="BK-FR-2210" /></div>
+        <div class="field"><label>起始章节</label><input id="pushChapterStart" class="control" value="1" /></div>
+        <div class="field"><label>结束章节</label><input id="pushChapterEnd" class="control" value="100" /></div>
+      </div>
+      <div class="risk-confirm">
+        <label><input id="pushRiskCheck" class="row-check" type="checkbox" /> <span>我确认目标书籍ID和章节范围无误，并了解该操作会写入内容中台。</span></label>
+      </div>
+      <div class="actions" style="margin-top:16px;">
+        <button class="btn modal-close">取消</button>
+        <button class="btn primary" id="confirmPlatformPushBtn" disabled>提交推送任务</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="chapterPreviewModal" class="modal-mask" role="dialog" aria-modal="true" aria-labelledby="chapterPreviewTitle">
+    <div class="modal wide">
+      <button class="modal-close-x modal-close" type="button" aria-label="关闭">×</button>
+      <h3 id="chapterPreviewTitle">篇章预览</h3>
+      <div id="chapterPreviewBody" class="chapter-preview-body">沈清澜醒来时，窗外的雨还未停。
+
+“王爷还在书房？”她压低声音问。
+
+侍女点了点头，却不敢多说。
+
+这座王府里，每一句话都可能传到萧承煜耳中。</div>
+      <div class="actions" style="margin-top:16px;">
+        <button class="btn primary modal-close">关闭</button>
       </div>
     </div>
   </div>
@@ -4280,6 +5284,22 @@
     </div>
   </div>
 
+  <div id="replaceRangeModal" class="modal-mask" role="dialog" aria-modal="true" aria-labelledby="replaceRangeTitle">
+    <div class="modal">
+      <button class="modal-close-x modal-close" type="button" aria-label="关闭">×</button>
+      <h3 id="replaceRangeTitle">章节范围替换</h3>
+      <p>请输入本次需要查找与替换的连续章节范围，确认后进入替换预览。</p>
+      <div class="replace-range-fields">
+        <div class="field"><label>起始章节</label><input id="replaceRangeStart" class="control" value="2" /></div>
+        <div class="field"><label>结束章节</label><input id="replaceRangeEnd" class="control" value="18" /></div>
+      </div>
+      <div class="actions" style="margin-top:16px;">
+        <button class="btn modal-close">取消</button>
+        <button class="btn primary" id="confirmReplaceRangeBtn">进入预览</button>
+      </div>
+    </div>
+  </div>
+
   <div id="findPanel" class="find-panel">
     <div class="find-head">
       <div class="find-title"><span class="drag-handle"><span></span><span></span><span></span></span><span>查找与替换</span></div>
@@ -4310,7 +5330,8 @@
       <div class="find-actions">
         <button class="btn">替换</button>
         <button class="btn replace-preview-trigger" data-replace-scope="chapter">整章替换</button>
-        <button class="btn replace-preview-trigger" data-replace-scope="book">整部替换</button>
+        <button class="btn replace-preview-trigger" data-replace-scope="range">章节范围替换</button>
+        <button class="btn replace-preview-trigger" data-replace-scope="book">整书替换</button>
       </div>
     </div>
   </div>
@@ -4329,6 +5350,14 @@
       bookGlossary: {
         back: null,
         crumbs: [{ label: "术语库", view: "bookGlossary" }, { label: "书籍术语库", view: "bookGlossary" }]
+      },
+      taskCenter: {
+        back: null,
+        crumbs: [{ label: "任务中心", view: "taskCenter" }, { label: "书籍翻译", view: "taskCenter" }]
+      },
+      taskDetail: {
+        back: "taskCenter",
+        crumbs: [{ label: "任务中心", view: "taskCenter" }, { label: "书籍翻译", view: "taskCenter" }, { label: "任务详情", view: "taskDetail" }]
       },
       create: {
         back: "projects",
@@ -4389,7 +5418,7 @@
       document.body.classList.add(`view-${id}`);
       document.body.classList.toggle("editor-focus", id === "editor" || id === "sourceEditor");
       document.querySelectorAll(".nav-item[data-go]").forEach((item) => {
-        item.classList.toggle("active", item.dataset.go === id || (id !== "bookGlossary" && item.dataset.go === "projects" && ["create", "assets", "editor", "sourceEditor"].includes(id)));
+        item.classList.toggle("active", item.dataset.go === id || (id === "taskDetail" && item.dataset.go === "taskCenter") || (id !== "bookGlossary" && id !== "taskCenter" && id !== "taskDetail" && item.dataset.go === "projects" && ["create", "assets", "editor", "sourceEditor"].includes(id)));
       });
       document.getElementById("findPanel")?.classList.remove("visible");
       if (id === "sourceEditor" && currentViewId !== "sourceEditor") {
@@ -4435,6 +5464,14 @@
     }
     document.getElementById("processMode")?.addEventListener("change", (event) => {
       syncProcessModeFlow(event.target.value);
+    });
+    document.querySelectorAll("[data-source-method]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const method = button.dataset.sourceMethod;
+        document.querySelectorAll("[data-source-method]").forEach((item) => item.classList.toggle("active", item === button));
+        document.getElementById("platformSourcePanel")?.classList.toggle("active", method === "platform");
+        document.getElementById("localSourcePanel")?.classList.toggle("active", method === "local");
+      });
     });
     document.querySelectorAll("#findToggle").forEach((button) => {
       button.addEventListener("click", () => {
@@ -4837,6 +5874,28 @@
       }, 900);
     });
 
+    document.getElementById("createSubmitBtn")?.addEventListener("click", () => {
+      createValidationModal?.classList.add("visible");
+    });
+    document.getElementById("copyCreateValidationBtn")?.addEventListener("click", async () => {
+      const message = [
+        "书籍ID不存在：BK10021、BK10035、BK10089",
+        "章节范围超出：BK10052：选择 1-100，当前仅有 82 章",
+        "同语种同章节任务已存在：BK10012：法语 1-100章"
+      ].join("\n");
+      try {
+        await navigator.clipboard?.writeText(message);
+        showToast("异常信息已复制");
+      } catch (error) {
+        showToast("异常信息已生成，可手动复制弹窗内容");
+      }
+    });
+    document.getElementById("skipCreateValidationBtn")?.addEventListener("click", () => {
+      createValidationModal?.classList.remove("visible");
+      showToast("已跳过异常书籍，创建任务已提交至任务中心");
+      showView("taskCenter");
+    });
+
     const exportModal = document.getElementById("exportModal");
     const exportLoading = document.getElementById("exportLoading");
     const newLanguageModal = document.getElementById("newLanguageModal");
@@ -4857,7 +5916,11 @@
     const bookGlossaryEditModal = document.getElementById("bookGlossaryEditModal");
     const bookGlossaryImportModal = document.getElementById("bookGlossaryImportModal");
     const bookGlossaryDeleteModal = document.getElementById("bookGlossaryDeleteModal");
+    const createValidationModal = document.getElementById("createValidationModal");
+    const platformPushModal = document.getElementById("platformPushModal");
+    const chapterPreviewModal = document.getElementById("chapterPreviewModal");
     const replacePreviewModal = document.getElementById("replacePreviewModal");
+    const replaceRangeModal = document.getElementById("replaceRangeModal");
     const replacePreviewTitle = document.getElementById("replacePreviewTitle");
     const replaceChecks = Array.from(document.querySelectorAll(".preview-check"));
     const replaceSelectedCount = document.getElementById("replaceSelectedCount");
@@ -5053,6 +6116,45 @@
     document.querySelector(".glossary-search")?.addEventListener("click", () => showToast("已按条件查询"));
     document.querySelectorAll(".project-delete").forEach((button) => {
       button.addEventListener("click", () => deleteProjectModal.classList.add("visible"));
+    });
+    document.querySelectorAll(".task-detail-view").forEach((button) => {
+      button.addEventListener("click", () => showView("taskDetail"));
+    });
+    document.querySelectorAll(".chapter-preview-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        const title = button.dataset.chapterTitle || "篇章预览";
+        const titleEl = document.getElementById("chapterPreviewTitle");
+        const bodyEl = document.getElementById("chapterPreviewBody");
+        if (titleEl) titleEl.textContent = `${title} · 篇章预览`;
+        if (bodyEl) {
+          bodyEl.textContent = title.includes("003")
+            ? "初见王府时，沈清澜只觉得门庭深重。\n\n管事嬷嬷将她引入偏院，低声叮嘱不可擅入书房。\n\n她抬头望向灯火最盛处，心里忽然生出几分不安。"
+            : "沈清澜醒来时，窗外的雨还未停。\n\n“王爷还在书房？”她压低声音问。\n\n侍女点了点头，却不敢多说。\n\n这座王府里，每一句话都可能传到萧承煜耳中。";
+        }
+        chapterPreviewModal?.classList.add("visible");
+      });
+    });
+    function retryTaskRows(rows) {
+      rows.forEach((row) => {
+        const tag = row.querySelector(".tag.red");
+        if (!tag) return;
+        tag.className = "tag yellow processing";
+        tag.textContent = "处理中";
+        const retryButton = row.querySelector(".task-row-retry");
+        if (retryButton) retryButton.disabled = true;
+      });
+      showToast(rows.length > 1 ? `已重新提交 ${rows.length} 个失败篇章` : "失败篇章已重新提交");
+    }
+    document.querySelectorAll(".task-row-retry").forEach((button) => {
+      button.addEventListener("click", () => retryTaskRows([button.closest("tr")].filter(Boolean)));
+    });
+    document.getElementById("taskDetailRetryAll")?.addEventListener("click", () => {
+      const failedRows = Array.from(document.querySelectorAll("#taskDetail tbody tr")).filter((row) => row.querySelector(".tag.red"));
+      if (!failedRows.length) {
+        showToast("当前没有失败篇章");
+        return;
+      }
+      retryTaskRows(failedRows);
     });
     document.getElementById("confirmDeleteProjectBtn")?.addEventListener("click", () => {
       deleteProjectModal.classList.remove("visible");
@@ -5580,6 +6682,7 @@
 
       updateQaCounts();
       syncQaSelection();
+      setQaPanelCollapsed(panel, true);
     }
 
     function rollbackPendingTermsToExtracting(panel) {
@@ -5648,8 +6751,8 @@
         currentExportScope = scope;
         exportTextConfirmTitle.textContent = "确认导出译文？";
         exportTextConfirmDesc.textContent = scope === "selected"
-          ? `将导出已选章节的${lang}译文，确认继续导出吗？`
-          : `将导出当前书籍全部章节的${lang}译文，确认继续导出吗？`;
+          ? `将导出已选章节的${lang}译文，确认继续导出吗？导出任务提交后，请前往任务中心查看处理进度并下载结果。`
+          : `将导出当前书籍全部章节的${lang}译文，确认继续导出吗？导出任务提交后，请前往任务中心查看处理进度并下载结果。`;
         exportTextConfirmModal.classList.add("visible");
       });
     });
@@ -5661,8 +6764,8 @@
         currentExportScope = scope;
         exportTextConfirmTitle.textContent = "确认导出原文？";
         exportTextConfirmDesc.textContent = scope === "selected"
-          ? "将导出已选章节的中文原文，确认继续导出吗？"
-          : "将导出当前书籍全部章节的中文原文，确认继续导出吗？";
+          ? "将导出已选章节的中文原文，确认继续导出吗？导出任务提交后，请前往任务中心查看处理进度并下载结果。"
+          : "将导出当前书籍全部章节的中文原文，确认继续导出吗？导出任务提交后，请前往任务中心查看处理进度并下载结果。";
         exportTextConfirmModal.classList.add("visible");
       });
     });
@@ -5704,13 +6807,36 @@
     document.getElementById("confirmExportTextBtn")?.addEventListener("click", () => {
       if (currentExportKind === "source") {
         const scopeLabel = currentExportScope === "selected" ? "已选章节" : "当前书籍全部章节";
-        triggerDownload("摄政王的白月光_中文原文.zip", `${scopeLabel}的中文原文`);
-        showToast(`${scopeLabel}中文原文已开始下载`);
+        showToast(`${scopeLabel}中文原文导出任务已提交至任务中心`);
+        showView("taskCenter");
         return;
       }
       const scopeLabel = currentExportScope === "selected" ? "已选章节" : "当前书籍全部章节";
-      triggerDownload(`摄政王的白月光_${currentExportLang}_译文.zip`, `${scopeLabel}的${currentExportLang}译文`);
-      showToast(`${scopeLabel}${currentExportLang}译文已开始下载`);
+      showToast(`${scopeLabel}${currentExportLang}译文导出任务已提交至任务中心`);
+      showView("taskCenter");
+    });
+    document.querySelectorAll(".platform-push, .task-center-push").forEach((button) => {
+      button.addEventListener("click", () => {
+        currentExportLang = button.dataset.pushLang || currentExportLang;
+        const risk = document.getElementById("pushRiskCheck");
+        const confirmButton = document.getElementById("confirmPlatformPushBtn");
+        const startInput = document.getElementById("pushChapterStart");
+        const endInput = document.getElementById("pushChapterEnd");
+        if (startInput) startInput.value = button.dataset.rangeStart || "1";
+        if (endInput) endInput.value = button.dataset.rangeEnd || "100";
+        if (risk) risk.checked = false;
+        if (confirmButton) confirmButton.disabled = true;
+        platformPushModal?.classList.add("visible");
+      });
+    });
+    document.getElementById("pushRiskCheck")?.addEventListener("change", (event) => {
+      const confirmButton = document.getElementById("confirmPlatformPushBtn");
+      if (confirmButton) confirmButton.disabled = !event.currentTarget.checked;
+    });
+    document.getElementById("confirmPlatformPushBtn")?.addEventListener("click", () => {
+      platformPushModal?.classList.remove("visible");
+      showToast(`${currentExportLang}译文推送任务已提交至任务中心`);
+      showView("taskCenter");
     });
     document.getElementById("termReextractBtn")?.addEventListener("click", () => {
       termReextractConfirmModal.classList.add("visible");
@@ -5749,6 +6875,159 @@
       setPanelChapterStatus(button.closest(".book-panel"), "AI翻译中");
       showToast("术语已确认，翻译任务已提交");
       pendingTermsTranslateButton = null;
+    });
+
+    function syncParagraphRerollSelection() {
+      const checks = Array.from(document.querySelectorAll("#editorShell .paragraph-reselect"));
+      const selected = checks.filter((input) => input.checked);
+      const checkAll = document.getElementById("rerollCheckAll");
+      document.querySelectorAll("#editorShell .paragraph-row").forEach((row) => {
+        const checked = row.querySelector(".paragraph-reselect")?.checked;
+        row.classList.toggle("reroll-selected", Boolean(checked));
+      });
+      if (checkAll) {
+        checkAll.checked = checks.length > 0 && selected.length === checks.length;
+        checkAll.indeterminate = selected.length > 0 && selected.length < checks.length;
+      }
+      const countEl = document.getElementById("rerollSelectedCount");
+      if (countEl) countEl.textContent = selected.length;
+      const submit = document.getElementById("rerollSubmitBtn");
+      if (submit) submit.disabled = selected.length === 0;
+    }
+
+    function closeParagraphRerollMode() {
+      document.getElementById("editorShell")?.classList.remove("reroll-mode");
+      document.querySelectorAll("#editorShell .paragraph-reselect").forEach((input) => { input.checked = false; });
+      document.querySelectorAll("#editorShell .paragraph-row").forEach((row) => row.classList.remove("reroll-selected"));
+      document.querySelectorAll("#editorShell .reroll-candidate").forEach((card) => card.remove());
+      document.getElementById("rerollPanel")?.classList.remove("has-results");
+      syncParagraphRerollSelection();
+    }
+
+    function makeCandidateText(row, variant = 0) {
+      const index = row.querySelector(".para-index")?.textContent.trim() || "000";
+      const samples = [
+        "« Votre Altesse est-elle toujours dans le bureau ? » demanda-t-elle à voix basse.",
+        "Lorsque Shen Qinglan se réveilla, la pluie dehors n'avait pas encore cessé.",
+        "La servante hocha la tête, mais n'osa pas en dire davantage.",
+        "Dans cette résidence princière, chaque mot pouvait parvenir aux oreilles de Xiao Chengyu."
+      ];
+      const offset = Number(index) || 1;
+      return variant % 2 === 0 ? samples[(offset - 1) % samples.length] : `${samples[(offset - 1) % samples.length]}`
+        .replace("Votre Altesse", "Monseigneur")
+        .replace("résidence princière", "palais princier");
+    }
+
+    function createRerollCandidate(row, variant = 0) {
+      const target = row.querySelector(".para-cell.target");
+      if (!target) return;
+      target.querySelector(".reroll-candidate")?.remove();
+      const card = document.createElement("div");
+      card.className = "reroll-candidate";
+      card.dataset.variant = String(variant);
+      card.innerHTML = `
+        <div class="reroll-candidate-head">
+          <span>新翻译建议</span>
+          <span class="tag purple">抽卡候选</span>
+        </div>
+        <p class="reroll-candidate-text">${escapeHtml(makeCandidateText(row, variant))}</p>
+        <div class="reroll-candidate-actions">
+          <button class="btn reroll-cancel-one" type="button">取消</button>
+          <button class="btn reroll-refresh-one" type="button">换一个</button>
+          <button class="btn primary reroll-adopt-one" type="button">采用</button>
+        </div>
+      `;
+      target.appendChild(card);
+    }
+
+    function adoptRerollCandidate(card) {
+      const target = card.closest(".para-cell.target");
+      const textarea = target?.querySelector("textarea");
+      const text = card.querySelector(".reroll-candidate-text")?.textContent || "";
+      if (textarea && text) {
+        textarea.value = text;
+        autosizeTextarea(textarea);
+        target.classList.remove("empty");
+        markSaving(document.querySelector("#editor .save-status"));
+      }
+      const row = card.closest(".paragraph-row");
+      row?.querySelector(".paragraph-reselect") && (row.querySelector(".paragraph-reselect").checked = false);
+      row?.classList.remove("reroll-selected");
+      card.remove();
+      syncParagraphRerollSelection();
+      if (!document.querySelector("#editorShell .reroll-candidate")) closeParagraphRerollMode();
+    }
+
+    function refreshRerollCandidate(card) {
+      const row = card.closest(".paragraph-row");
+      const nextVariant = Number(card.dataset.variant || 0) + 1;
+      card.dataset.variant = String(nextVariant);
+      const text = card.querySelector(".reroll-candidate-text");
+      if (text && row) text.textContent = makeCandidateText(row, nextVariant);
+    }
+
+    document.getElementById("editorRerollToggle")?.addEventListener("click", () => {
+      const shell = document.getElementById("editorShell");
+      if (!shell) return;
+      const active = shell.classList.toggle("reroll-mode");
+      if (active) {
+        showToast("请选择需要重新翻译的译文段落");
+      } else {
+        closeParagraphRerollMode();
+      }
+    });
+    document.querySelectorAll("#editorShell .paragraph-reselect").forEach((input) => {
+      input.addEventListener("change", syncParagraphRerollSelection);
+    });
+    document.getElementById("rerollCheckAll")?.addEventListener("change", (event) => {
+      document.querySelectorAll("#editorShell .paragraph-row").forEach((row) => {
+        if (row.style.display === "none") return;
+        const input = row.querySelector(".paragraph-reselect");
+        if (input) input.checked = event.currentTarget.checked;
+      });
+      syncParagraphRerollSelection();
+    });
+    document.getElementById("rerollCancelBtn")?.addEventListener("click", closeParagraphRerollMode);
+    document.getElementById("rerollSubmitBtn")?.addEventListener("click", () => {
+      const selectedRows = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).filter((row) => row.querySelector(".paragraph-reselect")?.checked);
+      const selectedCount = selectedRows.length;
+      if (!selectedCount) return;
+      document.querySelectorAll("#editorShell .reroll-candidate").forEach((card) => card.remove());
+      selectedRows.forEach((row) => createRerollCandidate(row));
+      document.getElementById("rerollPanel")?.classList.add("has-results");
+      showToast(`已提交 ${selectedCount} 段重新翻译抽卡，章节状态保持不变`);
+    });
+    document.getElementById("rerollBatchApplyBtn")?.addEventListener("click", () => {
+      Array.from(document.querySelectorAll("#editorShell .reroll-candidate")).forEach(adoptRerollCandidate);
+      showToast("已批量采用候选译文并自动保存");
+    });
+    document.getElementById("rerollBatchRefreshBtn")?.addEventListener("click", () => {
+      Array.from(document.querySelectorAll("#editorShell .reroll-candidate")).forEach(refreshRerollCandidate);
+      showToast("已批量换一个候选译文");
+    });
+    document.getElementById("rerollExitBtn")?.addEventListener("click", () => {
+      closeParagraphRerollMode();
+    });
+    document.getElementById("editorShell")?.addEventListener("click", (event) => {
+      const adopt = event.target.closest(".reroll-adopt-one");
+      const refresh = event.target.closest(".reroll-refresh-one");
+      const cancel = event.target.closest(".reroll-cancel-one");
+      const card = event.target.closest(".reroll-candidate");
+      if (!card) return;
+      if (adopt) {
+        adoptRerollCandidate(card);
+        showToast("已采用候选译文并自动保存");
+      } else if (refresh) {
+        refreshRerollCandidate(card);
+        showToast("已换一个候选译文");
+      } else if (cancel) {
+        const row = card.closest(".paragraph-row");
+        row?.querySelector(".paragraph-reselect") && (row.querySelector(".paragraph-reselect").checked = false);
+        row?.classList.remove("reroll-selected");
+        card.remove();
+        syncParagraphRerollSelection();
+        if (!document.querySelector("#editorShell .reroll-candidate")) closeParagraphRerollMode();
+      }
     });
     document.getElementById("finishReviewBtn")?.addEventListener("click", () => {
       finishReviewConfirmModal.classList.add("visible");
@@ -5836,12 +7115,25 @@
     });
     document.querySelectorAll(".replace-preview-trigger").forEach((button) => {
       button.addEventListener("click", () => {
+        if (button.dataset.replaceScope === "range") {
+          replaceRangeModal?.classList.add("visible");
+          return;
+        }
         const isBook = button.dataset.replaceScope === "book";
-        replacePreviewTitle.textContent = isBook ? "整部替换预览（共命中 3 条，7 处）" : "整章替换预览（共命中 3 条，7 处）";
+        replacePreviewTitle.textContent = isBook ? "整书替换预览（共命中 3 条，7 处）" : "整章替换预览（共命中 3 条，7 处）";
         replaceChecks.forEach((input) => { input.checked = true; });
         syncReplacePreviewSelection();
         replacePreviewModal.classList.add("visible");
       });
+    });
+    document.getElementById("confirmReplaceRangeBtn")?.addEventListener("click", () => {
+      const start = document.getElementById("replaceRangeStart")?.value || "2";
+      const end = document.getElementById("replaceRangeEnd")?.value || "18";
+      replaceRangeModal?.classList.remove("visible");
+      replacePreviewTitle.textContent = `章节范围替换预览（${start}-${end}章，共命中 3 条，7 处）`;
+      replaceChecks.forEach((input) => { input.checked = true; });
+      syncReplacePreviewSelection();
+      replacePreviewModal.classList.add("visible");
     });
     replaceChecks.forEach((input) => input.addEventListener("change", syncReplacePreviewSelection));
     document.getElementById("replaceSelectAll")?.addEventListener("click", () => {
@@ -5978,6 +7270,7 @@
 
     function selectTranslatedChapter(button) {
       if (!button) return;
+      closeParagraphRerollMode();
       document.querySelectorAll("#editorShell .chapter-node").forEach((item) => item.classList.toggle("active", item === button));
       syncTranslationReviewButton(button.querySelector(".sub")?.textContent.split("·")[0].trim() || "");
       const rows = Array.from(document.querySelectorAll("#editorShell .paragraph-row"));
