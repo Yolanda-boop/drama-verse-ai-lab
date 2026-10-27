@@ -294,11 +294,7 @@
     }
 
     .inline-mark {
-      text-decoration-line: underline;
-      text-decoration-style: wavy;
-      text-decoration-color: var(--danger);
-      text-decoration-thickness: 1.2px;
-      text-underline-offset: 3px;
+      text-decoration: none;
     }
 
     .video-panel {
@@ -876,6 +872,23 @@
       transform: rotate(-45deg) translate(1px, -1px);
     }
 
+    .fake-checkbox.indeterminate {
+      background: var(--brand-purple);
+      border-color: var(--brand-purple);
+      box-shadow:
+        0 0 0 2px rgba(98, 36, 255, 0.18),
+        0 4px 12px rgba(98, 36, 255, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+
+    .fake-checkbox.indeterminate::after {
+      content: "";
+      width: 8px;
+      height: 2px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
     .config-title {
       font-size: 14px;
       font-weight: 600;
@@ -1169,7 +1182,7 @@
       <div class="modal-body">
         <div class="notice">
           <span>ⓘ</span>
-          <span>本次扫描不会自动修改译文。扫描结果将写入右侧质检提醒面板，用户可逐条定位、采用建议或忽略。</span>
+          <span>质检扫描用于按所选类别检查当前集译文中的翻译质量问题。本次扫描不会自动修改译文，扫描结果将写入右侧质检提醒面板，可逐条定位、采用建议或忽略。</span>
         </div>
 
         <div class="config-grid">
@@ -1436,15 +1449,28 @@
 
     function setCheckbox(box, checked) {
       box.classList.toggle("checked", checked);
+      box.classList.remove("indeterminate");
       box.textContent = checked ? "✓" : "";
+    }
+
+    function setIndeterminate(box) {
+      box.classList.remove("checked");
+      box.classList.add("indeterminate");
+      box.textContent = "";
     }
 
     function syncGroupCheckbox(card) {
       const groupBox = card.querySelector("[data-check]");
       const subBoxes = [...card.querySelectorAll("[data-subcheck]")];
       if (!groupBox || subBoxes.length === 0) return;
-      const allChecked = subBoxes.every(box => box.classList.contains("checked"));
-      setCheckbox(groupBox, allChecked);
+      const checkedCount = subBoxes.filter(box => box.classList.contains("checked")).length;
+      if (checkedCount === subBoxes.length) {
+        setCheckbox(groupBox, true);
+      } else if (checkedCount === 0) {
+        setCheckbox(groupBox, false);
+      } else {
+        setIndeterminate(groupBox);
+      }
     }
 
     document.querySelectorAll(".fake-checkbox").forEach(box => {
