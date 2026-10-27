@@ -1104,8 +1104,9 @@
     }
 
     .book-id-textarea {
-      height: 168px;
-      min-height: 168px;
+      display: block;
+      height: 104px !important;
+      min-height: 104px !important;
       resize: none;
       line-height: 1.55;
       padding: 10px 12px;
@@ -1134,11 +1135,104 @@
       font-size: 12.5px;
     }
 
+    .range-preview table th:last-child,
+    .range-preview table td:last-child {
+      min-width: 262px;
+      text-align: left;
+    }
+
     .range-preview .range-input {
       width: 82px;
       height: 28px;
       text-align: center;
       font-size: 12px;
+    }
+
+    .range-preview .range-input.invalid {
+      border-color: rgba(255, 107, 120, 0.76) !important;
+      background: rgba(255, 107, 120, 0.1) !important;
+      box-shadow: 0 0 0 2px rgba(255, 107, 120, 0.12) !important;
+    }
+
+    .chapter-range-inputs {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .chapter-range-inputs .range-separator {
+      color: rgba(255, 255, 255, 0.46);
+      line-height: 28px;
+    }
+
+    .meta-toggle-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 240px;
+      align-items: center;
+    }
+
+    .mini-toggle {
+      position: relative;
+      height: 28px;
+      min-width: 72px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      padding: 0 28px 0 12px;
+      color: rgba(255, 255, 255, 0.58);
+      background: rgba(255, 255, 255, 0.045);
+      cursor: pointer;
+      font-size: 12px;
+      text-align: center;
+      white-space: nowrap;
+      transition: 0.18s ease;
+    }
+
+    .mini-toggle::before {
+      content: "";
+      position: absolute;
+      left: calc(100% - 19px);
+      top: 50%;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.48);
+      transform: translateY(-50%);
+      transition: 0.18s ease;
+    }
+
+    .mini-toggle.active {
+      color: #fff;
+      border-color: rgba(124, 90, 243, 0.58);
+      background: rgba(98, 36, 255, 0.32);
+      box-shadow: 0 0 0 2px rgba(98, 36, 255, 0.12);
+    }
+
+    .mini-toggle.active::before {
+      background: #fff;
+    }
+
+    .mini-toggle:not(.active) {
+      padding: 0 12px 0 28px;
+    }
+
+    .mini-toggle:not(.active)::before {
+      left: 7px;
+    }
+
+    .range-error {
+      display: none;
+      margin-top: 5px;
+      color: #ff9aa3;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .range-error.visible {
+      display: block;
     }
 
     .danger-modal {
@@ -1559,6 +1653,7 @@
       box-shadow: inset 3px 0 0 #8b73ff;
     }
 
+    .paragraph-row.reroll-selected .para-cell.source,
     .paragraph-row.reroll-selected .para-cell.target {
       border-color: rgba(139, 115, 255, 0.72);
       background: rgba(98, 36, 255, 0.18);
@@ -3693,13 +3788,12 @@
     .para-cell textarea {
       width: 100%;
       min-height: 44px;
-      max-height: 128px;
       color: inherit;
       line-height: 1.64;
       border: 0;
       outline: 0;
       resize: none;
-      overflow: auto;
+      overflow: hidden;
       background: transparent;
       font-size: 15px;
     }
@@ -4131,7 +4225,7 @@
 
     <section id="projects" class="view active">
       <div class="toolbar project-toolbar">
-        <div class="filter"><label>书籍ID</label><input class="control" placeholder="请输入书籍ID" /></div>
+        <div class="filter"><label>原始书籍ID</label><input class="control" placeholder="请输入原始书籍ID" /></div>
         <div class="filter"><label>书籍名称</label><input class="control" placeholder="请输入书籍名称" /></div>
         <div class="filter"><label>原始语言</label><select class="control"><option>请选择原始语言</option><option>中文</option></select></div>
         <div class="filter"><label>目标语言</label><select class="control"><option>请选择目标语言</option><option>法语</option><option>西班牙语</option><option>葡萄牙语</option></select></div>
@@ -4151,7 +4245,7 @@
         <table>
           <thead>
             <tr>
-              <th>书籍ID</th><th>书籍名称</th><th>原始语言</th><th>目标语言</th><th>规模</th><th>资产状态</th><th>进度</th><th>业务线</th><th>创建人</th><th>创建时间</th><th>更新人</th><th>更新时间</th><th>操作</th>
+              <th>原始书籍ID</th><th>书籍名称</th><th>原始语言</th><th>目标语言</th><th>规模</th><th>资产状态</th><th>进度</th><th>业务线</th><th>创建人</th><th>创建时间</th><th>更新人</th><th>更新时间</th><th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -4206,13 +4300,10 @@
     </section>
 
     <section id="taskCenter" class="view">
-      <div class="task-module-tabs">
-        <button type="button">短剧译配</button>
-        <button class="active" type="button">书籍翻译</button>
-      </div>
       <div class="toolbar task-toolbar">
         <div class="filter"><label>任务ID</label><input class="control" placeholder="请输入任务ID" /></div>
-        <div class="filter"><label>书籍ID</label><input class="control" placeholder="请输入书籍ID" /></div>
+        <div class="filter"><label>原始书籍ID</label><input class="control" placeholder="请输入原始书籍ID" /></div>
+        <div class="filter"><label>原章节ID</label><input class="control" placeholder="请输入原章节ID" /></div>
         <div class="filter"><label>原始语言</label><select class="control"><option>请选择原始语言</option><option>中文</option><option>英文</option></select></div>
         <div class="filter"><label>目标语言</label><select class="control"><option>请选择目标语言</option><option>法语</option><option>西班牙语</option><option>葡萄牙语</option></select></div>
         <div class="filter"><label>导出类型</label><select class="control"><option>请选择导出类型</option><option>导出原文</option><option>导出译文</option></select></div>
@@ -4233,7 +4324,7 @@
         <table>
           <thead>
             <tr>
-              <th>任务ID</th><th>书籍ID</th><th>书籍名称</th><th>原始语言</th><th>目标语言</th><th>导出类型</th><th>篇章范围</th><th>处理进度</th><th>状态</th><th>提交人</th><th>提交时间</th><th>推送人</th><th>推送时间</th><th>业务线</th><th>操作</th>
+              <th>任务ID</th><th>原始书籍ID</th><th>书籍名称</th><th>原始语言</th><th>目标语言</th><th>导出类型</th><th>篇章范围</th><th>处理进度</th><th>状态</th><th>提交人</th><th>提交时间</th><th>推送人</th><th>推送时间</th><th>业务线</th><th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -4252,7 +4343,7 @@
               <td>-</td>
               <td>-</td>
               <td>海外书籍</td>
-              <td><div class="task-action-group"><button class="btn task-detail-view">查看</button><button class="btn download">下载</button><button class="btn push task-center-push" data-push-lang="法语" data-range-start="1" data-range-end="100">推送至内容中台</button></div></td>
+              <td><div class="task-action-group"><button class="btn task-detail-view">查看</button><button class="btn download">下载</button><button class="btn push task-center-push" data-push-lang="法语" data-range-start="1" data-range-end="100">推送至后台</button></div></td>
             </tr>
             <tr>
               <td><span class="mono">BT-20261024002</span></td>
@@ -4269,7 +4360,7 @@
               <td>-</td>
               <td>-</td>
               <td>海外书籍</td>
-              <td><div class="task-action-group"><button class="btn task-detail-view">查看</button><button class="btn download" disabled title="任务处理中，完成后可下载">下载</button><button class="btn push task-center-push" data-push-lang="法语" data-range-start="1" data-range-end="100" disabled title="任务处理中，完成后可推送">推送至内容中台</button></div></td>
+              <td><div class="task-action-group"><button class="btn task-detail-view">查看</button><button class="btn download" disabled title="任务处理中，完成后可下载">下载</button><button class="btn push task-center-push" data-push-lang="法语" data-range-start="1" data-range-end="100" disabled title="任务处理中，完成后可推送">推送至后台</button></div></td>
             </tr>
             <tr>
               <td><span class="mono">BT-20261024003</span></td>
@@ -4286,7 +4377,7 @@
               <td>-</td>
               <td>-</td>
               <td>GS内容中台</td>
-              <td><div class="task-action-group"><button class="btn task-detail-view">查看</button><button class="btn download" disabled title="任务失败，重试成功后可下载">下载</button><button class="btn push task-center-push" data-push-lang="西班牙语" data-range-start="1" data-range-end="80" disabled title="导出原文任务不支持推送译文">推送至内容中台</button></div></td>
+              <td><div class="task-action-group"><button class="btn task-detail-view">查看</button><button class="btn download" disabled title="任务失败，重试成功后可下载">下载</button><button class="btn push task-center-push" data-push-lang="西班牙语" data-range-start="1" data-range-end="80" disabled title="导出原文任务不支持推送译文">推送至后台</button></div></td>
             </tr>
           </tbody>
         </table>
@@ -4303,7 +4394,7 @@
       </div>
       <div class="task-detail-info">
         <div class="task-detail-item"><label>任务ID</label><span class="mono">BT-20261024003</span></div>
-        <div class="task-detail-item"><label>书籍ID</label><span class="mono">BK10052</span></div>
+        <div class="task-detail-item"><label>原始书籍ID</label><span class="mono">BK10052</span></div>
         <div class="task-detail-item"><label>书籍名称</label><span>星轨婚约</span></div>
         <div class="task-detail-item"><label>业务线</label><span>GS内容中台</span></div>
         <div class="task-detail-item"><label>原始语言</label><span>中文</span></div>
@@ -4317,11 +4408,12 @@
       <div class="table-card">
         <table>
           <thead>
-            <tr><th>序号</th><th>章节名称</th><th>处理状态</th><th>篇章预览</th><th>更新时间</th><th>操作</th></tr>
+            <tr><th>序号</th><th>原章节ID</th><th>章节名称</th><th>处理状态</th><th>篇章预览</th><th>更新时间</th><th>操作</th></tr>
           </thead>
           <tbody>
             <tr>
               <td class="mono">1</td>
+              <td class="mono">873455060</td>
               <td>001 楔子</td>
               <td><span class="tag green">已完成</span></td>
               <td><button class="btn text chapter-preview-btn" data-chapter-title="001 楔子">查看内容</button></td>
@@ -4330,6 +4422,7 @@
             </tr>
             <tr>
               <td class="mono">2</td>
+              <td class="mono">873455061</td>
               <td>002 旧梦</td>
               <td><span class="tag red">失败</span></td>
               <td><button class="btn text chapter-preview-btn" data-chapter-title="002 旧梦">查看内容</button></td>
@@ -4338,6 +4431,7 @@
             </tr>
             <tr>
               <td class="mono">3</td>
+              <td class="mono">873455062</td>
               <td>003 初见王府</td>
               <td><span class="tag red">失败</span></td>
               <td><button class="btn text chapter-preview-btn" data-chapter-title="003 初见王府">查看内容</button></td>
@@ -4461,14 +4555,14 @@
       <div class="create-grid">
         <div class="glass section">
           <div class="section-title">
-            <div><h2>创建书籍翻译项目</h2><p>支持从内容中台按书籍ID拉取原书，也支持本地zip导入。</p></div>
+            <div><h2>创建书籍翻译项目</h2></div>
           </div>
           <div class="source-method-switch" aria-label="选择创建来源">
-            <button class="active" type="button" data-source-method="platform">从中台拉取</button>
+            <button class="active" type="button" data-source-method="platform">后台拉取</button>
             <button type="button" data-source-method="local">本地导入</button>
           </div>
           <div class="form-grid" style="margin-top:14px;">
-            <div class="field"><label>原始语言</label>
+            <div id="sourceLanguageField" class="field hidden"><label>原始语言</label>
               <div class="mock-select" data-select-name="sourceLanguage" data-value="中文">
                 <button class="mock-select-trigger" type="button">中文</button>
                 <div class="mock-select-menu">
@@ -4506,19 +4600,18 @@
             </div>
             <div class="form-grid">
               <div class="field wide">
-                <label>书籍ID<span class="required">*</span></label>
-                <textarea id="bookIdBatchInput" class="control book-id-textarea" placeholder="请输入书籍ID，多个书籍ID请使用回车换行&#10;示例：BK10012&#10;BK10021&#10;BK10052"></textarea>
+                <label>原书籍ID<span class="required">*</span></label>
+                <textarea id="bookIdBatchInput" class="control book-id-textarea" placeholder="请输入原书籍ID，多个原书籍ID请使用回车换行&#10;示例：BK10012&#10;BK10021&#10;BK10052"></textarea>
               </div>
-              <div class="field"><label>默认起始章节</label><input id="defaultChapterStart" class="control" value="1" /></div>
-              <div class="field"><label>默认结束章节</label><input id="defaultChapterEnd" class="control" value="100" /></div>
             </div>
+            <div id="platformRangeLoading" class="loading-inline hidden" style="margin-top:12px;"><span class="spinner"></span><span>正在检测书籍任务状态，并计算默认新增正文章节范围。</span></div>
             <div class="range-preview">
               <table>
-                <thead><tr><th>书籍ID</th><th>章节范围</th><th>是否已存在当前书籍</th></tr></thead>
-                <tbody>
-                  <tr><td class="mono">BK10012</td><td><input class="control range-input" value="31" /> - <input class="control range-input" value="100" /></td><td><span class="tag yellow">是</span><span class="sub">已创建 1-30章</span></td></tr>
-                  <tr><td class="mono">BK10021</td><td><input class="control range-input" value="1" /> - <input class="control range-input" value="100" /></td><td><span class="tag">否</span></td></tr>
-                  <tr><td class="mono">BK10052</td><td><input class="control range-input" value="81" /> - <input class="control range-input" value="120" /></td><td><span class="tag yellow">是</span><span class="sub">已创建 1-80章</span></td></tr>
+                <thead><tr><th>原书籍ID</th><th>书籍任务状态</th><th>新增正文章节</th><th>翻译书名、笔名、简介</th></tr></thead>
+                <tbody id="platformRangeBody">
+                  <tr><td class="mono">BK10012</td><td><span class="tag yellow">已创建 1-30 章</span></td><td><span class="chapter-range-inputs"><input class="control range-input" value="31" /><span class="range-separator">-</span><input class="control range-input" value="326" /></span><span class="range-error">仅支持输入正整数</span></td><td><div class="meta-toggle-list"><button class="mini-toggle active" type="button">书名</button><button class="mini-toggle active" type="button">笔名</button><button class="mini-toggle active" type="button">简介</button></div></td></tr>
+                  <tr><td class="mono">BK10021</td><td><span class="tag">无</span></td><td><span class="chapter-range-inputs"><input class="control range-input" value="1" /><span class="range-separator">-</span><input class="control range-input" value="180" /></span><span class="range-error">仅支持输入正整数</span></td><td><div class="meta-toggle-list"><button class="mini-toggle active" type="button">书名</button><button class="mini-toggle active" type="button">笔名</button><button class="mini-toggle active" type="button">简介</button></div></td></tr>
+                  <tr><td class="mono">BK10052</td><td><span class="tag yellow">已创建 1-80 章</span></td><td><span class="chapter-range-inputs"><input class="control range-input" value="81" /><span class="range-separator">-</span><input class="control range-input" value="120" /></span><span class="range-error">仅支持输入正整数</span></td><td><div class="meta-toggle-list"><button class="mini-toggle active" type="button">书名</button><button class="mini-toggle active" type="button">笔名</button><button class="mini-toggle active" type="button">简介</button></div></td></tr>
                 </tbody>
               </table>
             </div>
@@ -4640,8 +4733,10 @@
           </div>
           <div class="table-card">
             <table>
-              <thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>章节ID</th><th>章节文件</th><th>标题</th><th>字符数</th><th>状态</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead>
+              <thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符数</th><th>状态</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead>
               <tbody>
+                <tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>摄政王的白月光</td><td class="source-count"><span class="mono">7</span></td><td class="task-status"><span class="tag green">审校完成</span></td><td>2026-10-19 10:28</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:20</td><td class="actions"><button class="btn text source-reextract">重新解析</button><button class="btn text" data-go="sourceEditor" data-meta-type="title">编辑</button></td></tr>
+                <tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>清月</td><td class="source-count"><span class="mono">2</span></td><td class="task-status"><span class="tag green">审校完成</span></td><td>2026-10-19 10:28</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:20</td><td class="actions"><button class="btn text source-reextract">重新解析</button><button class="btn text" data-go="sourceEditor" data-meta-type="author">编辑</button></td></tr>
                 <tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>简介</td><td class="source-count"><span class="mono">1,240</span><span class="sub">8 段</span></td><td class="task-status"><span class="tag green">审校完成</span></td><td>2026-10-19 10:28</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:20</td><td class="actions"><button class="btn text source-reextract">重新解析</button><button class="btn text" data-go="sourceEditor">编辑</button></td></tr>
                 <tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>楔子</td><td class="source-count"><span class="mono">12,408</span><span class="sub">86 段</span></td><td class="task-status"><span class="tag green">AI解析完成</span></td><td>2026-10-19 10:28</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text source-reextract">重新解析</button><button class="btn text" data-go="sourceEditor">编辑</button></td></tr>
                 <tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>旧梦</td><td class="source-count"><span class="mono">15,812</span><span class="sub">103 段</span></td><td class="task-status"><span class="tag purple">原文审校中</span></td><td>2026-10-19 10:28</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:31</td><td class="actions"><button class="btn text source-reextract">重新解析</button><button class="btn text" data-go="sourceEditor">编辑</button></td></tr>
@@ -4657,7 +4752,7 @@
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
             <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn retry-all-failed">全部重试</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="法语">导出全部</button></div>
           </div>
-          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>简介</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr data-retry-status="AI翻译中"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>楔子</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag red">失败</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>旧梦</td><td><span class="mono">15,812</span><span class="sub">103 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">AI翻译完成</span></td><td><span class="qc-alert" title="译文为空：3 处"><span class="qc-icon">⚠</span>1类 / 3处</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:31</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
+          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La lumière blanche du régent</td><td><span class="mono">29</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>简介</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr data-retry-status="AI翻译中"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>楔子</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag red">失败</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>旧梦</td><td><span class="mono">15,812</span><span class="sub">103 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">AI翻译完成</span></td><td><span class="qc-alert" title="译文为空：3 处"><span class="qc-icon">⚠</span>1类 / 3处</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:31</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="法语" data-export-scope="selected">导出译文</button></div></div>
         </div>
 
@@ -4666,7 +4761,7 @@
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
             <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="西班牙语">导出全部</button></div>
           </div>
-          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introducción</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>Viejo sueño</td><td><span class="mono">15,812</span><span class="sub">103 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag purple">翻译审校中</span></td><td><span class="qc-alert" title="译文为空：1 处"><span class="qc-icon">⚠</span>1类 / 1处</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:38</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
+          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La luz blanca del regente</td><td><span class="mono">24</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introducción</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>Viejo sueño</td><td><span class="mono">15,812</span><span class="sub">103 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag purple">翻译审校中</span></td><td><span class="qc-alert" title="译文为空：1 处"><span class="qc-icon">⚠</span>1类 / 1处</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:38</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="西班牙语" data-export-scope="selected">导出译文</button></div></div>
         </div>
 
@@ -4675,7 +4770,7 @@
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
             <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="葡萄牙语">导出全部</button></div>
           </div>
-          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introdução</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:12</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
+          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>A luz branca do regente</td><td><span class="mono">24</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introdução</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:12</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="葡萄牙语" data-export-scope="selected">导出译文</button></div></div>
         </div>
 
@@ -4684,7 +4779,7 @@
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
             <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="意大利语">导出全部</button></div>
           </div>
-          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>-</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>-</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
+          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La luce bianca del reggente</td><td><span class="mono">28</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>-</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>-</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="意大利语" data-export-scope="selected">导出译文</button></div></div>
         </div>
       </div>
@@ -4817,25 +4912,25 @@
           <div class="paragraph-list">
             <div class="paragraph-row">
               <div class="para-index">001</div>
-              <div class="para-cell source">沈清澜醒来时，窗外的雨还未停。</div>
+              <div class="para-cell source"><textarea>沈清澜醒来时，窗外的雨还未停。</textarea></div>
               <div class="para-cell target"><textarea>Lorsque Shen Qinglan se réveilla, la pluie dehors n'avait pas encore cessé.</textarea></div>
               <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第1段重新翻译" /></div>
             </div>
             <div class="paragraph-row">
               <div class="para-index">002</div>
-              <div class="para-cell source">“王爷还在书房？”她压低声音问。</div>
+              <div class="para-cell source"><textarea>“王爷还在书房？”她压低声音问。</textarea></div>
               <div class="para-cell target"><textarea>« Son Altesse est-elle encore dans le bureau ? » demanda-t-elle à voix basse.</textarea></div>
               <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第2段重新翻译" /></div>
             </div>
             <div class="paragraph-row">
               <div class="para-index">003</div>
-              <div class="para-cell source">侍女点了点头，却不敢多说。</div>
+              <div class="para-cell source"><textarea>侍女点了点头，却不敢多说。</textarea></div>
               <div class="para-cell target empty" data-tooltip="译文为空，请补充或重新翻译"><textarea placeholder="请输入译文"></textarea></div>
               <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第3段重新翻译" /></div>
             </div>
             <div class="paragraph-row">
               <div class="para-index">004</div>
-              <div class="para-cell source">这座王府里，每一句话都可能传到萧承煜耳中。</div>
+              <div class="para-cell source"><textarea>这座王府里，每一句话都可能传到萧承煜耳中。</textarea></div>
               <div class="para-cell target"><textarea>Dans ce palais princier, chaque parole pouvait parvenir aux oreilles de Xiao Chengyu.</textarea></div>
               <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第4段重新翻译" /></div>
             </div>
@@ -5059,10 +5154,10 @@
   <div id="platformPushModal" class="modal-mask" role="dialog" aria-modal="true" aria-labelledby="platformPushTitle">
     <div class="modal">
       <button class="modal-close-x modal-close" type="button" aria-label="关闭">×</button>
-      <h3 id="platformPushTitle">推送至内容中台</h3>
-      <p>请确认目标书籍ID和章节范围，提交后系统将异步推送当前任务的译文内容。</p>
+      <h3 id="platformPushTitle">推送至后台</h3>
+      <p>请确认目标书籍ID和章节范围，提交后系统将推送当前任务的译文内容。</p>
       <div class="form-grid">
-        <div class="field wide"><label>目标书籍ID<span class="required">*</span></label><input id="pushTargetBookId" class="control" placeholder="请输入内容中台目标书籍ID" value="BK-FR-2210" /></div>
+        <div class="field wide"><label>目标书籍ID<span class="required">*</span></label><input id="pushTargetBookId" class="control" placeholder="请输入需要推送至运营后台的目标书籍ID" value="BK-FR-2210" /></div>
         <div class="field"><label>起始章节</label><input id="pushChapterStart" class="control" value="1" /></div>
         <div class="field"><label>结束章节</label><input id="pushChapterEnd" class="control" value="100" /></div>
       </div>
@@ -5427,7 +5522,11 @@
       currentViewId = id;
     }
     document.querySelectorAll("[data-go]").forEach((button) => {
-      button.addEventListener("click", () => showView(button.dataset.go));
+      button.addEventListener("click", () => {
+        showView(button.dataset.go);
+        if (button.dataset.metaType) applyMetaEditor(button);
+        if (button.dataset.go === "editor" && !button.dataset.metaType) applyTranslatedTaskEditor(button);
+      });
     });
     backBtn.addEventListener("click", () => {
       if (backBtn.dataset.go) showView(backBtn.dataset.go);
@@ -5465,13 +5564,97 @@
     document.getElementById("processMode")?.addEventListener("change", (event) => {
       syncProcessModeFlow(event.target.value);
     });
+    const platformBookStatusMock = {
+      BK10012: { status: "已创建 1-30 章", start: 31, end: 326, existed: true },
+      BK10021: { status: "无", start: 1, end: 180, existed: false },
+      BK10052: { status: "已创建 1-80 章", start: 81, end: 120, existed: true }
+    };
+    let platformRangeDetectTimer = null;
+
+    function syncCreateSourceMethod(method) {
+      document.getElementById("platformSourcePanel")?.classList.toggle("active", method === "platform");
+      document.getElementById("localSourcePanel")?.classList.toggle("active", method === "local");
+      document.getElementById("sourceLanguageField")?.classList.toggle("hidden", method === "platform");
+    }
+
+    function parsePlatformBookIds() {
+      const input = document.getElementById("bookIdBatchInput");
+      const ids = (input?.value || "")
+        .split(/\s+/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+      return Array.from(new Set(ids)).slice(0, 100);
+    }
+
+    function getPlatformBookStatus(bookId, index) {
+      if (platformBookStatusMock[bookId]) return platformBookStatusMock[bookId];
+      const charTotal = Array.from(bookId).reduce((sum, char) => sum + char.charCodeAt(0), 0);
+      return {
+        status: "无",
+        start: 1,
+        end: 100 + ((charTotal + index * 17) % 280),
+        existed: false
+      };
+    }
+
+    function renderPlatformRangeRows(bookIds) {
+      const body = document.getElementById("platformRangeBody");
+      if (!body) return;
+      if (!bookIds.length) {
+        body.innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.46);">请输入原书籍ID，检测后展示书籍任务状态和默认新增正文章节范围。</td></tr>';
+        return;
+      }
+      body.innerHTML = bookIds.map((bookId, index) => {
+        const result = getPlatformBookStatus(bookId, index);
+        const tagClass = result.existed ? "tag yellow" : "tag";
+        return `
+          <tr>
+            <td class="mono">${escapeHtml(bookId)}</td>
+            <td><span class="${tagClass}">${escapeHtml(result.status)}</span></td>
+            <td><span class="chapter-range-inputs"><input class="control range-input" value="${result.start}" /><span class="range-separator">-</span><input class="control range-input" value="${result.end}" /></span><span class="range-error">仅支持输入正整数</span></td>
+            <td><div class="meta-toggle-list"><button class="mini-toggle active" type="button">书名</button><button class="mini-toggle active" type="button">笔名</button><button class="mini-toggle active" type="button">简介</button></div></td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function syncChapterRangeValidation(input) {
+      const cell = input.closest("td");
+      const inputs = Array.from(cell?.querySelectorAll(".range-input") || []);
+      const hasInvalid = inputs.some((item) => !/^[1-9]\d*$/.test(item.value.trim()));
+      inputs.forEach((item) => item.classList.toggle("invalid", !/^[1-9]\d*$/.test(item.value.trim())));
+      cell?.querySelector(".range-error")?.classList.toggle("visible", hasInvalid);
+    }
+
+    function refreshPlatformBookStatus() {
+      const bookIds = parsePlatformBookIds();
+      const loading = document.getElementById("platformRangeLoading");
+      window.clearTimeout(platformRangeDetectTimer);
+      loading?.classList.remove("hidden");
+      platformRangeDetectTimer = window.setTimeout(() => {
+        renderPlatformRangeRows(bookIds);
+        loading?.classList.add("hidden");
+      }, 650);
+    }
+
     document.querySelectorAll("[data-source-method]").forEach((button) => {
       button.addEventListener("click", () => {
         const method = button.dataset.sourceMethod;
         document.querySelectorAll("[data-source-method]").forEach((item) => item.classList.toggle("active", item === button));
-        document.getElementById("platformSourcePanel")?.classList.toggle("active", method === "platform");
-        document.getElementById("localSourcePanel")?.classList.toggle("active", method === "local");
+        syncCreateSourceMethod(method);
       });
+    });
+    syncCreateSourceMethod("platform");
+    document.getElementById("bookIdBatchInput")?.addEventListener("blur", refreshPlatformBookStatus);
+    document.getElementById("platformRangeBody")?.addEventListener("click", (event) => {
+      const button = event.target.closest(".mini-toggle");
+      if (!button) return;
+      button.classList.toggle("active");
+    });
+    document.getElementById("platformRangeBody")?.addEventListener("input", (event) => {
+      const input = event.target.closest(".range-input");
+      if (!input) return;
+      syncChapterRangeValidation(input);
     });
     document.querySelectorAll("#findToggle").forEach((button) => {
       button.addEventListener("click", () => {
@@ -5750,9 +5933,34 @@
       icon.dataset.timer = String(timer);
     }
 
+    function syncParagraphRowHeight(row) {
+      if (!row || row.style.display === "none") return;
+      const areas = Array.from(row.querySelectorAll(".para-cell textarea"));
+      if (!areas.length) return;
+      areas.forEach((area) => { area.style.height = "auto"; });
+      const height = Math.max(44, ...areas.map((area) => area.scrollHeight));
+      areas.forEach((area) => { area.style.height = `${height}px`; });
+    }
+
     function autosizeTextarea(textarea) {
+      if (!textarea) return;
+      const paragraphRow = textarea.closest("#editorShell .paragraph-row");
+      if (paragraphRow) {
+        syncParagraphRowHeight(paragraphRow);
+        return;
+      }
       textarea.style.height = "auto";
       textarea.style.height = `${Math.min(textarea.scrollHeight, 128)}px`;
+    }
+
+    function setParagraphCellText(cell, text, placeholder = "") {
+      const textarea = cell?.querySelector("textarea");
+      if (textarea) {
+        textarea.value = text || "";
+        textarea.placeholder = placeholder;
+        return;
+      }
+      if (cell) cell.textContent = text || "";
     }
 
     document.querySelectorAll("textarea").forEach((textarea) => {
@@ -6877,6 +7085,20 @@
       pendingTermsTranslateButton = null;
     });
 
+    let activeEditorParagraphRow = null;
+
+    function rememberActiveEditorParagraph(target) {
+      const row = target?.closest?.("#editorShell .paragraph-row");
+      if (row && row.style.display !== "none") activeEditorParagraphRow = row;
+    }
+
+    function getDefaultRerollRow() {
+      const focusedRow = document.activeElement?.closest?.("#editorShell .paragraph-row");
+      if (focusedRow && focusedRow.style.display !== "none") return focusedRow;
+      if (activeEditorParagraphRow && activeEditorParagraphRow.style.display !== "none") return activeEditorParagraphRow;
+      return null;
+    }
+
     function syncParagraphRerollSelection() {
       const checks = Array.from(document.querySelectorAll("#editorShell .paragraph-reselect"));
       const selected = checks.filter((input) => input.checked);
@@ -6947,6 +7169,7 @@
       if (textarea && text) {
         textarea.value = text;
         autosizeTextarea(textarea);
+        syncParagraphRowHeight(card.closest(".paragraph-row"));
         target.classList.remove("empty");
         markSaving(document.querySelector("#editor .save-status"));
       }
@@ -6966,11 +7189,21 @@
       if (text && row) text.textContent = makeCandidateText(row, nextVariant);
     }
 
-    document.getElementById("editorRerollToggle")?.addEventListener("click", () => {
+    const editorRerollToggle = document.getElementById("editorRerollToggle");
+    editorRerollToggle?.addEventListener("mousedown", (event) => {
+      event.preventDefault();
+    });
+    editorRerollToggle?.addEventListener("click", () => {
       const shell = document.getElementById("editorShell");
       if (!shell) return;
       const active = shell.classList.toggle("reroll-mode");
       if (active) {
+        const defaultRow = getDefaultRerollRow();
+        const defaultCheck = defaultRow?.querySelector(".paragraph-reselect");
+        if (defaultRow?.style.display !== "none" && defaultCheck) {
+          defaultCheck.checked = true;
+        }
+        syncParagraphRerollSelection();
         showToast("请选择需要重新翻译的译文段落");
       } else {
         closeParagraphRerollMode();
@@ -7007,6 +7240,18 @@
     });
     document.getElementById("rerollExitBtn")?.addEventListener("click", () => {
       closeParagraphRerollMode();
+    });
+    document.getElementById("editorShell")?.addEventListener("pointerdown", (event) => {
+      rememberActiveEditorParagraph(event.target);
+    }, true);
+    document.getElementById("editorShell")?.addEventListener("focusin", (event) => {
+      rememberActiveEditorParagraph(event.target);
+    });
+    document.getElementById("editorShell")?.addEventListener("click", (event) => {
+      rememberActiveEditorParagraph(event.target);
+    });
+    document.addEventListener("selectionchange", () => {
+      rememberActiveEditorParagraph(document.activeElement);
     });
     document.getElementById("editorShell")?.addEventListener("click", (event) => {
       const adopt = event.target.closest(".reroll-adopt-one");
@@ -7237,6 +7482,116 @@
       ]
     };
 
+    const metaSourceContent = {
+      title: "摄政王的白月光",
+      author: "清月"
+    };
+
+    function applyMetaEditor(button) {
+      const type = button.dataset.metaType;
+      if (!type) return;
+      const row = button.closest("tr");
+      const targetText = row?.children?.[4]?.textContent?.trim() || "";
+      const sourceText = metaSourceContent[type] || targetText;
+      const label = type === "author" ? "作者笔名" : "书名";
+      if (button.dataset.go === "sourceEditor") {
+        document.querySelectorAll("#sourceEditorShell .chapter-node").forEach((item) => item.classList.remove("active"));
+        const textarea = document.querySelector("#sourceEditor .source-textarea");
+        if (textarea) {
+          textarea.value = sourceText;
+          autosizeTextarea(textarea);
+        }
+        const railTitle = document.querySelector("#sourceEditorShell .rail-title-text span");
+        if (railTitle) railTitle.textContent = `中文 · ${label}`;
+        markSaving(document.querySelector("#sourceEditor .save-status"));
+        sourceEditorDirty = false;
+        syncSourceReviewButton();
+        return;
+      }
+      if (button.dataset.go === "editor") {
+        closeParagraphRerollMode();
+        document.querySelectorAll("#editorShell .chapter-node").forEach((item) => item.classList.remove("active"));
+        const rows = Array.from(document.querySelectorAll("#editorShell .paragraph-row"));
+        rows.forEach((item, index) => {
+          const source = item.querySelector(".para-cell.source");
+          const target = item.querySelector(".para-cell.target");
+          const textarea = target?.querySelector("textarea");
+          if (index === 0) {
+            setParagraphCellText(source, sourceText);
+            if (textarea) {
+              textarea.value = targetText || sourceText;
+              textarea.placeholder = "";
+              autosizeTextarea(textarea);
+            }
+            target?.classList.remove("empty");
+            item.style.display = "";
+            syncParagraphRowHeight(item);
+          } else {
+            item.style.display = "none";
+          }
+        });
+        const railTitle = document.querySelector("#editorShell .rail-title-text span");
+        const activeTab = document.querySelector(".book-tab.active")?.textContent?.trim() || "法语";
+        if (railTitle) railTitle.textContent = `${activeTab} · ${label}`;
+        syncTranslationReviewButton("翻译审校中");
+        markSaving(document.querySelector("#editor .save-status"));
+      }
+    }
+
+    const spanishTaskEditorContent = {
+      "0": [
+        ["她曾是盛京城里最明亮的那一抹春色，却在一场宫变后被卷入摄政王府。旧日婚约、失散亲眷与深宫秘闻接连浮出水面，沈清澜必须在权势与真心之间辨认自己的归处。", "Ella fue la presencia más luminosa de Shengjing, hasta que una revuelta palaciega la arrastró a la residencia del regente. Entre un compromiso antiguo, parientes perdidos y secretos de palacio, Shen Qinglan tendrá que distinguir dónde está realmente su lugar."],
+        ["摄政王萧承煜冷峻寡言，手握朝局，却始终避开她的追问。众人都说她只是王府里一枚可有可无的棋子，只有她知道，那些被雨夜掩埋的往事，正一点点改变两人的命运。", "Xiao Chengyu, el regente, es reservado y severo; controla la corte, pero evita siempre sus preguntas. Todos dicen que ella no es más que una pieza prescindible en su residencia, aunque solo ella sabe que el pasado enterrado bajo aquellas noches de lluvia está cambiando poco a poco el destino de ambos."],
+        ["当白月光不再只是回忆，沈清澜也终于明白，真正困住人的从来不是王府高墙，而是无人敢触碰的真相。", "Cuando la luz blanca del pasado deja de ser solo un recuerdo, Shen Qinglan comprende por fin que lo que aprisiona a una persona no son los muros de la residencia, sino una verdad que nadie se atreve a tocar."],
+        ["", ""]
+      ],
+      "1": [
+        ["楔子那日，盛京下了一整夜的雨。", "La noche del prólogo, llovió toda la noche en Shengjing."],
+        ["摄政王府门前的青石阶被雨水冲得发亮。", "Los escalones de piedra azul ante la residencia del regente brillaban bajo la lluvia."],
+        ["沈清澜站在长街尽头，披风早已湿透。", "Shen Qinglan estaba al final de la larga calle, con la capa empapada."],
+        ["她知道，只要踏进那扇朱红大门，旧案便再也不能当作尘封往事。", "Sabía que, al cruzar aquella puerta escarlata, el viejo caso ya no podría seguir enterrado."]
+      ],
+      "2": [
+        ["沈清澜醒来时，窗外的雨还未停。", "Cuando Shen Qinglan despertó, la lluvia aún no había cesado."],
+        ["昨夜书房里的烛火仿佛仍在眼前摇晃。", "La luz de las velas del estudio parecía seguir temblando ante sus ojos."],
+        ["侍女端着温水进来，见她醒了，神色明显松了一口气。", "La doncella entró con agua tibia y, al verla despierta, pareció aliviada."],
+        ["她问起王爷时，侍女立刻低下头。", "Cuando preguntó por el regente, la doncella bajó la cabeza de inmediato."]
+      ]
+    };
+
+    function applyTranslatedTaskEditor(button) {
+      const panel = button.closest(".book-panel");
+      if (panel?.id !== "esText") return;
+      const row = button.closest("tr");
+      const sequence = row?.children?.[1]?.textContent?.trim();
+      const content = spanishTaskEditorContent[sequence];
+      if (!content) return;
+      closeParagraphRerollMode();
+      document.querySelectorAll("#editorShell .chapter-node").forEach((item) => item.classList.remove("active"));
+      const rows = Array.from(document.querySelectorAll("#editorShell .paragraph-row"));
+      rows.forEach((item, index) => {
+        const pair = content[index] || ["", ""];
+        const source = item.querySelector(".para-cell.source");
+        const target = item.querySelector(".para-cell.target");
+        const textarea = target?.querySelector("textarea");
+        setParagraphCellText(source, pair[0]);
+        if (textarea) {
+          textarea.value = pair[1];
+          textarea.placeholder = pair[1] ? "" : "请输入译文";
+          autosizeTextarea(textarea);
+        }
+        item.style.display = pair[0] ? "" : "none";
+        target?.classList.toggle("empty", !pair[1] && Boolean(pair[0]));
+        syncParagraphRowHeight(item);
+      });
+      const title = row?.children?.[4]?.textContent?.trim() || "篇章";
+      const railTitle = document.querySelector("#editorShell .rail-title-text span");
+      if (railTitle) railTitle.textContent = `西班牙语 · ${title}`;
+      const status = row?.querySelector(".task-status .tag")?.textContent?.trim() || "翻译审校中";
+      syncTranslationReviewButton(status);
+      markSaving(document.querySelector("#editor .save-status"));
+    }
+
     function getNextChapterButton(shellSelector) {
       const buttons = Array.from(document.querySelectorAll(`${shellSelector} .chapter-node`));
       const activeIndex = buttons.findIndex((item) => item.classList.contains("active"));
@@ -7280,7 +7635,7 @@
         const source = row.querySelector(".para-cell.source");
         const target = row.querySelector(".para-cell.target");
         const textarea = target?.querySelector("textarea");
-        if (source) source.textContent = pair[0];
+        setParagraphCellText(source, pair[0]);
         if (textarea) {
           textarea.value = pair[1];
           textarea.placeholder = pair[1] ? "" : "请输入译文";
@@ -7288,6 +7643,7 @@
         }
         row.style.display = pair[0] ? "" : "none";
         target?.classList.toggle("empty", !pair[1] && Boolean(pair[0]));
+        syncParagraphRowHeight(row);
       });
       button.scrollIntoView({ block: "nearest" });
       markSaving(document.querySelector("#editor .save-status"));
