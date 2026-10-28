@@ -1670,6 +1670,214 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 2px rgba(98, 36, 255, 0.2), 0 8px 18px rgba(0, 0, 0, 0.22);
     }
 
+    .editor.continuous-mode .editor-main {
+      background: #11151d;
+      border-color: rgba(255, 255, 255, 0.09);
+    }
+
+    .editor.continuous-mode .paragraph-list {
+      padding: 0;
+      background: #161b24;
+    }
+
+    .editor.continuous-mode .editor-columns {
+      background: #202633;
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .editor.continuous-mode .paragraph-row {
+      background: #161b24;
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .editor.continuous-mode .paragraph-row:hover {
+      background: #1a202b;
+    }
+
+    .editor.continuous-mode .paragraph-row:focus-within,
+    .editor.continuous-mode .paragraph-row.reroll-selected {
+      background: rgba(98, 36, 255, 0.13);
+      box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
+    }
+
+    .editor.continuous-mode .para-cell {
+      margin: 0;
+      padding: 11px 14px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .editor.continuous-mode .para-cell.source {
+      color: rgba(255, 255, 255, 0.78);
+      background: transparent;
+    }
+
+    .editor.continuous-mode .para-cell.target {
+      border-left: 1px solid rgba(255, 255, 255, 0.13);
+      color: rgba(255, 255, 255, 0.9);
+      background: transparent;
+    }
+
+    .editor.continuous-mode .paragraph-row .para-cell:focus-within {
+      background: rgba(255, 255, 255, 0.045);
+      box-shadow: inset 0 0 0 1px rgba(139, 115, 255, 0.34);
+    }
+
+    .editor.continuous-mode .paragraph-row.reroll-selected .para-cell.source,
+    .editor.continuous-mode .paragraph-row.reroll-selected .para-cell.target {
+      background: transparent;
+      border-color: rgba(255, 255, 255, 0.13);
+    }
+
+    .editor.continuous-mode .para-index,
+    .editor.continuous-mode .paragraph-select-cell {
+      padding-top: 12px;
+    }
+
+    .editor.paired-highlight-mode .paragraph-row {
+      border-bottom-color: transparent;
+      align-items: flex-start;
+    }
+
+    .paired-reader {
+      display: none;
+    }
+
+    .editor.paired-highlight-mode .editor-columns,
+    .editor.paired-highlight-mode .paragraph-list {
+      display: none;
+    }
+
+    .editor.paired-highlight-mode .paired-reader {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      min-height: 0;
+      overflow: auto;
+      background: #161b24;
+    }
+
+    .paired-column {
+      min-width: 0;
+      padding: 12px 0 18px;
+    }
+
+    .paired-column-body {
+      display: grid;
+      align-content: start;
+      gap: 22px;
+    }
+
+    .paired-column.target {
+      border-left: 1px solid rgba(255, 255, 255, 0.13);
+    }
+
+    .paired-title {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 9px 16px;
+      background: #202633;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .paired-segment {
+      position: relative;
+      margin: 0;
+      padding: 4px 38px 4px 16px;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .paired-column.source .paired-segment {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .paired-segment textarea {
+      display: block;
+      width: 100%;
+      min-height: 26px;
+      border: 0;
+      outline: 0;
+      resize: none;
+      overflow: hidden;
+      background: transparent;
+      color: inherit;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .paired-segment.pair-peer-highlight,
+    .paired-segment.pair-active-cell {
+      background: rgba(139, 115, 255, 0.14);
+      box-shadow: inset 0 0 0 1px rgba(139, 115, 255, 0.25);
+    }
+
+    .paired-segment.is-reroll-selected {
+      background: rgba(98, 36, 255, 0.15);
+      box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
+    }
+
+    .paired-check {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      display: none;
+    }
+
+    .editor.reroll-mode.paired-highlight-mode .paired-check {
+      display: inline-flex;
+    }
+
+    .editor.paired-highlight-mode .paragraph-row:hover {
+      background: #161b24;
+    }
+
+    .editor.paired-highlight-mode .paragraph-row:focus-within {
+      background: #161b24;
+      box-shadow: none;
+    }
+
+    .editor.paired-highlight-mode .paragraph-row.reroll-selected {
+      background: rgba(98, 36, 255, 0.12);
+      box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
+    }
+
+    .editor.paired-highlight-mode .para-cell.pair-peer-highlight {
+      background: rgba(139, 115, 255, 0.14);
+      box-shadow: inset 0 0 0 1px rgba(139, 115, 255, 0.28);
+    }
+
+    .editor.paired-highlight-mode .para-cell.pair-active-cell {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .editor.paired-highlight-mode .paragraph-list {
+      padding: 14px 0 18px;
+    }
+
+    .editor.paired-highlight-mode .para-index {
+      padding-top: 6px;
+      line-height: 1.9;
+    }
+
+    .editor.paired-highlight-mode .paragraph-select-cell {
+      padding-top: 8px;
+    }
+
+    .editor.paired-highlight-mode .para-cell {
+      padding: 4px 14px 8px;
+    }
+
+    .editor.paired-highlight-mode .para-cell textarea {
+      min-height: 26px;
+      line-height: 1.9;
+      font-size: 15px;
+    }
+
     .reroll-panel {
       display: none;
       flex: 0 0 auto;
@@ -4761,7 +4969,7 @@
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
             <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="西班牙语">导出全部</button></div>
           </div>
-          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La luz blanca del regente</td><td><span class="mono">24</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introducción</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>Viejo sueño</td><td><span class="mono">15,812</span><span class="sub">103 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag purple">翻译审校中</span></td><td><span class="qc-alert" title="译文为空：1 处"><span class="qc-icon">⚠</span>1类 / 1处</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:38</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
+          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La luz blanca del regente</td><td><span class="mono">24</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introducción</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>Viejo sueño</td><td><span class="mono">15,812</span><span class="sub">103 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag purple">翻译审校中</span></td><td><span class="qc-alert" title="译文为空：1 处"><span class="qc-icon">⚠</span>1类 / 1处</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:38</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr data-editor-mode="continuous"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">3</td><td class="mono">873455062</td><td>003_初见王府.docx</td><td>Primer encuentro con la residencia</td><td><span class="mono">16,124</span><span class="sub">112 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag purple">翻译审校中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:46</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="西班牙语" data-export-scope="selected">导出译文</button></div></div>
         </div>
 
@@ -4909,6 +5117,16 @@
           <div class="editor-columns">
             <span>#</span><span>原文</span><span>译文</span><span class="reroll-check-head"><input id="rerollCheckAll" class="row-check" type="checkbox" aria-label="全选重新翻译段落" /></span>
           </div>
+          <div id="pairedReader" class="paired-reader" aria-label="篇章连续分栏编辑器">
+            <div class="paired-column source">
+              <div class="paired-title">原文</div>
+              <div class="paired-column-body" data-paired-source></div>
+            </div>
+            <div class="paired-column target">
+              <div class="paired-title">译文</div>
+              <div class="paired-column-body" data-paired-target></div>
+            </div>
+          </div>
           <div class="paragraph-list">
             <div class="paragraph-row">
               <div class="para-index">001</div>
@@ -4933,6 +5151,30 @@
               <div class="para-cell source"><textarea>这座王府里，每一句话都可能传到萧承煜耳中。</textarea></div>
               <div class="para-cell target"><textarea>Dans ce palais princier, chaque parole pouvait parvenir aux oreilles de Xiao Chengyu.</textarea></div>
               <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第4段重新翻译" /></div>
+            </div>
+            <div class="paragraph-row" style="display:none;">
+              <div class="para-index">005</div>
+              <div class="para-cell source"><textarea></textarea></div>
+              <div class="para-cell target"><textarea></textarea></div>
+              <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第5段重新翻译" /></div>
+            </div>
+            <div class="paragraph-row" style="display:none;">
+              <div class="para-index">006</div>
+              <div class="para-cell source"><textarea></textarea></div>
+              <div class="para-cell target"><textarea></textarea></div>
+              <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第6段重新翻译" /></div>
+            </div>
+            <div class="paragraph-row" style="display:none;">
+              <div class="para-index">007</div>
+              <div class="para-cell source"><textarea></textarea></div>
+              <div class="para-cell target"><textarea></textarea></div>
+              <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第7段重新翻译" /></div>
+            </div>
+            <div class="paragraph-row" style="display:none;">
+              <div class="para-index">008</div>
+              <div class="para-cell source"><textarea></textarea></div>
+              <div class="para-cell target"><textarea></textarea></div>
+              <div class="paragraph-select-cell"><input class="row-check paragraph-reselect" type="checkbox" aria-label="选择第8段重新翻译" /></div>
             </div>
           </div>
         </div>
@@ -5938,6 +6180,10 @@
       const areas = Array.from(row.querySelectorAll(".para-cell textarea"));
       if (!areas.length) return;
       areas.forEach((area) => { area.style.height = "auto"; });
+      if (row.closest("#editorShell")?.classList.contains("paired-highlight-mode")) {
+        areas.forEach((area) => { area.style.height = `${Math.max(26, area.scrollHeight)}px`; });
+        return;
+      }
       const height = Math.max(44, ...areas.map((area) => area.scrollHeight));
       areas.forEach((area) => { area.style.height = `${height}px`; });
     }
@@ -7088,6 +7334,12 @@
     let activeEditorParagraphRow = null;
 
     function rememberActiveEditorParagraph(target) {
+      const pairedSegment = target?.closest?.("#pairedReader .paired-segment");
+      if (pairedSegment) {
+        const row = document.querySelectorAll("#editorShell .paragraph-row")[Number(pairedSegment.dataset.pairIndex || 0)];
+        if (row && row.style.display !== "none") activeEditorParagraphRow = row;
+        return;
+      }
       const row = target?.closest?.("#editorShell .paragraph-row");
       if (row && row.style.display !== "none") activeEditorParagraphRow = row;
     }
@@ -7097,6 +7349,93 @@
       if (focusedRow && focusedRow.style.display !== "none") return focusedRow;
       if (activeEditorParagraphRow && activeEditorParagraphRow.style.display !== "none") return activeEditorParagraphRow;
       return null;
+    }
+
+    function clearPairedCellHighlights() {
+      document.querySelectorAll("#editorShell .pair-peer-highlight, #editorShell .pair-active-cell").forEach((cell) => {
+        cell.classList.remove("pair-peer-highlight", "pair-active-cell");
+      });
+    }
+
+    function syncPairedTextareaHeight(textarea) {
+      if (!textarea) return;
+      textarea.style.height = "auto";
+      textarea.style.height = `${Math.max(26, textarea.scrollHeight)}px`;
+    }
+
+    function syncPairedRerollSelectionFromRows() {
+      const shell = document.getElementById("editorShell");
+      if (!shell?.classList.contains("paired-highlight-mode")) return;
+      document.querySelectorAll("#pairedReader .paired-segment").forEach((segment) => {
+        const row = document.querySelectorAll("#editorShell .paragraph-row")[Number(segment.dataset.pairIndex || 0)];
+        const checked = Boolean(row?.querySelector(".paragraph-reselect")?.checked);
+        segment.classList.toggle("is-reroll-selected", checked);
+        const check = segment.querySelector(".paired-check");
+        if (check) check.checked = checked;
+      });
+    }
+
+    function renderPairedReader(content = []) {
+      const sourceWrap = document.querySelector("#pairedReader [data-paired-source]");
+      const targetWrap = document.querySelector("#pairedReader [data-paired-target]");
+      if (!sourceWrap || !targetWrap) return;
+      sourceWrap.innerHTML = "";
+      targetWrap.innerHTML = "";
+      content.forEach((pair, index) => {
+        if (!pair?.[0]) return;
+        const sourceSegment = document.createElement("div");
+        sourceSegment.className = "paired-segment source";
+        sourceSegment.dataset.pairIndex = String(index);
+        sourceSegment.innerHTML = `<textarea aria-label="第${index + 1}段原文">${escapeHtml(pair[0])}</textarea>`;
+        sourceWrap.appendChild(sourceSegment);
+
+        const targetSegment = document.createElement("div");
+        targetSegment.className = "paired-segment target";
+        targetSegment.dataset.pairIndex = String(index);
+        targetSegment.innerHTML = `<textarea aria-label="第${index + 1}段译文">${escapeHtml(pair[1] || "")}</textarea><input class="row-check paired-check" type="checkbox" aria-label="选择第${index + 1}段重新翻译" />`;
+        targetWrap.appendChild(targetSegment);
+      });
+      document.querySelectorAll("#pairedReader textarea").forEach((textarea) => {
+        syncPairedTextareaHeight(textarea);
+        textarea.addEventListener("input", () => {
+          syncPairedTextareaHeight(textarea);
+          markSaving(document.querySelector("#editor .save-status"));
+        });
+      });
+      document.querySelectorAll("#pairedReader .paired-check").forEach((input) => {
+        input.addEventListener("change", () => {
+          const index = Number(input.closest(".paired-segment")?.dataset.pairIndex || 0);
+          const row = document.querySelectorAll("#editorShell .paragraph-row")[index];
+          const rowCheck = row?.querySelector(".paragraph-reselect");
+          if (rowCheck) rowCheck.checked = input.checked;
+          syncParagraphRerollSelection();
+        });
+      });
+      syncPairedRerollSelectionFromRows();
+    }
+
+    function syncPairedCounterpartHighlight(target) {
+      const shell = document.getElementById("editorShell");
+      if (!shell?.classList.contains("paired-highlight-mode")) {
+        clearPairedCellHighlights();
+        return;
+      }
+      const pairedSegment = target?.closest?.("#pairedReader .paired-segment");
+      if (pairedSegment) {
+        const index = pairedSegment.dataset.pairIndex;
+        clearPairedCellHighlights();
+        pairedSegment.classList.add("pair-active-cell");
+        const side = pairedSegment.classList.contains("source") ? "target" : "source";
+        document.querySelector(`#pairedReader .paired-segment.${side}[data-pair-index="${index}"]`)?.classList.add("pair-peer-highlight");
+        return;
+      }
+      const cell = target?.closest?.("#editorShell .para-cell.source, #editorShell .para-cell.target");
+      if (!cell) return;
+      const row = cell.closest(".paragraph-row");
+      const peer = cell.classList.contains("source") ? row?.querySelector(".para-cell.target") : row?.querySelector(".para-cell.source");
+      clearPairedCellHighlights();
+      cell.classList.add("pair-active-cell");
+      peer?.classList.add("pair-peer-highlight");
     }
 
     function syncParagraphRerollSelection() {
@@ -7115,6 +7454,7 @@
       if (countEl) countEl.textContent = selected.length;
       const submit = document.getElementById("rerollSubmitBtn");
       if (submit) submit.disabled = selected.length === 0;
+      syncPairedRerollSelectionFromRows();
     }
 
     function closeParagraphRerollMode() {
@@ -7140,13 +7480,22 @@
         .replace("résidence princière", "palais princier");
     }
 
+    function getRerollCardRow(card) {
+      const directRow = card.closest(".paragraph-row");
+      if (directRow) return directRow;
+      const index = Number(card.closest(".paired-segment")?.dataset.pairIndex || 0);
+      return document.querySelectorAll("#editorShell .paragraph-row")[index] || null;
+    }
+
     function createRerollCandidate(row, variant = 0) {
       const target = row.querySelector(".para-cell.target");
       if (!target) return;
       target.querySelector(".reroll-candidate")?.remove();
+      const rowIndex = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
       const card = document.createElement("div");
       card.className = "reroll-candidate";
       card.dataset.variant = String(variant);
+      card.dataset.pairIndex = String(rowIndex);
       card.innerHTML = `
         <div class="reroll-candidate-head">
           <span>新翻译建议</span>
@@ -7160,29 +7509,45 @@
         </div>
       `;
       target.appendChild(card);
+      const pairedTarget = document.querySelector(`#pairedReader .paired-segment.target[data-pair-index="${rowIndex}"]`);
+      if (pairedTarget) {
+        pairedTarget.querySelector(".reroll-candidate")?.remove();
+        pairedTarget.appendChild(card.cloneNode(true));
+      }
     }
 
     function adoptRerollCandidate(card) {
-      const target = card.closest(".para-cell.target");
+      const pairedTarget = card.closest(".paired-segment.target");
+      const row = getRerollCardRow(card);
+      const target = pairedTarget || row?.querySelector(".para-cell.target");
       const textarea = target?.querySelector("textarea");
       const text = card.querySelector(".reroll-candidate-text")?.textContent || "";
       if (textarea && text) {
         textarea.value = text;
-        autosizeTextarea(textarea);
-        syncParagraphRowHeight(card.closest(".paragraph-row"));
+        pairedTarget ? syncPairedTextareaHeight(textarea) : autosizeTextarea(textarea);
+        const rowTextarea = row?.querySelector(".para-cell.target textarea");
+        if (pairedTarget && rowTextarea) {
+          rowTextarea.value = text;
+          autosizeTextarea(rowTextarea);
+        }
+        syncParagraphRowHeight(row);
         target.classList.remove("empty");
         markSaving(document.querySelector("#editor .save-status"));
       }
-      const row = card.closest(".paragraph-row");
       row?.querySelector(".paragraph-reselect") && (row.querySelector(".paragraph-reselect").checked = false);
       row?.classList.remove("reroll-selected");
+      const rowIndex = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
+      document.querySelector(`#pairedReader .paired-segment.target[data-pair-index="${rowIndex}"]`)?.classList.remove("is-reroll-selected");
+      document.querySelector(`#pairedReader .paired-segment.target[data-pair-index="${rowIndex}"] .paired-check`) && (document.querySelector(`#pairedReader .paired-segment.target[data-pair-index="${rowIndex}"] .paired-check`).checked = false);
+      if (pairedTarget) row?.querySelector(".reroll-candidate")?.remove();
+      else document.querySelector(`#pairedReader .paired-segment.target[data-pair-index="${rowIndex}"] .reroll-candidate`)?.remove();
       card.remove();
       syncParagraphRerollSelection();
       if (!document.querySelector("#editorShell .reroll-candidate")) closeParagraphRerollMode();
     }
 
     function refreshRerollCandidate(card) {
-      const row = card.closest(".paragraph-row");
+      const row = getRerollCardRow(card);
       const nextVariant = Number(card.dataset.variant || 0) + 1;
       card.dataset.variant = String(nextVariant);
       const text = card.querySelector(".reroll-candidate-text");
@@ -7244,11 +7609,16 @@
     document.getElementById("editorShell")?.addEventListener("pointerdown", (event) => {
       rememberActiveEditorParagraph(event.target);
     }, true);
+    document.getElementById("editorShell")?.addEventListener("mouseover", (event) => {
+      syncPairedCounterpartHighlight(event.target);
+    });
     document.getElementById("editorShell")?.addEventListener("focusin", (event) => {
       rememberActiveEditorParagraph(event.target);
+      syncPairedCounterpartHighlight(event.target);
     });
     document.getElementById("editorShell")?.addEventListener("click", (event) => {
       rememberActiveEditorParagraph(event.target);
+      syncPairedCounterpartHighlight(event.target);
     });
     document.addEventListener("selectionchange", () => {
       rememberActiveEditorParagraph(document.activeElement);
@@ -7266,9 +7636,12 @@
         refreshRerollCandidate(card);
         showToast("已换一个候选译文");
       } else if (cancel) {
-        const row = card.closest(".paragraph-row");
+        const row = getRerollCardRow(card);
         row?.querySelector(".paragraph-reselect") && (row.querySelector(".paragraph-reselect").checked = false);
         row?.classList.remove("reroll-selected");
+        const rowIndex = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
+        if (card.closest(".paired-segment")) row?.querySelector(".reroll-candidate")?.remove();
+        else document.querySelector(`#pairedReader .paired-segment.target[data-pair-index="${rowIndex}"] .reroll-candidate`)?.remove();
         card.remove();
         syncParagraphRerollSelection();
         if (!document.querySelector("#editorShell .reroll-candidate")) closeParagraphRerollMode();
@@ -7510,6 +7883,8 @@
       }
       if (button.dataset.go === "editor") {
         closeParagraphRerollMode();
+        document.getElementById("editorShell")?.classList.remove("continuous-mode", "paired-highlight-mode");
+        clearPairedCellHighlights();
         document.querySelectorAll("#editorShell .chapter-node").forEach((item) => item.classList.remove("active"));
         const rows = Array.from(document.querySelectorAll("#editorShell .paragraph-row"));
         rows.forEach((item, index) => {
@@ -7552,10 +7927,24 @@
         ["她知道，只要踏进那扇朱红大门，旧案便再也不能当作尘封往事。", "Sabía que, al cruzar aquella puerta escarlata, el viejo caso ya no podría seguir enterrado."]
       ],
       "2": [
-        ["沈清澜醒来时，窗外的雨还未停。", "Cuando Shen Qinglan despertó, la lluvia aún no había cesado."],
-        ["昨夜书房里的烛火仿佛仍在眼前摇晃。", "La luz de las velas del estudio parecía seguir temblando ante sus ojos."],
-        ["侍女端着温水进来，见她醒了，神色明显松了一口气。", "La doncella entró con agua tibia y, al verla despierta, pareció aliviada."],
-        ["她问起王爷时，侍女立刻低下头。", "Cuando preguntó por el regente, la doncella bajó la cabeza de inmediato."]
+        ["沈清澜醒来时，窗外的雨还未停，细密雨丝顺着雕花窗棂一路滑落，滴在青石台阶上，声音轻得像有人在暗处反复叩门。她盯着那片湿冷的天色看了许久，才慢慢想起昨夜自己是怎样被人领进这座王府。", "Cuando Shen Qinglan despertó, la lluvia aún no había cesado."],
+        ["昨夜书房里的烛火仿佛仍在眼前摇晃，案上那封旧信、萧承煜垂下的眼睫、以及他始终没有拆开的沉默，都像被雨水浸过一样压在她心口。", "La luz de las velas del estudio parecía seguir temblando ante sus ojos."],
+        ["萧承煜那句“每一个答案都有代价”，也像细线一样缠在耳边，越是想要忽略，越是清晰地勒进她的思绪里。", "La frase de Xiao Chengyu, «cada respuesta tiene un precio», seguía enredada en sus oídos como un hilo fino."],
+        ["她坐起身，发现自己被安置在王府东侧的偏院，窗外种着两株老梅，枝叶被雨打得低垂，院门口还有侍卫换岗留下的脚印。", "Se incorporó y descubrió que la habían instalado en un patio lateral."],
+        ["屋中陈设干净克制，没有多余香料，也没有寻常贵女房里那些明丽摆件，只有一只铜炉安静地摆在角落，里面的灰烬已经冷了。", "La habitación era limpia y sobria."],
+        ["侍女端着温水进来，见她醒了，神色明显松了一口气，却又很快低下头，像是早被人叮嘱过不该多看、不该多问。", "La doncella entró con agua tibia y pareció aliviada."],
+        ["她问起王爷时，侍女立刻低下头，指尖紧紧扣住托盘边缘，连回答的声音都比方才轻了许多。", "Cuando preguntó por el regente, la doncella bajó la cabeza de inmediato."],
+        ["只说王爷一早去了前院议事，若姑娘醒了，便先用些清粥，其他事情等管事嬷嬷过来再说。", "Solo respondió que Su Alteza había ido temprano al patio delantero."]
+      ],
+      "3": [
+        ["初见王府时，沈清澜只觉得门庭深重。", "Al ver por primera vez la residencia, Shen Qinglan solo sintió un peso solemne en sus puertas."],
+        ["门楣上的铜兽被雨水洗得发亮。", "Las bestias de bronce del dintel brillaban bajo la lluvia."],
+        ["管事嬷嬷将她引入偏院。", "La matrona la condujo hasta un patio lateral."],
+        ["她低声叮嘱，不可擅入书房。", "Le advirtió en voz baja que no entrara al estudio sin permiso."],
+        ["沈清澜抬头望向灯火最盛处。", "Shen Qinglan alzó la vista hacia el lugar donde ardían más luces."],
+        ["那里隔着一重回廊，像隔着一层雾。", "Entre ambos había una galería, como una capa de niebla."],
+        ["她心里忽然生出几分不安。", "De pronto, una inquietud leve nació en su corazón."],
+        ["这座王府，比她想象中更安静。", "Aquella residencia era más silenciosa de lo que había imaginado."]
       ]
     };
 
@@ -7567,6 +7956,16 @@
       const content = spanishTaskEditorContent[sequence];
       if (!content) return;
       closeParagraphRerollMode();
+      const editorMode = sequence === "2" ? "paired" : row?.dataset.editorMode;
+      const editorShell = document.getElementById("editorShell");
+      editorShell?.classList.toggle("continuous-mode", editorMode === "continuous" || editorMode === "paired");
+      editorShell?.classList.toggle("paired-highlight-mode", editorMode === "paired");
+      clearPairedCellHighlights();
+      if (editorMode === "paired") {
+        renderPairedReader(content);
+      } else {
+        document.querySelectorAll("#pairedReader .paired-column-body").forEach((wrap) => { wrap.innerHTML = ""; });
+      }
       document.querySelectorAll("#editorShell .chapter-node").forEach((item) => item.classList.remove("active"));
       const rows = Array.from(document.querySelectorAll("#editorShell .paragraph-row"));
       rows.forEach((item, index) => {
@@ -7626,6 +8025,8 @@
     function selectTranslatedChapter(button) {
       if (!button) return;
       closeParagraphRerollMode();
+      document.getElementById("editorShell")?.classList.remove("continuous-mode", "paired-highlight-mode");
+      clearPairedCellHighlights();
       document.querySelectorAll("#editorShell .chapter-node").forEach((item) => item.classList.toggle("active", item === button));
       syncTranslationReviewButton(button.querySelector(".sub")?.textContent.split("·")[0].trim() || "");
       const rows = Array.from(document.querySelectorAll("#editorShell .paragraph-row"));
