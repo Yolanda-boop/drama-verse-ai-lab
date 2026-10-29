@@ -2445,6 +2445,17 @@
       background: rgba(98, 36, 255, 0.12);
     }
 
+    .book-meta-instruction #bookMetaRerollConfirm {
+      color: var(--accent-text);
+      border-color: rgba(124, 90, 243, 0.42);
+      background: rgba(98, 36, 255, 0.12);
+    }
+
+    .book-meta-instruction #bookMetaRerollConfirm:hover {
+      border-color: rgba(139, 115, 255, 0.62);
+      background: rgba(98, 36, 255, 0.18);
+    }
+
     .book-meta-modal > p {
       display: none;
     }
@@ -2555,6 +2566,17 @@
       color: rgba(255, 255, 255, 0.78);
       font-size: 13px;
       line-height: 1.6;
+    }
+
+    .book-meta-candidate-result .book-meta-apply {
+      color: var(--accent-text);
+      border-color: rgba(124, 90, 243, 0.42);
+      background: rgba(98, 36, 255, 0.12);
+    }
+
+    .book-meta-candidate-result .book-meta-apply:hover {
+      border-color: rgba(139, 115, 255, 0.62);
+      background: rgba(98, 36, 255, 0.18);
     }
 
     @media (max-width: 1180px) {
@@ -4810,7 +4832,6 @@
         <div class="filter"><label>书籍名称</label><input class="control" placeholder="请输入书籍名称" /></div>
         <div class="filter"><label>原始语言</label><select class="control"><option>请选择原始语言</option><option>中文</option></select></div>
         <div class="filter"><label>目标语言</label><select class="control"><option>请选择目标语言</option><option>法语</option><option>西班牙语</option><option>葡萄牙语</option></select></div>
-        <div class="filter"><label>处理模式</label><select class="control"><option>请选择处理模式</option><option>AIPE</option><option>AI</option></select></div>
         <div class="filter wide"><label>创建时间</label><input class="control" placeholder="请选择创建时间" /></div>
         <div class="filter"><label>创建人</label><input class="control" placeholder="请输入创建人" /></div>
         <div class="filter"><label>更新人</label><input class="control" placeholder="请输入更新人" /></div>
@@ -4889,9 +4910,9 @@
         <div class="filter"><label>目标语言</label><select class="control"><option>请选择目标语言</option><option>法语</option><option>西班牙语</option><option>葡萄牙语</option></select></div>
         <div class="filter"><label>导出类型</label><select class="control"><option>请选择导出类型</option><option>导出原文</option><option>导出译文</option></select></div>
         <div class="filter"><label>处理进度</label><select class="control"><option>请选择处理进度</option><option>全部完成</option><option>未全部完成</option></select></div>
-        <div class="filter wide"><label>提交时间</label><input class="control" placeholder="请选择提交时间" /></div>
+        <div class="filter wide"><label>提交时间</label><input class="control" type="datetime-local" /></div>
         <div class="filter"><label>提交人</label><input class="control" placeholder="请输入提交人" /></div>
-        <div class="filter wide"><label>推送时间</label><input class="control" placeholder="请选择推送时间" /></div>
+        <div class="filter wide"><label>推送时间</label><input class="control" type="datetime-local" /></div>
         <div class="filter"><label>推送人</label><input class="control" placeholder="请输入推送人" /></div>
         <div class="filter"><label>业务线</label><select class="control"><option>请选择业务线</option><option>海外书籍</option><option>GS内容中台</option></select></div>
         <div class="toolbar-actions">
@@ -5258,7 +5279,7 @@
         <div id="novelAssets" class="term-asset-content">
           <div class="asset-actionbar">
             <div class="notice">ⓘ 修改后不会自动改写已生成的AI译文</div>
-            <div class="actions"><button id="termReextractBtn" class="btn">重新提取</button><button id="termExportBtn" class="btn">导出</button></div>
+            <div class="actions"><button id="termReextractBtn" class="btn" title="基于最新原文重新提取术语并生成译法，当前结果将被覆盖">重新提取</button><button id="termExportBtn" class="btn">导出</button></div>
           </div>
           <div class="tabs">
             <button class="tab active" data-asset="termCharacter">角色</button>
@@ -5321,7 +5342,7 @@
           </div>
           <div class="language-panel-head">
             <div class="quick-filter"><span>快捷选择：</span><button class="active">AI解析完成</button><button>AI解析中</button><button>原文审校中</button><button>审校完成</button></div>
-            <div class="actions"><button class="btn primary confirm-extract-assets" title="确认全部章节原文无误后点击，章节将标记为「审校完成」，并开始提取目标语言术语译法。">确认并提取术语</button><button class="btn primary confirm-export-source">导出全部</button></div>
+            <div class="actions"><button class="btn primary confirm-extract-assets" title="确认全部章节原文无误后点击，章节将标记为「审校完成」，并开始提取目标语言术语译法。">确认并提取术语</button><button class="btn primary confirm-export-source" title="导出当前语言下该书全部章节内容">导出全部</button></div>
           </div>
           <div class="table-card">
             <table>
@@ -5361,7 +5382,7 @@
           </div>
           <div class="language-panel-head">
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
-            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn retry-all-failed">全部重试</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="法语">导出全部</button></div>
+            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn retry-all-failed">全部重试</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="法语" title="导出当前语言下该书全部章节内容">导出全部</button></div>
           </div>
           <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La lumière blanche du régent</td><td><span class="mono">29</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>简介</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr data-retry-status="AI翻译中"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>楔子</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag red">失败</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>旧梦</td><td><span class="mono">15,812</span><span class="sub">103 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">AI翻译完成</span></td><td><span class="qc-alert" title="译文为空：3 处"><span class="qc-icon">⚠</span>1类 / 3处</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:31</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="法语" data-export-scope="selected">导出译文</button></div></div>
@@ -5389,7 +5410,7 @@
           </div>
           <div class="language-panel-head">
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
-            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="西班牙语">导出全部</button></div>
+            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="西班牙语" title="导出当前语言下该书全部章节内容">导出全部</button></div>
           </div>
           <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La luz blanca del regente</td><td><span class="mono">24</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introducción</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>Viejo sueño</td><td><span class="mono">15,812</span><span class="sub">103 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag purple">翻译审校中</span></td><td><span class="qc-alert" title="译文为空：1 处"><span class="qc-icon">⚠</span>1类 / 1处</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:38</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr data-editor-mode="continuous"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">3</td><td class="mono">873455062</td><td>003_初见王府.docx</td><td>Primer encuentro con la residencia</td><td><span class="mono">16,124</span><span class="sub">112 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag purple">翻译审校中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:46</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="西班牙语" data-export-scope="selected">导出译文</button></div></div>
@@ -5417,7 +5438,7 @@
           </div>
           <div class="language-panel-head">
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
-            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="葡萄牙语">导出全部</button></div>
+            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="葡萄牙语" title="导出当前语言下该书全部章节内容">导出全部</button></div>
           </div>
           <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>A luz branca do regente</td><td><span class="mono">24</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introdução</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:12</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="葡萄牙语" data-export-scope="selected">导出译文</button></div></div>
@@ -5445,7 +5466,7 @@
           </div>
           <div class="language-panel-head">
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
-            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="意大利语">导出全部</button></div>
+            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="意大利语" title="导出当前语言下该书全部章节内容">导出全部</button></div>
           </div>
           <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La luce bianca del reggente</td><td><span class="mono">28</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>-</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>-</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="意大利语" data-export-scope="selected">导出译文</button></div></div>
@@ -5973,6 +5994,19 @@
     </div>
   </div>
 
+  <div id="sourceVersionChoiceModal" class="modal-mask" role="dialog" aria-modal="true" aria-labelledby="sourceVersionChoiceTitle">
+    <div class="modal">
+      <button class="modal-close-x modal-close" type="button" aria-label="关闭">×</button>
+      <h3 id="sourceVersionChoiceTitle">检测到原文已变更</h3>
+      <p id="sourceVersionChoiceDesc">对应章节原文在上次 AI 翻译后发生过人工修改。请选择本次处理使用的原文版本。</p>
+      <div class="actions" style="margin-top:16px;">
+        <button class="btn modal-close">取消</button>
+        <button id="useOriginalSourceVersionBtn" class="btn">沿用创建翻译时原文</button>
+        <button id="useLatestSourceVersionBtn" class="btn primary">使用当前最新原文</button>
+      </div>
+    </div>
+  </div>
+
   <div id="bookMetaEditModal" class="modal-mask" role="dialog" aria-modal="true" aria-labelledby="bookMetaEditTitle">
     <div class="modal wide book-meta-modal">
       <button class="modal-close-x modal-close" type="button" aria-label="关闭">×</button>
@@ -6012,7 +6046,7 @@
           <div class="actions">
             <button class="btn text" id="bookMetaCandidateCancel" type="button">取消</button>
             <button class="btn text" id="bookMetaCandidateRefresh" type="button">换一个</button>
-            <button class="btn primary" id="bookMetaCandidateApply" type="button">采用</button>
+            <button class="btn book-meta-apply" id="bookMetaCandidateApply" type="button">采用</button>
           </div>
         </div>
       </div>
@@ -6873,6 +6907,8 @@
     const termsTranslateConfirmModal = document.getElementById("termsTranslateConfirmModal");
     const finishReviewConfirmModal = document.getElementById("finishReviewConfirmModal");
     const retranslateConfirmModal = document.getElementById("retranslateConfirmModal");
+    const sourceVersionChoiceModal = document.getElementById("sourceVersionChoiceModal");
+    const sourceVersionChoiceDesc = document.getElementById("sourceVersionChoiceDesc");
     const termEditModal = document.getElementById("termEditModal");
     const termDeleteModal = document.getElementById("termDeleteModal");
     const termGlossaryModal = document.getElementById("termGlossaryModal");
@@ -6907,6 +6943,7 @@
     let activeTermLanguagePanel = null;
     let pendingRetranslateRows = [];
     let pendingSourceReextractRows = [];
+    let pendingSourceVersionAction = null;
     const translationBulkEnabledStatuses = new Set(["AI翻译完成", "翻译审校中", "翻译已审校"]);
 
     function setButtonLoading(button, loading) {
@@ -7394,6 +7431,46 @@
       showToast(rows.length > 1 ? `已提交 ${rows.length} 个章节重新翻译，状态已更新为 AI翻译中` : "已提交重新翻译，状态已更新为 AI翻译中");
     }
 
+    function getSourceRowByOriginalChapterId(chapterId) {
+      if (!chapterId || chapterId === "-") return null;
+      return Array.from(document.querySelectorAll("#sourceText tbody tr")).find((row) => {
+        return row.children[2]?.textContent?.trim() === chapterId;
+      }) || null;
+    }
+
+    function hasChangedSourceForRetranslateRows(rows) {
+      return rows.some((row) => {
+        const chapterId = row.children[2]?.textContent?.trim();
+        const sourceRow = getSourceRowByOriginalChapterId(chapterId);
+        return getRowStatus(sourceRow) === "原文审校中";
+      });
+    }
+
+    function hasAnyChangedSourceText() {
+      return Array.from(document.querySelectorAll("#sourceText tbody tr")).some((row) => getRowStatus(row) === "原文审校中");
+    }
+
+    function openSourceVersionChoice(action, description) {
+      pendingSourceVersionAction = action;
+      if (sourceVersionChoiceDesc) sourceVersionChoiceDesc.textContent = description;
+      window.setTimeout(() => sourceVersionChoiceModal?.classList.add("visible"), 0);
+    }
+
+    function executeRetranslateRows(sourceVersion = "latest") {
+      submitRetranslateRows(pendingRetranslateRows);
+      if (pendingRetranslateRows.length) {
+        showToast(sourceVersion === "latest" ? "已按当前最新原文重新提交翻译" : "已按创建翻译时原文重新提交翻译");
+      }
+      pendingRetranslateRows = [];
+    }
+
+    function executeTermReextract(sourceVersion = "latest") {
+      termAssetModal.classList.remove("visible");
+      rollbackPendingTermsToExtracting(activeTermLanguagePanel);
+      showToast(sourceVersion === "latest" ? "已按当前最新原文提交术语译法重新提取任务" : "已按创建翻译时原文提交术语译法重新提取任务");
+      setActiveTermPanelLoading();
+    }
+
     function syncPanelSelectionAfterFilter(panel) {
       const visibleChecks = Array.from(panel.querySelectorAll("tbody tr"))
         .filter((row) => row.style.display !== "none")
@@ -7805,10 +7882,11 @@
       termReextractConfirmModal.classList.add("visible");
     });
     document.getElementById("confirmTermReextractBtn")?.addEventListener("click", () => {
-      termAssetModal.classList.remove("visible");
-      rollbackPendingTermsToExtracting(activeTermLanguagePanel);
-      showToast("术语译法重新提取任务已提交");
-      setActiveTermPanelLoading();
+      if (hasAnyChangedSourceText()) {
+        openSourceVersionChoice("termReextract", "检测到原文中存在人工修改后尚未完成审校的章节。请选择本次重新提取术语译法使用的原文版本。");
+        return;
+      }
+      executeTermReextract("latest");
     });
     document.getElementById("termExportBtn")?.addEventListener("click", (event) => {
       startButtonDownload(event.currentTarget, "摄政王的白月光_术语译法.xlsx", "术语译法已开始下载");
@@ -8235,8 +8313,29 @@
       });
     });
     document.getElementById("confirmRetranslateBtn")?.addEventListener("click", () => {
-      submitRetranslateRows(pendingRetranslateRows);
-      pendingRetranslateRows = [];
+      if (hasChangedSourceForRetranslateRows(pendingRetranslateRows)) {
+        openSourceVersionChoice("retranslate", "检测到所选章节对应原文在上次 AI 翻译后发生人工修改。请选择本次重新翻译使用的原文版本。");
+        return;
+      }
+      executeRetranslateRows("latest");
+    });
+    document.getElementById("useLatestSourceVersionBtn")?.addEventListener("click", () => {
+      sourceVersionChoiceModal?.classList.remove("visible");
+      if (pendingSourceVersionAction === "retranslate") {
+        executeRetranslateRows("latest");
+      } else if (pendingSourceVersionAction === "termReextract") {
+        executeTermReextract("latest");
+      }
+      pendingSourceVersionAction = null;
+    });
+    document.getElementById("useOriginalSourceVersionBtn")?.addEventListener("click", () => {
+      sourceVersionChoiceModal?.classList.remove("visible");
+      if (pendingSourceVersionAction === "retranslate") {
+        executeRetranslateRows("original");
+      } else if (pendingSourceVersionAction === "termReextract") {
+        executeTermReextract("original");
+      }
+      pendingSourceVersionAction = null;
     });
     document.querySelectorAll(".retry-all-failed").forEach((button) => {
       button.addEventListener("click", () => {
@@ -8526,6 +8625,7 @@
 
     document.getElementById("bookMetaRerollConfirm")?.addEventListener("click", () => {
       activeBookMeta.variant = 0;
+      bookMetaInstruction?.closest(".book-meta-instruction")?.classList.remove("instruction-visible");
       bookMetaCandidate?.classList.remove("visible");
       bookMetaCandidate?.classList.add("loading");
       window.setTimeout(() => {
