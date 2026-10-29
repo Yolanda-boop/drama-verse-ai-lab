@@ -1182,7 +1182,7 @@
       <div class="modal-body">
         <div class="notice">
           <span>ⓘ</span>
-          <span>质检扫描用于按所选类别检查当前集译文中的翻译质量问题。本次扫描不会自动修改译文，扫描结果将写入右侧质检提醒面板，可逐条定位、采用建议或忽略。</span>
+          <span>质检扫描用于按所选类别检查译文中的翻译质量问题。本次扫描不会自动修改译文，扫描结果将写入右侧质检提醒面板，可逐条定位、采用建议或忽略。</span>
         </div>
 
         <div class="config-grid">
@@ -1194,7 +1194,7 @@
             <div class="sub-options">
               <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="spelling">✓</span><span>常见词汇错拼</span></label>
               <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="capitalization">✓</span><span>大小写异常</span></label>
-              <label class="sub-option"><span class="fake-checkbox" data-subcheck="suspected_missing_or_extra"></span><span>疑似漏译 / 多译</span></label>
+              <label class="sub-option"><span class="fake-checkbox" data-subcheck="subtitle_too_long"></span><span>译文字幕超长</span></label>
             </div>
           </section>
 
@@ -1204,9 +1204,8 @@
               <span class="config-title">格式规范</span>
             </div>
             <div class="sub-options">
-              <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="duplicate_punctuation">✓</span><span>重复标点</span></label>
+              <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="punctuation_error">✓</span><span>标点错误</span></label>
               <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="extra_space">✓</span><span>多余空格</span></label>
-              <label class="sub-option"><span class="fake-checkbox" data-subcheck="punctuation_style"></span><span>目标语标点习惯</span></label>
             </div>
           </section>
 
@@ -1216,7 +1215,6 @@
               <span class="config-title">一致性问题</span>
             </div>
             <div class="sub-options">
-              <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="source_translation_consistency">✓</span><span>同源文译法不一致</span></label>
               <label class="sub-option"><span class="fake-checkbox checked" data-subcheck="term_consistency">✓</span><span>术语译法不一致</span></label>
             </div>
           </section>
@@ -1225,7 +1223,8 @@
       </div>
       <div class="modal-footer">
         <button id="cancelScan" class="btn">取消</button>
-        <button id="startScan" class="btn primary">开始扫描</button>
+        <button id="scanEpisode" class="btn primary">扫描该集</button>
+        <button id="scanBook" class="btn primary">扫描整剧</button>
       </div>
     </div>
   </div>
@@ -1260,8 +1259,8 @@
         id: 3,
         row: "3",
         category: "format",
-        typeLabel: "重复标点",
-        title: "第3段｜重复标点",
+        typeLabel: "标点错误",
+        title: "第3段｜标点错误",
         current: "Lee el contrato antes de acusarme..",
         suggestion: "Lee el contrato antes de acusarme.",
         note: "检测到句末连续使用多个句号。",
@@ -1271,8 +1270,8 @@
         id: 4,
         row: "5",
         category: "format",
-        typeLabel: "目标语标点习惯",
-        title: "第5段｜目标语标点习惯",
+        typeLabel: "标点错误",
+        title: "第5段｜标点错误",
         current: "El señor Langley ya aprobó la transferéncia.",
         suggestion: "El señor Langley ya aprobó la transferencia.",
         note: "建议统一为目标语标准拼写与标点。",
@@ -1408,12 +1407,12 @@
       scanModal.classList.remove("show");
     }
 
-    function startScan() {
+    function startScan(scopeLabel = "该集") {
       closeModal();
       state.scanning = true;
       scanStatus.classList.add("show");
-      scanStatusText.textContent = "正在扫描已选质检项…";
-      showToast("质检扫描已开始");
+      scanStatusText.textContent = `正在扫描${scopeLabel}已选质检项…`;
+      showToast(`质检扫描已开始：${scopeLabel}`);
       window.setTimeout(() => {
         scanStatusText.textContent = "正在生成质检提醒…";
       }, 900);
@@ -1425,14 +1424,15 @@
         state.adopted.clear();
         state.selected.clear();
         renderIssues();
-        showToast("质检扫描完成，发现 5 处问题");
+        showToast(`${scopeLabel}质检扫描完成，发现 5 处问题`);
       }, 1700);
     }
 
     document.getElementById("openScanFromPanel").addEventListener("click", openModal);
     document.getElementById("closeScanModal").addEventListener("click", closeModal);
     document.getElementById("cancelScan").addEventListener("click", closeModal);
-    document.getElementById("startScan").addEventListener("click", startScan);
+    document.getElementById("scanEpisode").addEventListener("click", () => startScan("该集"));
+    document.getElementById("scanBook").addEventListener("click", () => startScan("整剧"));
     scanModal.addEventListener("click", event => {
       if (event.target === scanModal) closeModal();
     });
