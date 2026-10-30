@@ -2921,6 +2921,227 @@
       font-size: 11px;
     }
 
+    #termCharacter table,
+    .term-alias-table {
+      display: block;
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    #termCharacter thead,
+    .term-alias-table thead {
+      display: none;
+    }
+
+    #termCharacter tbody,
+    .term-alias-table tbody {
+      display: block;
+      width: 100%;
+    }
+
+    #termCharacter tbody tr,
+    .term-alias-table tbody tr {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+      width: 100%;
+    }
+
+    #termCharacter tbody tr,
+    .term-alias-table tbody tr {
+      margin-bottom: 10px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.075);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.024);
+    }
+
+    #termCharacter tbody tr:hover,
+    .term-alias-table tbody tr:hover {
+      border-color: rgba(124, 90, 243, 0.22);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    #termCharacter th,
+    #termCharacter td,
+    .term-alias-table th,
+    .term-alias-table td {
+      display: flex;
+      align-items: flex-start;
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    #termCharacter th,
+    .term-alias-table th {
+      align-items: center;
+      color: inherit;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    #termCharacter .check-col,
+    .term-alias-table .check-col {
+      justify-content: center;
+      padding-top: 10px;
+    }
+
+    #termCharacter thead .check-col,
+    .term-alias-table thead .check-col {
+      padding-top: 0;
+    }
+
+    .alias-map {
+      display: grid;
+      width: 100%;
+      min-width: 0;
+      gap: 6px;
+    }
+
+    .alias-map-head,
+    .alias-map-row {
+      display: grid;
+      grid-template-columns: 28px 44px minmax(88px, 0.8fr) minmax(112px, 0.9fr) minmax(180px, 1.3fr) 82px 78px 72px 118px;
+      align-items: center;
+      column-gap: 8px;
+    }
+
+    .alias-map-head {
+      padding: 0 8px;
+      color: rgba(255, 255, 255, 0.42);
+      font-size: 11px;
+    }
+
+    .alias-map-row {
+      position: relative;
+      min-height: 34px;
+      padding: 7px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .alias-map-row.is-primary {
+      border-color: rgba(124, 90, 243, 0.28);
+      background: rgba(124, 90, 243, 0.11);
+    }
+
+    .alias-map-row:not(.is-primary) {
+      margin-left: 0;
+      background: rgba(255, 255, 255, 0.026);
+    }
+
+    .alias-map-row:not(.is-primary)::before {
+      content: none;
+    }
+
+    .alias-map-row:hover {
+      border-color: rgba(124, 90, 243, 0.28);
+      background: rgba(124, 90, 243, 0.07);
+    }
+
+    .alias-check {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 28px;
+      min-width: 28px;
+    }
+
+    .alias-head-spacer {
+      width: 28px;
+      min-width: 28px;
+    }
+
+    .alias-kind {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 22px;
+      border-radius: 999px;
+      color: rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+    }
+
+    .alias-map-row.is-primary .alias-kind {
+      color: #fff;
+      background: rgba(124, 90, 243, 0.42);
+    }
+
+    .alias-name,
+    .alias-translation {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+    }
+
+    .alias-translation {
+      color: rgba(255, 255, 255, 0.86);
+      font-weight: 500;
+    }
+
+    .alias-reason {
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .alias-meta {
+      display: inline-flex;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .alias-actions {
+      display: inline-flex;
+      justify-content: flex-end;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .alias-actions .btn.text {
+      height: 24px;
+      padding: 0 5px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .alias-map-row.editing {
+      border-color: rgba(124, 90, 243, 0.42);
+      background: rgba(124, 90, 243, 0.09);
+    }
+
+    .alias-map-row .term-inline-select {
+      min-width: 0;
+      height: 26px;
+      font-size: 12px;
+    }
+
+    .alias-add {
+      justify-self: start;
+      margin-left: 8px;
+      height: 26px;
+      padding: 0 8px;
+      border: 1px dashed rgba(124, 90, 243, 0.35);
+      border-radius: 7px;
+      color: rgba(198, 184, 255, 0.96);
+      background: rgba(124, 90, 243, 0.08);
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .alias-add:hover {
+      background: rgba(124, 90, 243, 0.14);
+    }
+
     .term-action-edit {
       color: rgba(210, 210, 210, 0.9) !important;
     }
@@ -5302,11 +5523,10 @@
 
           <div id="termCharacter" class="asset-panel active">
             <table>
-              <thead><tr><th class="check-col"><input class="row-check term-check-all" type="checkbox" /></th><th>原文</th><th>别名</th><th>译文</th><th>原因</th><th>出场首章</th><th>题材</th><th>入库状态</th><th>操作</th></tr></thead>
               <tbody>
-                <tr><td class="check-col"><input class="row-check term-check" type="checkbox" /></td><td>萧承煜</td><td><span class="tag purple">王爷</span></td><td>Xiao Chengyu</td><td>角色姓名按规则与英文保持一致</td><td><span class="tag">001 楔子</span></td><td><span class="tag purple">古代言情</span></td><td><span class="tag">未入库</span></td><td class="actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">加入术语库</button></td></tr>
-                <tr><td class="check-col"><input class="row-check term-check" type="checkbox" /></td><td>沈清澜</td><td><span class="tag purple">清澜</span></td><td>Shen Qinglan</td><td>女主姓名，涉及多章节称谓统一</td><td><span class="tag">001 楔子</span></td><td><span class="tag purple">古代言情</span></td><td><span class="tag yellow">部分入库</span></td><td class="actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">加入术语库</button></td></tr>
-                <tr><td class="check-col"><input class="row-check term-check" type="checkbox" /></td><td>太后</td><td><span class="tag">-</span></td><td>Empress Dowager</td><td>身份称谓影响尊卑语气</td><td><span class="tag">002 旧梦</span></td><td><span class="tag purple">宫廷权谋</span></td><td><span class="tag green">已入库</span></td><td class="actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">加入术语库</button></td></tr>
+                <tr><td class="check-col"><input class="row-check term-check" type="checkbox" /></td><td><div class="alias-map"><div class="alias-map-head"><span>类型</span><span>原文/别名</span><span>译文</span><span>理由</span><span>出场首章</span><span>题材</span><span>入库状态</span><span>操作</span></div><div class="alias-map-row is-primary"><span class="alias-kind">原文</span><span class="alias-name">萧承煜</span><span class="alias-translation">Xiao Chengyu</span><span class="alias-reason">角色姓名按规则与英文保持一致</span><span class="alias-meta"><span class="tag">001 楔子</span></span><span class="alias-meta"><span class="tag purple">古代言情</span></span><span class="alias-meta"><span class="tag">未入库</span></span><span class="alias-actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-glossary">加入术语库</button></span></div><div class="alias-map-row"><span class="alias-kind">别名</span><span class="alias-name">王爷</span><span class="alias-translation">Your Highness</span><span class="alias-reason">尊卑关系明确，适合对摄政王的敬称</span><span class="alias-meta"><span class="tag">001 楔子</span></span><span class="alias-meta"><span class="tag purple">古代言情</span></span><span class="alias-meta"><span class="tag">未入库</span></span><span class="alias-actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">入库</button></span></div><div class="alias-map-row"><span class="alias-kind">别名</span><span class="alias-name">承煜</span><span class="alias-translation">Chengyu</span><span class="alias-reason">亲密称呼保留名，体现关系距离变化</span><span class="alias-meta"><span class="tag">003 初见王府</span></span><span class="alias-meta"><span class="tag purple">古代言情</span></span><span class="alias-meta"><span class="tag yellow">部分入库</span></span><span class="alias-actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">入库</button></span></div><button class="alias-add" type="button">＋ 新增别名译法</button></div></td></tr>
+                <tr><td class="check-col"><input class="row-check term-check" type="checkbox" /></td><td><div class="alias-map"><div class="alias-map-head"><span>类型</span><span>原文/别名</span><span>译文</span><span>理由</span><span>出场首章</span><span>题材</span><span>入库状态</span><span>操作</span></div><div class="alias-map-row is-primary"><span class="alias-kind">原文</span><span class="alias-name">沈清澜</span><span class="alias-translation">Shen Qinglan</span><span class="alias-reason">女主姓名，涉及多章节称谓统一</span><span class="alias-meta"><span class="tag">001 楔子</span></span><span class="alias-meta"><span class="tag purple">古代言情</span></span><span class="alias-meta"><span class="tag yellow">部分入库</span></span><span class="alias-actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-glossary">加入术语库</button></span></div><div class="alias-map-row"><span class="alias-kind">别名</span><span class="alias-name">清澜</span><span class="alias-translation">Qinglan</span><span class="alias-reason">熟人称呼，省去姓氏体现亲近感</span><span class="alias-meta"><span class="tag">001 楔子</span></span><span class="alias-meta"><span class="tag purple">古代言情</span></span><span class="alias-meta"><span class="tag">未入库</span></span><span class="alias-actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">入库</button></span></div><div class="alias-map-row"><span class="alias-kind">别名</span><span class="alias-name">沈姑娘</span><span class="alias-translation">Miss Shen</span><span class="alias-reason">保留礼貌称谓，适用于初见或疏离关系</span><span class="alias-meta"><span class="tag">002 旧梦</span></span><span class="alias-meta"><span class="tag purple">古代言情</span></span><span class="alias-meta"><span class="tag">未入库</span></span><span class="alias-actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">入库</button></span></div><button class="alias-add" type="button">＋ 新增别名译法</button></div></td></tr>
+                <tr><td class="check-col"><input class="row-check term-check" type="checkbox" /></td><td><div class="alias-map"><div class="alias-map-head"><span>类型</span><span>原文/别名</span><span>译文</span><span>理由</span><span>出场首章</span><span>题材</span><span>入库状态</span><span>操作</span></div><div class="alias-map-row is-primary"><span class="alias-kind">原文</span><span class="alias-name">太后</span><span class="alias-translation">Empress Dowager</span><span class="alias-reason">身份称谓影响尊卑语气</span><span class="alias-meta"><span class="tag">002 旧梦</span></span><span class="alias-meta"><span class="tag purple">宫廷权谋</span></span><span class="alias-meta"><span class="tag green">已入库</span></span><span class="alias-actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-glossary">加入术语库</button></span></div><div class="alias-map-row"><span class="alias-kind">别名</span><span class="alias-name">太后娘娘</span><span class="alias-translation">Your Majesty, the Empress Dowager</span><span class="alias-reason">正式尊称，体现宫廷礼制和尊卑</span><span class="alias-meta"><span class="tag">002 旧梦</span></span><span class="alias-meta"><span class="tag purple">宫廷权谋</span></span><span class="alias-meta"><span class="tag green">已入库</span></span><span class="alias-actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">入库</button></span></div><button class="alias-add" type="button">＋ 新增别名译法</button></div></td></tr>
               </tbody>
             </table>
           </div>
@@ -6102,14 +6322,7 @@
         </div>
       </div>
       <div class="preview-table-wrap">
-        <table class="preview-table">
-          <thead><tr><th>来源</th><th>术语原文</th><th>译文</th><th>题材</th><th>状态</th><th>备注</th><th class="check-col">选择</th></tr></thead>
-          <tbody>
-            <tr><td>原文</td><td>萧承煜</td><td>Xiao Chengyu</td><td><span class="tag purple">古代言情</span></td><td><span class="tag">未入库</span></td><td>角色姓名按规则与英文保持一致</td><td class="check-col"><input class="row-check term-glossary-check" type="checkbox" checked /></td></tr>
-            <tr><td>别名</td><td>王爷</td><td>Your Highness</td><td><span class="tag purple">古代言情</span></td><td><span class="tag">未入库</span></td><td>身份称谓影响尊卑语气</td><td class="check-col"><input class="row-check term-glossary-check" type="checkbox" checked /></td></tr>
-            <tr><td>原文</td><td>太后</td><td>Empress Dowager</td><td><span class="tag purple">宫廷权谋</span></td><td><span class="tag green">已入库</span></td><td>已存在相同题材术语</td><td class="check-col"><input class="row-check term-glossary-check" type="checkbox" disabled /></td></tr>
-          </tbody>
-        </table>
+        <div id="termGlossaryList" class="alias-map"></div>
       </div>
       <div class="actions" style="margin-top:16px;">
         <button class="btn modal-close">取消</button>
@@ -6543,15 +6756,84 @@
       return document.querySelector("#novelAssets .asset-panel.active");
     }
 
+    function buildAliasRow({ kind, name, translation, reason, chapter, genre, status, primary = false, checked = false }) {
+      const statusClass = status === "已入库" ? "tag green" : "tag";
+      return `<div class="alias-map-row${primary ? " is-primary" : ""}">
+        <span class="alias-check"><input class="row-check term-check" type="checkbox"${checked ? " checked" : ""} /></span>
+        <span class="alias-kind">${escapeHtml(kind)}</span>
+        <span class="alias-name">${escapeHtml(name)}</span>
+        <span class="alias-translation">${escapeHtml(translation)}</span>
+        <span class="alias-reason">${escapeHtml(reason)}</span>
+        <span class="alias-meta"><span class="tag">${escapeHtml(chapter)}</span></span>
+        <span class="alias-meta"><span class="tag purple">${escapeHtml(genre)}</span></span>
+        <span class="alias-meta"><span class="${statusClass}">${escapeHtml(status)}</span></span>
+        <span class="alias-actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">入库</button></span>
+      </div>`;
+    }
+
+    function buildAliasMap(rows, options = {}) {
+      const head = options.showHead === false ? "" : `<div class="alias-map-head">${options.showCheckAll ? '<span class="alias-check"><input class="row-check term-check-all" type="checkbox" aria-label="全选术语译法" /></span>' : '<span class="alias-head-spacer" aria-hidden="true"></span>'}<span>类型</span><span>原文</span><span>译文</span><span>理由</span><span>出场首章</span><span>题材</span><span>入库状态</span><span>操作</span></div>`;
+      return `<div class="alias-map">
+        ${head}
+        ${rows.map(buildAliasRow).join("")}
+        <button class="alias-add" type="button">＋ 新增别名译法</button>
+      </div>`;
+    }
+
+    function renderTermAliasPanel(panelId, groups) {
+      const panel = document.getElementById(panelId);
+      if (!panel || panel.dataset.normalized === "true") return;
+      panel.dataset.normalized = "true";
+      panel.innerHTML = `<table class="term-alias-table">
+        <tbody>${groups.map((rows, index) => `<tr><td>${buildAliasMap(rows, { showCheckAll: index === 0, showHead: index === 0 })}</td></tr>`).join("")}</tbody>
+      </table>`;
+    }
+
+    function normalizeCharacterTermRows() {
+      const table = document.querySelector("#termCharacter table");
+      table?.classList.add("term-alias-table");
+      table?.querySelector("thead")?.remove();
+      const tbody = document.querySelector("#termCharacter tbody");
+      if (!tbody || tbody.dataset.normalized === "true") return;
+      tbody.dataset.normalized = "true";
+      tbody.innerHTML = `
+        <tr><td>${buildAliasMap([
+          { kind: "原文", name: "萧承煜", translation: "Xiao Chengyu", reason: "角色姓名按规则与英文保持一致", chapter: "001 楔子", genre: "古代言情", status: "未入库", primary: true },
+          { kind: "别名", name: "王爷", translation: "Your Highness", reason: "尊卑关系明确，适合对摄政王的敬称", chapter: "001 楔子", genre: "古代言情", status: "未入库" },
+          { kind: "别名", name: "承煜", translation: "Chengyu", reason: "亲密称呼保留名，体现关系距离变化", chapter: "003 初见王府", genre: "古代言情", status: "未入库" }
+        ], { showCheckAll: true })}</td></tr>
+        <tr><td>${buildAliasMap([
+          { kind: "原文", name: "沈清澜", translation: "Shen Qinglan", reason: "女主姓名，涉及多章节称谓统一", chapter: "001 楔子", genre: "古代言情", status: "未入库", primary: true },
+          { kind: "别名", name: "清澜", translation: "Qinglan", reason: "熟人称呼，省去姓氏体现亲近感", chapter: "001 楔子", genre: "古代言情", status: "未入库" },
+          { kind: "别名", name: "沈姑娘", translation: "Miss Shen", reason: "保留礼貌称谓，适用于初见或疏离关系", chapter: "002 旧梦", genre: "古代言情", status: "未入库" }
+        ], { showHead: false })}</td></tr>
+        <tr><td>${buildAliasMap([
+          { kind: "原文", name: "太后", translation: "Empress Dowager", reason: "身份称谓影响尊卑语气", chapter: "002 旧梦", genre: "宫廷权谋", status: "已入库", primary: true },
+          { kind: "别名", name: "太后娘娘", translation: "Your Majesty, the Empress Dowager", reason: "正式尊称，体现宫廷礼制和尊卑", chapter: "002 旧梦", genre: "宫廷权谋", status: "已入库" }
+        ], { showHead: false })}</td></tr>
+      `;
+    }
+    normalizeCharacterTermRows();
+    renderTermAliasPanel("termLocation", [[
+      { kind: "原文", name: "凤仪宫", translation: "Fengyi Palace", reason: "地点名按音译+地点类型处理", chapter: "004 凤仪宫", genre: "宫廷权谋", status: "未入库", primary: true }
+    ]]);
+    renderTermAliasPanel("termProfessional", [[
+      { kind: "原文", name: "银针", translation: "silver needle", reason: "医术相关物品，需保持译法一致", chapter: "003 初见王府", genre: "古代言情", status: "未入库", primary: true }
+    ]]);
+    renderTermAliasPanel("termIdiom", [[
+      { kind: "原文", name: "白月光", translation: "first love", reason: "核心意象，按语境保留文学感", chapter: "001 楔子", genre: "古代言情", status: "未入库", primary: true },
+      { kind: "别名", name: "心上旧影", translation: "old flame", reason: "意象别称，保留文学化表达", chapter: "001 楔子", genre: "古代言情", status: "未入库" }
+    ]]);
+
     function syncTermAssetSelection() {
       const activePanel = getActiveTermPanel();
-      const all = activePanel?.querySelector(".term-check-all");
+      const allInputs = Array.from(activePanel?.querySelectorAll(".term-check-all") || []);
       const checks = Array.from(activePanel?.querySelectorAll(".term-check") || []);
       const count = checks.filter((input) => input.checked).length;
-      if (all) {
+      allInputs.forEach((all) => {
         all.checked = checks.length > 0 && count === checks.length;
         all.indeterminate = count > 0 && count < checks.length;
-      }
+      });
       if (termBatchAddButton) {
         termBatchAddButton.textContent = `批量加入术语库（${count}）`;
         termBatchAddButton.disabled = count === 0;
@@ -6572,12 +6854,12 @@
     });
 
     function bindTermSelectionControls(panel) {
-      panel?.querySelector(".term-check-all")?.addEventListener("change", (event) => {
+      panel?.querySelectorAll(".term-check-all").forEach((input) => input.addEventListener("change", (event) => {
         panel.querySelectorAll(".term-check").forEach((check) => {
           check.checked = event.currentTarget.checked;
         });
         syncTermAssetSelection();
-      });
+      }));
       panel?.querySelectorAll(".term-check").forEach((input) => {
         input.addEventListener("change", syncTermAssetSelection);
       });
@@ -6932,7 +7214,7 @@
       document.getElementById("confirmReplacePreview").disabled = count === 0;
     }
 
-    const termGlossaryChecks = Array.from(document.querySelectorAll(".term-glossary-check"));
+    let termGlossaryChecks = Array.from(document.querySelectorAll(".term-glossary-check"));
     const termGlossarySelectedCount = document.getElementById("termGlossarySelectedCount");
     const termGlossaryTotalCount = document.getElementById("termGlossaryTotalCount");
     let termEditMode = "edit";
@@ -6997,6 +7279,101 @@
       }[char]));
     }
 
+    function getAliasRowData(row) {
+      if (!row) return null;
+      const metas = row.querySelectorAll(".alias-meta .tag");
+      return {
+        kind: row.querySelector(".alias-kind")?.textContent.trim() || "原文",
+        name: row.querySelector(".alias-name")?.textContent.trim() || "-",
+        translation: row.querySelector(".alias-translation")?.textContent.trim() || "-",
+        reason: row.querySelector(".alias-reason")?.textContent.trim() || "-",
+        chapter: metas[0]?.textContent.trim() || "-",
+        genre: metas[1]?.textContent.trim() || "未分类",
+        status: metas[2]?.textContent.trim() || "未入库",
+        checked: row.querySelector(".term-check")?.checked ?? true
+      };
+    }
+
+    function renderGlossaryAliasRows(rows) {
+      const list = document.getElementById("termGlossaryList");
+      if (!list) return;
+      list.innerHTML = `<div class="alias-map-head"><span class="alias-head-spacer" aria-hidden="true"></span><span>类型</span><span>原文</span><span>译文</span><span>理由</span><span>出场首章</span><span>题材</span><span>入库状态</span><span>操作</span></div>${rows.map((item) => {
+        const disabled = item.status === "已入库" || !item.translation || item.translation === "-";
+        const statusClass = item.status === "已入库" ? "tag green" : "tag";
+        return `<div class="alias-map-row${item.kind === "原文" ? " is-primary" : ""}">
+          <span class="alias-check"><input class="row-check term-glossary-check" type="checkbox"${disabled ? " disabled" : " checked"} /></span>
+          <span class="alias-kind">${escapeHtml(item.kind)}</span>
+          <span class="alias-name">${escapeHtml(item.name)}</span>
+          <span class="alias-translation">${escapeHtml(item.translation)}</span>
+          <span class="alias-reason">${escapeHtml(item.reason)}</span>
+          <span class="alias-meta"><span class="tag">${escapeHtml(item.chapter)}</span></span>
+          <span class="alias-meta"><span class="tag purple">${escapeHtml(item.genre)}</span></span>
+          <span class="alias-meta"><span class="${statusClass}">${escapeHtml(item.status)}</span></span>
+          <span class="alias-actions"><span class="sub">${disabled ? "不可入库" : "待确认"}</span></span>
+        </div>`;
+      }).join("")}`;
+      termGlossaryChecks = Array.from(list.querySelectorAll(".term-glossary-check"));
+      termGlossaryChecks.forEach((input) => input.addEventListener("change", syncTermGlossarySelection));
+      syncTermGlossarySelection();
+    }
+
+    function openTermGlossaryWithRows(rows) {
+      const data = rows.map(getAliasRowData).filter(Boolean);
+      if (!data.length) {
+        showToast("请先选择需要加入术语库的术语译法");
+        return;
+      }
+      renderGlossaryAliasRows(data);
+      termGlossaryModal.classList.add("visible");
+    }
+
+    function makeEditableAliasCell(cell, className, placeholder) {
+      const value = cell.textContent.trim();
+      cell.innerHTML = `<input class="alias-inline-input ${className}" placeholder="${placeholder}" value="${escapeHtml(value)}" />`;
+      return cell.querySelector("input");
+    }
+
+    function editAliasRow(row) {
+      if (!row) return;
+      const editButton = row.querySelector(".term-action-edit");
+      const genreHost = row.querySelectorAll(".alias-meta")[1];
+      if (row.classList.contains("editing")) {
+        const nameInput = row.querySelector(".alias-edit-name");
+        const translationInput = row.querySelector(".alias-edit-translation");
+        const reasonInput = row.querySelector(".alias-edit-reason");
+        const genreSelect = row.querySelector(".alias-edit-genre");
+        row.querySelector(".alias-name").textContent = nameInput?.value.trim() || "未命名术语";
+        row.querySelector(".alias-translation").textContent = translationInput?.value.trim() || "-";
+        row.querySelector(".alias-reason").textContent = reasonInput?.value.trim() || "请补充使用理由";
+        if (genreHost) genreHost.innerHTML = `<span class="tag purple">${escapeHtml(genreSelect?.value || "未分类")}</span>`;
+        row.classList.remove("editing");
+        row.closest("tr.term-inline-row")?.classList.remove("term-inline-row");
+        if (editButton) editButton.textContent = "修改";
+        showToast("术语译法已保存");
+        return;
+      }
+      const nameInput = makeEditableAliasCell(row.querySelector(".alias-name"), "alias-edit-name", "原文");
+      makeEditableAliasCell(row.querySelector(".alias-translation"), "alias-edit-translation", "译文");
+      makeEditableAliasCell(row.querySelector(".alias-reason"), "alias-edit-reason", "理由");
+      const currentGenre = genreHost?.textContent.trim() || "古代言情";
+      if (genreHost) {
+        genreHost.innerHTML = `<select class="term-inline-select alias-edit-genre"><option${currentGenre === "古代言情" ? " selected" : ""}>古代言情</option><option${currentGenre === "宫廷权谋" ? " selected" : ""}>宫廷权谋</option><option${currentGenre === "未分类" ? " selected" : ""}>未分类</option></select>`;
+      }
+      row.classList.add("editing");
+      if (editButton) editButton.textContent = "保存";
+      nameInput?.focus();
+    }
+
+    function addEditableAliasRow(button) {
+      const row = document.createElement("div");
+      row.className = "alias-map-row editing";
+      row.innerHTML = '<span class="alias-check"><input class="row-check term-check" type="checkbox" /></span><span class="alias-kind">别名</span><span class="alias-name"><input class="alias-inline-input alias-edit-name" placeholder="原文" /></span><span class="alias-translation"><input class="alias-inline-input alias-edit-translation" placeholder="译文" /></span><span class="alias-reason"><input class="alias-inline-input alias-edit-reason" placeholder="理由" /></span><span class="alias-meta"><span class="tag">待选择</span></span><span class="alias-meta"><select class="term-inline-select alias-edit-genre"><option>古代言情</option><option>宫廷权谋</option><option>未分类</option></select></span><span class="alias-meta"><span class="tag">未入库</span></span><span class="alias-actions"><button class="btn text term-action-edit">保存</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">入库</button></span>';
+      button.before(row);
+      row.querySelector(".term-check")?.addEventListener("change", syncTermAssetSelection);
+      row.querySelector(".alias-edit-name")?.focus();
+      syncTermAssetSelection();
+    }
+
     function bindTermRowActions(row) {
       row.querySelector(".term-check")?.addEventListener("change", syncTermAssetSelection);
       row.querySelector(".term-action-edit")?.addEventListener("click", () => openTermEditModal("edit"));
@@ -7023,10 +7400,45 @@
         existing.querySelector("input, select")?.focus();
         return;
       }
+      const aliasTermRow = document.createElement("tr");
+      aliasTermRow.className = "term-inline-row";
+      aliasTermRow.innerHTML = `
+        <td><div class="alias-map">
+          <div class="alias-map-head"><span class="alias-check"><input class="row-check term-check-all" type="checkbox" aria-label="全选术语译法" /></span><span>类型</span><span>原文</span><span>译文</span><span>理由</span><span>出场首章</span><span>题材</span><span>入库状态</span><span>操作</span></div>
+          <div class="alias-map-row is-primary editing">
+            <span class="alias-check"><input class="row-check term-check" type="checkbox" /></span>
+            <span class="alias-kind">原文</span>
+            <span class="alias-name"><input class="alias-inline-input alias-edit-name" placeholder="原文" /></span>
+            <span class="alias-translation"><input class="alias-inline-input alias-edit-translation" placeholder="译文" /></span>
+            <span class="alias-reason"><input class="alias-inline-input alias-edit-reason" placeholder="理由" /></span>
+            <span class="alias-meta"><span class="tag">待选择</span></span>
+            <span class="alias-meta"><select class="term-inline-select alias-edit-genre"><option>古代言情</option><option>宫廷权谋</option><option>未分类</option></select></span>
+            <span class="alias-meta"><span class="tag">未入库</span></span>
+            <span class="alias-actions"><button class="btn text term-action-edit">保存</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">入库</button></span>
+          </div>
+          <button class="alias-add" type="button">＋ 新增别名译法</button>
+        </div></td>
+      `;
+      tbody.appendChild(aliasTermRow);
+      aliasTermRow.querySelector(".term-check-all")?.addEventListener("change", (event) => {
+        const activePanel = getActiveTermPanel();
+        activePanel?.querySelectorAll(".term-check").forEach((check) => {
+          check.checked = event.currentTarget.checked;
+        });
+        syncTermAssetSelection();
+      });
+      aliasTermRow.querySelector(".term-check")?.addEventListener("change", syncTermAssetSelection);
+      aliasTermRow.querySelector(".alias-edit-name")?.focus();
+      syncTermAssetSelection();
+      return;
       const hasCheckColumn = Boolean(table.querySelector("th.check-col"));
+      const isCharacterPanel = activePanel?.id === "termCharacter";
       const row = document.createElement("tr");
       row.className = "term-inline-row";
-      row.innerHTML = `
+      row.innerHTML = isCharacterPanel ? `
+        ${hasCheckColumn ? '<td class="check-col"><input class="row-check" type="checkbox" disabled /></td>' : ''}
+        <td><div class="alias-map"><div class="alias-map-head"><span>类型</span><span>原文/别名</span><span>译文</span><span>理由</span><span>出场首章</span><span>题材</span><span>入库状态</span><span>操作</span></div><div class="alias-map-row is-primary"><span class="alias-kind">原文</span><span class="alias-name"><input class="alias-inline-input term-inline-original" placeholder="角色原文" /></span><span class="alias-translation"><input class="alias-inline-input term-inline-translation" placeholder="译文" /></span><span class="alias-reason"><input class="alias-inline-input term-inline-reason" placeholder="使用理由" /></span><span class="alias-meta"><input class="alias-inline-input term-inline-first-chapter" placeholder="章节" /></span><span class="alias-meta"><select class="term-inline-select term-inline-genre"><option>请选择题材</option><option>古代言情</option><option>宫廷权谋</option></select></span><span class="alias-meta"><span class="tag">未入库</span></span><span class="alias-actions"><button class="btn text term-inline-cancel">取消</button><button class="btn text term-inline-save">保存</button></span></div><div class="alias-map-row"><span class="alias-kind">别名</span><span class="alias-name"><input class="alias-inline-input term-inline-alias" placeholder="别名" /></span><span class="alias-translation"><input class="alias-inline-input term-inline-alias-translation" placeholder="别名译文" /></span><span class="alias-reason"><input class="alias-inline-input term-inline-alias-reason" placeholder="使用理由" /></span><span class="alias-meta"><input class="alias-inline-input term-inline-alias-first-chapter" placeholder="章节" /></span><span class="alias-meta"><span class="tag purple">古代言情</span></span><span class="alias-meta"><span class="tag">未入库</span></span><span class="alias-actions"><button class="btn text term-inline-save">保存</button><button class="btn text term-action-delete">删除</button></span></div><button class="alias-add" type="button">＋ 新增别名译法</button></div></td>
+      ` : `
         ${hasCheckColumn ? '<td class="check-col"><input class="row-check" type="checkbox" disabled /></td>' : ''}
         <td><input class="term-inline-input term-inline-original" placeholder="字符长度 ≤ 100" /></td>
         <td><input class="term-inline-input term-inline-alias" placeholder="多个别名用回车分隔" /></td>
@@ -7046,9 +7458,15 @@
         const translation = row.querySelector(".term-inline-translation")?.value.trim() || "-";
         const reason = row.querySelector(".term-inline-reason")?.value.trim() || "人工新增术语译法";
         const firstChapter = row.querySelector(".term-inline-first-chapter")?.value.trim() || "001 楔子";
+        const aliasFirstChapter = row.querySelector(".term-inline-alias-first-chapter")?.value.trim() || firstChapter;
         const genre = row.querySelector(".term-inline-genre")?.value || "请选择题材";
+        const aliasTranslation = row.querySelector(".term-inline-alias-translation")?.value.trim() || "-";
+        const aliasReason = row.querySelector(".term-inline-alias-reason")?.value.trim() || "人工新增别名译法";
         row.classList.remove("term-inline-row");
-        row.innerHTML = `
+        row.innerHTML = isCharacterPanel ? `
+          ${hasCheckColumn ? '<td class="check-col"><input class="row-check term-check" type="checkbox" /></td>' : ''}
+          <td><div class="alias-map"><div class="alias-map-head"><span>类型</span><span>原文/别名</span><span>译文</span><span>理由</span><span>出场首章</span><span>题材</span><span>入库状态</span><span>操作</span></div><div class="alias-map-row is-primary"><span class="alias-kind">原文</span><span class="alias-name">${escapeHtml(original)}</span><span class="alias-translation">${escapeHtml(translation)}</span><span class="alias-reason">${escapeHtml(reason)}</span><span class="alias-meta"><span class="tag">${escapeHtml(firstChapter)}</span></span><span class="alias-meta"><span class="tag purple">${escapeHtml(genre === "请选择题材" ? "未分类" : genre)}</span></span><span class="alias-meta"><span class="tag">未入库</span></span><span class="alias-actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-glossary">加入术语库</button></span></div><div class="alias-map-row"><span class="alias-kind">别名</span><span class="alias-name">${escapeHtml(alias)}</span><span class="alias-translation">${escapeHtml(aliasTranslation)}</span><span class="alias-reason">${escapeHtml(aliasReason)}</span><span class="alias-meta"><span class="tag">${escapeHtml(aliasFirstChapter)}</span></span><span class="alias-meta"><span class="tag purple">${escapeHtml(genre === "请选择题材" ? "未分类" : genre)}</span></span><span class="alias-meta"><span class="tag">未入库</span></span><span class="alias-actions"><button class="btn text term-action-edit">修改</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">入库</button></span></div><button class="alias-add" type="button">＋ 新增别名译法</button></div></td>
+        ` : `
           ${hasCheckColumn ? '<td class="check-col"><input class="row-check term-check" type="checkbox" /></td>' : ''}
           <td>${escapeHtml(original)}</td>
           <td><span class="tag purple">${escapeHtml(alias)}</span></td>
@@ -8347,6 +8765,45 @@
         retryFailedRows(failedRows);
       });
     });
+    document.getElementById("novelAssets")?.addEventListener("click", (event) => {
+      const addAliasButton = event.target.closest(".alias-add");
+      const aliasRow = event.target.closest(".alias-map-row");
+      const editButton = event.target.closest(".term-action-edit");
+      const deleteButton = event.target.closest(".term-action-delete");
+      const glossaryButton = event.target.closest(".term-action-glossary");
+      const batchButton = event.target.closest(".term-batch-add");
+      if (addAliasButton) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        addEditableAliasRow(addAliasButton);
+        return;
+      }
+      if (batchButton) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        const activePanel = getActiveTermPanel();
+        const rows = Array.from(activePanel?.querySelectorAll(".alias-map-row") || []).filter((row) => row.querySelector(".term-check")?.checked);
+        openTermGlossaryWithRows(rows);
+        return;
+      }
+      if (!aliasRow) return;
+      if (editButton) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        editAliasRow(aliasRow);
+      } else if (deleteButton) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        termDeleteModal.classList.add("visible");
+      } else if (glossaryButton) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        const checkbox = aliasRow.querySelector(".term-check");
+        if (checkbox) checkbox.checked = true;
+        syncTermAssetSelection();
+        openTermGlossaryWithRows([aliasRow]);
+      }
+    }, true);
     document.querySelectorAll(".term-action-edit").forEach((button) => {
       button.addEventListener("click", () => openTermEditModal("edit"));
     });
