@@ -270,9 +270,22 @@
 
     .nav-icon {
       width: 22px;
-      text-align: center;
-      font-size: 15px;
-      opacity: 0.9;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.74);
+      opacity: 0.92;
+    }
+
+    .nav-icon svg {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .main {
@@ -1641,6 +1654,68 @@
       display: none;
     }
 
+    .editor .paragraph-reselect,
+    .editor #rerollCheckAll,
+    .editor #pairedRerollCheckAll,
+    .editor .paired-line-check {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      display: inline-grid;
+      place-content: center;
+      border-radius: 5px;
+      border-color: rgba(185, 164, 255, 0.54);
+      background: rgba(255, 255, 255, 0.035);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.18s ease;
+      vertical-align: middle;
+    }
+
+    .editor .paired-line-check::before {
+      content: "";
+      width: 8px;
+      height: 4px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) scale(0);
+      transform-origin: center;
+      transition: transform 0.12s ease;
+    }
+
+    .editor .paragraph-reselect:hover,
+    .editor #rerollCheckAll:hover,
+    .editor #pairedRerollCheckAll:hover,
+    .editor .paired-line-check:hover {
+      border-color: rgba(185, 164, 255, 0.94);
+      background: rgba(139, 115, 255, 0.12);
+    }
+
+    .editor .paragraph-reselect:checked,
+    .editor #rerollCheckAll:checked,
+    .editor #pairedRerollCheckAll:checked,
+    .editor .paired-line-check:checked {
+      border-color: #8b73ff;
+      background: linear-gradient(180deg, #8b73ff 0%, #6224ff 100%);
+      box-shadow: 0 0 0 2px rgba(139, 115, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    }
+
+    .editor .paired-line-check:checked::before {
+      transform: rotate(-45deg) scale(1);
+    }
+
+    .editor .paragraph-reselect:disabled,
+    .editor #rerollCheckAll:disabled,
+    .editor #pairedRerollCheckAll:disabled,
+    .editor .paired-line-check:disabled {
+      cursor: not-allowed;
+      opacity: 0.42;
+      border-color: rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.025);
+      box-shadow: none;
+    }
+
     .paragraph-select-cell {
       display: flex;
       align-items: flex-start;
@@ -1661,13 +1736,13 @@
     }
 
     .paragraph-row:focus-within {
-      background: rgba(98, 36, 255, 0.1);
+      background: transparent;
       box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
     }
 
     .paragraph-row .para-cell:focus-within {
       border-color: rgba(139, 115, 255, 0.82);
-      background: rgba(98, 36, 255, 0.13);
+      background: transparent;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 2px rgba(98, 36, 255, 0.2), 0 8px 18px rgba(0, 0, 0, 0.22);
     }
 
@@ -1701,7 +1776,7 @@
     }
 
     .editor.continuous-mode .paragraph-row:focus-within {
-      background: rgba(98, 36, 255, 0.13);
+      background: #161b24;
       box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
     }
 
@@ -1726,7 +1801,7 @@
     }
 
     .editor.continuous-mode .paragraph-row .para-cell:focus-within {
-      background: rgba(255, 255, 255, 0.045);
+      background: transparent;
       box-shadow: inset 0 0 0 1px rgba(139, 115, 255, 0.34);
     }
 
@@ -1777,6 +1852,7 @@
       display: grid;
       align-content: start;
       gap: 22px;
+      min-height: calc(100vh - 260px);
     }
 
     .paired-column.target {
@@ -1838,6 +1914,98 @@
       color: inherit;
       font-size: 15px;
       line-height: 1.9;
+    }
+
+    .paired-text-editor {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      min-height: calc(100vh - 284px);
+      margin: 0;
+      background: #141922;
+    }
+
+    .paired-line-gutter {
+      padding: 11px 0 18px;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(185, 205, 231, 0.72);
+      background: rgba(8, 10, 14, 0.26);
+      font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.9;
+      user-select: none;
+    }
+
+    .paired-line-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 28.5px;
+      padding: 0 8px;
+    }
+
+    .paired-line-check {
+      display: none;
+      width: 14px;
+      height: 14px;
+      margin: 0;
+      accent-color: #8b73ff;
+    }
+
+    .editor.reroll-mode.paired-highlight-mode .paired-column.source .paired-line-check {
+      display: inline-flex;
+    }
+
+    .paired-line-number {
+      flex: 1;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .paired-line-item.is-reroll-selected {
+      color: #ffffff;
+      background: rgba(98, 36, 255, 0.18);
+      box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
+    }
+
+    .paired-line-item.pair-line-focus {
+      color: #fff;
+      background: rgba(139, 115, 255, 0.26);
+      box-shadow: inset 3px 0 0 #b9a4ff;
+    }
+
+    .paired-editor-text {
+      width: 100%;
+      min-height: calc(100vh - 284px);
+      border: 0;
+      outline: 0;
+      resize: none;
+      overflow: hidden;
+      padding: 11px 16px 18px;
+      color: rgba(255, 255, 255, 0.88);
+      background: transparent;
+      font-size: 15px;
+      line-height: 1.9;
+      white-space: pre-wrap;
+    }
+
+    .paired-column.source .paired-editor-text {
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .paired-text-editor:focus-within {
+      background: #141922;
+      box-shadow: inset 0 0 0 1px rgba(139, 115, 255, 0.24);
+    }
+
+    .paired-candidate-host {
+      grid-column: 2;
+      display: grid;
+      gap: 10px;
+      padding: 0 16px 18px;
+    }
+
+    .paired-editor-candidate {
+      margin: 0;
     }
 
     .paired-segment.pair-peer-highlight,
@@ -4796,10 +4964,80 @@
       background: rgba(255, 255, 255, 0.08);
     }
 
+    .assist-panel.qa-panel-collapsed .assist-body,
     .assist-panel.qa-panel-collapsed .qa-summary,
     .assist-panel.qa-panel-collapsed .qa-toolbar,
     .assist-panel.qa-panel-collapsed .qa-list {
       display: none;
+    }
+
+    .assist-body {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      min-height: 0;
+    }
+
+    .assist-block {
+      min-height: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .assist-block:last-child {
+      border-bottom: 0;
+    }
+
+    .assist-block-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      height: 38px;
+      padding: 0 12px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 13px;
+      font-weight: 650;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .assist-block-count {
+      color: rgba(255, 255, 255, 0.46);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .reroll-result-list {
+      display: grid;
+      gap: 10px;
+      max-height: 42vh;
+      overflow-y: auto;
+      padding: 0 12px 12px;
+    }
+
+    .reroll-result-list:empty {
+      display: none;
+    }
+
+    .assist-panel .reroll-candidate {
+      margin-top: 0;
+      cursor: pointer;
+    }
+
+    .assist-panel .reroll-candidate:hover {
+      border-color: rgba(139, 115, 255, 0.44);
+      background: linear-gradient(180deg, rgba(47, 54, 78, 0.98), rgba(32, 37, 53, 0.98));
+    }
+
+    .assist-panel .reroll-candidate-head {
+      margin-bottom: 8px;
+    }
+
+    .assist-panel .reroll-candidate-text {
+      font-size: 13px;
+      line-height: 1.62;
+    }
+
+    .assist-panel .reroll-candidate-reason {
+      margin-bottom: 10px;
     }
 
     .qa-summary {
@@ -4928,11 +5166,53 @@
     .qa-check {
       width: 16px;
       height: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 4px;
-      background: transparent;
-      accent-color: #6224ff;
+      margin: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      display: inline-grid;
+      place-content: center;
+      border: 1px solid rgba(185, 164, 255, 0.5);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.035);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
       flex: 0 0 auto;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .qa-check::before {
+      content: "";
+      width: 8px;
+      height: 4px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) scale(0);
+      transform-origin: center;
+      transition: transform 0.12s ease;
+    }
+
+    .qa-check:hover {
+      border-color: rgba(185, 164, 255, 0.94);
+      background: rgba(139, 115, 255, 0.12);
+    }
+
+    .qa-check:checked,
+    .qa-check:indeterminate {
+      border-color: #8b73ff;
+      background: linear-gradient(180deg, #8b73ff 0%, #6224ff 100%);
+      box-shadow: 0 0 0 2px rgba(139, 115, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    }
+
+    .qa-check:checked::before {
+      transform: rotate(-45deg) scale(1);
+    }
+
+    .qa-check:indeterminate::before {
+      width: 8px;
+      height: 2px;
+      border: 0;
+      background: #fff;
+      transform: scale(1);
     }
 
     .qa-batch {
@@ -5086,16 +5366,15 @@
   </header>
 
   <aside class="sidebar">
-    <div class="nav-group nav-parent"><span class="nav-icon">剧</span><span>短剧译配</span></div>
+    <div class="nav-group nav-parent"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="14" height="12" rx="2"></rect><path d="M17 10.5l4-2.5v8l-4-2.5"></path><path d="M7 3l2 3"></path><path d="M13 3l-2 3"></path></svg></span><span>短剧译配</span></div>
     <button class="nav-item nav-child"><span>工作台</span></button>
     <button class="nav-item nav-child"><span>术语库</span></button>
     <button class="nav-item nav-child"><span>任务中心</span></button>
-    <button class="nav-item nav-child"><span>用户管理</span></button>
-    <div class="nav-group nav-parent"><span class="nav-icon">书</span><span>小说翻译</span></div>
+    <div class="nav-group nav-parent"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 1 4 16.5z"></path><path d="M4 16.5A2.5 2.5 0 0 1 6.5 14H20"></path><path d="M8 7h7"></path><path d="M8 10h5"></path></svg></span><span>小说翻译</span></div>
     <button class="nav-item nav-child active" data-go="projects"><span>工作台</span></button>
     <button class="nav-item nav-child" data-go="bookGlossary"><span>术语库</span></button>
     <button class="nav-item nav-child" data-go="taskCenter"><span>任务中心</span></button>
-    <button class="nav-item nav-child"><span>用户管理</span></button>
+    <div class="nav-group nav-parent"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9.5" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span><span>用户管理</span></div>
   </aside>
 
   <main class="main">
@@ -5939,40 +6218,54 @@
 
         <div class="glass assist-panel qa-panel-collapsed">
           <div class="qa-header">
-            <span class="qa-title">质检提醒</span>
-            <span class="qa-badge">共 1 处</span>
-            <button class="qa-collapse" type="button" title="折叠质检提醒">›</button>
+            <span class="qa-title">辅助处理</span>
+            <button class="qa-collapse" type="button" title="折叠">›</button>
           </div>
-          <div class="qa-summary">
-            <div class="qa-summary-top"><span>异常汇总</span><span>按数量倒序</span></div>
-            <div class="qa-type-group" data-qa-type="empty">
-              <button class="qa-type-button active" type="button" data-qa-type="empty">
-                <span class="qa-type-name">译文为空</span>
-                <span class="qa-type-count">1</span>
-                <span class="qa-type-arrow" role="button" tabindex="0" title="展开该类型明细">›</span>
-              </button>
-              <div class="qa-type-children">
-                <button class="qa-type-child" type="button" data-qa-type="empty" data-target-para="003">
-                  <span>第 3 段</span>
-                  <span class="qa-type-child-detail">| 译文为空</span>
-                  <span class="qa-type-child-check">✓</span>
-                </button>
+          <div class="assist-body">
+            <section class="assist-block qa-block">
+              <div class="assist-block-head">
+                <span>质检提醒</span>
+                <span class="assist-block-count qa-section-count">共 1 处</span>
               </div>
-            </div>
-          </div>
-          <div class="qa-toolbar">
-            <input class="qa-check qa-check-all" type="checkbox" aria-label="全选质检提醒" />
-            <button class="qa-batch primary qa-apply-selected" type="button" disabled title="译文为空不支持采用">采用所选</button>
-            <button class="qa-batch qa-ignore-selected" type="button" disabled>忽略所选</button>
-          </div>
-          <div class="qa-list">
-            <div class="qa-card" data-qa-type="empty" data-target-para="003">
-              <input class="qa-check" type="checkbox" />
-              <div class="qa-card-head">
-                <div class="qa-card-title">第 3 段 | 译文为空</div>
-                <span class="qa-tag">译文为空</span>
+              <div class="qa-summary">
+                <div class="qa-summary-top"><span>异常汇总</span><span>按数量倒序</span></div>
+                <div class="qa-type-group" data-qa-type="empty">
+                  <button class="qa-type-button active" type="button" data-qa-type="empty">
+                    <span class="qa-type-name">译文为空</span>
+                    <span class="qa-type-count">1</span>
+                    <span class="qa-type-arrow" role="button" tabindex="0" title="展开该类型明细">›</span>
+                  </button>
+                  <div class="qa-type-children">
+                    <button class="qa-type-child" type="button" data-qa-type="empty" data-target-para="003">
+                      <span>第 3 段</span>
+                      <span class="qa-type-child-detail">| 译文为空</span>
+                      <span class="qa-type-child-check">✓</span>
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
+              <div class="qa-toolbar">
+                <input class="qa-check qa-check-all" type="checkbox" aria-label="全选质检提醒" />
+                <button class="qa-batch primary qa-apply-selected" type="button" disabled title="译文为空不支持采用">采用所选</button>
+                <button class="qa-batch qa-ignore-selected" type="button" disabled>忽略所选</button>
+              </div>
+              <div class="qa-list">
+                <div class="qa-card" data-qa-type="empty" data-target-para="003">
+                  <input class="qa-check" type="checkbox" />
+                  <div class="qa-card-head">
+                    <div class="qa-card-title">第 3 段 | 译文为空</div>
+                    <span class="qa-tag">译文为空</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="assist-block reroll-result-block">
+              <div class="assist-block-head">
+                <span>重翻结果</span>
+                <span id="rerollResultCount" class="assist-block-count">0 条</span>
+              </div>
+              <div id="rerollResultList" class="reroll-result-list" aria-live="polite"></div>
+            </section>
           </div>
         </div>
       </div>
@@ -8079,6 +8372,7 @@
       const cards = getQaCards("empty");
       const count = cards.length;
       const badge = document.querySelector("#editor .qa-badge");
+      const sectionCount = document.querySelector("#editor .qa-section-count");
       const typeCount = document.querySelector('#editor .qa-type-button[data-qa-type="empty"] .qa-type-count');
       const list = document.querySelector("#editor .qa-list");
       const typeChildren = document.querySelector('#editor .qa-type-group[data-qa-type="empty"] .qa-type-children');
@@ -8086,6 +8380,7 @@
         const collapsed = badge.closest(".assist-panel")?.classList.contains("qa-panel-collapsed");
         badge.textContent = collapsed ? `${count}处` : `共 ${count} 处`;
       }
+      if (sectionCount) sectionCount.textContent = `共 ${count} 处`;
       if (typeCount) typeCount.textContent = String(count);
       if (typeChildren && count === 0) {
         typeChildren.innerHTML = '<div class="qa-empty-state">当前分类暂无质检提醒</div>';
@@ -8117,7 +8412,7 @@
       const badge = panel.querySelector(".qa-badge");
       if (collapseButton) {
         collapseButton.textContent = collapsed ? "‹" : "›";
-        collapseButton.title = collapsed ? "展开质检提醒" : "折叠质检提醒";
+        collapseButton.title = collapsed ? "展开" : "折叠";
       }
       if (badge) {
         badge.textContent = collapsed ? badge.textContent.replace(/^共\s*/, "").replace(/\s+/g, "") : `共 ${getQaCards("empty").length} 处`;
@@ -8243,7 +8538,7 @@
 
       updateQaCounts();
       syncQaSelection();
-      setQaPanelCollapsed(panel, true);
+      setQaPanelCollapsed(panel, false);
     }
 
     function rollbackPendingTermsToExtracting(panel) {
@@ -8448,6 +8743,12 @@
         if (row && row.style.display !== "none") activeEditorParagraphRow = row;
         return;
       }
+      const pairedEditor = target?.closest?.("#pairedReader .paired-editor-text");
+      if (pairedEditor) {
+        const row = document.querySelectorAll("#editorShell .paragraph-row")[getPairedEditorCursorLine(pairedEditor)];
+        if (row && row.style.display !== "none") activeEditorParagraphRow = row;
+        return;
+      }
       const row = target?.closest?.("#editorShell .paragraph-row");
       if (row && row.style.display !== "none") activeEditorParagraphRow = row;
     }
@@ -8456,6 +8757,11 @@
       const focusedSourceSegment = document.activeElement?.closest?.("#pairedReader .paired-segment.source");
       if (focusedSourceSegment) {
         const row = document.querySelectorAll("#editorShell .paragraph-row")[Number(focusedSourceSegment.dataset.pairIndex || 0)];
+        if (row && row.style.display !== "none") return row;
+      }
+      const focusedSourceEditor = document.activeElement?.closest?.("#pairedReader .paired-editor-text[data-editor-side='source']");
+      if (focusedSourceEditor) {
+        const row = document.querySelectorAll("#editorShell .paragraph-row")[getPairedEditorCursorLine(focusedSourceEditor)];
         if (row && row.style.display !== "none") return row;
       }
       const focusedSourceCell = document.activeElement?.closest?.("#editorShell .para-cell.source");
@@ -8476,6 +8782,93 @@
       textarea.style.height = `${Math.max(26, textarea.scrollHeight)}px`;
     }
 
+    function getPairedEditorCursorLine(textarea) {
+      const cursor = typeof textarea.selectionStart === "number" ? textarea.selectionStart : 0;
+      const before = textarea.value.slice(0, cursor);
+      return Math.max(0, before.split("\n").length - 1);
+    }
+
+    function getEffectivePairedLineCount(value = "") {
+      const lines = String(value).split("\n");
+      while (lines.length > 0 && lines[lines.length - 1].trim() === "") lines.pop();
+      return Math.max(1, lines.length);
+    }
+
+    function renderFixedLineNumbers(count, side = "target") {
+      const lineCount = Math.max(1, count);
+      return Array.from({ length: lineCount }, (_, index) => `
+        <label class="paired-line-item" data-pair-index="${index}">
+          ${side === "source" ? `<input class="paired-line-check" type="checkbox" aria-label="选择第 ${index + 1} 段重新翻译" />` : ""}
+          <span class="paired-line-number">${index + 1}</span>
+        </label>
+      `).join("");
+    }
+
+    function bindPairedLineChecks(scope = document) {
+      scope.querySelectorAll(".paired-line-check").forEach((input) => {
+        if (input.dataset.bound === "true") return;
+        input.dataset.bound = "true";
+        input.addEventListener("change", () => {
+          const index = Number(input.closest(".paired-line-item")?.dataset.pairIndex || 0);
+          const row = document.querySelectorAll("#editorShell .paragraph-row")[index];
+          const rowCheck = row?.querySelector(".paragraph-reselect");
+          if (rowCheck) rowCheck.checked = input.checked;
+          syncParagraphRerollSelection();
+        });
+      });
+    }
+
+    function syncPairedLineNumbers() {
+      const sourceTextarea = document.querySelector("#pairedReader .paired-editor-text[data-editor-side='source']");
+      const targetTextarea = document.querySelector("#pairedReader .paired-editor-text[data-editor-side='target']");
+      const sourceCount = getEffectivePairedLineCount(sourceTextarea?.value || "");
+      const targetCount = getEffectivePairedLineCount(targetTextarea?.value || "");
+      const lineCount = Math.max(sourceCount, targetCount);
+      document.querySelectorAll("#pairedReader .paired-text-editor").forEach((block) => {
+        const side = block.dataset.pairedEditorSide || "target";
+        const gutter = block.querySelector(".paired-line-gutter");
+        if (!gutter || Number(gutter.dataset.lineCount || 0) === lineCount) return;
+        gutter.dataset.lineCount = String(lineCount);
+        gutter.innerHTML = renderFixedLineNumbers(lineCount, side);
+        bindPairedLineChecks(gutter);
+      });
+      syncPairedRerollSelectionFromRows();
+    }
+
+    function syncHiddenRowsFromPairedEditor(textarea) {
+      const side = textarea?.dataset.editorSide;
+      if (!side) return;
+      const lines = textarea.value.split("\n");
+      const selector = side === "source" ? ".para-cell.source textarea" : ".para-cell.target textarea";
+      const rows = Array.from(document.querySelectorAll("#editorShell .paragraph-row"));
+      rows.forEach((row, index) => {
+        const cellTextarea = row.querySelector(selector);
+        if (!cellTextarea) return;
+        cellTextarea.value = lines[index] || "";
+        autosizeTextarea(cellTextarea);
+      });
+    }
+
+    function createPairedTextEditor(side, lines) {
+      const block = document.createElement("div");
+      block.className = "paired-text-editor";
+      block.dataset.pairedEditorSide = side;
+      block.innerHTML = `<div class="paired-line-gutter">${renderFixedLineNumbers(lines.length, side)}</div><textarea class="paired-editor-text" data-editor-side="${side}" spellcheck="false"></textarea><div class="paired-candidate-host" aria-live="polite"></div>`;
+      const textarea = block.querySelector("textarea");
+      textarea.value = lines.join("\n");
+      textarea.addEventListener("input", () => {
+        syncPairedTextareaHeight(textarea);
+        syncHiddenRowsFromPairedEditor(textarea);
+        syncPairedLineNumbers();
+        markSaving(document.querySelector("#editor .save-status"));
+      });
+      textarea.addEventListener("click", () => rememberActiveEditorParagraph(textarea));
+      textarea.addEventListener("keyup", () => rememberActiveEditorParagraph(textarea));
+      bindPairedLineChecks(block);
+      syncPairedTextareaHeight(textarea);
+      return block;
+    }
+
     function syncPairedRerollSelectionFromRows() {
       const shell = document.getElementById("editorShell");
       if (!shell?.classList.contains("paired-highlight-mode")) return;
@@ -8484,6 +8877,13 @@
         const checked = Boolean(row?.querySelector(".paragraph-reselect")?.checked);
         segment.classList.toggle("is-reroll-selected", checked && segment.classList.contains("source"));
         const check = segment.querySelector(".paired-check");
+        if (check) check.checked = checked;
+      });
+      document.querySelectorAll("#pairedReader .paired-column.source .paired-line-item").forEach((item) => {
+        const row = document.querySelectorAll("#editorShell .paragraph-row")[Number(item.dataset.pairIndex || 0)];
+        const checked = Boolean(row?.querySelector(".paragraph-reselect")?.checked);
+        item.classList.toggle("is-reroll-selected", checked);
+        const check = item.querySelector(".paired-line-check");
         if (check) check.checked = checked;
       });
       const pairedCheckAll = document.getElementById("pairedRerollCheckAll");
@@ -8501,36 +8901,10 @@
       if (!sourceWrap || !targetWrap) return;
       sourceWrap.innerHTML = "";
       targetWrap.innerHTML = "";
-      content.forEach((pair, index) => {
-        if (!pair?.[0]) return;
-        const sourceSegment = document.createElement("div");
-        sourceSegment.className = "paired-segment source";
-        sourceSegment.dataset.pairIndex = String(index);
-        sourceSegment.innerHTML = `<input class="row-check paired-check" type="checkbox" aria-label="选择第${index + 1}段原文重新翻译" /><textarea aria-label="第${index + 1}段原文">${escapeHtml(pair[0])}</textarea>`;
-        sourceWrap.appendChild(sourceSegment);
-
-        const targetSegment = document.createElement("div");
-        targetSegment.className = "paired-segment target";
-        targetSegment.dataset.pairIndex = String(index);
-        targetSegment.innerHTML = `<textarea aria-label="第${index + 1}段译文">${escapeHtml(pair[1] || "")}</textarea>`;
-        targetWrap.appendChild(targetSegment);
-      });
-      document.querySelectorAll("#pairedReader textarea").forEach((textarea) => {
-        syncPairedTextareaHeight(textarea);
-        textarea.addEventListener("input", () => {
-          syncPairedTextareaHeight(textarea);
-          markSaving(document.querySelector("#editor .save-status"));
-        });
-      });
-      document.querySelectorAll("#pairedReader .paired-check").forEach((input) => {
-        input.addEventListener("change", () => {
-          const index = Number(input.closest(".paired-segment")?.dataset.pairIndex || 0);
-          const row = document.querySelectorAll("#editorShell .paragraph-row")[index];
-          const rowCheck = row?.querySelector(".paragraph-reselect");
-          if (rowCheck) rowCheck.checked = input.checked;
-          syncParagraphRerollSelection();
-        });
-      });
+      const visiblePairs = content.filter((pair) => pair?.[0]);
+      sourceWrap.appendChild(createPairedTextEditor("source", visiblePairs.map((pair) => pair[0] || "")));
+      targetWrap.appendChild(createPairedTextEditor("target", visiblePairs.map((pair) => pair[1] || "")));
+      syncPairedLineNumbers();
       syncPairedRerollSelectionFromRows();
     }
 
@@ -8557,13 +8931,66 @@
       const submit = document.getElementById("rerollSubmitBtn");
       if (submit) submit.disabled = selected.length === 0;
       syncPairedRerollSelectionFromRows();
+      if (document.getElementById("editorShell")?.classList.contains("reroll-selection-locked")) {
+        setRerollSelectionLocked(true);
+      }
+    }
+
+    function setRerollSelectionLocked(locked) {
+      const shell = document.getElementById("editorShell");
+      shell?.classList.toggle("reroll-selection-locked", locked);
+      document.querySelectorAll("#editorShell .paragraph-row").forEach((row) => {
+        const input = row.querySelector(".paragraph-reselect");
+        if (!input) return;
+        input.disabled = locked && !input.checked;
+      });
+      document.querySelectorAll("#pairedReader .paired-column.source .paired-line-check").forEach((input) => {
+        input.disabled = locked && !input.checked;
+      });
+      const checkAll = document.getElementById("rerollCheckAll");
+      const pairedCheckAll = document.getElementById("pairedRerollCheckAll");
+      if (checkAll) checkAll.disabled = locked;
+      if (pairedCheckAll) pairedCheckAll.disabled = locked;
+    }
+
+    function updateRerollResultCount() {
+      const count = document.querySelectorAll("#rerollResultList .reroll-candidate").length;
+      const countEl = document.getElementById("rerollResultCount");
+      if (countEl) countEl.textContent = `${count} 条`;
+    }
+
+    function clearRerollCandidates() {
+      document.querySelectorAll("#editorShell .reroll-candidate").forEach((card) => card.remove());
+      updateRerollResultCount();
+    }
+
+    function setAssistPanelExpanded() {
+      const panel = document.querySelector("#editor .assist-panel");
+      if (panel?.classList.contains("qa-panel-collapsed")) {
+        setQaPanelCollapsed(panel, false);
+      }
+    }
+
+    function focusRerollResultRow(row) {
+      if (!row) return;
+      const rowIndex = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
+      const pairedLine = document.querySelector(`#pairedReader .paired-column.source .paired-line-item[data-pair-index="${rowIndex}"]`);
+      if (pairedLine && document.getElementById("editorShell")?.classList.contains("paired-highlight-mode")) {
+        pairedLine.scrollIntoView({ behavior: "smooth", block: "center" });
+        pairedLine.classList.add("pair-line-focus");
+        window.setTimeout(() => pairedLine.classList.remove("pair-line-focus"), 1200);
+        document.querySelector("#pairedReader .paired-editor-text[data-editor-side='source']")?.focus();
+        return;
+      }
+      locateEditorParagraph(row?.querySelector(".para-index")?.textContent.trim());
     }
 
     function closeParagraphRerollMode() {
       document.getElementById("editorShell")?.classList.remove("reroll-mode");
+      setRerollSelectionLocked(false);
       document.querySelectorAll("#editorShell .paragraph-reselect").forEach((input) => { input.checked = false; });
       document.querySelectorAll("#editorShell .paragraph-row").forEach((row) => row.classList.remove("reroll-selected"));
-      document.querySelectorAll("#editorShell .reroll-candidate").forEach((card) => card.remove());
+      clearRerollCandidates();
       document.getElementById("rerollPanel")?.classList.remove("has-results");
       syncParagraphRerollSelection();
     }
@@ -8596,16 +9023,30 @@
     function getRerollCardRow(card) {
       const directRow = card.closest(".paragraph-row");
       if (directRow) return directRow;
+      if (card.dataset.pairIndex !== undefined) {
+        return document.querySelectorAll("#editorShell .paragraph-row")[Number(card.dataset.pairIndex || 0)] || null;
+      }
       const index = Number(card.closest(".paired-segment")?.dataset.pairIndex || 0);
       return document.querySelectorAll("#editorShell .paragraph-row")[index] || null;
     }
 
+    function updatePairedEditorLine(side, rowIndex, text) {
+      const textarea = document.querySelector(`#pairedReader .paired-editor-text[data-editor-side="${side}"]`);
+      if (!textarea || rowIndex < 0) return;
+      const lines = textarea.value.split("\n");
+      while (lines.length <= rowIndex) lines.push("");
+      lines[rowIndex] = text;
+      textarea.value = lines.join("\n");
+      syncPairedTextareaHeight(textarea);
+    }
+
     function renderRerollCandidateContent(card, row, variant = 0, loading = false) {
+      const paraIndex = row?.querySelector(".para-index")?.textContent.trim() || "";
       if (loading) {
         card.classList.add("is-loading");
         card.innerHTML = `
           <div class="reroll-candidate-head">
-            <span>新译文生成中</span>
+            <span>${escapeHtml(paraIndex ? `第 ${Number(paraIndex)} 段生成中` : "新译文生成中")}</span>
             <span class="tag purple">生成中</span>
           </div>
           <div class="reroll-skeleton" aria-label="候选译文生成中">
@@ -8619,7 +9060,7 @@
       card.classList.remove("is-loading");
       card.innerHTML = `
         <div class="reroll-candidate-head">
-          <span>新译文</span>
+          <span>${escapeHtml(paraIndex ? `第 ${Number(paraIndex)} 段 | 新译文` : "新译文")}</span>
           <button class="reroll-candidate-close reroll-cancel-one" type="button" aria-label="关闭候选译文">×</button>
         </div>
         <p class="reroll-candidate-text">${escapeHtml(makeCandidateText(row, variant))}</p>
@@ -8635,16 +9076,24 @@
     function createRerollCandidate(row, variant = 0, loading = false) {
       const rowIndex = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
       const pairedSource = document.querySelector(`#pairedReader .paired-segment.source[data-pair-index="${rowIndex}"]`);
-      const source = pairedSource || row.querySelector(".para-cell.source");
+      const pairedTextHost = document.querySelector("#pairedReader [data-paired-source] .paired-candidate-host");
+      const resultHost = document.getElementById("rerollResultList");
+      const source = resultHost || pairedSource || pairedTextHost || row.querySelector(".para-cell.source");
       if (!source) return;
       row.querySelectorAll(".reroll-candidate").forEach((candidate) => candidate.remove());
       document.querySelectorAll(`#pairedReader .paired-segment[data-pair-index="${rowIndex}"] .reroll-candidate`).forEach((candidate) => candidate.remove());
+      document.querySelectorAll(`#pairedReader .paired-candidate-host .reroll-candidate[data-pair-index="${rowIndex}"]`).forEach((candidate) => candidate.remove());
+      document.querySelectorAll(`#rerollResultList .reroll-candidate[data-pair-index="${rowIndex}"]`).forEach((candidate) => candidate.remove());
       const card = document.createElement("div");
       card.className = "reroll-candidate";
+      if (source.classList.contains("paired-candidate-host")) card.classList.add("paired-editor-candidate");
+      if (source.id === "rerollResultList") card.classList.add("reroll-side-candidate");
       card.dataset.variant = String(variant);
       card.dataset.pairIndex = String(rowIndex);
       renderRerollCandidateContent(card, row, variant, loading);
       source.appendChild(card);
+      updateRerollResultCount();
+      setAssistPanelExpanded();
       if (loading) {
         window.setTimeout(() => {
           if (!card.isConnected) return;
@@ -8656,6 +9105,7 @@
     function adoptRerollCandidate(card) {
       const pairedTarget = card.closest(".paired-segment.target");
       const row = getRerollCardRow(card);
+      const rowIndex = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
       const target = pairedTarget || row?.querySelector(".para-cell.target");
       const textarea = target?.querySelector("textarea");
       const text = card.querySelector(".reroll-candidate-text")?.textContent || "";
@@ -8666,6 +9116,10 @@
         if (pairedTarget && rowTextarea) {
           rowTextarea.value = text;
           autosizeTextarea(rowTextarea);
+        } else if (rowTextarea && card.closest(".paired-candidate-host")) {
+          rowTextarea.value = text;
+          autosizeTextarea(rowTextarea);
+          updatePairedEditorLine("target", rowIndex, text);
         }
         syncParagraphRowHeight(row);
         target.classList.remove("empty");
@@ -8673,12 +9127,15 @@
       }
       row?.querySelector(".paragraph-reselect") && (row.querySelector(".paragraph-reselect").checked = false);
       row?.classList.remove("reroll-selected");
-      const rowIndex = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
       document.querySelectorAll(`#pairedReader .paired-segment[data-pair-index="${rowIndex}"]`).forEach((segment) => segment.classList.remove("is-reroll-selected"));
       document.querySelector(`#pairedReader .paired-segment.source[data-pair-index="${rowIndex}"] .paired-check`) && (document.querySelector(`#pairedReader .paired-segment.source[data-pair-index="${rowIndex}"] .paired-check`).checked = false);
+      document.querySelector(`#pairedReader .paired-column.source .paired-line-item[data-pair-index="${rowIndex}"]`)?.classList.remove("is-reroll-selected");
+      const pairedLineCheck = document.querySelector(`#pairedReader .paired-column.source .paired-line-item[data-pair-index="${rowIndex}"] .paired-line-check`);
+      if (pairedLineCheck) pairedLineCheck.checked = false;
       if (pairedTarget) row?.querySelector(".reroll-candidate")?.remove();
       else document.querySelector(`#pairedReader .paired-segment.target[data-pair-index="${rowIndex}"] .reroll-candidate`)?.remove();
       card.remove();
+      updateRerollResultCount();
       syncParagraphRerollSelection();
       if (!document.querySelector("#editorShell .reroll-candidate")) closeParagraphRerollMode();
     }
@@ -8699,6 +9156,7 @@
       if (!shell) return;
       const active = shell.classList.toggle("reroll-mode");
       if (active) {
+        setRerollSelectionLocked(false);
         const defaultRow = getDefaultRerollRow();
         const defaultCheck = defaultRow?.querySelector(".paragraph-reselect");
         if (defaultRow?.style.display !== "none" && defaultCheck) {
@@ -8734,8 +9192,9 @@
       const selectedRows = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).filter((row) => row.querySelector(".paragraph-reselect")?.checked);
       const selectedCount = selectedRows.length;
       if (!selectedCount) return;
-      document.querySelectorAll("#editorShell .reroll-candidate").forEach((card) => card.remove());
+      clearRerollCandidates();
       selectedRows.forEach((row) => createRerollCandidate(row, 0, true));
+      setRerollSelectionLocked(true);
       document.getElementById("rerollPanel")?.classList.add("has-results");
       showToast(`已提交 ${selectedCount} 段重新翻译，章节状态保持不变`);
     });
@@ -8800,9 +9259,16 @@
         document.querySelectorAll(`#pairedReader .paired-segment[data-pair-index="${rowIndex}"]`).forEach((segment) => segment.classList.remove("is-reroll-selected"));
         const pairedCheck = document.querySelector(`#pairedReader .paired-segment.source[data-pair-index="${rowIndex}"] .paired-check`);
         if (pairedCheck) pairedCheck.checked = false;
+        const pairedLine = document.querySelector(`#pairedReader .paired-column.source .paired-line-item[data-pair-index="${rowIndex}"]`);
+        pairedLine?.classList.remove("is-reroll-selected");
+        const pairedLineCheck = pairedLine?.querySelector(".paired-line-check");
+        if (pairedLineCheck) pairedLineCheck.checked = false;
         card.remove();
+        updateRerollResultCount();
         syncParagraphRerollSelection();
         if (!document.querySelector("#editorShell .reroll-candidate")) closeParagraphRerollMode();
+      } else {
+        focusRerollResultRow(getRerollCardRow(card));
       }
     });
     document.getElementById("finishReviewBtn")?.addEventListener("click", () => {
