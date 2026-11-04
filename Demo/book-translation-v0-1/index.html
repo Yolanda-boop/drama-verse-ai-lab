@@ -77,7 +77,8 @@
 
     body.editor-focus .main {
       left: 0;
-      padding: 0 0 104px;
+      overflow: hidden;
+      padding: 0;
     }
 
     body.editor-focus .page-head {
@@ -579,7 +580,8 @@
       background: rgba(255, 255, 255, 0.075);
     }
 
-    .btn:disabled {
+    .btn:disabled,
+    .btn[aria-disabled="true"] {
       cursor: not-allowed;
       color: rgba(255, 255, 255, 0.42);
       border-color: rgba(255, 255, 255, 0.08);
@@ -848,6 +850,29 @@
       border: 1.5px solid currentColor;
       border-right-color: transparent;
       animation: spin 0.75s linear infinite;
+    }
+
+    .status-help {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      margin-left: 6px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 107, 120, 0.42);
+      color: var(--danger);
+      background: rgba(255, 107, 120, 0.1);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      vertical-align: middle;
+      cursor: help;
+    }
+
+    .status-help:hover {
+      border-color: rgba(255, 107, 120, 0.68);
+      background: rgba(255, 107, 120, 0.16);
     }
 
     @keyframes spin {
@@ -1437,6 +1462,19 @@
       cursor: not-allowed;
     }
 
+    #taskCenter .task-action-group {
+      grid-template-columns: 56px;
+    }
+
+    #taskCenter .task-action-group .download,
+    #taskCenter .task-action-group .push,
+    #taskDetailRetryAll,
+    #taskDetail .task-action-group .download,
+    #taskDetail table th:last-child,
+    #taskDetail table td:last-child {
+      display: none;
+    }
+
     .task-module-tabs {
       display: flex;
       gap: 8px;
@@ -1735,6 +1773,31 @@
       box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
     }
 
+    .paragraph-row.reroll-result-pending .para-cell.source {
+      border-color: rgba(255, 214, 80, 0.28);
+    }
+
+    .reroll-text-highlight-layer {
+      position: absolute;
+      inset: 10px 12px;
+      z-index: 0;
+      pointer-events: none;
+      color: transparent;
+      font-size: 15px;
+      line-height: 1.64;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      overflow: hidden;
+    }
+
+    .reroll-text-highlight-layer mark {
+      color: transparent;
+      background: rgba(255, 214, 80, 0.52);
+      border-radius: 4px;
+      box-shadow: 0 0 0 1px rgba(255, 214, 80, 0.16);
+    }
+
     .paragraph-row:focus-within {
       background: transparent;
       box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
@@ -1816,6 +1879,10 @@
       box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
     }
 
+    .editor.continuous-mode .paragraph-row.reroll-result-pending .para-cell.source {
+      border-color: rgba(255, 214, 80, 0.3);
+    }
+
     .editor.continuous-mode .para-index,
     .editor.continuous-mode .paragraph-select-cell {
       padding-top: 12px;
@@ -1838,21 +1905,30 @@
     .editor.paired-highlight-mode .paired-reader {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      flex: 1 1 auto;
       min-height: 0;
-      overflow: auto;
+      overflow: hidden;
       background: #161b24;
     }
 
     .paired-column {
+      display: flex;
+      flex-direction: column;
       min-width: 0;
+      min-height: 0;
+      overflow: hidden;
       padding: 12px 0 18px;
     }
 
     .paired-column-body {
       display: grid;
+      flex: 1 1 auto;
       align-content: start;
       gap: 22px;
-      min-height: calc(100vh - 260px);
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding-bottom: 18px;
     }
 
     .paired-column.target {
@@ -1955,6 +2031,47 @@
       display: inline-flex;
     }
 
+    #editorRerollToggle,
+    #editorShell .paragraph-select-cell,
+    #editorShell .reroll-check-head,
+    #pairedRerollCheckAll,
+    #pairedReader .paired-line-check {
+      display: none !important;
+    }
+
+    .selection-reroll-popover {
+      position: fixed;
+      z-index: 1200;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid rgba(139, 115, 255, 0.34);
+      border-radius: 8px;
+      background: rgba(23, 25, 34, 0.96);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+    }
+
+    .selection-reroll-popover.visible {
+      display: inline-flex;
+    }
+
+    .selection-reroll-popover .btn {
+      height: 30px;
+      padding: 0 10px;
+      color: #fff;
+      border-color: rgba(139, 115, 255, 0.58);
+      background: rgba(98, 36, 255, 0.22);
+      font-size: 12px;
+    }
+
+    #editor .paired-editor-text::selection,
+    #editor .para-cell textarea::selection {
+      color: #17130a;
+      background: rgba(255, 214, 80, 0.82);
+    }
+
     .paired-line-number {
       flex: 1;
       text-align: right;
@@ -1968,6 +2085,10 @@
       box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
     }
 
+    .paired-line-item.reroll-result-pending {
+      color: rgba(255, 255, 255, 0.96);
+    }
+
     .paired-line-item.pair-line-focus {
       color: #fff;
       background: rgba(139, 115, 255, 0.26);
@@ -1975,6 +2096,8 @@
     }
 
     .paired-editor-text {
+      position: relative;
+      z-index: 1;
       width: 100%;
       min-height: calc(100vh - 284px);
       border: 0;
@@ -1987,6 +2110,17 @@
       font-size: 15px;
       line-height: 1.9;
       white-space: pre-wrap;
+    }
+
+    .paired-editor-stack {
+      position: relative;
+      grid-column: 2;
+      min-width: 0;
+    }
+
+    .paired-editor-stack .reroll-text-highlight-layer {
+      inset: 11px 16px 18px;
+      line-height: 1.9;
     }
 
     .paired-column.source .paired-editor-text {
@@ -2018,6 +2152,10 @@
     .paired-segment.is-reroll-selected {
       background: rgba(98, 36, 255, 0.15);
       box-shadow: inset 3px 0 0 rgba(139, 115, 255, 0.95);
+    }
+
+    .paired-segment.reroll-result-pending {
+      box-shadow: none;
     }
 
     .paired-check {
@@ -2289,6 +2427,54 @@
 
     .reroll-panel.has-results textarea {
       display: none;
+    }
+
+    .export-dropdown-wrap {
+      position: relative;
+      display: inline-flex;
+      padding-bottom: 6px;
+      margin-bottom: -6px;
+    }
+
+    .export-dropdown-wrap > .btn {
+      position: relative;
+      z-index: 2;
+    }
+
+    .export-dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% - 1px);
+      z-index: 20;
+      display: none;
+      min-width: 116px;
+      padding: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      background: rgba(20, 22, 30, 0.98);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32);
+    }
+
+    .export-dropdown-wrap:hover .export-dropdown-menu {
+      display: grid;
+      gap: 4px;
+    }
+
+    .export-dropdown-option {
+      height: 30px;
+      border: 0;
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.82);
+      background: transparent;
+      text-align: left;
+      padding: 0 9px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .export-dropdown-option:hover {
+      color: #fff;
+      background: rgba(124, 90, 243, 0.18);
     }
 
     .upload-empty {
@@ -3425,7 +3611,7 @@
 
     .source-editor {
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 220px 1fr;
       gap: 12px;
       min-height: calc(100vh - 148px);
       background: #0c0c10;
@@ -4352,10 +4538,28 @@
 
     .editor {
       display: grid;
-      grid-template-columns: 232px 1fr 336px;
+      grid-template-columns: 200px 1fr 336px;
       gap: 12px;
       min-height: calc(100vh - 148px);
       background: #0c0c10;
+    }
+
+    body.editor-focus #editor.view.active {
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      height: calc(100vh - 48px);
+      overflow: hidden;
+    }
+
+    body.editor-focus #editor .editor-menu {
+      flex: 0 0 auto;
+    }
+
+    body.editor-focus #editorShell {
+      flex: 1 1 auto;
+      min-height: 0;
+      height: auto;
     }
 
     .editor.rail-collapsed {
@@ -4363,7 +4567,7 @@
     }
 
     .editor.qa-collapsed {
-      grid-template-columns: 232px 1fr 44px;
+      grid-template-columns: 200px 1fr 44px;
       gap: 8px;
     }
 
@@ -4375,6 +4579,7 @@
     .assist-panel {
       padding: 14px;
       align-self: stretch;
+      min-height: 0;
       overflow: auto;
     }
 
@@ -4535,6 +4740,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      min-height: 0;
       background: #12141b;
       border-color: rgba(255, 255, 255, 0.08);
     }
@@ -4815,6 +5021,7 @@
     }
 
     .para-cell {
+      position: relative;
       margin: 6px 8px 6px 0;
       padding: 10px 12px;
       border: 1px solid rgba(255, 255, 255, 0.07);
@@ -4886,6 +5093,8 @@
     }
 
     .para-cell textarea {
+      position: relative;
+      z-index: 1;
       width: 100%;
       min-height: 44px;
       color: inherit;
@@ -5057,9 +5266,10 @@
     .reroll-result-list {
       display: grid;
       gap: 10px;
-      max-height: 42vh;
+      max-height: min(52vh, 520px);
       overflow-y: auto;
       padding: 0 12px 12px;
+      overscroll-behavior: contain;
     }
 
     .reroll-result-list:empty {
@@ -5422,7 +5632,7 @@
     <div class="nav-group nav-parent"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 1 4 16.5z"></path><path d="M4 16.5A2.5 2.5 0 0 1 6.5 14H20"></path><path d="M8 7h7"></path><path d="M8 10h5"></path></svg></span><span>小说翻译</span></div>
     <button class="nav-item nav-child active" data-go="projects"><span>工作台</span></button>
     <button class="nav-item nav-child" data-go="bookGlossary"><span>术语库</span></button>
-    <button class="nav-item nav-child" data-go="taskCenter"><span>任务中心</span></button>
+    <button class="nav-item nav-child" data-go="taskCenter"><span>导出记录</span></button>
     <div class="nav-group nav-parent"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9.5" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span><span>用户管理</span></div>
   </aside>
 
@@ -5592,7 +5802,7 @@
 
     <section id="taskDetail" class="view">
       <div class="task-detail-head">
-        <h2>书籍导出任务详情</h2>
+        <h2>书籍导出记录详情</h2>
         <div class="actions">
           <button class="btn retry" id="taskDetailRetryAll">全部重试</button>
           <button class="btn" data-go="taskCenter">返回列表</button>
@@ -5630,7 +5840,7 @@
               <td class="mono">2</td>
               <td class="mono">873455061</td>
               <td>002 旧梦</td>
-              <td><span class="tag red">失败</span></td>
+              <td class="task-status" data-failure-reason="推送任务处理超时，请重试该章节；如多次失败请联系技术排查。"><span class="tag red">失败</span></td>
               <td><button class="btn text chapter-preview-btn" data-chapter-title="002 旧梦">查看内容</button></td>
               <td>2026-10-24 10:26</td>
               <td><div class="task-action-group"><button class="btn retry task-row-retry">重试</button></div></td>
@@ -5639,7 +5849,7 @@
               <td class="mono">3</td>
               <td class="mono">873455062</td>
               <td>003 初见王府</td>
-              <td><span class="tag red">失败</span></td>
+              <td class="task-status" data-failure-reason="运营后台返回章节范围校验失败，请确认目标章节后重试。"><span class="tag red">失败</span></td>
               <td><button class="btn text chapter-preview-btn" data-chapter-title="003 初见王府">查看内容</button></td>
               <td>2026-10-24 10:26</td>
               <td><div class="task-action-group"><button class="btn retry task-row-retry">重试</button></div></td>
@@ -5858,17 +6068,17 @@
           <button class="btn primary create-submit-btn" id="createSubmitBtn">创建项目</button>
         </div>
         <div id="flowMtpe" class="flow mode-flow active">
-          <div class="flow-step"><strong>1. 文件解析</strong><span>识别书名、简介、目录、标题、正文段落</span></div>
-          <div class="flow-step"><strong>2. 资产提取</strong><span>提取项目内术语映射与题材标签</span></div>
-          <div class="flow-step"><strong>3. 人工确认</strong><span>确认资产后应用到本项目翻译</span></div>
-          <div class="flow-step"><strong>4. 翻译生成</strong><span>基于项目资产生成段落译文</span></div>
-          <div class="flow-step"><strong>5. 审校导出</strong><span>段落审校，按章节导出</span></div>
+          <div class="flow-step"><strong>1. 提交任务</strong><span>确认书籍、语种和章节范围</span></div>
+          <div class="flow-step"><strong>2. 原文解析与资产生成</strong><span>解析正文，同步生成书籍资产和术语候选</span></div>
+          <div class="flow-step"><strong>3. 原文审校与术语确认</strong><span>确认原文无误，翻译并确认术语译法</span></div>
+          <div class="flow-step"><strong>4. AI翻译</strong><span>按确认后的原文和术语生成译文</span></div>
+          <div class="flow-step"><strong>5. 译文审校与导出</strong><span>人工审校后下载本地或推送后台</span></div>
         </div>
         <div id="flowMt" class="flow mode-flow">
-          <div class="flow-step"><strong>1. 文件解析</strong><span>识别书名、简介、目录、标题、正文段落</span></div>
-          <div class="flow-step"><strong>2. 资产提取</strong><span>提取项目内术语映射与题材标签</span></div>
-          <div class="flow-step"><strong>3. AI翻译</strong><span>基于最新资产与书籍原文生成译文</span></div>
-          <div class="flow-step"><strong>4. 导出译文</strong><span>按章节导出译文文件</span></div>
+          <div class="flow-step"><strong>1. 提交任务</strong><span>确认书籍、语种和章节范围</span></div>
+          <div class="flow-step"><strong>2. 原文解析与资产生成</strong><span>解析正文，同步生成书籍资产和术语候选</span></div>
+          <div class="flow-step"><strong>3. AI翻译</strong><span>按确认后的原文和术语生成译文</span></div>
+          <div class="flow-step"><strong>4. 导出译文</strong><span>下载本地或推送后台</span></div>
         </div>
       </div>
     </section>
@@ -5948,7 +6158,7 @@
           </div>
           <div class="language-panel-head">
             <div class="quick-filter"><span>快捷选择：</span><button class="active">AI解析完成</button><button>AI解析中</button><button>原文审校中</button><button>审校完成</button></div>
-            <div class="actions"><button class="btn primary confirm-extract-assets" title="确认全部章节原文无误后点击，章节将标记为「审校完成」，并开始提取目标语言术语译法。">确认并提取术语</button><button class="btn primary confirm-export-source" title="导出当前语言下该书全部章节内容">导出全部</button></div>
+            <div class="actions"><button class="btn primary confirm-extract-assets" title="确认全部章节原文无误后点击，章节将标记为「审校完成」，并开始生成目标语言术语译法。">确认并翻译术语</button><button class="btn primary confirm-export-source" title="导出当前语言下该书全部章节内容">导出原文</button></div>
           </div>
           <div class="table-card">
             <table>
@@ -5988,7 +6198,7 @@
           </div>
           <div class="language-panel-head">
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
-            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn retry-all-failed">全部重试</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="法语" title="导出当前语言下该书全部章节内容">导出全部</button></div>
+            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn retry-all-failed">全部重试</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="法语" title="导出当前语言下该书全部章节内容">导出译文</button></div>
           </div>
           <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La lumière blanche du régent</td><td><span class="mono">29</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>简介</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr data-retry-status="AI翻译中"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>楔子</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag red">失败</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>旧梦</td><td><span class="mono">15,812</span><span class="sub">103 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">AI翻译完成</span></td><td><span class="qc-alert" title="译文为空：3 处"><span class="qc-icon">⚠</span>1类 / 3处</span></td><td>2026-10-19 10:40</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:31</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="法语" data-export-scope="selected">导出译文</button></div></div>
@@ -6016,9 +6226,9 @@
           </div>
           <div class="language-panel-head">
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
-            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="西班牙语" title="导出当前语言下该书全部章节内容">导出全部</button></div>
+            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="西班牙语" title="导出当前语言下该书全部章节内容">导出译文</button></div>
           </div>
-          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La luz blanca del regente</td><td><span class="mono">24</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introducción</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>Viejo sueño</td><td><span class="mono">15,812</span><span class="sub">103 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag purple">翻译审校中</span></td><td><span class="qc-alert" title="译文为空：1 处"><span class="qc-icon">⚠</span>1类 / 1处</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:38</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr data-editor-mode="continuous"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">3</td><td class="mono">873455062</td><td>003_初见王府.docx</td><td>Primer encuentro con la residencia</td><td><span class="mono">16,124</span><span class="sub">112 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag purple">翻译审校中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:46</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
+          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La luz blanca del regente</td><td><span class="mono">24</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introducción</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:18</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语翻译中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:24</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">2</td><td class="mono">873455061</td><td>002_旧梦.docx</td><td>Viejo sueño</td><td><span class="mono">15,812</span><span class="sub">103 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag purple">翻译审校中</span></td><td><span class="qc-alert" title="译文为空：1 处"><span class="qc-icon">⚠</span>1类 / 1处</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:38</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr data-editor-mode="continuous"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">3</td><td class="mono">873455062</td><td>003_初见王府.docx</td><td>Primer encuentro con la residencia</td><td><span class="mono">16,124</span><span class="sub">112 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag purple">翻译审校中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-19 10:52</td><td>Mia</td><td>Lynn</td><td>2026-10-19 11:46</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="西班牙语" data-export-scope="selected">导出译文</button></div></div>
         </div>
 
@@ -6044,9 +6254,9 @@
           </div>
           <div class="language-panel-head">
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
-            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="葡萄牙语" title="导出当前语言下该书全部章节内容">导出全部</button></div>
+            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="葡萄牙语" title="导出当前语言下该书全部章节内容">导出译文</button></div>
           </div>
-          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>A luz branca do regente</td><td><span class="mono">24</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introdução</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:12</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
+          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>A luz branca do regente</td><td><span class="mono">24</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语翻译中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语翻译中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>Introdução</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语翻译中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:08</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>Prólogo</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag">AI</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 09:00</td><td>Mia</td><td>-</td><td>2026-10-20 09:12</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="葡萄牙语" data-export-scope="selected">导出译文</button></div></div>
         </div>
 
@@ -6072,9 +6282,9 @@
           </div>
           <div class="language-panel-head">
             <div class="quick-filter"><span>快捷选择：</span><button class="active">翻译完成</button><button>翻译已校对</button></div>
-            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="意大利语" title="导出当前语言下该书全部章节内容">导出全部</button></div>
+            <div class="actions"><button class="btn term-asset-trigger open-term-assets">术语译法</button><button class="btn primary confirm-terms-translate" title="按照当前确认后的术语结果，开始翻译全部章节">确认并翻译</button><button class="btn primary confirm-export-text" data-export-lang="意大利语" title="导出当前语言下该书全部章节内容">导出译文</button></div>
           </div>
-          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La luce bianca del reggente</td><td><span class="mono">28</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>-</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语映射中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>-</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
+          <div class="table-card"><table><thead><tr><th class="check-col"><input class="row-check lang-check-all" type="checkbox" /></th><th>序号</th><th>原章节ID</th><th>章节文件</th><th>标题</th><th>字符/段落</th><th>处理模式</th><th>状态</th><th>质检提醒</th><th>创建时间</th><th>创建人</th><th>更新人</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr data-meta-type="title"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>书名</td><td>La luce bianca del reggente</td><td><span class="mono">28</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语翻译中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="title">编辑</button></td></tr><tr data-meta-type="author"><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">-</td><td class="mono">-</td><td>作者笔名</td><td>Qing Yue</td><td><span class="mono">8</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语翻译中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor" data-meta-type="author">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">0</td><td class="mono">873455059</td><td>000_简介.docx</td><td>-</td><td><span class="mono">1,240</span><span class="sub">8 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语翻译中</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr><tr><td class="check-col"><input class="row-check lang-check" type="checkbox" /></td><td class="mono">1</td><td class="mono">873455060</td><td>001_楔子.docx</td><td>-</td><td><span class="mono">12,408</span><span class="sub">86 段</span></td><td><span class="tag purple">AIPE</span></td><td class="task-status"><span class="tag yellow">术语待确认</span></td><td><span class="qc-empty">无</span></td><td>2026-10-20 15:20</td><td>Mia</td><td>-</td><td>-</td><td class="actions"><button class="btn text" data-go="editor">编辑</button></td></tr></tbody></table></div>
           <div class="language-bulk-bar"><div class="bulk-title">已选 <strong data-selected-count>0</strong> 章</div><div class="actions"><button class="btn confirm-retranslate">重新翻译</button><button class="btn confirm-export-text" data-export-lang="意大利语" data-export-scope="selected">导出译文</button></div></div>
         </div>
       </div>
@@ -6091,6 +6301,7 @@
         <div class="editor-menu-right">
           <div class="menu-group">
             <button class="status-icon save-status" type="button" title="已保存" aria-label="已保存">&#10003;</button>
+            <button id="sourceEditorExportBtn" class="menu-btn"><span class="menu-icon icon-download"></span><span>导出</span></button>
           </div>
         </div>
       </div>
@@ -6123,7 +6334,7 @@
 
     <section id="chapters" class="view">
       <div class="toolbar chapter-toolbar">
-        <div class="filter"><label>状态</label><select class="control"><option>全部</option><option>术语映射中</option><option>术语待确认</option><option>AI翻译中</option><option>AI翻译完成</option><option>翻译审校中</option><option>翻译已审校</option></select></div>
+        <div class="filter"><label>状态</label><select class="control"><option>全部</option><option>术语翻译中</option><option>术语待确认</option><option>AI翻译中</option><option>AI翻译完成</option><option>翻译审校中</option><option>翻译已审校</option></select></div>
       </div>
 
       <div class="table-card">
@@ -6508,7 +6719,7 @@
     <div class="modal">
       <button class="modal-close-x modal-close" type="button" aria-label="关闭">×</button>
       <h3 id="platformPushTitle">推送至后台</h3>
-      <p>请确认目标书籍ID和章节范围，提交后系统将推送当前任务的译文内容。</p>
+      <p>请确认目标书籍ID和章节范围，提交后系统将推送当前任务的译文内容。同步时会一并更新书籍名称、作者笔名和简介；若目标语言已有内容，将以当前结果覆盖。</p>
       <div class="form-grid">
         <div class="field wide"><label>目标书籍ID<span class="required">*</span></label><input id="pushTargetBookId" class="control" placeholder="请输入需要推送至运营后台的目标书籍ID" value="BK-FR-2210" /></div>
         <div class="field"><label>起始章节</label><input id="pushChapterStart" class="control" value="1" /></div>
@@ -6568,11 +6779,11 @@
   <div id="extractAssetsConfirmModal" class="modal-mask" role="dialog" aria-modal="true" aria-labelledby="extractAssetsConfirmTitle">
     <div class="modal">
       <button class="modal-close-x modal-close" type="button" aria-label="关闭">×</button>
-      <h3 id="extractAssetsConfirmTitle">确认提取术语？</h3>
-      <p>确认全部章节原文无误后，章节将标记为「审校完成」，并开始提取目标语言术语译法。</p>
+      <h3 id="extractAssetsConfirmTitle">确认翻译术语？</h3>
+      <p>确认全部章节原文无误后，章节将标记为「审校完成」，并开始生成目标语言术语译法。</p>
       <div class="actions" style="margin-top:16px;">
         <button class="btn modal-close">取消</button>
-        <button id="confirmExtractAssetsBtn" class="btn primary modal-close">确认提取术语</button>
+        <button id="confirmExtractAssetsBtn" class="btn primary modal-close">确认翻译术语</button>
       </div>
     </div>
   </div>
@@ -6858,11 +7069,11 @@
       },
       taskCenter: {
         back: null,
-        crumbs: [{ label: "任务中心", view: "taskCenter" }, { label: "书籍翻译", view: "taskCenter" }]
+        crumbs: [{ label: "导出记录", view: "taskCenter" }, { label: "书籍翻译", view: "taskCenter" }]
       },
       taskDetail: {
         back: "taskCenter",
-        crumbs: [{ label: "任务中心", view: "taskCenter" }, { label: "书籍翻译", view: "taskCenter" }, { label: "任务详情", view: "taskDetail" }]
+        crumbs: [{ label: "导出记录", view: "taskCenter" }, { label: "书籍翻译", view: "taskCenter" }, { label: "记录详情", view: "taskDetail" }]
       },
       create: {
         back: "projects",
@@ -7459,6 +7670,7 @@
       autosizeTextarea(textarea);
       textarea.addEventListener("input", () => {
         autosizeTextarea(textarea);
+        renderTextareaHighlights(textarea);
         markSaving(textarea.closest(".view")?.querySelector(".save-status"));
         if (textarea.closest("#sourceEditor")) {
           syncSourceLineNumbers();
@@ -7595,7 +7807,7 @@
     });
     document.getElementById("skipCreateValidationBtn")?.addEventListener("click", () => {
       createValidationModal?.classList.remove("visible");
-      showToast("已跳过异常书籍，创建任务已提交至任务中心");
+      showToast("已跳过异常书籍，创建任务已提交至导出记录");
       showView("taskCenter");
     });
 
@@ -7659,7 +7871,7 @@
     }
 
     function triggerDownload(filename, content) {
-      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const blob = content instanceof Blob ? content : new Blob([content], { type: "text/plain;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -7670,13 +7882,203 @@
       URL.revokeObjectURL(url);
     }
 
-    function startButtonDownload(button, filename, toastText) {
+    function writeUint16(view, offset, value) {
+      view[offset] = value & 0xff;
+      view[offset + 1] = (value >>> 8) & 0xff;
+    }
+
+    function writeUint32(view, offset, value) {
+      view[offset] = value & 0xff;
+      view[offset + 1] = (value >>> 8) & 0xff;
+      view[offset + 2] = (value >>> 16) & 0xff;
+      view[offset + 3] = (value >>> 24) & 0xff;
+    }
+
+    const crcTable = (() => {
+      const table = new Uint32Array(256);
+      for (let n = 0; n < 256; n += 1) {
+        let c = n;
+        for (let k = 0; k < 8; k += 1) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+        table[n] = c >>> 0;
+      }
+      return table;
+    })();
+
+    function crc32(bytes) {
+      let crc = 0xffffffff;
+      bytes.forEach((byte) => {
+        crc = crcTable[(crc ^ byte) & 0xff] ^ (crc >>> 8);
+      });
+      return (crc ^ 0xffffffff) >>> 0;
+    }
+
+    function createZipBlob(files) {
+      const encoder = new TextEncoder();
+      const localParts = [];
+      const centralParts = [];
+      let offset = 0;
+      files.forEach((file) => {
+        const nameBytes = encoder.encode(file.name);
+        const contentBytes = encoder.encode(file.content || "");
+        const checksum = crc32(contentBytes);
+        const local = new Uint8Array(30 + nameBytes.length);
+        writeUint32(local, 0, 0x04034b50);
+        writeUint16(local, 4, 20);
+        writeUint16(local, 6, 0x0800);
+        writeUint16(local, 8, 0);
+        writeUint32(local, 14, checksum);
+        writeUint32(local, 18, contentBytes.length);
+        writeUint32(local, 22, contentBytes.length);
+        writeUint16(local, 26, nameBytes.length);
+        local.set(nameBytes, 30);
+        localParts.push(local, contentBytes);
+
+        const central = new Uint8Array(46 + nameBytes.length);
+        writeUint32(central, 0, 0x02014b50);
+        writeUint16(central, 4, 20);
+        writeUint16(central, 6, 20);
+        writeUint16(central, 8, 0x0800);
+        writeUint16(central, 10, 0);
+        writeUint32(central, 16, checksum);
+        writeUint32(central, 20, contentBytes.length);
+        writeUint32(central, 24, contentBytes.length);
+        writeUint16(central, 28, nameBytes.length);
+        writeUint32(central, 42, offset);
+        central.set(nameBytes, 46);
+        centralParts.push(central);
+        offset += local.length + contentBytes.length;
+      });
+      const centralSize = centralParts.reduce((sum, part) => sum + part.length, 0);
+      const end = new Uint8Array(22);
+      writeUint32(end, 0, 0x06054b50);
+      writeUint16(end, 8, files.length);
+      writeUint16(end, 10, files.length);
+      writeUint32(end, 12, centralSize);
+      writeUint32(end, 16, offset);
+      return new Blob([...localParts, ...centralParts, end], { type: "application/zip" });
+    }
+
+    function startButtonDownload(button, filename, toastText, content) {
       setButtonLoading(button, true);
       window.setTimeout(() => {
-        triggerDownload(filename, "Drama Verse 书籍翻译原型导出文件");
+        triggerDownload(filename, content ?? "Drama Verse 书籍翻译原型导出文件");
         setButtonLoading(button, false);
         showToast(toastText);
       }, 650);
+    }
+
+    function openExportPushModal(button) {
+      if (hasNonContinuousSelectedChapters(button)) {
+        showToast("仅支持推送连续章节范围，请调整勾选章节后再推送");
+        return;
+      }
+      currentExportLang = button?.dataset.exportLang || currentExportLang || "中文";
+      currentExportKind = button?.classList.contains("confirm-export-source") ? "source" : "translation";
+      currentExportScope = button?.dataset.exportScope || "all";
+      const risk = document.getElementById("pushRiskCheck");
+      const confirmButton = document.getElementById("confirmPlatformPushBtn");
+      const startInput = document.getElementById("pushChapterStart");
+      const endInput = document.getElementById("pushChapterEnd");
+      const range = getSelectedChapterRange(button);
+      if (startInput) startInput.value = range?.start || button?.dataset.rangeStart || "1";
+      if (endInput) endInput.value = range?.end || button?.dataset.rangeEnd || "100";
+      if (risk) risk.checked = false;
+      if (confirmButton) confirmButton.disabled = true;
+      platformPushModal?.classList.add("visible");
+    }
+
+    function getExportTxtFilename(button) {
+      const bookName = "摄政王的白月光";
+      const scope = button?.dataset.exportScope === "selected" ? "已选章节" : "第2章";
+      return `${bookName}_${scope}.txt`;
+    }
+
+    function getActiveChapterExportFilename(shellSelector) {
+      const bookName = "摄政王的白月光";
+      const chapterText = document.querySelector(`${shellSelector} .chapter-node.active strong`)?.textContent.trim() || "002 旧梦";
+      const chapterNumber = chapterText.match(/^0*(\d+)/)?.[1];
+      const chapterLabel = chapterNumber ? `第${Number(chapterNumber)}章` : chapterText.replace(/\s+/g, "_");
+      return `${bookName}_${chapterLabel}.txt`;
+    }
+
+    function getSelectedExportRows(button) {
+      if (button?.dataset.exportScope !== "selected") return [];
+      const panel = button.closest(".book-panel");
+      if (!panel) return [];
+      return Array.from(panel.querySelectorAll("tbody tr")).filter((row) => row.querySelector(".lang-check")?.checked);
+    }
+
+    function getSelectedChapterNumbers(button) {
+      return getSelectedExportRows(button).map((row) => Number(row?.children?.[1]?.textContent.trim())).filter(Number.isFinite);
+    }
+
+    function getSelectedChapterRange(button) {
+      const numbers = getSelectedChapterNumbers(button);
+      if (!numbers.length) return null;
+      return {
+        start: String(Math.min(...numbers)),
+        end: String(Math.max(...numbers))
+      };
+    }
+
+    function hasNonContinuousSelectedChapters(button) {
+      const rows = getSelectedExportRows(button);
+      if (button?.dataset.exportScope !== "selected" || rows.length <= 1) return false;
+      const numbers = rows.map((row) => Number(row?.children?.[1]?.textContent.trim()));
+      if (numbers.some((num) => !Number.isFinite(num))) return true;
+      const sorted = numbers.slice().sort((a, b) => a - b);
+      return sorted.some((num, index) => index > 0 && num !== sorted[index - 1] + 1);
+    }
+
+    function getExportChapterLabel(row) {
+      const sequence = row?.children?.[1]?.textContent.trim() || "";
+      if (/^\d+$/.test(sequence)) return `第${Number(sequence)}章`;
+      return row?.children?.[3]?.textContent.trim() || row?.children?.[4]?.textContent.trim() || "当前章节";
+    }
+
+    function makeExportFileContent(row, button) {
+      const lang = button?.dataset.exportLang || (button?.classList.contains("confirm-export-source") ? "中文" : "当前语言");
+      const title = row?.children?.[4]?.textContent.trim() || row?.children?.[3]?.textContent.trim() || "章节内容";
+      return `Drama Verse 书籍翻译原型导出文件\n书籍：摄政王的白月光\n语言：${lang}\n章节：${title}\n`;
+    }
+
+    function downloadLocalExport(button) {
+      const bookName = "摄政王的白月光";
+      const rows = getSelectedExportRows(button);
+      if (rows.length > 1) {
+        const files = rows.map((row) => ({
+          name: `${bookName}_${getExportChapterLabel(row)}.txt`,
+          content: makeExportFileContent(row, button)
+        }));
+        startButtonDownload(button, `${bookName}_已选章节.zip`, "zip 文件已下载至本地", createZipBlob(files));
+        return;
+      }
+      if (rows.length === 1) {
+        const row = rows[0];
+        startButtonDownload(button, `${bookName}_${getExportChapterLabel(row)}.txt`, "txt 文件已下载至本地", makeExportFileContent(row, button));
+        return;
+      }
+      startButtonDownload(button, getExportTxtFilename(button), "txt 文件已下载至本地");
+    }
+
+    function setupExportDropdowns() {
+      document.querySelectorAll(".confirm-export-source, .confirm-export-text").forEach((button) => {
+        button.removeAttribute("title");
+        delete button.dataset.dvTooltip;
+        if (tooltipTarget === button) hideTooltip();
+        if (button.closest(".export-dropdown-wrap")) return;
+        const wrap = document.createElement("span");
+        wrap.className = "export-dropdown-wrap";
+        button.parentNode?.insertBefore(wrap, button);
+        wrap.appendChild(button);
+        const menu = document.createElement("span");
+        menu.className = "export-dropdown-menu";
+        menu.innerHTML = `
+          <button class="export-dropdown-option" type="button" data-export-action="push">推送后台</button>
+          <button class="export-dropdown-option" type="button" data-export-action="download">下载本地</button>
+        `;
+        wrap.appendChild(menu);
+      });
     }
 
     function openTermEditModal(mode) {
@@ -8027,6 +8429,7 @@
         if (!tag) return;
         tag.className = "tag yellow processing";
         tag.textContent = "处理中";
+        decorateFailedStatusTags(row);
         const retryButton = row.querySelector(".task-row-retry");
         if (retryButton) retryButton.disabled = true;
       });
@@ -8082,8 +8485,8 @@
     const initialPanelStatuses = {
       frText: "术语待确认",
       esText: "翻译审校中",
-      ptText: "术语映射中",
-      itText: "术语映射中"
+      ptText: "术语翻译中",
+      itText: "术语翻译中"
     };
     const statusClassMap = {
       "解析中": "tag yellow",
@@ -8092,7 +8495,7 @@
       "原文审校中": "tag purple",
       "审校完成": "tag green",
       "术语提取中": "tag yellow",
-      "术语映射中": "tag yellow",
+      "术语翻译中": "tag yellow",
       "术语待确认": "tag yellow",
       "AI翻译中": "tag yellow",
       "AI翻译完成": "tag green",
@@ -8100,14 +8503,15 @@
       "翻译已审校": "tag green",
       "失败": "tag red"
     };
-    const retranslateDisabledStatuses = new Set(["AI翻译中", "术语映射中", "术语提取中", "术语待确认"]);
-    const processingStatuses = new Set(["解析中", "AI解析中", "术语提取中", "术语映射中", "AI翻译中"]);
+    const retranslateDisabledStatuses = new Set(["AI翻译中", "术语翻译中", "术语提取中", "术语待确认"]);
+    const processingStatuses = new Set(["解析中", "AI解析中", "术语提取中", "术语翻译中", "AI翻译中"]);
 
     function setStatusTag(statusTag, text, className = statusClassMap[text] || "tag yellow") {
       if (!statusTag) return;
       statusTag.className = className;
       if (processingStatuses.has(text)) statusTag.classList.add("processing");
       statusTag.textContent = text;
+      decorateFailedStatusTags(statusTag.closest(".task-status") || statusTag.parentElement || document);
     }
 
     function syncSourceActionButtons(root = document) {
@@ -8191,7 +8595,7 @@
     }
 
     function updateTargetBulkActions(panel) {
-      if (!panel || !panel.querySelector(".language-bulk-bar .confirm-export-text")) return;
+      if (!panel || !panel.querySelector(".language-bulk-bar .confirm-retranslate")) return;
       const selectedRows = Array.from(panel.querySelectorAll("tbody tr")).filter((row) => {
         const checkbox = row.querySelector(".lang-check");
         return checkbox?.checked && row.style.display !== "none";
@@ -8222,7 +8626,7 @@
       const firstTargetTab = document.querySelector('[data-book-panel="frText"]');
       const firstTargetPanel = document.getElementById("frText");
       firstTargetTab?.click();
-      setPanelChapterStatus(firstTargetPanel, "术语映射中", statusClassMap["术语映射中"], { force: true });
+      setPanelChapterStatus(firstTargetPanel, "术语翻译中", statusClassMap["术语翻译中"], { force: true });
       showToast("术语提取任务已提交，已进入首个目标语种");
       window.setTimeout(() => {
         setPanelChapterStatus(firstTargetPanel, "术语待确认", statusClassMap["术语待确认"], { force: true });
@@ -8433,6 +8837,52 @@
       });
     }
 
+    function getStatusCells(root = document) {
+      const cells = [];
+      if (root.matches?.(".task-status")) cells.push(root);
+      root.querySelectorAll?.(".task-status").forEach((cell) => cells.push(cell));
+      return cells;
+    }
+
+    function decorateFailedStatusTags(root = document) {
+      getStatusCells(root).forEach((cell) => {
+        cell.querySelector(".status-help")?.remove();
+        const tag = cell.querySelector(".tag");
+        if (tag?.textContent.trim() !== "失败") return;
+        const row = cell.closest("tr");
+        const reason = row?.dataset.failureReason || cell.dataset.failureReason || "AI翻译服务调用超时，请重试该章节任务；如多次失败请联系技术排查。";
+        const help = document.createElement("span");
+        help.className = "status-help";
+        help.textContent = "?";
+        help.title = reason;
+        cell.appendChild(help);
+        normalizeTooltipElement(help);
+      });
+    }
+
+    function getConfirmedTermRange(button) {
+      const panel = button?.closest(".book-panel");
+      const chapterNums = Array.from(panel?.querySelectorAll("tbody tr") || [])
+        .map((row) => Number(row.children?.[1]?.textContent.trim()))
+        .filter((num) => Number.isFinite(num) && num > 0);
+      const fallbackNums = Array.from(panel?.querySelectorAll("tbody tr") || [])
+        .map((row) => Number(row.children?.[1]?.textContent.trim()))
+        .filter(Number.isFinite);
+      const nums = chapterNums.length ? chapterNums : fallbackNums;
+      if (!nums.length) return "第1至1章";
+      return `第${Math.min(...nums)}至${Math.max(...nums)}章`;
+    }
+
+    function markTermsConfirmedButton(button) {
+      if (!button) return;
+      button.disabled = false;
+      button.setAttribute("aria-disabled", "true");
+      button.classList.remove("primary");
+      button.textContent = "术语已确认";
+      button.title = `${getConfirmedTermRange(button)}术语译法已确认`;
+      normalizeTooltipElement(button);
+    }
+
     function getQaCards(type) {
       return Array.from(document.querySelectorAll("#editor .qa-card")).filter((card) => !type || card.dataset.qaType === type);
     }
@@ -8635,10 +9085,7 @@
         setPanelChapterStatus(panel, initialStatus);
         const confirmButton = panel.querySelector(".confirm-terms-translate");
         if (confirmButton && editableTranslationStatuses.has(initialStatus)) {
-          confirmButton.disabled = true;
-          confirmButton.classList.remove("primary");
-          confirmButton.textContent = "术语已确认";
-          confirmButton.title = "术语已确认";
+          markTermsConfirmedButton(confirmButton);
         }
         panel.querySelectorAll("td.actions").forEach((actionsCell) => {
           if (actionsCell.querySelector(".row-retranslate")) return;
@@ -8656,6 +9103,7 @@
     prepareBookLanguageTabs();
     bindQuickFilters();
     decorateProcessingStatusTags();
+    decorateFailedStatusTags();
     bindQaPanel();
     syncSourceActionButtons(document);
     syncSourceReviewButton();
@@ -8670,8 +9118,23 @@
     document.querySelectorAll(".export-check").forEach((button) => {
       button.addEventListener("click", () => exportModal.classList.add("visible"));
     });
+    setupExportDropdowns();
+    document.addEventListener("click", (event) => {
+      const option = event.target.closest(".export-dropdown-option");
+      if (!option) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const sourceButton = option.closest(".export-dropdown-wrap")?.querySelector(".confirm-export-source, .confirm-export-text");
+      if (!sourceButton || sourceButton.disabled) return;
+      if (option.dataset.exportAction === "push") {
+        openExportPushModal(sourceButton);
+        return;
+      }
+      downloadLocalExport(sourceButton);
+    });
     document.querySelectorAll(".confirm-export-text").forEach((button) => {
       button.addEventListener("click", () => {
+        if (button.closest(".export-dropdown-wrap")) return;
         if (button.disabled) return;
         const lang = button.dataset.exportLang || "当前语种";
         const scope = button.dataset.exportScope || "all";
@@ -8680,21 +9143,22 @@
         currentExportScope = scope;
         exportTextConfirmTitle.textContent = "确认导出译文？";
         exportTextConfirmDesc.textContent = scope === "selected"
-          ? `将导出已选章节的${lang}译文，确认继续导出吗？导出任务提交后，请前往任务中心查看处理进度并下载结果。`
-          : `将导出当前书籍全部章节的${lang}译文，确认继续导出吗？导出任务提交后，请前往任务中心查看处理进度并下载结果。`;
+          ? `将导出已选章节的${lang}译文，确认继续导出吗？导出任务提交后，请前往导出记录查看处理进度并下载结果。`
+          : `将导出当前书籍全部章节的${lang}译文，确认继续导出吗？导出任务提交后，请前往导出记录查看处理进度并下载结果。`;
         exportTextConfirmModal.classList.add("visible");
       });
     });
     document.querySelectorAll(".confirm-export-source").forEach((button) => {
       button.addEventListener("click", () => {
+        if (button.closest(".export-dropdown-wrap")) return;
         const scope = button.dataset.exportScope || "all";
         currentExportLang = "中文";
         currentExportKind = "source";
         currentExportScope = scope;
         exportTextConfirmTitle.textContent = "确认导出原文？";
         exportTextConfirmDesc.textContent = scope === "selected"
-          ? "将导出已选章节的中文原文，确认继续导出吗？导出任务提交后，请前往任务中心查看处理进度并下载结果。"
-          : "将导出当前书籍全部章节的中文原文，确认继续导出吗？导出任务提交后，请前往任务中心查看处理进度并下载结果。";
+          ? "将导出已选章节的中文原文，确认继续导出吗？导出任务提交后，请前往导出记录查看处理进度并下载结果。"
+          : "将导出当前书籍全部章节的中文原文，确认继续导出吗？导出任务提交后，请前往导出记录查看处理进度并下载结果。";
         exportTextConfirmModal.classList.add("visible");
       });
     });
@@ -8736,12 +9200,12 @@
     document.getElementById("confirmExportTextBtn")?.addEventListener("click", () => {
       if (currentExportKind === "source") {
         const scopeLabel = currentExportScope === "selected" ? "已选章节" : "当前书籍全部章节";
-        showToast(`${scopeLabel}中文原文导出任务已提交至任务中心`);
+        showToast(`${scopeLabel}中文原文导出任务已提交至导出记录`);
         showView("taskCenter");
         return;
       }
       const scopeLabel = currentExportScope === "selected" ? "已选章节" : "当前书籍全部章节";
-      showToast(`${scopeLabel}${currentExportLang}译文导出任务已提交至任务中心`);
+      showToast(`${scopeLabel}${currentExportLang}译文导出任务已提交至导出记录`);
       showView("taskCenter");
     });
     document.querySelectorAll(".platform-push, .task-center-push").forEach((button) => {
@@ -8764,7 +9228,7 @@
     });
     document.getElementById("confirmPlatformPushBtn")?.addEventListener("click", () => {
       platformPushModal?.classList.remove("visible");
-      showToast(`${currentExportLang}译文推送任务已提交至任务中心`);
+      showToast(currentExportKind === "source" ? "中文原文推送任务已提交至导出记录" : `${currentExportLang}译文推送任务已提交至导出记录`);
       showView("taskCenter");
     });
     document.getElementById("termReextractBtn")?.addEventListener("click", () => {
@@ -8790,7 +9254,7 @@
     let pendingTermsTranslateButton = null;
     document.querySelectorAll(".confirm-terms-translate").forEach((button) => {
       button.addEventListener("click", () => {
-        if (button.disabled) return;
+        if (button.disabled || button.getAttribute("aria-disabled") === "true") return;
         pendingTermsTranslateButton = button;
         termsTranslateConfirmModal.classList.add("visible");
       });
@@ -8798,16 +9262,174 @@
     document.getElementById("confirmTermsTranslateBtn")?.addEventListener("click", () => {
       const button = pendingTermsTranslateButton;
       if (!button) return;
-      button.disabled = true;
-      button.classList.remove("primary");
-      button.textContent = "术语已确认";
-      button.title = "术语已确认，已开始翻译全部章节";
+      markTermsConfirmedButton(button);
       setPanelChapterStatus(button.closest(".book-panel"), "AI翻译中");
       showToast("术语已确认，翻译任务已提交");
       pendingTermsTranslateButton = null;
     });
 
     let activeEditorParagraphRow = null;
+    let selectedTextRerollRows = [];
+    let activeRerollTextSelection = null;
+    let rerollHighlightSeq = 0;
+    const rerollTextHighlights = [];
+    const selectionRerollPopover = document.createElement("div");
+    selectionRerollPopover.className = "selection-reroll-popover";
+    selectionRerollPopover.innerHTML = '<button class="btn" type="button">重新翻译</button>';
+    document.body.appendChild(selectionRerollPopover);
+
+    function hideSelectionRerollPopover() {
+      selectionRerollPopover.classList.remove("visible");
+      selectedTextRerollRows = [];
+    }
+
+    function rememberRerollTextSelection(textarea) {
+      if (!textarea || textarea.selectionStart === textarea.selectionEnd) return;
+      activeRerollTextSelection = {
+        textarea,
+        start: textarea.selectionStart,
+        end: textarea.selectionEnd
+      };
+    }
+
+    function restoreRerollTextSelection() {
+      const selection = activeRerollTextSelection;
+      if (!selection?.textarea?.isConnected) return;
+      selection.textarea.focus({ preventScroll: true });
+      selection.textarea.setSelectionRange(selection.start, selection.end);
+    }
+
+    function clearRerollTextSelection() {
+      const selection = activeRerollTextSelection;
+      if (selection?.textarea?.isConnected) {
+        const cursor = selection.end;
+        selection.textarea.setSelectionRange(cursor, cursor);
+      }
+      activeRerollTextSelection = null;
+    }
+
+    function getHighlightHost(textarea) {
+      return textarea?.closest?.(".para-cell.source, .paired-editor-stack");
+    }
+
+    function getHighlightLayer(textarea) {
+      const host = getHighlightHost(textarea);
+      if (!host) return null;
+      let layer = host.querySelector(":scope > .reroll-text-highlight-layer");
+      if (!layer) {
+        layer = document.createElement("div");
+        layer.className = "reroll-text-highlight-layer";
+        host.insertBefore(layer, textarea);
+      }
+      return layer;
+    }
+
+    function renderTextareaHighlights(textarea) {
+      if (!textarea?.isConnected) return;
+      const layer = getHighlightLayer(textarea);
+      if (!layer) return;
+      const ranges = rerollTextHighlights
+        .filter((item) => item.textarea === textarea && item.end > item.start)
+        .sort((a, b) => a.start - b.start);
+      if (!ranges.length) {
+        layer.remove();
+        return;
+      }
+      const text = textarea.value || "";
+      let cursor = 0;
+      let html = "";
+      ranges.forEach((range) => {
+        const start = Math.max(cursor, Math.min(text.length, range.start));
+        const end = Math.max(start, Math.min(text.length, range.end));
+        html += escapeHtml(text.slice(cursor, start));
+        html += `<mark>${escapeHtml(text.slice(start, end))}</mark>`;
+        cursor = end;
+      });
+      html += escapeHtml(text.slice(cursor));
+      layer.innerHTML = html || "&nbsp;";
+      layer.scrollTop = textarea.scrollTop || 0;
+    }
+
+    function addRerollTextHighlight(selection) {
+      if (!selection?.textarea?.isConnected || selection.start === selection.end) return "";
+      const id = `reroll-highlight-${rerollHighlightSeq += 1}`;
+      const start = Math.min(selection.start, selection.end);
+      const end = Math.max(selection.start, selection.end);
+      rerollTextHighlights.push({ id, textarea: selection.textarea, start, end });
+      renderTextareaHighlights(selection.textarea);
+      return id;
+    }
+
+    function removeRerollTextHighlight(id) {
+      if (!id) return;
+      const removed = [];
+      for (let index = rerollTextHighlights.length - 1; index >= 0; index -= 1) {
+        if (rerollTextHighlights[index].id === id) {
+          removed.push(rerollTextHighlights[index].textarea);
+          rerollTextHighlights.splice(index, 1);
+        }
+      }
+      removed.forEach(renderTextareaHighlights);
+    }
+
+    function clearRerollTextHighlights() {
+      const textareas = [...new Set(rerollTextHighlights.map((item) => item.textarea))];
+      rerollTextHighlights.length = 0;
+      textareas.forEach(renderTextareaHighlights);
+    }
+
+    function getTextareaSelectedRows(textarea) {
+      if (!textarea || textarea.selectionStart === textarea.selectionEnd) return [];
+      const start = Math.min(textarea.selectionStart, textarea.selectionEnd);
+      const end = Math.max(textarea.selectionStart, textarea.selectionEnd);
+      if (!textarea.value.slice(start, end).trim()) return [];
+      const startLine = textarea.value.slice(0, start).split("\n").length - 1;
+      const endLine = textarea.value.slice(0, end).split("\n").length - 1;
+      const rows = Array.from(document.querySelectorAll("#editorShell .paragraph-row"));
+      return rows.slice(startLine, endLine + 1).filter((row) => row && row.style.display !== "none");
+    }
+
+    function showSelectionRerollPopover(event) {
+      const textarea = document.activeElement?.closest?.("#pairedReader .paired-editor-text, #editorShell .para-cell textarea");
+      const rows = textarea?.classList.contains("paired-editor-text")
+        ? getTextareaSelectedRows(textarea)
+        : [textarea?.closest("#editorShell .paragraph-row")].filter(Boolean);
+      const hasSelection = textarea && textarea.selectionStart !== textarea.selectionEnd && textarea.value.slice(textarea.selectionStart, textarea.selectionEnd).trim();
+      if (!hasSelection || !rows.length) {
+        hideSelectionRerollPopover();
+        return;
+      }
+      rememberRerollTextSelection(textarea);
+      selectedTextRerollRows = rows;
+      const rect = textarea.getBoundingClientRect();
+      const left = Math.min(window.innerWidth - 120, Math.max(12, event?.clientX || rect.left + 80));
+      const top = Math.max(12, (event?.clientY || rect.top + 24) - 46);
+      selectionRerollPopover.style.left = `${left}px`;
+      selectionRerollPopover.style.top = `${top}px`;
+      selectionRerollPopover.classList.add("visible");
+    }
+
+    function submitTextSelectionReroll() {
+      const rows = selectedTextRerollRows.filter((row) => row?.isConnected && row.style.display !== "none");
+      if (!rows.length) return;
+      const highlightId = addRerollTextHighlight(activeRerollTextSelection);
+      document.querySelectorAll("#editorShell .paragraph-reselect").forEach((input) => { input.checked = false; });
+      rows.forEach((row) => {
+        const input = row.querySelector(".paragraph-reselect");
+        if (input) input.checked = true;
+        row.classList.add("reroll-selected");
+        createRerollCandidate(row, 0, true, highlightId);
+        window.setTimeout(() => row.classList.remove("reroll-selected"), 0);
+      });
+      syncParagraphRerollSelection();
+      setRerollSelectionLocked(true);
+      hideSelectionRerollPopover();
+      window.setTimeout(restoreRerollTextSelection, 0);
+      showToast(`已提交 ${rows.length} 段重新翻译，章节状态保持不变`);
+    }
+
+    selectionRerollPopover.addEventListener("mousedown", (event) => event.preventDefault());
+    selectionRerollPopover.addEventListener("click", submitTextSelectionReroll);
 
     function rememberActiveEditorParagraph(target) {
       const pairedSegment = target?.closest?.("#pairedReader .paired-segment");
@@ -8964,7 +9586,7 @@
       const block = document.createElement("div");
       block.className = "paired-text-editor";
       block.dataset.pairedEditorSide = side;
-      block.innerHTML = `<div class="paired-line-gutter">${renderFixedLineNumbers(lines.length, side)}</div><textarea class="paired-editor-text" data-editor-side="${side}" spellcheck="false"></textarea><div class="paired-candidate-host" aria-live="polite"></div>`;
+      block.innerHTML = `<div class="paired-line-gutter">${renderFixedLineNumbers(lines.length, side)}</div><div class="paired-editor-stack"><textarea class="paired-editor-text" data-editor-side="${side}" spellcheck="false"></textarea></div><div class="paired-candidate-host" aria-live="polite"></div>`;
       const gutter = block.querySelector(".paired-line-gutter");
       if (gutter) gutter.dataset.lineCount = String(Math.max(1, lines.length));
       const textarea = block.querySelector("textarea");
@@ -8972,6 +9594,7 @@
       textarea.addEventListener("input", () => {
         syncPairedTextareaHeight(textarea);
         syncHiddenRowsFromPairedEditor(textarea);
+        renderTextareaHighlights(textarea);
         syncPairedLineNumbers();
         markSaving(document.querySelector("#editor .save-status"));
       });
@@ -9072,8 +9695,22 @@
       if (countEl) countEl.textContent = `${count} 条`;
     }
 
+    function markRerollResultPending(row, pending) {
+      if (!row) return;
+      const rowIndex = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
+      row.classList.toggle("reroll-result-pending", Boolean(pending));
+      document.querySelector(`#pairedReader .paired-column.source .paired-line-item[data-pair-index="${rowIndex}"]`)?.classList.toggle("reroll-result-pending", Boolean(pending));
+      document.querySelector(`#pairedReader .paired-segment.source[data-pair-index="${rowIndex}"]`)?.classList.toggle("reroll-result-pending", Boolean(pending));
+    }
+
+    function clearRerollResultPending() {
+      document.querySelectorAll("#editorShell .reroll-result-pending").forEach((item) => item.classList.remove("reroll-result-pending"));
+    }
+
     function clearRerollCandidates() {
       document.querySelectorAll("#editorShell .reroll-candidate").forEach((card) => card.remove());
+      clearRerollResultPending();
+      clearRerollTextHighlights();
       updateRerollResultCount();
     }
 
@@ -9101,6 +9738,8 @@
     function closeParagraphRerollMode() {
       document.getElementById("editorShell")?.classList.remove("reroll-mode");
       setRerollSelectionLocked(false);
+      hideSelectionRerollPopover();
+      clearRerollTextSelection();
       document.querySelectorAll("#editorShell .paragraph-reselect").forEach((input) => { input.checked = false; });
       document.querySelectorAll("#editorShell .paragraph-row").forEach((row) => row.classList.remove("reroll-selected"));
       clearRerollCandidates();
@@ -9186,7 +9825,7 @@
       `;
     }
 
-    function createRerollCandidate(row, variant = 0, loading = false) {
+    function createRerollCandidate(row, variant = 0, loading = false, highlightId = "") {
       const rowIndex = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
       const pairedSource = document.querySelector(`#pairedReader .paired-segment.source[data-pair-index="${rowIndex}"]`);
       const pairedTextHost = document.querySelector("#pairedReader [data-paired-source] .paired-candidate-host");
@@ -9203,8 +9842,10 @@
       if (source.id === "rerollResultList") card.classList.add("reroll-side-candidate");
       card.dataset.variant = String(variant);
       card.dataset.pairIndex = String(rowIndex);
+      if (highlightId) card.dataset.highlightId = highlightId;
       renderRerollCandidateContent(card, row, variant, loading);
       source.appendChild(card);
+      markRerollResultPending(row, true);
       updateRerollResultCount();
       setAssistPanelExpanded();
       if (loading) {
@@ -9248,6 +9889,8 @@
       if (pairedTarget) row?.querySelector(".reroll-candidate")?.remove();
       else document.querySelector(`#pairedReader .paired-segment.target[data-pair-index="${rowIndex}"] .reroll-candidate`)?.remove();
       card.remove();
+      removeRerollTextHighlight(card.dataset.highlightId);
+      markRerollResultPending(row, false);
       updateRerollResultCount();
       syncParagraphRerollSelection();
       if (!document.querySelector("#editorShell .reroll-candidate")) closeParagraphRerollMode();
@@ -9320,7 +9963,16 @@
     });
     document.getElementById("editorShell")?.addEventListener("pointerdown", (event) => {
       rememberActiveEditorParagraph(event.target);
+      if (!event.target.closest(".selection-reroll-popover")) hideSelectionRerollPopover();
     }, true);
+    document.getElementById("editorShell")?.addEventListener("mouseup", (event) => {
+      window.setTimeout(() => showSelectionRerollPopover(event), 0);
+    });
+    document.getElementById("editorShell")?.addEventListener("keyup", (event) => {
+      if (event.key === "Shift" || event.shiftKey || ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
+        showSelectionRerollPopover(event);
+      }
+    });
     document.getElementById("editorShell")?.addEventListener("mouseover", (event) => {
       syncPairedCounterpartHighlight(event.target);
     });
@@ -9332,6 +9984,9 @@
       rememberActiveEditorParagraph(event.target);
       syncPairedCounterpartHighlight(event.target);
     });
+    document.getElementById("editorShell")?.addEventListener("mousedown", (event) => {
+      if (event.target.closest(".reroll-candidate")) event.preventDefault();
+    });
     document.addEventListener("selectionchange", () => {
       rememberActiveEditorParagraph(document.activeElement);
     });
@@ -9342,11 +9997,16 @@
       const card = event.target.closest(".reroll-candidate");
       if (!card) return;
       if (copy) {
+        const row = getRerollCardRow(card);
         const text = card.querySelector(".reroll-candidate-text")?.textContent?.trim() || "";
         if (!text) return;
         if (navigator.clipboard?.writeText) {
           navigator.clipboard.writeText(text)
-            .then(() => showToast("复制成功"))
+            .then(() => {
+              removeRerollTextHighlight(card.dataset.highlightId);
+              markRerollResultPending(row, false);
+              showToast("复制成功");
+            })
             .catch(() => showToast("复制失败，请手动复制"));
         } else {
           const textarea = document.createElement("textarea");
@@ -9357,11 +10017,17 @@
           textarea.select();
           const copied = document.execCommand("copy");
           textarea.remove();
+          if (copied) {
+            removeRerollTextHighlight(card.dataset.highlightId);
+            markRerollResultPending(row, false);
+          }
           showToast(copied ? "复制成功" : "复制失败，请手动复制");
         }
+        window.setTimeout(restoreRerollTextSelection, 0);
       } else if (refresh) {
         refreshRerollCandidate(card);
         showToast("已换一个候选译文");
+        window.setTimeout(restoreRerollTextSelection, 0);
       } else if (cancel) {
         const row = getRerollCardRow(card);
         row?.querySelector(".paragraph-reselect") && (row.querySelector(".paragraph-reselect").checked = false);
@@ -9376,10 +10042,13 @@
         pairedLine?.classList.remove("is-reroll-selected");
         const pairedLineCheck = pairedLine?.querySelector(".paired-line-check");
         if (pairedLineCheck) pairedLineCheck.checked = false;
+        removeRerollTextHighlight(card.dataset.highlightId);
+        markRerollResultPending(row, false);
         card.remove();
         updateRerollResultCount();
         syncParagraphRerollSelection();
         if (!document.querySelector("#editorShell .reroll-candidate")) closeParagraphRerollMode();
+        else window.setTimeout(restoreRerollTextSelection, 0);
       } else {
         focusRerollResultRow(getRerollCardRow(card));
       }
@@ -9393,7 +10062,10 @@
       showToast(advanced ? "审校状态已更新为翻译已审校，已自动进入下一章节" : "审校状态已更新为翻译已审校，当前已是最后一章");
     });
     document.getElementById("editorExportBtn")?.addEventListener("click", (event) => {
-      startButtonDownload(event.currentTarget, "002_旧梦_法语译文.docx", "章节译文已开始下载");
+      startButtonDownload(event.currentTarget, getActiveChapterExportFilename("#editorShell"), "章节 txt 文件已下载至本地");
+    });
+    document.getElementById("sourceEditorExportBtn")?.addEventListener("click", (event) => {
+      startButtonDownload(event.currentTarget, getActiveChapterExportFilename("#sourceEditorShell"), "章节 txt 文件已下载至本地");
     });
     document.querySelectorAll(".confirm-retranslate").forEach((button) => {
       button.addEventListener("click", () => {
