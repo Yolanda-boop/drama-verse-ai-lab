@@ -2053,8 +2053,62 @@
       backdrop-filter: blur(16px);
     }
 
+    .selection-reroll-popover.is-instruction {
+      width: 292px;
+      align-items: stretch;
+      flex-direction: column;
+      padding: 10px;
+    }
+
     .selection-reroll-popover.visible {
       display: inline-flex;
+    }
+
+    .selection-reroll-form {
+      display: none;
+      gap: 8px;
+    }
+
+    .selection-reroll-popover.is-instruction .selection-reroll-start {
+      display: none;
+    }
+
+    .selection-reroll-popover.is-instruction .selection-reroll-form {
+      display: grid;
+    }
+
+    .selection-reroll-form label {
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .selection-reroll-form textarea {
+      width: 100%;
+      min-height: 72px;
+      max-height: 120px;
+      padding: 8px 9px;
+      border: 1px solid rgba(139, 115, 255, 0.28);
+      border-radius: 6px;
+      outline: 0;
+      resize: vertical;
+      color: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.055);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .selection-reroll-form textarea:focus {
+      border-color: rgba(139, 115, 255, 0.62);
+      box-shadow: 0 0 0 2px rgba(139, 115, 255, 0.14);
+    }
+
+    .selection-reroll-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
     }
 
     .selection-reroll-popover .btn {
@@ -2862,12 +2916,39 @@
     }
 
     .book-meta-instruction.instruction-visible {
-      display: block;
+      display: grid;
+      gap: 9px;
+      padding: 10px 12px 12px;
+      border: 1px solid rgba(124, 90, 243, 0.2);
+      border-radius: 8px;
+      background: rgba(98, 36, 255, 0.06);
+    }
+
+    .book-meta-instruction label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .book-meta-instruction label .sub {
+      color: rgba(255, 255, 255, 0.38);
+      font-weight: 500;
     }
 
     .book-meta-instruction .actions {
       justify-content: flex-end;
-      margin-top: 10px;
+      gap: 8px;
+      margin-top: 0;
+    }
+
+    .book-meta-instruction .textarea {
+      min-height: 82px;
+      background: rgba(255, 255, 255, 0.045);
     }
 
     .book-meta-candidate {
@@ -6869,10 +6950,10 @@
           <div id="bookMetaCharCount" class="book-meta-char-count">0 字符</div>
         </div>
         <div class="field wide book-meta-instruction">
-          <label>自定义指令（非必填）</label>
+          <label><span>重翻指令（选填）</span></label>
           <textarea id="bookMetaInstruction" class="textarea" rows="3" placeholder="如：更口语化、保持古风感、缩短简介长度"></textarea>
           <div class="actions">
-            <button class="btn text" id="bookMetaRerollCancel" type="button">取消</button>
+            <button class="btn text" id="bookMetaRerollCancel" type="button">收起重翻</button>
             <button class="btn primary" id="bookMetaRerollConfirm" type="button">确认重翻</button>
           </div>
         </div>
@@ -6887,7 +6968,7 @@
           <strong>候选译文</strong>
           <p></p>
           <div class="actions">
-            <button class="btn text" id="bookMetaCandidateCancel" type="button">取消</button>
+            <button class="btn text" id="bookMetaCandidateCancel" type="button">关闭候选</button>
             <button class="btn text" id="bookMetaCandidateRefresh" type="button">换一个</button>
             <button class="btn book-meta-apply" id="bookMetaCandidateApply" type="button">采用</button>
           </div>
@@ -9275,11 +9356,23 @@
     const rerollTextHighlights = [];
     const selectionRerollPopover = document.createElement("div");
     selectionRerollPopover.className = "selection-reroll-popover";
-    selectionRerollPopover.innerHTML = '<button class="btn" type="button">重新翻译</button>';
+    selectionRerollPopover.innerHTML = `
+      <button class="btn selection-reroll-start" type="button">重新翻译</button>
+      <div class="selection-reroll-form">
+        <label><span>自定义指令（选填）</span><span>最多 200 字</span></label>
+        <textarea class="selection-reroll-instruction" maxlength="200" placeholder="如：语气更自然、保留人物称谓、减少直译"></textarea>
+        <div class="selection-reroll-actions">
+          <button class="btn selection-reroll-cancel" type="button">取消</button>
+          <button class="btn primary selection-reroll-confirm" type="button">确认重翻</button>
+        </div>
+      </div>
+    `;
     document.body.appendChild(selectionRerollPopover);
 
     function hideSelectionRerollPopover() {
       selectionRerollPopover.classList.remove("visible");
+      selectionRerollPopover.classList.remove("is-instruction");
+      selectionRerollPopover.querySelector(".selection-reroll-instruction").value = "";
       selectedTextRerollRows = [];
     }
 
@@ -9389,6 +9482,20 @@
       return rows.slice(startLine, endLine + 1).filter((row) => row && row.style.display !== "none");
     }
 
+    function getRerollRowIndex(row) {
+      return Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
+    }
+
+    function getRerollRowsLabel(rows = []) {
+      const indexes = rows
+        .map((row) => Number(row.querySelector(".para-index")?.textContent.trim()))
+        .filter(Number.isFinite);
+      if (!indexes.length) return "选中文本";
+      const min = Math.min(...indexes);
+      const max = Math.max(...indexes);
+      return min === max ? `第 ${min} 段` : `第 ${min}-${max} 段`;
+    }
+
     function showSelectionRerollPopover(event) {
       const textarea = document.activeElement?.closest?.("#pairedReader .paired-editor-text, #editorShell .para-cell textarea");
       const rows = textarea?.classList.contains("paired-editor-text")
@@ -9404,12 +9511,24 @@
       const rect = textarea.getBoundingClientRect();
       const left = Math.min(window.innerWidth - 120, Math.max(12, event?.clientX || rect.left + 80));
       const top = Math.max(12, (event?.clientY || rect.top + 24) - 46);
+      selectionRerollPopover.classList.remove("is-instruction");
+      selectionRerollPopover.querySelector(".selection-reroll-instruction").value = "";
       selectionRerollPopover.style.left = `${left}px`;
       selectionRerollPopover.style.top = `${top}px`;
       selectionRerollPopover.classList.add("visible");
     }
 
-    function submitTextSelectionReroll() {
+    function showSelectionRerollInstructionStep() {
+      if (!selectedTextRerollRows.length) return;
+      const currentLeft = parseFloat(selectionRerollPopover.style.left) || 12;
+      const currentTop = parseFloat(selectionRerollPopover.style.top) || 12;
+      selectionRerollPopover.classList.add("is-instruction");
+      selectionRerollPopover.style.left = `${Math.max(12, Math.min(window.innerWidth - 320, currentLeft - 84))}px`;
+      selectionRerollPopover.style.top = `${Math.max(12, Math.min(window.innerHeight - 180, currentTop - 8))}px`;
+      window.setTimeout(() => selectionRerollPopover.querySelector(".selection-reroll-instruction")?.focus(), 0);
+    }
+
+    function submitTextSelectionReroll(instruction = "") {
       const rows = selectedTextRerollRows.filter((row) => row?.isConnected && row.style.display !== "none");
       if (!rows.length) return;
       const highlightId = addRerollTextHighlight(activeRerollTextSelection);
@@ -9418,18 +9537,38 @@
         const input = row.querySelector(".paragraph-reselect");
         if (input) input.checked = true;
         row.classList.add("reroll-selected");
-        createRerollCandidate(row, 0, true, highlightId);
         window.setTimeout(() => row.classList.remove("reroll-selected"), 0);
+      });
+      createRerollCandidate(rows[0], 0, true, highlightId, instruction, {
+        label: `${getRerollRowsLabel(rows)} | 新译文`,
+        loadingLabel: `${getRerollRowsLabel(rows)}生成中`,
+        relatedRows: rows
       });
       syncParagraphRerollSelection();
       setRerollSelectionLocked(true);
       hideSelectionRerollPopover();
       window.setTimeout(restoreRerollTextSelection, 0);
-      showToast(`已提交 ${rows.length} 段重新翻译，章节状态保持不变`);
+      showToast(instruction ? `已按自定义指令提交 ${rows.length} 段重新翻译` : `已提交 ${rows.length} 段重新翻译，章节状态保持不变`);
     }
 
-    selectionRerollPopover.addEventListener("mousedown", (event) => event.preventDefault());
-    selectionRerollPopover.addEventListener("click", submitTextSelectionReroll);
+    selectionRerollPopover.addEventListener("mousedown", (event) => {
+      if (!event.target.closest("textarea")) event.preventDefault();
+    });
+    selectionRerollPopover.addEventListener("click", (event) => {
+      if (event.target.closest(".selection-reroll-start")) {
+        showSelectionRerollInstructionStep();
+        return;
+      }
+      if (event.target.closest(".selection-reroll-cancel")) {
+        hideSelectionRerollPopover();
+        window.setTimeout(restoreRerollTextSelection, 0);
+        return;
+      }
+      if (event.target.closest(".selection-reroll-confirm")) {
+        const instruction = selectionRerollPopover.querySelector(".selection-reroll-instruction")?.value.trim() || "";
+        submitTextSelectionReroll(instruction);
+      }
+    });
 
     function rememberActiveEditorParagraph(target) {
       const pairedSegment = target?.closest?.("#pairedReader .paired-segment");
@@ -9782,6 +9921,21 @@
       return document.querySelectorAll("#editorShell .paragraph-row")[index] || null;
     }
 
+    function getRerollCardRows(card) {
+      const rows = Array.from(document.querySelectorAll("#editorShell .paragraph-row"));
+      const related = (card?.dataset.relatedPairIndexes || "")
+        .split(",")
+        .map((value) => Number(value))
+        .filter((index) => Number.isFinite(index) && rows[index])
+        .map((index) => rows[index]);
+      if (related.length) return related;
+      return [getRerollCardRow(card)].filter(Boolean);
+    }
+
+    function clearRerollCardPending(card) {
+      getRerollCardRows(card).forEach((row) => markRerollResultPending(row, false));
+    }
+
     function updatePairedEditorLine(side, rowIndex, text) {
       const textarea = document.querySelector(`#pairedReader .paired-editor-text[data-editor-side="${side}"]`);
       if (!textarea || rowIndex < 0) return;
@@ -9794,11 +9948,13 @@
 
     function renderRerollCandidateContent(card, row, variant = 0, loading = false) {
       const paraIndex = row?.querySelector(".para-index")?.textContent.trim() || "";
+      const label = card.dataset.label || (paraIndex ? `第 ${Number(paraIndex)} 段 | 新译文` : "新译文");
+      const loadingLabel = card.dataset.loadingLabel || (paraIndex ? `第 ${Number(paraIndex)} 段生成中` : "新译文生成中");
       if (loading) {
         card.classList.add("is-loading");
         card.innerHTML = `
           <div class="reroll-candidate-head">
-            <span>${escapeHtml(paraIndex ? `第 ${Number(paraIndex)} 段生成中` : "新译文生成中")}</span>
+            <span>${escapeHtml(loadingLabel)}</span>
             <span class="tag purple">生成中</span>
           </div>
           <div class="reroll-skeleton" aria-label="候选译文生成中">
@@ -9810,13 +9966,15 @@
         return;
       }
       card.classList.remove("is-loading");
+      const instruction = card.dataset.instruction || "";
       card.innerHTML = `
         <div class="reroll-candidate-head">
-          <span>${escapeHtml(paraIndex ? `第 ${Number(paraIndex)} 段 | 新译文` : "新译文")}</span>
+          <span>${escapeHtml(label)}</span>
           <button class="reroll-candidate-close reroll-cancel-one" type="button" aria-label="关闭候选译文">×</button>
         </div>
         <p class="reroll-candidate-text">${escapeHtml(makeCandidateText(row, variant))}</p>
         <p class="reroll-candidate-reason"><strong>建议原因：</strong>${escapeHtml(makeCandidateReason(row, variant))}</p>
+        ${instruction ? `<p class="reroll-candidate-reason"><strong>自定义指令：</strong>${escapeHtml(instruction)}</p>` : ""}
         <div class="reroll-candidate-actions">
           <button class="btn reroll-cancel-one" type="button">取消</button>
           <button class="btn reroll-refresh-one" type="button">换一个</button>
@@ -9825,8 +9983,8 @@
       `;
     }
 
-    function createRerollCandidate(row, variant = 0, loading = false, highlightId = "") {
-      const rowIndex = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
+    function createRerollCandidate(row, variant = 0, loading = false, highlightId = "", instruction = "", options = {}) {
+      const rowIndex = getRerollRowIndex(row);
       const pairedSource = document.querySelector(`#pairedReader .paired-segment.source[data-pair-index="${rowIndex}"]`);
       const pairedTextHost = document.querySelector("#pairedReader [data-paired-source] .paired-candidate-host");
       const resultHost = document.getElementById("rerollResultList");
@@ -9843,9 +10001,16 @@
       card.dataset.variant = String(variant);
       card.dataset.pairIndex = String(rowIndex);
       if (highlightId) card.dataset.highlightId = highlightId;
+      if (instruction) card.dataset.instruction = instruction;
+      if (options.label) card.dataset.label = options.label;
+      if (options.loadingLabel) card.dataset.loadingLabel = options.loadingLabel;
+      const relatedIndexes = (options.relatedRows || [row])
+        .map(getRerollRowIndex)
+        .filter((index) => index >= 0);
+      card.dataset.relatedPairIndexes = [...new Set(relatedIndexes)].join(",");
       renderRerollCandidateContent(card, row, variant, loading);
       source.appendChild(card);
-      markRerollResultPending(row, true);
+      getRerollCardRows(card).forEach((item) => markRerollResultPending(item, true));
       updateRerollResultCount();
       setAssistPanelExpanded();
       if (loading) {
@@ -9890,7 +10055,7 @@
       else document.querySelector(`#pairedReader .paired-segment.target[data-pair-index="${rowIndex}"] .reroll-candidate`)?.remove();
       card.remove();
       removeRerollTextHighlight(card.dataset.highlightId);
-      markRerollResultPending(row, false);
+      clearRerollCardPending(card);
       updateRerollResultCount();
       syncParagraphRerollSelection();
       if (!document.querySelector("#editorShell .reroll-candidate")) closeParagraphRerollMode();
@@ -10004,7 +10169,7 @@
           navigator.clipboard.writeText(text)
             .then(() => {
               removeRerollTextHighlight(card.dataset.highlightId);
-              markRerollResultPending(row, false);
+              clearRerollCardPending(card);
               showToast("复制成功");
             })
             .catch(() => showToast("复制失败，请手动复制"));
@@ -10019,7 +10184,7 @@
           textarea.remove();
           if (copied) {
             removeRerollTextHighlight(card.dataset.highlightId);
-            markRerollResultPending(row, false);
+            clearRerollCardPending(card);
           }
           showToast(copied ? "复制成功" : "复制失败，请手动复制");
         }
@@ -10030,8 +10195,10 @@
         window.setTimeout(restoreRerollTextSelection, 0);
       } else if (cancel) {
         const row = getRerollCardRow(card);
-        row?.querySelector(".paragraph-reselect") && (row.querySelector(".paragraph-reselect").checked = false);
-        row?.classList.remove("reroll-selected");
+        getRerollCardRows(card).forEach((item) => {
+          item.querySelector(".paragraph-reselect") && (item.querySelector(".paragraph-reselect").checked = false);
+          item.classList.remove("reroll-selected");
+        });
         const rowIndex = Array.from(document.querySelectorAll("#editorShell .paragraph-row")).indexOf(row);
         if (card.closest(".paired-segment")) row?.querySelector(".reroll-candidate")?.remove();
         else document.querySelector(`#pairedReader .paired-segment.target[data-pair-index="${rowIndex}"] .reroll-candidate`)?.remove();
@@ -10043,7 +10210,7 @@
         const pairedLineCheck = pairedLine?.querySelector(".paired-line-check");
         if (pairedLineCheck) pairedLineCheck.checked = false;
         removeRerollTextHighlight(card.dataset.highlightId);
-        markRerollResultPending(row, false);
+        clearRerollCardPending(card);
         card.remove();
         updateRerollResultCount();
         syncParagraphRerollSelection();
