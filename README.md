@@ -7,6 +7,7 @@ Private workspace for Drama Verse demos and internal prototypes.
 - `Demo/ai-subtitle-qc-2/`: AI subtitle QC 2.0 editor interaction prototype.
 - `Demo/book-translation-v0-1/`: Book translation v0.1 project, term mapping, source/translation editor prototype.
 - `Demo/external-admin-role-online-increment/`: External admin role and export workflow incremental prototype.
+- `Demo/audio-tag-collection-prototype/`: Audio tag collection and cross-drama reuse interaction prototype.
 
 ## Secure sharing recommendation
 

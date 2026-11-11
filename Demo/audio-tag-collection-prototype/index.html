@@ -1,0 +1,2079 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>自定义 audio tag 收藏与跨剧复用 - 交互原型</title>
+  <style>
+    :root {
+      --bg: #141414;
+      --panel: #1f1f1f;
+      --panel-2: #242424;
+      --elevated: #252525;
+      --elevated-2: #2a2a2a;
+      --border: rgba(255, 255, 255, 0.12);
+      --border-strong: rgba(255, 255, 255, 0.18);
+      --text: #f2f2f2;
+      --text-2: #d4d4d8;
+      --text-3: #a1a1aa;
+      --text-4: #73737c;
+      --purple: #7c3aed;
+      --purple-2: #5b21b6;
+      --purple-soft: rgba(124, 58, 237, 0.18);
+      --yellow: #facc15;
+      --green: #22c55e;
+      --red: #ef4444;
+      --blue: #38bdf8;
+      --radius: 6px;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 52px 1fr;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), transparent 160px),
+        var(--bg);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--border);
+      background: #181818;
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 650;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .brand-subtitle {
+      color: var(--text-3);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .toolbar-action {
+      height: 34px;
+      border: 0;
+      background: transparent;
+      color: var(--text-2);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 2px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .toolbar-action:hover {
+      color: #fff;
+    }
+
+    .toolbar-action .icon {
+      color: var(--text-3);
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .export-btn {
+      height: 36px;
+      border: 1px solid var(--purple);
+      border-radius: 6px;
+      background: var(--purple);
+      color: #fff;
+      padding: 0 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 650;
+    }
+
+    .export-btn:hover {
+      background: #8b5cf6;
+    }
+
+    .user-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text);
+      white-space: nowrap;
+      font-weight: 650;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .role-badge {
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(124,58,237,0.76);
+      border-radius: 999px;
+      padding: 0 9px;
+      color: #d8b4fe;
+      background: rgba(124,58,237,0.12);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .btn {
+      height: 30px;
+      border-radius: 5px;
+      border: 1px solid var(--border-strong);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-2);
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      border-color: rgba(124, 58, 237, 0.55);
+      background: rgba(124, 58, 237, 0.14);
+      color: #fff;
+    }
+
+    .btn.primary {
+      border-color: var(--purple);
+      background: var(--purple);
+      color: #fff;
+    }
+
+    .btn.primary:hover {
+      background: #8b5cf6;
+    }
+
+    .btn.text {
+      border-color: transparent;
+      background: transparent;
+      color: var(--text-3);
+      padding: 0 8px;
+    }
+
+    .btn.icon {
+      width: 30px;
+      padding: 0;
+      font-size: 15px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 30vw) minmax(720px, 1fr);
+      min-height: 0;
+    }
+
+    .video-pane {
+      display: grid;
+      grid-template-rows: 1fr;
+      border-right: 1px solid var(--border);
+      background: #101010;
+      min-width: 0;
+    }
+
+    .video-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      background:
+        radial-gradient(circle at 45% 34%, rgba(255,255,255,0.06), transparent 28%),
+        linear-gradient(135deg, #171717, #0b0b0b);
+    }
+
+    .video-box {
+      width: min(86%, 420px);
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.08);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), transparent),
+        #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-4);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    .video-caption {
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      bottom: 18%;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 650;
+      text-shadow: 0 2px 10px #000;
+    }
+
+    .asset-panel {
+      border-top: 1px solid var(--border);
+      padding: 14px 16px;
+      background: #151515;
+    }
+
+    .asset-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .asset-panel-title {
+      color: var(--text-2);
+      font-weight: 650;
+    }
+
+    .asset-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag-chip {
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 5px;
+      padding: 0 9px;
+      background: rgba(255,255,255,0.05);
+      color: var(--text-2);
+      max-width: 220px;
+    }
+
+    .tag-chip .en {
+      color: var(--text-3);
+    }
+
+    .tag-chip.favorite {
+      border-color: rgba(250, 204, 21, 0.35);
+      background: rgba(250, 204, 21, 0.08);
+    }
+
+    .editor-pane {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-width: 0;
+      background: var(--panel);
+    }
+
+    .editor-toolbar {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--border);
+      background: #191919;
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 26px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      padding: 0 8px;
+      color: var(--text-3);
+      background: rgba(255,255,255,0.04);
+      white-space: nowrap;
+    }
+
+    .subtitles {
+      overflow: auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .subtitle-row {
+      display: grid;
+      grid-template-columns: 40px 84px 36px 126px minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      gap: 7px 10px;
+      align-items: stretch;
+      min-height: 82px;
+      padding: 10px 0 14px;
+      border-radius: 0;
+      border: 1px solid transparent;
+      border-bottom-color: rgba(255,255,255,0.05);
+      background: transparent;
+      position: relative;
+    }
+
+    .subtitle-row.active {
+      border-left-color: var(--purple);
+      background: rgba(255,255,255,0.015);
+      box-shadow: inset 3px 0 0 var(--purple);
+    }
+
+    .row-index {
+      color: var(--text-4);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 4px;
+      line-height: 1;
+    }
+
+    .speaker {
+      color: #fff;
+      font-weight: 650;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .speaker-badge {
+      height: 24px;
+      max-width: 84px;
+      padding: 0 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #2563eb;
+      color: #fff;
+      font-size: 12px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .audio-cell {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 4px;
+      color: var(--text-3);
+    }
+
+    .time-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      color: var(--text-3);
+      font-size: 12px;
+      font-weight: 650;
+      padding-top: 1px;
+      white-space: nowrap;
+    }
+
+    .subtitle-cell {
+      border: 0;
+      border-radius: 5px;
+      padding: 10px;
+      color: var(--text-2);
+      background: transparent;
+      line-height: 1.6;
+      min-width: 0;
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .subtitle-cell.target {
+      background: #2a2a2a;
+      align-self: end;
+      min-height: 42px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .subtitle-cell .muted {
+      color: var(--text-4);
+      display: block;
+      margin-top: 6px;
+      font-size: 12px;
+    }
+
+    .row-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 34px;
+      margin: 0 0 3px 144px;
+      padding: 0 8px 0 12px;
+      border-radius: 6px;
+      background: rgba(128,128,128,0.2);
+    }
+
+    .row-actions-left,
+    .row-actions-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .action-link {
+      border: 0;
+      background: transparent;
+      color: var(--text-2);
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 4px;
+      font-weight: 650;
+    }
+
+    .action-link.active,
+    .action-link:hover {
+      color: #a78bfa;
+    }
+
+    .panel-pop {
+      position: relative;
+      grid-column: 1 / -1;
+      right: auto;
+      top: auto;
+      width: auto;
+      margin: 0 0 8px 144px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--elevated);
+      box-shadow: none;
+      z-index: 5;
+      display: none;
+      overflow: hidden;
+    }
+
+    .panel-pop.open {
+      display: block;
+    }
+
+    .emotion-panel {
+      padding: 22px 24px 20px;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr) minmax(280px, 1fr) minmax(300px, 1fr);
+      gap: 22px 28px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 74px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .field label {
+      color: var(--text-3);
+      white-space: nowrap;
+    }
+
+    .select-shell {
+      height: 32px;
+      border: 1px solid var(--border-strong);
+      border-radius: 5px;
+      background: #181818;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 9px;
+      min-width: 0;
+    }
+
+    .select-shell.focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 2px rgba(124,58,237,0.18);
+    }
+
+    .select-label {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .select-label .en {
+      color: var(--text-3);
+    }
+
+    .caret {
+      color: var(--text-4);
+      flex: none;
+    }
+
+    .dropdown {
+      position: fixed;
+      width: 350px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: #232323;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+      overflow: hidden;
+      z-index: 12;
+      display: none;
+    }
+
+    .dropdown.open { display: block; }
+
+    .dropdown.wide { width: 420px; }
+
+    .search-row {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .search {
+      height: 36px;
+      width: 100%;
+      border: 1px solid var(--purple);
+      border-radius: 5px;
+      background: #101010;
+      color: var(--text);
+      padding: 0 10px 0 34px;
+      outline: none;
+      background-image: linear-gradient(transparent, transparent);
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-4);
+    }
+
+    .menu-list {
+      max-height: 260px;
+      overflow: auto;
+      padding: 4px;
+    }
+
+    .menu-list::-webkit-scrollbar,
+    .subtitles::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    .menu-list::-webkit-scrollbar-thumb,
+    .subtitles::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .menu-section {
+      padding: 8px 10px 4px;
+      color: var(--text-4);
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .menu-section:first-child {
+      border-top: 0;
+    }
+
+    .menu-option {
+      min-height: 34px;
+      border-radius: 4px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--text-2);
+    }
+
+    .menu-option:hover {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .menu-option.selected {
+      background: rgba(124, 58, 237, 0.38);
+      color: #fff;
+      font-weight: 650;
+    }
+
+    .menu-option .left {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .menu-option .en {
+      color: var(--text-3);
+      font-weight: 400;
+    }
+
+    .star-btn {
+      flex: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: 0;
+      background: transparent;
+      color: var(--text-4);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .star-btn.on {
+      color: var(--yellow);
+    }
+
+    .star-btn:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--yellow);
+    }
+
+    .custom-box {
+      border-top: 1px solid var(--border);
+      padding: 10px 12px 12px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .custom-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-2);
+      margin-bottom: 8px;
+    }
+
+    .count {
+      color: var(--text-4);
+      font-size: 12px;
+    }
+
+    .custom-line {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      gap: 4px;
+      align-items: center;
+      color: var(--text-4);
+      font-size: 12px;
+    }
+
+    .custom-remark {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      gap: 4px;
+      align-items: center;
+      color: var(--text-4);
+      font-size: 12px;
+    }
+
+    .custom-actions {
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .input {
+      height: 34px;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      background: #0f0f0f;
+      color: var(--text);
+      padding: 0 10px;
+      outline: none;
+      min-width: 0;
+    }
+
+    .input:focus {
+      border-color: var(--purple);
+    }
+
+    .slider-shell {
+      display: grid;
+      grid-template-columns: auto 1fr auto 34px;
+      gap: 8px;
+      align-items: center;
+      color: var(--text-4);
+    }
+
+    .slider-track {
+      height: 4px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--purple) 50%, rgba(255,255,255,0.16) 50%);
+    }
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      margin-top: 18px;
+    }
+
+    .switch-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-3);
+    }
+
+    .switch {
+      width: 34px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--purple);
+      position: relative;
+    }
+
+    .switch::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .cue-popover {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 420px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: #242438;
+      box-shadow: 0 16px 42px rgba(0,0,0,0.48);
+      z-index: 6;
+      padding: 16px;
+      display: none;
+    }
+
+    .cue-popover.open {
+      display: block;
+    }
+
+    .cue-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 22px;
+      margin-bottom: 14px;
+      color: var(--text-2);
+      font-weight: 650;
+    }
+
+    .cue-search {
+      margin-bottom: 14px;
+    }
+
+    .cue-tip {
+      margin-top: 12px;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      color: var(--text-4);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .asset-drawer {
+      position: fixed;
+      top: 52px;
+      right: 0;
+      bottom: 0;
+      width: 440px;
+      max-width: 100vw;
+      background: #1e1e1e;
+      border-left: 1px solid var(--border);
+      box-shadow: -16px 0 36px rgba(0,0,0,0.34);
+      z-index: 20;
+      display: grid;
+      grid-template-rows: auto auto auto 1fr;
+      transform: translateX(100%);
+      transition: transform 0.18s ease;
+    }
+
+    .asset-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-head {
+      min-height: 58px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .drawer-title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .drawer-title strong {
+      font-size: 15px;
+    }
+
+    .drawer-filters {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .drawer-filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-chip {
+      height: 30px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0 10px;
+      color: var(--text-3);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .filter-chip.active {
+      color: #fff;
+      border-color: rgba(124,58,237,0.52);
+      background: rgba(124,58,237,0.26);
+    }
+
+    .drawer-create {
+      margin: 12px 16px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: none;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+      background: #181818;
+    }
+
+    .drawer-create.open {
+      display: grid;
+    }
+
+    .drawer-create-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-2);
+      font-weight: 650;
+    }
+
+    .create-field {
+      display: grid;
+      grid-template-columns: 62px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      color: var(--text-4);
+      font-size: 12px;
+    }
+
+    .create-choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .drawer-create-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .filter {
+      height: 30px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--text-2);
+      background: #151515;
+      padding: 0 8px;
+    }
+
+    .asset-list {
+      overflow: auto;
+      padding: 12px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .asset-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: #181818;
+      display: grid;
+      gap: 10px;
+    }
+
+    .asset-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .asset-name {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      min-width: 0;
+      font-weight: 650;
+    }
+
+    .asset-name .value {
+      color: var(--text-3);
+      font-weight: 400;
+    }
+
+    .asset-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .badge {
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 4px;
+      padding: 0 6px;
+      background: rgba(255,255,255,0.06);
+      color: var(--text-3);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .badge.type {
+      color: #ddd6fe;
+      background: rgba(124,58,237,0.16);
+    }
+
+    .badge.source-custom {
+      color: #fef3c7;
+      background: rgba(250,204,21,0.12);
+    }
+
+    .badge.source-preset {
+      color: #bae6fd;
+      background: rgba(56,189,248,0.12);
+    }
+
+    .asset-note {
+      color: var(--text-3);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .asset-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: none;
+    }
+
+    .asset-action {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-4);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .asset-action:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      border-color: var(--border);
+    }
+
+    .delete-asset {
+      color: #f87171;
+    }
+
+    .delete-asset:hover {
+      color: #fecaca;
+      background: rgba(239,68,68,0.12);
+      border-color: rgba(239,68,68,0.28);
+    }
+
+    .delete-asset svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .confirm-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      background: rgba(0,0,0,0.44);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .confirm-backdrop.open {
+      display: flex;
+    }
+
+    .confirm-dialog {
+      width: 420px;
+      max-width: calc(100vw - 32px);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: #242424;
+      box-shadow: 0 20px 58px rgba(0,0,0,0.5);
+      padding: 18px;
+      position: relative;
+    }
+
+    .confirm-close {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+
+    .confirm-dialog h3 {
+      margin: 0 28px 10px 0;
+      font-size: 16px;
+    }
+
+    .confirm-dialog p {
+      margin: 0;
+      color: var(--text-3);
+      line-height: 1.7;
+    }
+
+    .confirm-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%) translateY(20px);
+      min-width: 180px;
+      max-width: 480px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      background: #262626;
+      border: 1px solid var(--border-strong);
+      color: var(--text);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.36);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.16s, transform 0.16s;
+      z-index: 50;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 1080px) {
+      .layout { grid-template-columns: 1fr; }
+      .video-pane { display: none; }
+      .panel-pop,
+      .cue-popover {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        top: 86px;
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-title">Drama Verse 编辑器</div>
+        <div class="brand-subtitle">自定义 audio tag 收藏与跨剧复用交互原型</div>
+      </div>
+      <div class="top-actions">
+        <button class="toolbar-action"><span class="icon">◇</span><span>术语译法</span></button>
+        <button class="toolbar-action"><span class="icon">⌕</span><span>查找替换</span></button>
+        <button class="toolbar-action" id="assetBtn" title="管理已收藏的音频标签，支持跨剧复用"><span class="icon">☆</span><span>标签收藏</span></button>
+        <button class="export-btn">导出 <span>⌄</span></button>
+        <div class="user-chip">
+          <span class="avatar">♙</span>
+          <span>Mia</span>
+          <span class="role-badge">内部管理员</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="video-pane">
+        <div class="video-stage">
+          <div class="video-box">视频预览示意</div>
+          <div class="video-caption">你这次做得很好。</div>
+        </div>
+      </section>
+
+      <section class="editor-pane">
+        <div class="editor-toolbar">
+          <div class="toolbar-left">
+            <span class="pill">第 05 集</span>
+            <span class="pill">配音校对</span>
+          </div>
+          <div class="toolbar-right">
+            <span class="pill">仅展示本能力相关控件</span>
+          </div>
+        </div>
+
+        <div class="subtitles">
+          <article class="subtitle-row">
+            <div class="row-index">13</div>
+            <div class="speaker"><span class="speaker-badge">Kak</span></div>
+            <div class="audio-cell">🔊</div>
+            <div class="time-cell"><span>00:00:08,120</span><span>00:00:09,360</span></div>
+            <div class="subtitle-cell">你这次做得很好。</div>
+            <div class="subtitle-cell target">You did really well this time.<span class="muted">AI 判断：平静 · serene / 正常 · normal</span></div>
+          </article>
+
+          <article class="subtitle-row active">
+            <div class="row-actions">
+              <div class="row-actions-left">
+                <button class="action-link">✂ 拆分片段</button>
+                <button class="action-link active" id="emotionBtn">◇ 情感表达</button>
+                <button class="action-link" id="cueBtn">☊ 语气词</button>
+              </div>
+              <div class="row-actions-right">
+                <button class="action-link">▶ 试听</button>
+              </div>
+            </div>
+            <section class="panel-pop open" id="emotionPanel">
+              <div class="emotion-panel">
+                <div class="panel-grid">
+                  <div class="field">
+                    <label>情感标签</label>
+                    <button class="select-shell focus" data-dd="emotionDropdown">
+                      <span class="select-label" id="emotionSelected">平静 <span class="en">· serene</span></span>
+                      <span class="caret">⌄</span>
+                    </button>
+                  </div>
+                  <div class="field">
+                    <label>情绪强度</label>
+                    <div class="slider-shell">
+                      <span>-</span>
+                      <div class="slider-track"></div>
+                      <span>+</span>
+                      <span>3</span>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label>声音表达</label>
+                    <button class="select-shell" data-dd="deliveryDropdown">
+                      <span class="select-label" id="deliverySelected">正常 <span class="en">· normal</span></span>
+                      <span class="caret">⌄</span>
+                    </button>
+                  </div>
+                  <div class="field">
+                    <label>语调稳定性</label>
+                    <div class="slider-shell">
+                      <span>创意</span>
+                      <div class="slider-track"></div>
+                      <span>稳定</span>
+                      <span>0.50</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="switch-row">
+                  <div class="switch-left">
+                    <span>应用到同语义组</span>
+                    <span class="switch"></span>
+                    <span class="count">将同步更新 1 条同组段落</span>
+                  </div>
+                  <div class="top-actions">
+                    <button class="btn">取消</button>
+                    <button class="btn primary" id="saveEmotion">保存</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <div class="row-index">14</div>
+            <div class="speaker"><span class="speaker-badge">Kak</span></div>
+            <div class="audio-cell">🔊</div>
+            <div class="time-cell"><span>00:00:10,040</span><span>00:00:11,480</span></div>
+            <div class="subtitle-cell">别怕，我在这儿。</div>
+            <div class="subtitle-cell target">Don't be afraid. I'm right here.<span class="muted">当前选中段落，可打开情感/语气词控件</span></div>
+          </article>
+
+          <article class="subtitle-row">
+            <div class="row-index">15</div>
+            <div class="speaker"><span class="speaker-badge">Kak</span></div>
+            <div class="audio-cell">🔊</div>
+            <div class="time-cell"><span>00:00:12,160</span><span>00:00:13,300</span></div>
+            <div class="subtitle-cell">我会处理好。</div>
+            <div class="subtitle-cell target">I'll take care of it.<span class="muted">用户收藏：自信</span></div>
+          </article>
+        </div>
+
+        <section class="cue-popover" id="cuePanel">
+          <div class="cue-head">
+            <span>选择语气词</span>
+            <button class="btn icon text" id="closeCue">×</button>
+          </div>
+          <div class="cue-search">
+            <div class="search-wrap">
+              <span class="search-icon">⌕</span>
+              <input class="search" placeholder="搜索语气词" />
+            </div>
+          </div>
+          <div class="menu-list">
+            <div class="menu-section">自定义收藏</div>
+            <div id="cueFavoriteGrid">
+              <div class="menu-option favorite" data-select="reaction" data-cn="压抑叹气" data-en="suppressed sigh">
+                <span class="left">压抑叹气</span>
+                <button class="star-btn on" data-star>★</button>
+              </div>
+            </div>
+            <div class="menu-section">笑声类</div>
+            <div class="menu-option favorite" data-select="reaction" data-cn="轻笑" data-en="chuckling" data-origin="preset">
+              <span class="left">轻笑 <span class="en">· chuckling</span></span>
+              <button class="star-btn on" data-star>★</button>
+            </div>
+            <div class="menu-option" data-select="reaction" data-cn="大笑" data-en="laughing">
+              <span class="left">大笑 <span class="en">· laughing</span></span>
+              <button class="star-btn" data-star>☆</button>
+            </div>
+            <div class="menu-section">哭声类</div>
+            <div class="menu-option" data-select="reaction" data-cn="哭声" data-en="crying">
+              <span class="left">哭声 <span class="en">· crying</span></span>
+              <button class="star-btn" data-star>☆</button>
+            </div>
+            <div class="menu-option" data-select="reaction" data-cn="啜泣" data-en="sobbing">
+              <span class="left">啜泣 <span class="en">· sobbing</span></span>
+              <button class="star-btn" data-star>☆</button>
+            </div>
+            <div class="menu-option" data-select="reaction" data-cn="哭喊" data-en="cried">
+              <span class="left">哭喊 <span class="en">· cried</span></span>
+              <button class="star-btn" data-star>☆</button>
+            </div>
+            <div class="menu-section">呼喊 / 爆发类</div>
+            <div class="menu-option" data-select="reaction" data-cn="怒吼" data-en="roaring">
+              <span class="left">怒吼 <span class="en">· roaring</span></span>
+              <button class="star-btn" data-star>☆</button>
+            </div>
+            <div class="menu-option" data-select="reaction" data-cn="尖叫" data-en="screaming">
+              <span class="left">尖叫 <span class="en">· screaming</span></span>
+              <button class="star-btn" data-star>☆</button>
+            </div>
+            <div class="menu-option" data-select="reaction" data-cn="欢呼" data-en="cheering">
+              <span class="left">欢呼 <span class="en">· cheering</span></span>
+              <button class="star-btn" data-star>☆</button>
+            </div>
+            <div class="menu-option" data-select="reaction" data-cn="低吼" data-en="growled">
+              <span class="left">低吼 <span class="en">· growled</span></span>
+              <button class="star-btn" data-star>☆</button>
+            </div>
+            <div class="menu-section">呼吸 / 叹息类</div>
+            <div class="menu-option" data-select="reaction" data-cn="叹气" data-en="sighing">
+              <span class="left">叹气 <span class="en">· sighing</span></span>
+              <button class="star-btn" data-star>☆</button>
+            </div>
+            <div class="menu-option" data-select="reaction" data-cn="喘息" data-en="gasping">
+              <span class="left">喘息 <span class="en">· gasping</span></span>
+              <button class="star-btn" data-star>☆</button>
+            </div>
+            <div class="menu-section">其他</div>
+            <div class="menu-option" data-select="reaction" data-cn="低吟" data-en="moaning">
+              <span class="left">低吟 <span class="en">· moaning</span></span>
+              <button class="star-btn" data-star>☆</button>
+            </div>
+          </div>
+          <div class="custom-box">
+            <div class="custom-head">
+              <span>自定义语气词</span>
+            </div>
+            <div class="custom-line">
+              <span>语气词</span>
+              <input class="input" id="cueCustom" placeholder="如：轻哼" />
+            </div>
+            <div class="custom-remark">
+              <span>备注</span>
+              <input class="input" id="reactionRemark" placeholder="非必填，可记录适用场景等" />
+            </div>
+            <div class="custom-actions">
+              <button class="btn" data-cancel-custom="reaction">取消</button>
+              <button class="btn" data-save-custom="reaction">保存</button>
+            </div>
+          </div>
+          <div class="cue-tip">ⓘ 语气词建议搭配文本使用，单独插入可能导致生成失败</div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="dropdown wide" id="emotionDropdown">
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input class="search" placeholder="搜索情感标签" />
+      </div>
+    </div>
+    <div class="menu-list">
+      <div class="menu-option" data-select="emotion" data-cn="空" data-en="">
+        <span class="left">空</span>
+        <span></span>
+      </div>
+      <div class="menu-option selected" data-select="emotion" data-cn="平静" data-en="serene">
+        <span class="left">平静（AI判断）<span class="en"> · serene</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-section">自定义收藏</div>
+      <div class="menu-option favorite" data-select="emotion" data-cn="自信" data-en="confident">
+        <span class="left">自信</span>
+        <button class="star-btn on" data-star>★</button>
+      </div>
+      <div class="menu-option favorite" data-select="emotion" data-cn="克制" data-en="restrained">
+        <span class="left">克制</span>
+        <button class="star-btn on" data-star>★</button>
+      </div>
+      <div class="menu-section">基础情绪</div>
+      <div class="menu-option favorite" data-select="emotion" data-cn="开心" data-en="happy" data-origin="preset">
+        <span class="left">开心 <span class="en">· happy</span></span>
+        <button class="star-btn on" data-star>★</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="悲伤" data-en="sad">
+        <span class="left">悲伤 <span class="en">· sad</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="愤怒" data-en="angry">
+        <span class="left">愤怒 <span class="en">· angry</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="恐惧" data-en="fearful">
+        <span class="left">恐惧 <span class="en">· fearful</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="厌恶" data-en="disgusted">
+        <span class="left">厌恶 <span class="en">· disgusted</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="惊讶" data-en="surprised">
+        <span class="left">惊讶 <span class="en">· surprised</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="平静" data-en="calm">
+        <span class="left">平静 <span class="en">· calm</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-section">进阶情绪</div>
+      <div class="menu-option" data-select="emotion" data-cn="兴奋" data-en="excited">
+        <span class="left">兴奋 <span class="en">· excited</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="温柔" data-en="gentle">
+        <span class="left">温柔 <span class="en">· gentle</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="严肃" data-en="serious">
+        <span class="left">严肃 <span class="en">· serious</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="疑惑" data-en="confused">
+        <span class="left">疑惑 <span class="en">· confused</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="紧张" data-en="nervous">
+        <span class="left">紧张 <span class="en">· nervous</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="失落" data-en="dejected">
+        <span class="left">失落 <span class="en">· dejected</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="嘲讽" data-en="mocking">
+        <span class="left">嘲讽 <span class="en">· mocking</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="emotion" data-cn="哭泣" data-en="crying">
+        <span class="left">哭泣 <span class="en">· crying</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+    </div>
+    <div class="custom-box">
+      <div class="custom-head">
+        <span>自定义情感</span>
+      </div>
+      <div class="custom-line">
+        <span>情感</span>
+        <input class="input" id="emotionCustom" placeholder="如：克制生气" />
+      </div>
+      <div class="custom-remark">
+        <span>备注</span>
+        <input class="input" id="emotionRemark" placeholder="非必填，可记录适用场景等" />
+      </div>
+      <div class="custom-actions">
+        <button class="btn" data-cancel-custom="emotion">取消</button>
+        <button class="btn" data-save-custom="emotion">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dropdown" id="deliveryDropdown">
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input class="search" placeholder="搜索声音表达" />
+      </div>
+    </div>
+    <div class="menu-list">
+      <div class="menu-option" data-select="delivery" data-cn="空" data-en="">
+        <span class="left">空</span>
+        <span></span>
+      </div>
+      <div class="menu-option selected" data-select="delivery" data-cn="正常" data-en="normal">
+        <span class="left">正常（AI判断）<span class="en"> · normal</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-section">自定义收藏</div>
+      <div class="menu-option favorite" data-select="delivery" data-cn="克制低声" data-en="soft restrained">
+        <span class="left">克制低声</span>
+        <button class="star-btn on" data-star>★</button>
+      </div>
+      <div class="menu-section">音量强弱</div>
+      <div class="menu-option favorite" data-select="delivery" data-cn="轻柔" data-en="soft" data-origin="preset">
+        <span class="left">轻柔 <span class="en">· soft</span></span>
+        <button class="star-btn on" data-star>★</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="正常" data-en="normal">
+        <span class="left">正常 <span class="en">· normal</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="安静" data-en="quiet">
+        <span class="left">安静 <span class="en">· quiet</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="大声" data-en="loud">
+        <span class="left">大声 <span class="en">· loud</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="低沉" data-en="low">
+        <span class="left">低沉 <span class="en">· low</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="洪亮" data-en="booming">
+        <span class="left">洪亮 <span class="en">· booming</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-section">声音质感</div>
+      <div class="menu-option" data-select="delivery" data-cn="耳语" data-en="whispered">
+        <span class="left">耳语 <span class="en">· whispered</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="低语" data-en="murmured">
+        <span class="left">低语 <span class="en">· murmured</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="嘀咕" data-en="muttered">
+        <span class="left">嘀咕 <span class="en">· muttered</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="气声" data-en="breathy">
+        <span class="left">气声 <span class="en">· breathy</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="沙哑" data-en="hoarse">
+        <span class="left">沙哑 <span class="en">· hoarse</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="发颤" data-en="shaky">
+        <span class="left">发颤 <span class="en">· shaky</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-section">节奏方式</div>
+      <div class="menu-option" data-select="delivery" data-cn="结巴" data-en="stammered">
+        <span class="left">结巴 <span class="en">· stammered</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="短促" data-en="clipped">
+        <span class="left">短促 <span class="en">· clipped</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="急促" data-en="rushed">
+        <span class="left">急促 <span class="en">· rushed</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="缓慢" data-en="slow">
+        <span class="left">缓慢 <span class="en">· slow</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+      <div class="menu-option" data-select="delivery" data-cn="单调" data-en="monotone">
+        <span class="left">单调 <span class="en">· monotone</span></span>
+        <button class="star-btn" data-star>☆</button>
+      </div>
+    </div>
+    <div class="custom-box">
+      <div class="custom-head">
+        <span>自定义声音表达</span>
+      </div>
+      <div class="custom-line">
+        <span>声音表达</span>
+        <input class="input" id="deliveryCustom" placeholder="如：轻声但不耳语" />
+      </div>
+      <div class="custom-remark">
+        <span>备注</span>
+        <input class="input" id="deliveryRemark" placeholder="非必填，可记录适用场景等" />
+      </div>
+      <div class="custom-actions">
+        <button class="btn" data-cancel-custom="delivery">取消</button>
+        <button class="btn" data-save-custom="delivery">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <aside class="asset-drawer" id="assetDrawer">
+    <div class="drawer-head">
+      <div class="drawer-title">
+        <strong title="管理已收藏的音频标签，支持跨剧复用">标签收藏</strong>
+      </div>
+      <div class="top-actions">
+        <button class="btn" id="showCreateAsset">+ 新增</button>
+        <button class="btn icon text" id="closeAsset">×</button>
+      </div>
+    </div>
+    <div class="drawer-create" id="assetCreateForm">
+      <div class="drawer-create-title">
+        <span id="assetCreateTitle">新增标签收藏</span>
+      </div>
+      <div class="create-field">
+        <span>标签类型</span>
+        <div class="create-choice-row" role="group" aria-label="新增标签类型">
+          <button class="filter-chip active" data-create-type="emotion">情感标签</button>
+          <button class="filter-chip" data-create-type="delivery">声音表达</button>
+          <button class="filter-chip" data-create-type="reaction">语气词</button>
+        </div>
+      </div>
+      <div class="create-field">
+        <span>标签值</span>
+        <input class="input" id="createValue" placeholder="标签值" />
+      </div>
+      <div class="create-field">
+        <span>备注</span>
+        <input class="input" id="createNote" placeholder="备注，选填" />
+      </div>
+      <div class="drawer-create-actions">
+        <button class="btn" id="cancelCreateAsset">取消</button>
+        <button class="btn primary" id="confirmCreateAsset">保存</button>
+      </div>
+    </div>
+    <div class="drawer-filters">
+      <div class="drawer-filter-group" role="group" aria-label="标签类型筛选">
+        <button class="filter-chip active" data-filter-type="all">全部类型</button>
+        <button class="filter-chip" data-filter-type="emotion">情感标签</button>
+        <button class="filter-chip" data-filter-type="delivery">声音表达</button>
+        <button class="filter-chip" data-filter-type="reaction">语气词</button>
+      </div>
+    </div>
+    <div class="asset-list" id="assetList"></div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="confirm-backdrop" id="deleteConfirm">
+    <div class="confirm-dialog">
+      <button class="btn icon text confirm-close" id="closeDeleteConfirm">×</button>
+      <h3>确认删除标签收藏？</h3>
+      <p>在这里删除只会移除收藏资产，不会影响已经配置该标签的段落。</p>
+      <div class="confirm-actions">
+        <button class="btn" id="cancelDeleteAsset">取消</button>
+        <button class="btn primary" id="confirmDeleteAsset">确认删除</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const assets = [
+      { type: 'emotion', cn: '自信', value: 'confident', origin: 'custom', note: '用于替代 V4 下过度嘲讽的 sarcastic 效果。' },
+      { type: 'emotion', cn: '克制', value: 'restrained', origin: 'custom', note: '普通克制表达，避免文本被 TTS 演过头。' },
+      { type: 'emotion', cn: '开心', value: 'happy', origin: 'preset', note: '从预设情感标签收藏，仍保留在基础情绪分组内。' },
+      { type: 'delivery', cn: '克制低声', value: 'soft restrained', origin: 'custom', note: '替代直接 whispered，降低气音风险。' },
+      { type: 'delivery', cn: '轻柔', value: 'soft', origin: 'preset', note: '从预设声音表达收藏，排序置于同分组上方。' },
+      { type: 'reaction', cn: '压抑叹气', value: 'suppressed sigh', origin: 'custom', note: '适合短促压抑的叹气，不做夸张哭腔。' },
+      { type: 'reaction', cn: '轻笑', value: 'chuckling', origin: 'preset', note: '从预设语气词收藏，避免每小句都追加笑声。' },
+    ];
+
+    const typeName = { emotion: '情感标签', delivery: '声音表达', reaction: '语气词' };
+    const originName = { custom: '自定义标签', preset: '预设标签' };
+    const toast = document.getElementById('toast');
+    let toastTimer = null;
+    let assetTypeFilter = 'all';
+    let createAssetType = 'emotion';
+    let pendingDeleteAsset = null;
+    let editingAssetKey = null;
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1700);
+    }
+
+    function renderAssets() {
+      const list = document.getElementById('assetList');
+      const used = document.getElementById('usedAssetTags');
+      const filtered = assets.filter(item => {
+        return assetTypeFilter === 'all' || item.type === assetTypeFilter;
+      });
+
+      list.innerHTML = filtered.map((item) => `
+        <article class="asset-card">
+          <div class="asset-card-top">
+            <div class="asset-name">
+              <span>${item.cn}</span>
+              ${(item.origin || 'custom') === 'preset' ? `<span class="value">· ${item.value}</span>` : ''}
+            </div>
+            <div class="asset-actions">
+              <button class="asset-action" title="编辑" aria-label="编辑" data-edit-asset="${item.type}|${item.value}">✎</button>
+              <button class="asset-action delete-asset" title="删除" aria-label="删除" data-delete-asset="${item.type}|${item.value}">
+                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18"></path>
+                  <path d="M8 6V4h8v2"></path>
+                  <path d="M19 6l-1 14H6L5 6"></path>
+                  <path d="M10 11v5"></path>
+                  <path d="M14 11v5"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="asset-meta">
+            <span class="badge type">${typeName[item.type]}</span>
+            <span class="badge source-${item.origin || 'custom'}">${originName[item.origin || 'custom']}</span>
+          </div>
+          ${item.note ? `<div class="asset-note">${item.note}</div>` : ''}
+        </article>
+      `).join('');
+
+      if (used) {
+        used.innerHTML = assets.slice(0, 4).map(item => `
+          <span class="tag-chip favorite">${item.cn}${(item.origin || 'custom') === 'preset' ? `<span class="en">· ${item.value}</span>` : ''}</span>
+        `).join('');
+      }
+    }
+
+    function renderCueFavorites() {
+      const grid = document.getElementById('cueFavoriteGrid');
+      if (!grid) return;
+      const reactions = assets.filter(item => item.type === 'reaction' && (item.origin || 'custom') === 'custom');
+      grid.innerHTML = reactions.map(item => `
+        <div class="menu-option favorite" data-select="reaction" data-cn="${item.cn}" data-en="${item.value}">
+          <span class="left">${item.cn}</span>
+          <button class="star-btn on" data-star>★</button>
+        </div>
+      `).join('');
+    }
+
+    function closeDropdowns(except) {
+      document.querySelectorAll('.dropdown').forEach(drop => {
+        if (drop.id !== except) drop.classList.remove('open');
+      });
+    }
+
+    function positionFloating(panel, trigger, gap = 6) {
+      const rect = trigger.getBoundingClientRect();
+      panel.style.left = '0px';
+      panel.style.top = '0px';
+      const panelWidth = panel.offsetWidth || 420;
+      const panelHeight = panel.offsetHeight || 320;
+      const maxLeft = window.innerWidth - panelWidth - 12;
+      const maxTop = window.innerHeight - panelHeight - 12;
+      const left = Math.max(12, Math.min(rect.left, maxLeft));
+      const top = Math.max(12, Math.min(rect.bottom + gap, maxTop));
+      panel.style.left = `${left}px`;
+      panel.style.top = `${top}px`;
+      panel.style.right = 'auto';
+    }
+
+    document.querySelectorAll('[data-dd]').forEach(btn => {
+      btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const id = btn.dataset.dd;
+        const drop = document.getElementById(id);
+        const next = !drop.classList.contains('open');
+        closeDropdowns(id);
+        drop.classList.toggle('open', next);
+        if (next) positionFloating(drop, btn, 6);
+      });
+    });
+
+    document.addEventListener('click', event => {
+      if (!event.target.closest('.dropdown') && !event.target.closest('[data-dd]')) {
+        closeDropdowns();
+      }
+    });
+
+    document.addEventListener('click', event => {
+      const star = event.target.closest('[data-star]');
+      if (star) {
+        event.stopPropagation();
+        const option = star.closest('.menu-option');
+        const type = option.dataset.select;
+        const cn = option.dataset.cn;
+        const value = option.dataset.en || cn;
+        const existsIndex = assets.findIndex(item => item.type === type && item.value === value);
+        if (existsIndex >= 0) {
+          assets.splice(existsIndex, 1);
+          star.classList.remove('on');
+          star.textContent = '☆';
+          showToast('已取消收藏');
+          renderAssets();
+          renderCueFavorites();
+        } else {
+          const origin = option.dataset.origin || (option.classList.contains('favorite') ? 'custom' : 'preset');
+          assets.unshift({ type, cn, value, origin, note: origin === 'preset' ? '从预设标签收藏。' : '从编辑器下拉收藏。' });
+          star.classList.add('on');
+          star.textContent = '★';
+          showToast(`已收藏：${cn}`);
+          renderAssets();
+          renderCueFavorites();
+        }
+        return;
+      }
+
+      const option = event.target.closest('[data-select]');
+      if (!option) return;
+      const type = option.dataset.select;
+      const cn = option.dataset.cn;
+      const en = option.dataset.en;
+      const target = document.getElementById(type + 'Selected');
+      if (target) {
+        target.innerHTML = en ? `${cn} <span class="en">· ${en}</span>` : cn;
+      }
+      document.querySelectorAll(`.menu-option[data-select="${type}"]`).forEach(item => item.classList.remove('selected'));
+      option.classList.add('selected');
+      showToast(`已应用${typeName[type] || '标签'}：${cn}`);
+      if (type === 'reaction') {
+        document.getElementById('cuePanel').classList.remove('open');
+      } else {
+        closeDropdowns();
+      }
+    });
+
+    document.querySelectorAll('[data-save-custom]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.saveCustom;
+        const input = document.getElementById(type + 'Custom') || document.getElementById('cueCustom');
+        const remarkInput = document.getElementById(type + 'Remark');
+        const value = input.value.trim();
+        const note = remarkInput ? remarkInput.value.trim() : '';
+        if (!value) {
+          input.focus();
+          return;
+        }
+        assets.unshift({
+          type,
+          cn: value,
+          value,
+          origin: 'custom',
+          note,
+        });
+        if (type !== 'reaction') {
+          document.getElementById(type + 'Selected').innerHTML = `${value} <span class="en">· ${value}</span>`;
+          closeDropdowns();
+        }
+        input.value = '';
+        if (remarkInput) remarkInput.value = '';
+        renderAssets();
+        renderCueFavorites();
+        if (type === 'reaction') {
+          document.getElementById('cuePanel').classList.remove('open');
+        }
+        showToast(`已保存自定义${typeName[type]}：${value}`);
+      });
+    });
+
+    document.querySelectorAll('[data-cancel-custom]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.cancelCustom;
+        const input = document.getElementById(type + 'Custom') || document.getElementById('cueCustom');
+        const remarkInput = document.getElementById(type + 'Remark');
+        if (input) input.value = '';
+        if (remarkInput) remarkInput.value = '';
+        if (type === 'reaction') {
+          document.getElementById('cuePanel').classList.remove('open');
+        } else {
+          closeDropdowns();
+        }
+      });
+    });
+
+    document.getElementById('emotionBtn').addEventListener('click', () => {
+      document.getElementById('emotionPanel').classList.toggle('open');
+      document.getElementById('cuePanel').classList.remove('open');
+      closeDropdowns();
+    });
+
+    document.getElementById('cueBtn').addEventListener('click', () => {
+      const panel = document.getElementById('cuePanel');
+      const next = !panel.classList.contains('open');
+      panel.classList.toggle('open', next);
+      document.getElementById('emotionPanel').classList.remove('open');
+      closeDropdowns();
+      if (next) positionFloating(panel, document.getElementById('cueBtn'), 8);
+    });
+
+    document.getElementById('closeCue').addEventListener('click', () => {
+      document.getElementById('cuePanel').classList.remove('open');
+    });
+
+    document.getElementById('saveEmotion').addEventListener('click', () => {
+      showToast('情感配置已保存');
+    });
+
+    ['assetBtn', 'assetBtn2'].forEach(id => {
+      const trigger = document.getElementById(id);
+      if (!trigger) return;
+      trigger.addEventListener('click', () => {
+        document.getElementById('assetDrawer').classList.add('open');
+        renderAssets();
+      });
+    });
+
+    document.getElementById('closeAsset').addEventListener('click', () => {
+      document.getElementById('assetDrawer').classList.remove('open');
+    });
+
+    document.addEventListener('click', event => {
+      const drawer = document.getElementById('assetDrawer');
+      if (!drawer.classList.contains('open')) return;
+      if (event.target.closest('#assetDrawer') || event.target.closest('#assetBtn') || event.target.closest('#deleteConfirm')) return;
+      drawer.classList.remove('open');
+    });
+
+    document.querySelectorAll('[data-filter-type]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        assetTypeFilter = btn.dataset.filterType;
+        document.querySelectorAll('[data-filter-type]').forEach(item => item.classList.toggle('active', item === btn));
+        renderAssets();
+      });
+    });
+
+    document.querySelectorAll('[data-create-type]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setCreateType(btn.dataset.createType);
+      });
+    });
+
+    function setCreateType(type) {
+      createAssetType = type;
+      document.querySelectorAll('[data-create-type]').forEach(item => item.classList.toggle('active', item.dataset.createType === createAssetType));
+    }
+
+    function resetCreateForm() {
+      editingAssetKey = null;
+      setCreateType('emotion');
+      document.getElementById('assetCreateTitle').textContent = '新增标签收藏';
+      document.getElementById('createValue').value = '';
+      document.getElementById('createNote').value = '';
+    }
+
+    function openCreateForm(item) {
+      document.getElementById('assetCreateForm').classList.add('open');
+      if (item) {
+        editingAssetKey = `${item.type}|${item.value}`;
+        document.getElementById('assetCreateTitle').textContent = '编辑标签收藏';
+        setCreateType(item.type);
+        document.getElementById('createValue').value = item.value;
+        document.getElementById('createNote').value = item.note || '';
+      } else {
+        resetCreateForm();
+      }
+      document.getElementById('createValue').focus();
+    }
+
+    document.getElementById('showCreateAsset').addEventListener('click', () => {
+      openCreateForm();
+    });
+
+    document.getElementById('cancelCreateAsset').addEventListener('click', () => {
+      document.getElementById('assetCreateForm').classList.remove('open');
+      resetCreateForm();
+    });
+
+    document.getElementById('confirmCreateAsset').addEventListener('click', () => {
+      const value = document.getElementById('createValue').value.trim();
+      const note = document.getElementById('createNote').value.trim();
+      if (!value) {
+        showToast('请填写标签值');
+        document.getElementById('createValue').focus();
+        return;
+      }
+      const wasEditing = Boolean(editingAssetKey);
+      if (editingAssetKey) {
+        const index = assets.findIndex(item => `${item.type}|${item.value}` === editingAssetKey);
+        if (index >= 0) {
+          assets[index] = {
+            ...assets[index],
+            type: createAssetType,
+            cn: value,
+            value,
+            note,
+          };
+        }
+      } else {
+        assets.unshift({ type: createAssetType, cn: value, value, origin: 'custom', note });
+      }
+      document.getElementById('assetCreateForm').classList.remove('open');
+      resetCreateForm();
+      renderAssets();
+      renderCueFavorites();
+      showToast(wasEditing ? '已更新标签收藏' : '已新增标签收藏');
+    });
+
+    document.getElementById('assetList').addEventListener('click', event => {
+      const editBtn = event.target.closest('[data-edit-asset]');
+      if (editBtn) {
+        const [type, value] = editBtn.dataset.editAsset.split('|');
+        const item = assets.find(asset => asset.type === type && asset.value === value);
+        if (item) openCreateForm(item);
+        return;
+      }
+
+      const btn = event.target.closest('[data-delete-asset]');
+      if (!btn) return;
+      const [type, value] = btn.dataset.deleteAsset.split('|');
+      pendingDeleteAsset = { type, value };
+      document.getElementById('deleteConfirm').classList.add('open');
+    });
+
+    document.getElementById('cancelDeleteAsset').addEventListener('click', () => {
+      pendingDeleteAsset = null;
+      document.getElementById('deleteConfirm').classList.remove('open');
+    });
+
+    document.getElementById('closeDeleteConfirm').addEventListener('click', () => {
+      pendingDeleteAsset = null;
+      document.getElementById('deleteConfirm').classList.remove('open');
+    });
+
+    document.getElementById('deleteConfirm').addEventListener('click', event => {
+      if (event.target.id !== 'deleteConfirm') return;
+      pendingDeleteAsset = null;
+      document.getElementById('deleteConfirm').classList.remove('open');
+    });
+
+    document.getElementById('confirmDeleteAsset').addEventListener('click', () => {
+      if (!pendingDeleteAsset) return;
+      const index = assets.findIndex(item => item.type === pendingDeleteAsset.type && item.value === pendingDeleteAsset.value);
+      if (index >= 0) assets.splice(index, 1);
+      pendingDeleteAsset = null;
+      document.getElementById('deleteConfirm').classList.remove('open');
+      renderAssets();
+      renderCueFavorites();
+      showToast('已删除标签收藏');
+    });
+
+    renderAssets();
+    renderCueFavorites();
+  </script>
+</body>
+</html>
