@@ -3191,6 +3191,12 @@
       background: rgba(255, 107, 120, 0.12);
     }
 
+    .term-filter-bar .danger-action {
+      color: var(--danger);
+      border-color: rgba(255, 107, 120, 0.45);
+      background: rgba(255, 107, 120, 0.12);
+    }
+
     .asset-actionbar {
       display: flex;
       align-items: center;
@@ -6192,6 +6198,7 @@
             <select class="control"><option>请选择入库状态</option><option>未入库</option><option>已入库</option></select>
             <button class="btn">重置</button>
             <span class="spacer"></span>
+            <button class="btn danger-action term-batch-delete" disabled>批量删除（0）</button>
             <button class="btn primary term-batch-add">批量加入术语库（2）</button>
           </div>
 
@@ -7453,6 +7460,7 @@
     bookPanels.forEach(initLanguageSelection);
 
     const termBatchAddButton = document.querySelector(".term-batch-add");
+    const termBatchDeleteButton = document.querySelector(".term-batch-delete");
 
     function getActiveTermPanel() {
       return document.querySelector("#novelAssets .asset-panel.active");
@@ -7540,6 +7548,10 @@
         termBatchAddButton.textContent = `批量加入术语库（${count}）`;
         termBatchAddButton.disabled = count === 0;
       }
+      if (termBatchDeleteButton) {
+        termBatchDeleteButton.textContent = `批量删除（${count}）`;
+        termBatchDeleteButton.disabled = count === 0;
+      }
     }
 
     document.querySelectorAll("#novelAssets .term-check-all").forEach((input) => {
@@ -7569,7 +7581,7 @@
         button.addEventListener("click", () => openTermEditModal("edit"));
       });
       panel?.querySelectorAll(".term-action-delete").forEach((button) => {
-        button.addEventListener("click", () => termDeleteModal.classList.add("visible"));
+        button.addEventListener("click", () => openTermDeleteConfirm([button.closest(".alias-map-row")].filter(Boolean)));
       });
       panel?.querySelectorAll(".term-action-glossary").forEach((button) => {
         button.addEventListener("click", () => {
@@ -8280,6 +8292,64 @@
       termGlossaryModal.classList.add("visible");
     }
 
+    let pendingTermDeleteRows = [];
+
+    function updateTermDeleteModal(rows) {
+      const title = document.getElementById("termDeleteTitle");
+      const desc = termDeleteModal?.querySelector("p");
+      const rowPreview = termDeleteModal?.querySelector(".modal-row");
+      const count = rows.length;
+      if (title) title.textContent = count > 1 ? "确认批量删除术语译法？" : "确认删除术语译法？";
+      if (desc) desc.textContent = count > 1
+        ? "删除后，所选术语译法不会再作为本书籍项目的翻译约束。已生成译文不会自动回滚。"
+        : "删除后，该术语译法不会再作为本书籍项目的翻译约束。已生成译文不会自动回滚。";
+      if (rowPreview) {
+        if (count > 1) {
+          rowPreview.innerHTML = `<span>已选 ${count} 条术语译法</span><span>确认删除</span>`;
+        } else {
+          const item = getAliasRowData(rows[0]) || {};
+          rowPreview.innerHTML = `<span>${escapeHtml(item.name || "-")}</span><span>${escapeHtml(item.translation || "-")}</span>`;
+        }
+      }
+    }
+
+    function openTermDeleteConfirm(rows) {
+      pendingTermDeleteRows = rows.filter(Boolean);
+      if (!pendingTermDeleteRows.length) {
+        showToast("请先选择需要删除的术语译法");
+        return;
+      }
+      updateTermDeleteModal(pendingTermDeleteRows);
+      termDeleteModal.classList.add("visible");
+    }
+
+    function promoteAliasRowIfNeeded(map) {
+      if (!map || map.querySelector(".alias-map-row.is-primary")) return;
+      const nextRow = map.querySelector(".alias-map-row");
+      if (!nextRow) {
+        map.closest("tr")?.remove();
+        return;
+      }
+      nextRow.classList.add("is-primary");
+      const kind = nextRow.querySelector(".alias-kind");
+      if (kind) kind.textContent = "原文";
+      const actions = nextRow.querySelector(".alias-actions");
+      if (actions) {
+        actions.innerHTML = '<button class="btn text term-action-edit">修改</button><button class="btn text term-action-delete">删除</button><button class="btn text term-action-glossary">入库</button>';
+      }
+    }
+
+    function deleteAliasRows(rows) {
+      const maps = new Set();
+      rows.forEach((row) => {
+        const map = row?.closest(".alias-map");
+        if (map) maps.add(map);
+        row?.remove();
+      });
+      maps.forEach(promoteAliasRowIfNeeded);
+      syncTermAssetSelection();
+    }
+
     function makeEditableAliasCell(cell, className, placeholder) {
       const value = cell.textContent.trim();
       cell.innerHTML = `<input class="alias-inline-input ${className}" placeholder="${placeholder}" value="${escapeHtml(value)}" />`;
@@ -8374,7 +8444,7 @@
     function bindTermRowActions(row) {
       row.querySelector(".term-check")?.addEventListener("change", syncTermAssetSelection);
       row.querySelector(".term-action-edit")?.addEventListener("click", () => openTermEditModal("edit"));
-      row.querySelector(".term-action-delete")?.addEventListener("click", () => termDeleteModal.classList.add("visible"));
+      row.querySelector(".term-action-delete")?.addEventListener("click", () => openTermDeleteConfirm([row]));
       row.querySelector(".term-action-glossary")?.addEventListener("click", () => {
         termGlossaryChecks.forEach((input) => {
           if (!input.disabled) input.checked = true;
@@ -10344,6 +10414,7 @@
       const deleteButton = event.target.closest(".term-action-delete");
       const glossaryButton = event.target.closest(".term-action-glossary");
       const batchButton = event.target.closest(".term-batch-add");
+      const batchDeleteButton = event.target.closest(".term-batch-delete");
       if (addAliasButton) {
         event.preventDefault();
         event.stopImmediatePropagation();
@@ -10358,6 +10429,14 @@
         openTermGlossaryWithRows(rows);
         return;
       }
+      if (batchDeleteButton) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        const activePanel = getActiveTermPanel();
+        const rows = Array.from(activePanel?.querySelectorAll(".alias-map-row") || []).filter((row) => row.querySelector(".term-check")?.checked);
+        openTermDeleteConfirm(rows);
+        return;
+      }
       if (!aliasRow) return;
       if (editButton) {
         event.preventDefault();
@@ -10370,7 +10449,7 @@
       } else if (deleteButton) {
         event.preventDefault();
         event.stopImmediatePropagation();
-        termDeleteModal.classList.add("visible");
+        openTermDeleteConfirm([aliasRow]);
       } else if (glossaryButton) {
         event.preventDefault();
         event.stopImmediatePropagation();
@@ -10385,7 +10464,7 @@
     });
     document.querySelector(".term-add-row")?.addEventListener("click", addInlineTermRow);
     document.querySelectorAll(".term-action-delete").forEach((button) => {
-      button.addEventListener("click", () => termDeleteModal.classList.add("visible"));
+      button.addEventListener("click", () => openTermDeleteConfirm([button.closest(".alias-map-row")].filter(Boolean)));
     });
     document.querySelectorAll(".term-action-glossary, .term-batch-add").forEach((button) => {
       button.addEventListener("click", () => {
@@ -10419,8 +10498,11 @@
       showToast(termEditMode === "add" ? "术语译法已新增" : "术语译法已保存");
     });
     document.querySelector(".term-delete-confirm")?.addEventListener("click", () => {
+      const count = pendingTermDeleteRows.length;
+      deleteAliasRows(pendingTermDeleteRows);
+      pendingTermDeleteRows = [];
       termDeleteModal.classList.remove("visible");
-      showToast("术语译法已删除");
+      showToast(count > 1 ? `已删除 ${count} 条术语译法` : "术语译法已删除");
     });
     document.querySelectorAll(".replace-preview-trigger").forEach((button) => {
       button.addEventListener("click", () => {
