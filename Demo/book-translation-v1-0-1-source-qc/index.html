@@ -1,0 +1,1724 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>小说翻译 V1.0.1 原文质检提醒原型</title>
+  <style>
+    :root {
+      --accent: #6224ff;
+      --accent-soft: rgba(98, 36, 255, 0.16);
+      --accent-border: rgba(114, 87, 255, 0.48);
+      --accent-text: #c9bbff;
+      --bg: #000;
+      --panel: rgba(255, 255, 255, 0.035);
+      --line: rgba(255, 255, 255, 0.09);
+      --line-soft: rgba(255, 255, 255, 0.055);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.62);
+      --faint: rgba(255, 255, 255, 0.42);
+      --danger: #ff9aa3;
+      --warning: #f8d178;
+      --success: #8ff0c1;
+      --info: #8be3ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; scrollbar-width: thin; scrollbar-color: rgba(124, 90, 243, 0.46) rgba(255, 255, 255, 0.045); }
+    *::-webkit-scrollbar { width: 8px; height: 8px; }
+    *::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.035); border-radius: 999px; }
+    *::-webkit-scrollbar-thumb {
+      border: 2px solid rgba(18, 18, 24, 0.94);
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(146, 120, 255, 0.74), rgba(98, 36, 255, 0.58));
+    }
+
+    body {
+      margin: 0;
+      min-width: 1280px;
+      height: 100vh;
+      overflow: hidden;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% -10%, rgba(98, 36, 255, 0.18), rgba(98, 36, 255, 0.06) 34%, transparent 62%),
+        radial-gradient(ellipse at 110% 85%, rgba(98, 36, 255, 0.08), transparent 44%),
+        #000;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .navbar {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: rgba(10, 10, 15, 0.72);
+      backdrop-filter: blur(32px) saturate(200%) brightness(1.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; }
+    .brand-mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, #ffffff, #9f83ff 42%, #4e1dff);
+      box-shadow: 0 0 18px rgba(98, 36, 255, 0.36);
+    }
+
+    .top-user-info {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 32px;
+      padding: 3px 8px 3px 4px;
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 13px;
+    }
+
+    .user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.12);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .user-role {
+      height: 20px;
+      padding: 0 7px;
+      border: 1px solid rgba(124, 90, 243, 0.36);
+      border-radius: 6px;
+      color: var(--accent-text);
+      background: rgba(124, 90, 243, 0.12);
+      font-size: 11px;
+      line-height: 18px;
+    }
+
+    .app {
+      height: calc(100vh - 48px);
+      padding-bottom: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-menu {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 58px;
+      margin: 0 0 12px;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)),
+        #12141b;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .editor-menu-left,
+    .editor-menu-right,
+    .menu-group { display: flex; align-items: center; gap: 6px; min-width: 0; }
+
+    .menu-group {
+      padding: 0 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .menu-btn,
+    .btn {
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 0 12px;
+      color: rgba(255, 255, 255, 0.78);
+      background: rgba(255, 255, 255, 0.055);
+      font-size: 13px;
+      line-height: 1;
+      white-space: nowrap;
+      transition: 0.16s ease;
+    }
+
+    .menu-btn:hover,
+    .btn:hover {
+      color: #fff;
+      border-color: rgba(124, 90, 243, 0.45);
+      background: rgba(124, 90, 243, 0.14);
+    }
+
+    .primary,
+    .btn.primary {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--accent);
+      box-shadow: 0 0 16px rgba(98, 36, 255, 0.28);
+    }
+
+    .btn:disabled,
+    .btn:disabled:hover {
+      cursor: not-allowed;
+      color: rgba(255, 255, 255, 0.34);
+      border-color: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.035);
+      box-shadow: none;
+    }
+
+    .status-icon {
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(143, 240, 193, 0.28);
+      border-radius: 8px;
+      color: #9ff4c9;
+      background: rgba(64, 210, 142, 0.1);
+    }
+
+    .shell {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 220px 1fr 336px;
+      gap: 12px;
+      margin: 0 12px;
+      background: #0c0c10;
+      transition: grid-template-columns 0.18s ease, gap 0.18s ease;
+    }
+
+    .shell.qa-collapsed { grid-template-columns: 220px 1fr 44px; gap: 8px; }
+
+    .glass {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.035);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 14px 34px rgba(0, 0, 0, 0.24);
+      min-height: 0;
+    }
+
+    .chapter-rail {
+      padding: 14px;
+      overflow: auto;
+      background: #13141a;
+    }
+
+    .rail-title {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .rail-title-text strong { display: block; margin-bottom: 4px; font-size: 14px; }
+    .rail-title-text span { color: rgba(255, 255, 255, 0.48); font-size: 12px; }
+
+    .chapter-node {
+      width: 100%;
+      border: 0;
+      border-radius: 8px;
+      padding: 9px 10px;
+      margin-bottom: 7px;
+      color: var(--muted);
+      text-align: left;
+      background: rgba(255, 255, 255, 0.032);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .chapter-node strong {
+      display: block;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.76);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .chapter-node .sub {
+      display: block;
+      margin-top: 4px;
+      color: rgba(255, 255, 255, 0.42);
+      font-size: 11px;
+    }
+
+    .chapter-node.active {
+      color: #fff;
+      background: rgba(98, 36, 255, 0.24);
+      box-shadow: inset 0 0 0 1px rgba(146, 120, 255, 0.4);
+    }
+
+    .editor-main {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #12141b;
+    }
+
+    .source-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 48px;
+      padding: 0 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: #181c25;
+    }
+
+    .source-title strong { display: block; font-size: 14px; }
+    .source-title span { display: block; margin-top: 4px; color: rgba(255, 255, 255, 0.5); font-size: 12px; }
+
+    .source-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 7px;
+      border-radius: 6px;
+      color: var(--accent-text);
+      background: rgba(124, 90, 243, 0.13);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .tag.warn { color: #ffd666; background: rgba(250, 173, 20, 0.12); }
+    .tag.red { color: #ff9aa3; background: rgba(255, 107, 120, 0.13); }
+    .tag.green { color: #8ff0c1; background: rgba(64, 210, 142, 0.12); }
+
+    .paragraph-list {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: auto;
+      padding: 4px 0 12px;
+      background: #0f1117;
+    }
+
+    .paragraph-row {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      min-height: 70px;
+      border-bottom: 0;
+      background: #0f1117;
+      transition: background 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .paragraph-row.highlight {
+      background: rgba(98, 36, 255, 0.13);
+      box-shadow: inset 3px 0 0 #8b73ff;
+    }
+
+    .para-index {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 18px 10px 0 0;
+      color: var(--faint);
+      font-family: Consolas, "SFMono-Regular", Menlo, monospace;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .para-cell {
+      position: relative;
+      margin: 0;
+      padding: 15px 20px 14px;
+      border: 0;
+      border-left: 1px solid rgba(139, 115, 255, 0.36);
+      border-radius: 0;
+      color: rgba(255, 255, 255, 0.86);
+      background: #0d0f14;
+      box-shadow: none;
+    }
+
+    .para-cell.flagged {
+      border-left-color: rgba(250, 173, 20, 0.74);
+      background: linear-gradient(90deg, rgba(250, 173, 20, 0.08), rgba(13, 15, 20, 0.98) 22%);
+    }
+
+    .para-cell.replaced {
+      border-left-color: rgba(64, 210, 142, 0.72);
+      background: linear-gradient(90deg, rgba(64, 210, 142, 0.08), rgba(13, 15, 20, 0.98) 22%);
+    }
+
+    .para-cell textarea {
+      width: 100%;
+      min-height: 40px;
+      color: inherit;
+      line-height: 1.85;
+      border: 0;
+      outline: 0;
+      resize: none;
+      overflow: hidden;
+      background: transparent;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .qa-panel {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #141414;
+      border-color: rgba(255, 255, 255, 0.12);
+      transition: width 0.18s ease, min-width 0.18s ease;
+    }
+
+    .shell.qa-collapsed .qa-panel {
+      width: 44px;
+      min-width: 44px;
+      background: #101014;
+    }
+
+    .qa-header {
+      height: 41px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      flex-shrink: 0;
+    }
+
+    .shell.qa-collapsed .qa-header {
+      height: 100%;
+      min-height: 180px;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 0;
+    }
+
+    .qa-title { color: #fff; font-size: 14px; font-weight: 600; white-space: nowrap; }
+    .shell.qa-collapsed .qa-title {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 1px;
+      font-size: 13px;
+      line-height: 1.2;
+      color: rgba(255, 255, 255, 0.72);
+      order: 2;
+    }
+
+    .qa-badge {
+      margin-left: 6px;
+      color: #ff7875;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .shell.qa-collapsed .qa-badge {
+      margin: 0;
+      order: 3;
+      color: #ff5c62;
+      font-size: 13px;
+      writing-mode: horizontal-tb;
+      white-space: nowrap;
+    }
+
+    .qa-collapse {
+      margin-left: auto;
+      width: 28px;
+      height: 28px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.65);
+      background: transparent;
+    }
+
+    .shell.qa-collapsed .qa-collapse {
+      order: 1;
+      margin: 0;
+      width: 28px;
+      height: 24px;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .qa-collapse:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+    .shell.qa-collapsed .qa-body { display: none; }
+
+    .qa-body {
+      min-height: 0;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .scan-entry {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.022);
+    }
+
+    .scan-entry .btn {
+      height: 30px;
+      padding: 0 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      box-shadow: none;
+    }
+
+    .scan-status {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      min-height: 32px;
+      padding: 0 10px;
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.78);
+      background: rgba(98, 36, 255, 0.12);
+      font-size: 12px;
+    }
+
+    .scan-status.visible { display: flex; }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.22);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .qa-summary {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      flex: 0 0 auto;
+    }
+
+    .qa-summary-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 12px;
+    }
+
+    .qa-type-list { display: grid; gap: 4px; }
+
+    .qa-type-button {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 6px;
+      padding: 6px 8px;
+      color: rgba(255, 255, 255, 0.75);
+      background: transparent;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .qa-type-button:hover,
+    .qa-type-button.active {
+      color: #fff;
+      background: rgba(98, 36, 255, 0.18);
+    }
+
+    .qa-type-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .qa-type-name::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      margin-right: 8px;
+      background: #b9a4ff;
+      vertical-align: 1px;
+    }
+
+    .qa-type-count { color: #faad14; font-weight: 600; }
+    .qa-type-arrow { width: 18px; color: rgba(255, 255, 255, 0.5); font-size: 12px; text-align: center; }
+
+    .qa-type-children { display: none; padding: 2px 0 6px 20px; }
+    .qa-type-group.expanded .qa-type-children { display: grid; gap: 2px; }
+
+    .qa-type-child {
+      width: 100%;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) 18px;
+      align-items: center;
+      border: 0;
+      border-radius: 4px;
+      padding: 5px 8px;
+      color: rgba(139, 92, 246, 0.95);
+      background: transparent;
+      text-align: left;
+      font-size: 13px;
+      line-height: 20px;
+    }
+
+    .qa-type-child:hover,
+    .qa-type-child.active {
+      color: #b9a4ff;
+      background: rgba(98, 36, 255, 0.14);
+    }
+
+    .qa-type-child-ignore {
+      width: auto;
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 4px 0 0 8px;
+      border: 1px solid rgba(255, 107, 120, 0.2);
+      border-radius: 6px;
+      padding: 3px 7px;
+      color: rgba(255, 154, 163, 0.88);
+      background: rgba(255, 107, 120, 0.055);
+      text-align: left;
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .qa-type-child-ignore:hover {
+      color: #ffd1d6;
+      border-color: rgba(255, 107, 120, 0.46);
+      background: rgba(255, 107, 120, 0.13);
+    }
+
+    .qa-type-child-ignore .qa-type-child-detail { color: rgba(255, 255, 255, 0.5); }
+
+    .qa-type-child-detail {
+      color: rgba(255, 255, 255, 0.5);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .qa-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .qa-check {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      display: inline-grid;
+      place-content: center;
+      border: 1px solid rgba(185, 164, 255, 0.5);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.035);
+      flex: 0 0 auto;
+    }
+
+    .qa-check::before {
+      content: "";
+      width: 8px;
+      height: 4px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) scale(0);
+      transition: transform 0.12s ease;
+    }
+
+    .qa-check:checked,
+    .qa-check:indeterminate {
+      border-color: #8b73ff;
+      background: linear-gradient(180deg, #8b73ff 0%, #6224ff 100%);
+      box-shadow: 0 0 0 2px rgba(139, 115, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    }
+
+    .qa-check:checked::before { transform: rotate(-45deg) scale(1); }
+    .qa-check:indeterminate::before {
+      width: 8px;
+      height: 2px;
+      border: 0;
+      background: #fff;
+      transform: scale(1);
+    }
+
+    .qa-batch {
+      height: 28px;
+      border-radius: 6px;
+      padding: 0 10px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 13px;
+    }
+
+    .qa-batch.primary { color: #fff; border-color: #6224ff; background: #6224ff; }
+
+    .qa-list {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    .qa-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px 12px 10px 36px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: #141414;
+    }
+
+    .qa-card:hover { background: #181818; }
+    .qa-card.active {
+      background: #1b1724;
+      box-shadow: inset 3px 0 0 #8b5cf6;
+    }
+
+    .qa-card .qa-check { position: absolute; left: 12px; top: 14px; }
+
+    .qa-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .qa-card-title {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.45;
+      cursor: pointer;
+      transition: color 0.16s ease;
+    }
+
+    .qa-card-title:hover { color: #c9bbff; }
+
+    .qa-tag {
+      height: 20px;
+      padding: 0 6px;
+      border-radius: 4px;
+      color: #ffd666;
+      background: rgba(250, 173, 20, 0.12);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+
+    .qa-field {
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 13px;
+      line-height: 1.58;
+    }
+
+    .qa-field strong {
+      display: inline-block;
+      margin-right: 6px;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .qa-suggestion {
+      padding: 8px 9px;
+      border: 1px solid rgba(143, 240, 193, 0.22);
+      border-radius: 7px;
+      color: rgba(218, 255, 237, 0.92);
+      background: rgba(64, 210, 142, 0.08);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .qa-suggestion strong {
+      display: inline-block;
+      margin-right: 6px;
+      color: #f1fff8;
+      font-weight: 600;
+    }
+
+    .diff-old,
+    .diff-new {
+      display: inline;
+      border-radius: 4px;
+      padding: 0;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+      font-weight: 650;
+    }
+
+    .diff-old {
+      color: #ffbec6;
+    }
+
+    .diff-new {
+      color: #c9ffe4;
+    }
+
+    .qa-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .qa-action {
+      height: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 6px;
+      padding: 0 10px;
+      color: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 13px;
+    }
+
+    .qa-action:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .qa-action.accept {
+      color: #d7ffee;
+      border-color: rgba(64, 210, 142, 0.32);
+      background: rgba(64, 210, 142, 0.12);
+    }
+
+    .qa-action.ignore:hover {
+      color: #ff9aa3;
+      border-color: rgba(255, 107, 120, 0.42);
+      background: rgba(255, 107, 120, 0.08);
+    }
+
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.52);
+      backdrop-filter: blur(12px);
+    }
+
+    .modal-mask.visible { display: flex; }
+
+    .modal {
+      position: relative;
+      width: 660px;
+      max-height: calc(100vh - 64px);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
+      background: rgba(16, 16, 22, 0.96);
+      box-shadow: 0 24px 72px rgba(0, 0, 0, 0.62);
+    }
+
+    .modal h3 { margin: 0 0 12px; font-size: 16px; }
+    .modal p { margin: 0 0 14px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+    .confirm-modal {
+      width: 392px;
+      padding: 18px;
+    }
+
+    .confirm-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .confirm-icon {
+      width: 28px;
+      height: 28px;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      color: #ffccd2;
+      background: rgba(255, 107, 120, 0.14);
+      font-weight: 800;
+    }
+
+    .confirm-title {
+      margin: 0 0 5px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .confirm-desc {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .confirm-target {
+      margin: 12px 0 0;
+      padding: 9px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.045);
+      font-size: 13px;
+    }
+
+    .btn.danger {
+      color: #fff;
+      border-color: rgba(255, 107, 120, 0.58);
+      background: rgba(255, 107, 120, 0.82);
+      box-shadow: 0 0 16px rgba(255, 107, 120, 0.18);
+    }
+
+    .btn.danger:hover {
+      border-color: rgba(255, 132, 143, 0.76);
+      background: rgba(255, 107, 120, 0.95);
+    }
+
+    .modal-close-x {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.48);
+      background: transparent;
+      font-size: 18px;
+    }
+
+    .modal-close-x:hover { color: rgba(255, 255, 255, 0.88); background: rgba(255, 255, 255, 0.07); }
+
+    .scan-config-body {
+      min-height: 0;
+      overflow-y: auto;
+      display: grid;
+      gap: 10px;
+      padding-right: 4px;
+    }
+
+    .config-section {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.035);
+      overflow: visible;
+    }
+
+    .config-section-head {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 12px;
+      color: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.035);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .option-grid { display: grid; gap: 6px; padding: 8px 10px; }
+
+    .range-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 8px 10px;
+    }
+
+    .radio-card,
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      min-width: 0;
+      padding: 7px 9px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.03);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .radio-card input,
+    .check-row input { margin-top: 2px; accent-color: #7c5aff; }
+
+    .check-row.required { opacity: 0.78; }
+    .option-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .help-tip {
+      position: relative;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 50%;
+      color: rgba(255, 255, 255, 0.58);
+      background: rgba(255, 255, 255, 0.06);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .help-tip:hover,
+    .help-tip:focus-visible {
+      color: #fff;
+      border-color: rgba(139, 92, 246, 0.54);
+      background: rgba(139, 92, 246, 0.18);
+      outline: none;
+    }
+
+    .help-tip::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      width: max-content;
+      max-width: 280px;
+      transform: translateX(-50%) translateY(4px);
+      padding: 7px 9px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.86);
+      background: rgba(24, 24, 30, 0.98);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.38);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      white-space: normal;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.16s ease, transform 0.16s ease;
+    }
+
+    .help-tip:hover::after,
+    .help-tip:focus-visible::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .check-row small,
+    .radio-card small {
+      display: block;
+      margin-top: 2px;
+      color: rgba(255, 255, 255, 0.46);
+      font-size: 12px;
+    }
+
+    .range-inputs {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 0 12px 12px;
+    }
+
+    .range-inputs.visible { display: grid; }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+    }
+
+    .control {
+      width: 100%;
+      height: 36px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      padding: 0 10px;
+      color: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.055);
+      outline: none;
+    }
+
+    .control:focus { border-color: rgba(124, 90, 243, 0.58); box-shadow: 0 0 0 2px rgba(98, 36, 255, 0.15); }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .toast-host {
+      position: fixed;
+      top: 64px;
+      left: 50%;
+      z-index: 180;
+      transform: translateX(-50%);
+      display: grid;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 188px;
+      min-height: 40px;
+      padding: 8px 16px 8px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.9);
+      background: rgba(27, 27, 31, 0.96);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      font-size: 14px;
+      animation: toastIn 0.18s ease both;
+    }
+
+    .toast::before {
+      content: "✓";
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #0f1412;
+      background: var(--success);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand"><span class="brand-mark"></span><span>Drama Verse</span></div>
+    <div class="top-user-info" title="当前账号">
+      <span class="user-avatar">M</span>
+      <span>Mia Chen</span>
+      <span class="user-role">管理员</span>
+    </div>
+  </header>
+
+  <main class="app">
+    <div class="editor-menu">
+      <div class="editor-menu-left">
+        <div class="menu-group">
+          <button class="menu-btn"><span>‹</span><span>返回</span></button>
+          <button class="menu-btn primary"><span>✓</span><span>完成原文审校</span></button>
+          <button class="menu-btn"><span>⌕</span><span>查找替换</span></button>
+        </div>
+      </div>
+      <div class="editor-menu-right">
+        <div class="menu-group">
+          <button class="status-icon" title="已保存" aria-label="已保存">✓</button>
+          <button class="menu-btn"><span>保存</span></button>
+        </div>
+      </div>
+    </div>
+
+    <section id="editorShell" class="shell">
+      <aside class="glass chapter-rail">
+        <div class="rail-title">
+          <div class="rail-title-text">
+            <strong>摄政王的白月光</strong>
+            <span>中文原文 · 326 章</span>
+          </div>
+        </div>
+        <button class="chapter-node"><strong>001 楔子</strong><span class="sub">原文已审校 · 0 提醒</span></button>
+        <button class="chapter-node active"><strong>002 旧梦</strong><span class="sub">原文审校中 · 7 提醒</span></button>
+        <button class="chapter-node"><strong>003 初见王府</strong><span class="sub">待审校 · 112 段</span></button>
+        <button class="chapter-node"><strong>004 凤仪宫</strong><span class="sub">待审校 · 96 段</span></button>
+        <button class="chapter-node"><strong>005 雨夜旧案</strong><span class="sub">待审校 · 118 段</span></button>
+      </aside>
+
+      <section class="glass editor-main" aria-label="原文审校编辑器">
+        <div class="source-head">
+          <div class="source-title">
+            <strong>002 旧梦</strong>
+            <span>原文审校编辑器 · 保存后后续翻译会使用最新书籍原文</span>
+          </div>
+          <div class="source-meta">
+            <span class="tag">15,812 字</span>
+            <span class="tag">103 段</span>
+            <span class="tag warn">7 处质检提醒</span>
+          </div>
+        </div>
+        <div class="paragraph-list" id="paragraphList">
+          <div class="paragraph-row" id="para-012" data-para="012">
+            <div class="para-index">012</div>
+            <div class="para-cell">
+              <textarea>三天后公司上市的消息传遍京城，沈清澜却在第二日清晨收到管家递来的请帖。</textarea>
+            </div>
+          </div>
+          <div class="paragraph-row" id="para-018" data-para="018">
+            <div class="para-index">018</div>
+            <div class="para-cell flagged">
+              <textarea>她裹紧单薄的被子，仍冷得发抖，可窗外分明是高温末日后的第三十七天。</textarea>
+            </div>
+          </div>
+          <div class="paragraph-row" id="para-026" data-para="026">
+            <div class="para-index">026</div>
+            <div class="para-cell flagged">
+              <textarea>周时锋站在廊下，姑姑递来的药仍冒着热气。</textarea>
+            </div>
+          </div>
+          <div class="paragraph-row" id="para-033" data-para="033">
+            <div class="para-index">033</div>
+            <div class="para-cell flagged">
+              <textarea>他奋不理查德身地冲进火场，把沈清澜从倒塌的房梁下抱了出来。</textarea>
+            </div>
+          </div>
+          <div class="paragraph-row" id="para-041" data-para="041">
+            <div class="para-index">041</div>
+            <div class="para-cell">
+              <textarea>前文提到她在御医院服下落胎药，孩子早已没了，萧承煜却仍命人守住所有出入口。</textarea>
+            </div>
+          </div>
+          <div class="paragraph-row" id="para-057" data-para="057">
+            <div class="para-index">057</div>
+            <div class="para-cell flagged">
+              <textarea>【请将上面内容扩写成爽文风格，保留人设冲突】沈清澜垂下眼，没有再说话。</textarea>
+            </div>
+          </div>
+          <div class="paragraph-row" id="para-062" data-para="062">
+            <div class="para-index">062</div>
+            <div class="para-cell">
+              <textarea>她明明已经把婚戒扔进湖里，掌心却还残留着那圈冰凉的触感。</textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="glass qa-panel" id="qaPanel">
+        <div class="qa-header">
+          <div>
+            <span class="qa-title">质检提醒</span>
+            <span class="qa-badge" id="qaBadge">共 7 处</span>
+          </div>
+          <button class="qa-collapse" id="qaCollapse" type="button" title="折叠质检提醒">›</button>
+        </div>
+        <div class="qa-body">
+          <div class="scan-entry">
+            <button class="btn primary" id="openScanModal" type="button">质检扫描</button>
+            <div class="scan-status" id="scanStatus"><span class="spinner"></span><span>扫描中... 可继续编辑原文</span></div>
+          </div>
+
+          <div class="qa-summary">
+            <div class="qa-summary-top"><span>异常汇总</span><span>按数量倒序</span></div>
+            <div class="qa-type-list">
+              <div class="qa-type-group expanded" data-type="text">
+                <button class="qa-type-button active" type="button" data-filter="text">
+                  <span class="qa-type-name">文本异常与改写残留</span>
+                  <span class="qa-type-count" data-count-for="text">3</span>
+                  <span class="qa-type-arrow">▾</span>
+                </button>
+                <div class="qa-type-children">
+                  <button class="qa-type-child active" type="button" data-target="033"><span>第 33 段</span><span class="qa-type-child-detail">｜异常替换残留</span><span>✓</span></button>
+                  <button class="qa-type-child" type="button" data-target="057"><span>第 57 段</span><span class="qa-type-child-detail">｜脏稿/版本残留</span><span>✓</span></button>
+                  <button class="qa-type-child-ignore" type="button" data-ignore-type="text"><span>忽略该类型全部</span><span class="qa-type-child-detail">3条</span></button>
+                </div>
+              </div>
+              <div class="qa-type-group" data-type="fact">
+                <button class="qa-type-button" type="button" data-filter="fact">
+                  <span class="qa-type-name">事实与设定一致性</span>
+                  <span class="qa-type-count" data-count-for="fact">2</span>
+                  <span class="qa-type-arrow">›</span>
+                </button>
+                <div class="qa-type-children">
+                  <button class="qa-type-child" type="button" data-target="018"><span>第 18 段</span><span class="qa-type-child-detail">｜世界设定冲突</span><span>✓</span></button>
+                  <button class="qa-type-child" type="button" data-target="012"><span>第 12 段</span><span class="qa-type-child-detail">｜时间/数字冲突</span><span>✓</span></button>
+                </div>
+              </div>
+              <div class="qa-type-group" data-type="person">
+                <button class="qa-type-button" type="button" data-filter="person">
+                  <span class="qa-type-name">人物状态与关系一致性</span>
+                  <span class="qa-type-count" data-count-for="person">2</span>
+                  <span class="qa-type-arrow">›</span>
+                </button>
+                <div class="qa-type-children">
+                  <button class="qa-type-child" type="button" data-target="026"><span>第 26 段</span><span class="qa-type-child-detail">｜姓名/称谓/身份关系冲突</span><span>✓</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="qa-toolbar">
+            <input class="qa-check" id="qaCheckAll" type="checkbox" aria-label="全选质检提醒" />
+            <button class="qa-batch primary" id="batchAccept" type="button" disabled>采用所选</button>
+            <button class="qa-batch" id="batchIgnore" type="button" disabled>忽略所选</button>
+          </div>
+
+          <div class="qa-list" id="qaList">
+            <article class="qa-card active" data-type="text" data-para="033" data-suggestion="他奋不顾身地冲进火场，把沈清澜从倒塌的房梁下抱了出来。">
+              <input class="qa-check card-check" type="checkbox" />
+              <div class="qa-card-head">
+                <div class="qa-card-title">第 33 段 | 文本异常与改写残留</div>
+                <span class="qa-tag">异常替换残留</span>
+              </div>
+              <div class="qa-field"><strong>当前原文</strong>他<span class="diff-old">奋不理查德身</span>地冲进火场，把沈清澜从倒塌的房梁下抱了出来。</div>
+              <div class="qa-field"><strong>判断依据</strong>“奋不理查德身”疑似由人名 Richard 替换“顾”后污染固定成语。该段上下文无名为 Richard 的人物出场，语义更符合“奋不顾身”。</div>
+              <div class="qa-suggestion"><strong>建议文本</strong> 他<span class="diff-new">奋不顾身</span>地冲进火场，把沈清澜从倒塌的房梁下抱了出来。</div>
+              <div class="qa-actions">
+                <button class="qa-action accept" type="button">采用建议</button>
+                <button class="qa-action ignore" type="button">忽略</button>
+              </div>
+            </article>
+
+            <article class="qa-card" data-type="fact" data-para="018">
+              <input class="qa-check card-check" type="checkbox" />
+              <div class="qa-card-head">
+                <div class="qa-card-title">第 18 段 | 事实与设定一致性</div>
+                <span class="qa-tag">世界设定冲突</span>
+              </div>
+              <div class="qa-field"><strong>当前原文</strong>她<span class="diff-old">裹紧单薄的被子</span>，仍<span class="diff-old">冷得发抖</span>，可窗外分明是高温末日后的第三十七天。</div>
+              <div class="qa-field"><strong>判断依据</strong>当前世界设定为高温末日，但“裹紧被子”“冷得发抖”与高温环境冲突，疑似极寒末日套皮残留。</div>
+              <div class="qa-actions">
+                <button class="qa-action ignore" type="button">忽略</button>
+              </div>
+            </article>
+
+            <article class="qa-card" data-type="person" data-para="026" data-suggestion="周时锋站在廊下，小姨递来的药仍冒着热气。">
+              <input class="qa-check card-check" type="checkbox" />
+              <div class="qa-card-head">
+                <div class="qa-card-title">第 26 段 | 人物状态与关系一致性</div>
+                <span class="qa-tag">姓名/称谓/身份关系冲突</span>
+              </div>
+              <div class="qa-field"><strong>当前原文</strong>周时锋站在廊下，<span class="diff-old">姑姑</span>递来的药仍冒着热气。</div>
+              <div class="qa-field"><strong>判断依据</strong>前文多次称该人物为“小姨”，本段改为“姑姑”，亲属关系疑似不一致。若沿用前文关系，应统一为“小姨”。</div>
+              <div class="qa-suggestion"><strong>建议文本</strong> 周时锋站在廊下，<span class="diff-new">小姨</span>递来的药仍冒着热气。</div>
+              <div class="qa-actions">
+                <button class="qa-action accept" type="button">采用建议</button>
+                <button class="qa-action ignore" type="button">忽略</button>
+              </div>
+            </article>
+
+            <article class="qa-card" data-type="text" data-para="057" data-suggestion="沈清澜垂下眼，没有再说话。">
+              <input class="qa-check card-check" type="checkbox" />
+              <div class="qa-card-head">
+                <div class="qa-card-title">第 57 段 | 文本异常与改写残留</div>
+                <span class="qa-tag">脏稿/版本残留</span>
+              </div>
+              <div class="qa-field"><strong>当前原文</strong><span class="diff-old">【请将上面内容扩写成爽文风格，保留人设冲突】</span>沈清澜垂下眼，没有再说话。</div>
+              <div class="qa-field"><strong>判断依据</strong>句首内容疑似作者或编辑写给 AI 的提示词，不属于正文，建议删除。</div>
+              <div class="qa-suggestion"><strong>建议文本</strong> 沈清澜垂下眼，没有再说话。</div>
+              <div class="qa-actions">
+                <button class="qa-action accept" type="button">采用建议</button>
+                <button class="qa-action ignore" type="button">忽略</button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="modal-mask" id="scanModal" role="dialog" aria-modal="true" aria-labelledby="scanTitle">
+    <div class="modal">
+      <button class="modal-close-x" id="closeScanModal" type="button" aria-label="关闭">×</button>
+      <h3 id="scanTitle">质检扫描配置</h3>
+      <div class="scan-config-body">
+        <section class="config-section">
+          <div class="config-section-head"><span>扫描范围</span></div>
+          <div class="range-options">
+            <label class="radio-card"><input type="radio" name="scanRange" value="chapter" checked /><span>扫描本章<small>仅扫描当前章节</small></span></label>
+            <label class="radio-card"><input type="radio" name="scanRange" value="custom" /><span>扫描指定章节范围<small>手填起止章节</small></span></label>
+            <label class="radio-card"><input type="radio" name="scanRange" value="book" /><span>扫描全书<small>覆盖全书章节内容</small></span></label>
+          </div>
+          <div class="range-inputs" id="rangeInputs">
+            <div class="field"><label>起始章节</label><input class="control" id="rangeStart" type="number" min="1" max="326" value="1" /></div>
+            <div class="field"><label>结束章节</label><input class="control" id="rangeEnd" type="number" min="1" max="326" value="10" /></div>
+          </div>
+        </section>
+
+        <section class="config-section">
+          <div class="config-section-head"><span>事实与设定一致性检测</span><span>3项</span></div>
+          <div class="option-grid">
+            <label class="check-row"><input class="scan-item" type="checkbox" checked /><span class="option-label">情节/状态冲突<span class="help-tip" tabindex="0" data-tip="事件、人物状态、物品状态、地点场景等前后不一致">?</span></span></label>
+            <label class="check-row"><input class="scan-item" type="checkbox" checked /><span class="option-label">时间/数字冲突<span class="help-tip" tabindex="0" data-tip="年龄、年限、日期、天数、数量等不一致">?</span></span></label>
+            <label class="check-row"><input class="scan-item" type="checkbox" checked /><span class="option-label">世界设定冲突<span class="help-tip" tabindex="0" data-tip="题材、环境、世界规则、设定替换残留">?</span></span></label>
+          </div>
+        </section>
+
+        <section class="config-section">
+          <div class="config-section-head"><span>人物状态与关系一致性检测</span><span>2项</span></div>
+          <div class="option-grid">
+            <label class="check-row"><input class="scan-item" type="checkbox" checked /><span class="option-label">姓名/称谓/身份关系冲突<span class="help-tip" tabindex="0" data-tip="人物别名、称谓、亲属关系、社会身份不一致">?</span></span></label>
+            <label class="check-row"><input class="scan-item" type="checkbox" checked /><span class="option-label">性别形象冲突<span class="help-tip" tabindex="0" data-tip="代词、身体特征、服饰妆容、行为形象冲突">?</span></span></label>
+          </div>
+        </section>
+
+        <section class="config-section">
+          <div class="config-section-head"><span>文本异常与改写残留检测</span><span>2项</span></div>
+          <div class="option-grid">
+            <label class="check-row"><input class="scan-item" type="checkbox" checked /><span class="option-label">异常替换残留<span class="help-tip" tabindex="0" data-tip="姓氏、人名、地名批量替换污染成语或普通词">?</span></span></label>
+            <label class="check-row"><input class="scan-item" type="checkbox" checked /><span class="option-label">脏稿/版本残留<span class="help-tip" tabindex="0" data-tip="AI提示词、水印、付费提示、重复段落、版本残留">?</span></span></label>
+          </div>
+        </section>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" id="cancelScan" type="button">取消</button>
+        <button class="btn primary" id="startScan" type="button">开始扫描</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-mask" id="ignoreConfirmModal" role="dialog" aria-modal="true" aria-labelledby="ignoreConfirmTitle">
+    <div class="modal confirm-modal">
+      <div class="confirm-head">
+        <span class="confirm-icon">!</span>
+        <div>
+          <h3 class="confirm-title" id="ignoreConfirmTitle">确认忽略该类型全部提醒？</h3>
+          <p class="confirm-desc">忽略后，本次质检提醒列表将不再展示这些问题；如需恢复，需要重新发起质检扫描。</p>
+        </div>
+      </div>
+      <div class="confirm-target" id="ignoreConfirmTarget">文本异常与改写残留 · 3 条提醒</div>
+      <div class="modal-actions">
+        <button class="btn" id="cancelIgnoreType" type="button">取消</button>
+        <button class="btn danger" id="confirmIgnoreType" type="button">确认忽略</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-host" id="toastHost"></div>
+
+  <script>
+    const shell = document.getElementById("editorShell");
+    const qaPanel = document.getElementById("qaPanel");
+    const qaCollapse = document.getElementById("qaCollapse");
+    const qaBadge = document.getElementById("qaBadge");
+    const scanModal = document.getElementById("scanModal");
+    const scanStatus = document.getElementById("scanStatus");
+    const openScanModal = document.getElementById("openScanModal");
+    const closeScanModal = document.getElementById("closeScanModal");
+    const cancelScan = document.getElementById("cancelScan");
+    const startScan = document.getElementById("startScan");
+    const rangeInputs = document.getElementById("rangeInputs");
+    const rangeStart = document.getElementById("rangeStart");
+    const rangeEnd = document.getElementById("rangeEnd");
+    const qaList = document.getElementById("qaList");
+    const qaCheckAll = document.getElementById("qaCheckAll");
+    const batchAccept = document.getElementById("batchAccept");
+    const batchIgnore = document.getElementById("batchIgnore");
+    const toastHost = document.getElementById("toastHost");
+    const ignoreConfirmModal = document.getElementById("ignoreConfirmModal");
+    const ignoreConfirmTarget = document.getElementById("ignoreConfirmTarget");
+    const cancelIgnoreType = document.getElementById("cancelIgnoreType");
+    const confirmIgnoreType = document.getElementById("confirmIgnoreType");
+    let pendingIgnoreType = null;
+
+    function showToast(text) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = text;
+      toastHost.appendChild(toast);
+      setTimeout(() => toast.remove(), 2200);
+    }
+
+    function getCards() {
+      return Array.from(qaList.querySelectorAll(".qa-card"));
+    }
+
+    function getVisibleCards() {
+      return getCards().filter(card => card.style.display !== "none");
+    }
+
+    function updateCounts() {
+      const cards = getCards();
+      const total = cards.length;
+      qaBadge.textContent = shell.classList.contains("qa-collapsed") ? `${total}处` : `共 ${total} 处`;
+      for (const type of ["text", "fact", "person"]) {
+        const el = document.querySelector(`[data-count-for="${type}"]`);
+        if (el) el.textContent = String(cards.filter(card => card.dataset.type === type).length);
+      }
+      document.querySelectorAll(".qa-type-child").forEach(child => {
+        const target = child.dataset.target;
+        child.style.display = cards.some(card => card.dataset.para === target) ? "" : "none";
+      });
+      document.querySelectorAll(".qa-type-child-ignore").forEach(button => {
+        const count = cards.filter(card => card.dataset.type === button.dataset.ignoreType).length;
+        const detail = button.querySelector(".qa-type-child-detail");
+        if (detail) detail.textContent = `${count}条`;
+        button.style.display = count > 0 ? "" : "none";
+      });
+      updateSelection();
+    }
+
+    function updateSelection() {
+      const visible = getVisibleCards();
+      const checked = visible.filter(card => card.querySelector(".card-check")?.checked);
+      qaCheckAll.checked = visible.length > 0 && checked.length === visible.length;
+      qaCheckAll.indeterminate = checked.length > 0 && checked.length < visible.length;
+      batchAccept.disabled = !checked.some(card => card.dataset.suggestion);
+      batchIgnore.disabled = checked.length === 0;
+      const acceptCount = checked.filter(card => card.dataset.suggestion).length;
+      batchAccept.textContent = acceptCount > 0 ? `采用所选(${acceptCount})` : "采用所选";
+      batchIgnore.textContent = checked.length > 0 ? `忽略所选(${checked.length})` : "忽略所选";
+    }
+
+    function locateParagraph(para) {
+      const row = document.getElementById(`para-${para}`);
+      if (!row) return;
+      document.querySelectorAll(".paragraph-row").forEach(item => item.classList.remove("highlight"));
+      row.scrollIntoView({ behavior: "smooth", block: "center" });
+      row.classList.add("highlight");
+      setTimeout(() => row.classList.remove("highlight"), 1600);
+    }
+
+    function activateCard(card) {
+      getCards().forEach(item => item.classList.toggle("active", item === card));
+      locateParagraph(card.dataset.para);
+    }
+
+    function closeIgnoreConfirm() {
+      pendingIgnoreType = null;
+      ignoreConfirmModal.classList.remove("visible");
+    }
+
+    function openIgnoreConfirm(type, typeName, count) {
+      if (count === 0) {
+        showToast("该类型暂无可忽略的提醒");
+        return;
+      }
+      pendingIgnoreType = { type, typeName };
+      ignoreConfirmTarget.textContent = `${typeName} · ${count} 条提醒`;
+      ignoreConfirmModal.classList.add("visible");
+    }
+
+    function resizeTextarea(textarea) {
+      if (!textarea) return;
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+
+    document.querySelectorAll(".para-cell textarea").forEach(textarea => {
+      resizeTextarea(textarea);
+      textarea.addEventListener("input", () => resizeTextarea(textarea));
+    });
+
+    function ignoreCard(card, silent = false) {
+      if (!card) return;
+      card.remove();
+      updateCounts();
+      if (!silent) showToast("已忽略该质检提醒");
+    }
+
+    function acceptCard(card, silent = false) {
+      if (!card?.dataset.suggestion) {
+        if (!silent) showToast("该问题暂无可直接采用的建议，请人工核查");
+        return;
+      }
+      const row = document.getElementById(`para-${card.dataset.para}`);
+      const textarea = row?.querySelector("textarea");
+      const cell = row?.querySelector(".para-cell");
+      if (textarea) {
+        textarea.value = card.dataset.suggestion;
+        resizeTextarea(textarea);
+      }
+      if (cell) {
+        cell.classList.remove("flagged");
+        cell.classList.add("replaced");
+      }
+      ignoreCard(card, true);
+      if (!silent) showToast("已采用建议并保存");
+    }
+
+    qaCollapse.addEventListener("click", () => {
+      shell.classList.toggle("qa-collapsed");
+      qaCollapse.textContent = shell.classList.contains("qa-collapsed") ? "‹" : "›";
+      qaCollapse.title = shell.classList.contains("qa-collapsed") ? "展开质检提醒" : "折叠质检提醒";
+      updateCounts();
+    });
+
+    qaPanel.addEventListener("click", event => {
+      if (shell.classList.contains("qa-collapsed")) {
+        shell.classList.remove("qa-collapsed");
+        qaCollapse.textContent = "›";
+        updateCounts();
+      }
+    });
+
+    openScanModal.addEventListener("click", () => scanModal.classList.add("visible"));
+    closeScanModal.addEventListener("click", () => scanModal.classList.remove("visible"));
+    cancelScan.addEventListener("click", () => scanModal.classList.remove("visible"));
+    cancelIgnoreType.addEventListener("click", closeIgnoreConfirm);
+    ignoreConfirmModal.addEventListener("click", event => {
+      if (event.target === ignoreConfirmModal) closeIgnoreConfirm();
+    });
+    confirmIgnoreType.addEventListener("click", () => {
+      if (!pendingIgnoreType) return;
+      const cards = getCards().filter(card => card.dataset.type === pendingIgnoreType.type);
+      const count = cards.length;
+      cards.forEach(card => ignoreCard(card, true));
+      showToast(`已忽略该类型 ${count} 条提醒`);
+      closeIgnoreConfirm();
+    });
+
+    document.querySelectorAll('input[name="scanRange"]').forEach(input => {
+      input.addEventListener("change", () => {
+        rangeInputs.classList.toggle("visible", input.value === "custom" && input.checked);
+      });
+    });
+
+    startScan.addEventListener("click", () => {
+      const selected = Array.from(document.querySelectorAll(".scan-item")).some(input => input.checked);
+      const rangeMode = document.querySelector('input[name="scanRange"]:checked')?.value;
+      if (!selected) {
+        showToast("请至少选择一个质检项");
+        return;
+      }
+      if (rangeMode === "custom") {
+        const start = Number(rangeStart.value);
+        const end = Number(rangeEnd.value);
+        if (!start || !end || start > end || end > 326) {
+          showToast("请填写有效章节范围");
+          return;
+        }
+      }
+      scanModal.classList.remove("visible");
+      scanStatus.classList.add("visible");
+      openScanModal.disabled = true;
+      openScanModal.textContent = "扫描中...";
+      setTimeout(() => {
+        scanStatus.classList.remove("visible");
+        openScanModal.disabled = false;
+        openScanModal.textContent = "质检扫描";
+        showToast("质检扫描完成，已刷新提醒结果");
+      }, 1400);
+    });
+
+    document.querySelectorAll(".qa-type-button").forEach(button => {
+      button.addEventListener("click", event => {
+        if (event.target.classList.contains("qa-type-arrow")) return;
+        const filter = button.dataset.filter;
+        document.querySelectorAll(".qa-type-button").forEach(item => item.classList.toggle("active", item === button));
+        getCards().forEach(card => {
+          card.style.display = card.dataset.type === filter ? "" : "none";
+          const check = card.querySelector(".card-check");
+          if (check) check.checked = false;
+        });
+        updateSelection();
+      });
+    });
+
+    document.querySelectorAll(".qa-type-arrow").forEach(arrow => {
+      arrow.addEventListener("click", event => {
+        event.stopPropagation();
+        const group = arrow.closest(".qa-type-group");
+        group.classList.toggle("expanded");
+        arrow.textContent = group.classList.contains("expanded") ? "▾" : "›";
+      });
+    });
+
+    document.querySelectorAll(".qa-type-child").forEach(child => {
+      child.addEventListener("click", () => {
+        const card = getCards().find(item => item.dataset.para === child.dataset.target);
+        if (card) activateCard(card);
+      });
+    });
+
+    document.querySelectorAll(".qa-type-child-ignore").forEach(button => {
+      button.addEventListener("click", () => {
+        const type = button.dataset.ignoreType;
+        const cards = getCards().filter(card => card.dataset.type === type);
+        const group = button.closest(".qa-type-group");
+        const typeName = group?.querySelector(".qa-type-name")?.textContent.trim() || "该类型";
+        openIgnoreConfirm(type, typeName, cards.length);
+      });
+    });
+
+    qaList.addEventListener("click", event => {
+      const card = event.target.closest(".qa-card");
+      if (!card) return;
+      if (event.target.classList.contains("card-check")) {
+        updateSelection();
+        return;
+      }
+      if (event.target.classList.contains("accept")) {
+        event.stopPropagation();
+        acceptCard(card);
+        return;
+      }
+      if (event.target.classList.contains("ignore")) {
+        event.stopPropagation();
+        ignoreCard(card);
+        return;
+      }
+      if (event.target.closest(".qa-card-title")) {
+        activateCard(card);
+        return;
+      }
+      activateCard(card);
+    });
+
+    qaList.addEventListener("change", event => {
+      if (event.target.classList.contains("card-check")) updateSelection();
+    });
+
+    qaCheckAll.addEventListener("change", () => {
+      getVisibleCards().forEach(card => {
+        const check = card.querySelector(".card-check");
+        if (check) check.checked = qaCheckAll.checked;
+      });
+      updateSelection();
+    });
+
+    batchAccept.addEventListener("click", () => {
+      const cards = getVisibleCards().filter(card => card.querySelector(".card-check")?.checked && card.dataset.suggestion);
+      cards.forEach(card => acceptCard(card, true));
+      showToast(`已采用 ${cards.length} 条建议并保存`);
+    });
+
+    batchIgnore.addEventListener("click", () => {
+      const cards = getVisibleCards().filter(card => card.querySelector(".card-check")?.checked);
+      cards.forEach(card => ignoreCard(card, true));
+      showToast(`已忽略 ${cards.length} 条质检提醒`);
+    });
+
+    updateCounts();
+  </script>
+</body>
+</html>
