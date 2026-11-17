@@ -4519,6 +4519,15 @@
       background: #111118;
     }
 
+    #bookGlossaryEditModal .control::placeholder,
+    #bookGlossaryEditModal .textarea::placeholder {
+      color: rgba(255, 255, 255, 0.38);
+    }
+
+    #bookGlossaryEditModal select.control.is-placeholder {
+      color: rgba(255, 255, 255, 0.38);
+    }
+
     .mock-select {
       position: relative;
       width: 100%;
@@ -6000,7 +6009,7 @@
       <div class="glossary-titlebar">
         <div>
           <h2>书籍术语库</h2>
-          <p>管理海外书籍翻译沉淀的项目术语，支持按语种、类型、题材和状态检索。</p>
+          <p>管理海外书籍翻译沉淀的项目术语，支持按语种、类型、题材检索。</p>
         </div>
       </div>
 
@@ -6012,7 +6021,6 @@
         <div class="filter"><label>类型</label><select class="control"><option value="">请选择类型</option><option>角色</option><option>地名</option><option>组织</option><option>专业术语</option><option>俗语成语</option><option>品牌</option><option>文化</option><option>其他</option></select></div>
         <div class="filter"><label>题材</label><select class="control"><option value="">请选择题材</option><option>古代言情</option><option>宫廷权谋</option><option>现代都市</option></select></div>
         <div class="filter"><label>关键词</label><input class="control" placeholder="请输入关键词" /></div>
-        <div class="filter"><label>状态</label><select class="control"><option value="">请选择状态</option><option>启用</option><option>停用</option></select></div>
         <div class="filter"><label>创建人</label><input class="control" placeholder="请输入创建人" /></div>
         <div class="filter"><label>更新人</label><input class="control" placeholder="请输入更新人" /></div>
         <div class="filter wide"><label>更新时间</label><input class="control" placeholder="请选择更新时间" /></div>
@@ -6030,7 +6038,7 @@
           <thead>
             <tr>
               <th class="check-col"><input id="glossaryCheckAll" class="row-check" type="checkbox" /></th>
-              <th>原文</th><th>译文</th><th>类型</th><th>语言</th><th>题材</th><th>状态</th><th>创建人</th><th>创建时间</th><th>更新人</th><th>更新时间</th><th>操作</th>
+              <th>原文</th><th>译文</th><th>类型</th><th>语言</th><th>题材</th><th>创建人</th><th>创建时间</th><th>更新人</th><th>更新时间</th><th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -6041,12 +6049,11 @@
               <td><span class="tag purple">角色</span></td>
               <td>中文 → 法语</td>
               <td><span class="tag purple">古代言情</span></td>
-              <td><span class="tag green">启用</span></td>
               <td>Mia</td>
               <td>2026-10-19 10:40</td>
               <td>Lynn</td>
               <td>2026-10-20 11:12</td>
-              <td class="actions"><button class="btn text glossary-edit">编辑</button><button class="btn text glossary-disable">停用</button><button class="btn text glossary-delete">删除</button></td>
+              <td class="actions"><button class="btn text glossary-edit">编辑</button><button class="btn text glossary-delete">删除</button></td>
             </tr>
             <tr>
               <td class="check-col"><input class="row-check glossary-check" type="checkbox" /></td>
@@ -6055,12 +6062,11 @@
               <td><span class="tag purple">称谓</span></td>
               <td>中文 → 法语</td>
               <td><span class="tag purple">宫廷权谋</span></td>
-              <td><span class="tag green">启用</span></td>
               <td>Mia</td>
               <td>2026-10-19 10:44</td>
               <td>Mia</td>
               <td>2026-10-20 09:32</td>
-              <td class="actions"><button class="btn text glossary-edit">编辑</button><button class="btn text glossary-disable">停用</button><button class="btn text glossary-delete">删除</button></td>
+              <td class="actions"><button class="btn text glossary-edit">编辑</button><button class="btn text glossary-delete">删除</button></td>
             </tr>
             <tr>
               <td class="check-col"><input class="row-check glossary-check" type="checkbox" /></td>
@@ -6069,12 +6075,11 @@
               <td><span class="tag purple">地名</span></td>
               <td>中文 → 西班牙语</td>
               <td><span class="tag purple">宫廷权谋</span></td>
-              <td><span class="tag green">启用</span></td>
               <td>Lynn</td>
               <td>2026-10-19 11:02</td>
               <td>Lynn</td>
               <td>2026-10-20 12:18</td>
-              <td class="actions"><button class="btn text glossary-edit">编辑</button><button class="btn text glossary-disable">停用</button><button class="btn text glossary-delete">删除</button></td>
+              <td class="actions"><button class="btn text glossary-edit">编辑</button><button class="btn text glossary-delete">删除</button></td>
             </tr>
             <tr>
               <td class="check-col"><input class="row-check glossary-check" type="checkbox" /></td>
@@ -6083,12 +6088,11 @@
               <td><span class="tag purple">俗语成语</span></td>
               <td>中文 → 葡萄牙语</td>
               <td><span class="tag purple">古代言情</span></td>
-              <td><span class="tag yellow">停用</span></td>
               <td>Evan</td>
               <td>2026-10-18 15:20</td>
               <td>Mia</td>
               <td>2026-10-19 16:06</td>
-              <td class="actions"><button class="btn text glossary-edit">编辑</button><button class="btn text glossary-disable">启用</button><button class="btn text glossary-delete">删除</button></td>
+              <td class="actions"><button class="btn text glossary-edit">编辑</button><button class="btn text glossary-delete">删除</button></td>
             </tr>
           </tbody>
         </table>
@@ -6097,7 +6101,6 @@
       <div id="glossaryBulkBar" class="language-bulk-bar glossary-bulk-bar">
         <div class="bulk-title">已选 <strong id="glossarySelectedCount">0</strong> 条</div>
         <div class="actions">
-          <button class="btn glossary-batch-disable">停用</button>
           <button class="btn danger-action glossary-batch-delete">删除</button>
           <button class="btn glossary-clear-selection">取消选择</button>
         </div>
@@ -6702,13 +6705,12 @@
       <h3 id="bookGlossaryEditTitle">新增术语</h3>
       <p>保存后将写入书籍术语库，可被后续书籍翻译项目引用。</p>
       <div class="form-grid">
-        <div class="field"><label>原文</label><input id="glossaryOriginalInput" class="control" placeholder="请输入原文" /></div>
-        <div class="field"><label>译文</label><input id="glossaryTranslationInput" class="control" placeholder="请输入译文" /></div>
-        <div class="field"><label>源语言</label><select class="control"><option>中文</option><option>英文</option></select></div>
-        <div class="field"><label>目标语言</label><select class="control"><option>法语</option><option>西班牙语</option><option>葡萄牙语</option></select></div>
-        <div class="field"><label>类型</label><select class="control"><option>角色</option><option>地名</option><option>组织</option><option>专业术语</option><option>俗语成语</option><option>品牌</option><option>文化</option><option>其他</option></select></div>
-        <div class="field"><label>题材</label><select class="control"><option>古代言情</option><option>宫廷权谋</option><option>现代都市</option></select></div>
-        <div class="field"><label>状态</label><select class="control"><option>启用</option><option>停用</option></select></div>
+        <div class="field"><label>原文<span class="required">*</span></label><input id="glossaryOriginalInput" class="control" placeholder="请输入原文" /></div>
+        <div class="field"><label>译文<span class="required">*</span></label><input id="glossaryTranslationInput" class="control" placeholder="请输入译文" /></div>
+        <div class="field"><label>源语言<span class="required">*</span></label><select id="glossarySourceLangSelect" class="control"><option value="" selected hidden>请选择源语言</option><option>中文</option><option>英文</option></select></div>
+        <div class="field"><label>目标语言<span class="required">*</span></label><select id="glossaryTargetLangSelect" class="control"><option value="" selected hidden>请选择目标语言</option><option>法语</option><option>西班牙语</option><option>葡萄牙语</option></select></div>
+        <div class="field"><label>类型<span class="required">*</span></label><select id="glossaryTypeSelect" class="control"><option value="" selected hidden>请选择类型</option><option>角色</option><option>地名</option><option>组织</option><option>专业术语</option><option>文化</option><option>其他</option></select></div>
+        <div class="field"><label>题材</label><select id="glossaryGenreSelect" class="control"><option value="" selected hidden>通用</option><option>现代</option><option>古代</option><option>年代/民国</option><option>东方玄幻</option><option>西方奇幻</option><option>悬疑/惊悚</option><option>系统/游戏</option></select></div>
         <div class="field wide"><label>备注</label><textarea id="glossaryRemarkInput" class="textarea" placeholder="请输入备注"></textarea></div>
       </div>
       <div class="modal-actions">
@@ -8632,8 +8634,22 @@
       document.getElementById("glossaryOriginalInput").value = mode === "add" ? "" : "萧承煜";
       document.getElementById("glossaryTranslationInput").value = mode === "add" ? "" : "Xiao Chengyu";
       document.getElementById("glossaryRemarkInput").value = mode === "add" ? "" : "角色姓名按规则与英文保持一致";
+      ["glossarySourceLangSelect", "glossaryTargetLangSelect", "glossaryTypeSelect", "glossaryGenreSelect"].forEach((id) => {
+        const select = document.getElementById(id);
+        if (select) {
+          select.value = "";
+          select.classList.add("is-placeholder");
+        }
+      });
       bookGlossaryEditModal.classList.add("visible");
     }
+
+    document.querySelectorAll("#bookGlossaryEditModal select.control").forEach((select) => {
+      select.classList.toggle("is-placeholder", !select.value);
+      select.addEventListener("change", () => {
+        select.classList.toggle("is-placeholder", !select.value);
+      });
+    });
 
     glossaryCheckAll?.addEventListener("change", () => {
       glossaryChecks.forEach((input) => { input.checked = glossaryCheckAll.checked; });
@@ -8739,15 +8755,12 @@
       bookGlossaryImportModal.classList.add("visible");
     });
     document.getElementById("bookGlossaryTemplateBtn")?.addEventListener("click", (event) => {
-      const template = "原文\t译文\t类型\t源语言\t目标语言\t题材\t状态\t备注\n萧承煜\tXiao Chengyu\t角色\t中文\t法语\t古代言情\t启用\t角色姓名按规则与英文保持一致\n凤仪宫\tFengyi Palace\t地名\t中文\t西班牙语\t宫廷权谋\t启用\t地点名按音译+地点类型处理\n";
+      const template = "原文\t译文\t类型\t源语言\t目标语言\t题材\t备注\n萧承煜\tXiao Chengyu\t角色\t中文\t法语\t古代言情\t角色姓名按规则与英文保持一致\n凤仪宫\tFengyi Palace\t地名\t中文\t西班牙语\t宫廷权谋\t地点名按音译+地点类型处理\n";
       startButtonDownload(event.currentTarget, "术语库导入模板.xlsx", "术语库导入模板已开始下载", template);
     });
     bindBookGlossaryImportControls();
     document.getElementById("bookGlossaryExportBtn")?.addEventListener("click", (event) => {
       startButtonDownload(event.currentTarget, "书籍术语库.xlsx", "书籍术语库已开始下载");
-    });
-    document.querySelectorAll(".glossary-disable, .glossary-batch-disable").forEach((button) => {
-      button.addEventListener("click", () => showToast("术语状态已更新"));
     });
     document.querySelectorAll(".glossary-delete, .glossary-batch-delete").forEach((button) => {
       button.addEventListener("click", () => bookGlossaryDeleteModal.classList.add("visible"));
