@@ -2550,6 +2550,30 @@
       font-size: 12px;
     }
 
+    .modal-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .modal-title-row h3 {
+      margin: 0;
+    }
+
+    .import-parse-status {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 112px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 13px;
+      text-align: center;
+    }
+
     .hidden {
       display: none !important;
     }
@@ -4409,6 +4433,35 @@
     .modal-close-x:hover {
       color: rgba(255, 255, 255, 0.88);
       background: rgba(255, 255, 255, 0.07);
+    }
+
+    #bookGlossaryImportModal .modal {
+      width: 520px;
+      padding: 22px 22px 24px;
+    }
+
+    #bookGlossaryImportModal .modal-title-row {
+      padding-right: 48px;
+      margin-bottom: 12px;
+    }
+
+    #bookGlossaryImportModal #bookGlossaryTemplateBtn {
+      height: 32px;
+      padding: 0 14px;
+      border-radius: 8px;
+      white-space: nowrap;
+      color: rgba(255, 255, 255, 0.86);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    #bookGlossaryImportModal #bookGlossaryTemplateBtn:hover {
+      background: rgba(124, 90, 243, 0.16);
+      border-color: rgba(124, 90, 243, 0.48);
+    }
+
+    #bookGlossaryImportModal .upload-box {
+      margin-top: 16px;
     }
 
     .modal p {
@@ -6668,18 +6721,17 @@
   <div id="bookGlossaryImportModal" class="modal-mask" role="dialog" aria-modal="true" aria-labelledby="bookGlossaryImportTitle">
     <div class="modal">
       <button class="modal-close-x modal-close" type="button" aria-label="关闭">×</button>
-      <h3 id="bookGlossaryImportTitle">导入术语</h3>
+      <div class="modal-title-row">
+        <h3 id="bookGlossaryImportTitle">导入术语</h3>
+        <button class="btn" id="bookGlossaryTemplateBtn" type="button">下载模板</button>
+      </div>
       <p>支持导入本地 xlsx / csv 文件，系统将按书籍术语库字段进行解析。</p>
-      <div class="upload-box" style="min-height:120px;">
+      <div id="bookGlossaryImportBox" class="upload-box" style="min-height:120px;">
+        <input id="bookGlossaryImportFile" class="hidden" type="file" accept=".xlsx,.csv" />
         <div class="upload-empty">
           <strong>选择术语文件</strong>
-          <p>导入后可在列表中继续编辑与停用。</p>
           <button class="btn primary" id="bookGlossaryChooseImportBtn" type="button">选择文件</button>
         </div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn modal-close">取消</button>
-        <button class="btn primary" id="bookGlossaryImportConfirmBtn">开始导入</button>
       </div>
     </div>
   </div>
@@ -8655,12 +8707,42 @@
       bookGlossaryEditModal.classList.remove("visible");
       showToast(bookGlossaryEditMode === "add" ? "术语已新增" : "术语已保存");
     });
-    document.getElementById("bookGlossaryImportBtn")?.addEventListener("click", () => bookGlossaryImportModal.classList.add("visible"));
-    document.getElementById("bookGlossaryChooseImportBtn")?.addEventListener("click", () => showToast("请选择本地术语文件"));
-    document.getElementById("bookGlossaryImportConfirmBtn")?.addEventListener("click", () => {
-      bookGlossaryImportModal.classList.remove("visible");
-      showToast("术语导入任务已提交");
+    function resetBookGlossaryImportBox() {
+      const box = document.getElementById("bookGlossaryImportBox");
+      if (!box) return;
+      box.innerHTML = '<input id="bookGlossaryImportFile" class="hidden" type="file" accept=".xlsx,.csv" /><div class="upload-empty"><strong>选择术语文件</strong><button class="btn primary" id="bookGlossaryChooseImportBtn" type="button">选择文件</button></div>';
+      bindBookGlossaryImportControls();
+    }
+
+    function startBookGlossaryImportParse(fileName = "术语库导入文件.xlsx") {
+      const box = document.getElementById("bookGlossaryImportBox");
+      if (!box) return;
+      box.innerHTML = `<div class="import-parse-status"><div class="loading-inline"><span class="spinner"></span><span>正在解析识别 ${escapeHtml(fileName)}</span></div><span class="sub">系统将自动校验字段并生成可入库术语。</span></div>`;
+      window.setTimeout(() => {
+        bookGlossaryImportModal.classList.remove("visible");
+        resetBookGlossaryImportBox();
+        showToast("术语文件解析完成，已导入 24 条术语");
+      }, 1100);
+    }
+
+    function bindBookGlossaryImportControls() {
+      const input = document.getElementById("bookGlossaryImportFile");
+      document.getElementById("bookGlossaryChooseImportBtn")?.addEventListener("click", () => input?.click());
+      input?.addEventListener("change", () => {
+        const fileName = input.files?.[0]?.name || "术语库导入文件.xlsx";
+        startBookGlossaryImportParse(fileName);
+      });
+    }
+
+    document.getElementById("bookGlossaryImportBtn")?.addEventListener("click", () => {
+      resetBookGlossaryImportBox();
+      bookGlossaryImportModal.classList.add("visible");
     });
+    document.getElementById("bookGlossaryTemplateBtn")?.addEventListener("click", (event) => {
+      const template = "原文\t译文\t类型\t源语言\t目标语言\t题材\t状态\t备注\n萧承煜\tXiao Chengyu\t角色\t中文\t法语\t古代言情\t启用\t角色姓名按规则与英文保持一致\n凤仪宫\tFengyi Palace\t地名\t中文\t西班牙语\t宫廷权谋\t启用\t地点名按音译+地点类型处理\n";
+      startButtonDownload(event.currentTarget, "术语库导入模板.xlsx", "术语库导入模板已开始下载", template);
+    });
+    bindBookGlossaryImportControls();
     document.getElementById("bookGlossaryExportBtn")?.addEventListener("click", (event) => {
       startButtonDownload(event.currentTarget, "书籍术语库.xlsx", "书籍术语库已开始下载");
     });
