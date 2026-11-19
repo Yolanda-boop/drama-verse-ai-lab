@@ -307,6 +307,19 @@
       background: rgba(250, 204, 21, 0.08);
     }
 
+    .strength-mark {
+      flex: none;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 4px;
+      padding: 0 6px;
+      color: #ddd6fe;
+      background: rgba(124,58,237,0.18);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
     .editor-pane {
       display: grid;
       grid-template-rows: auto 1fr;
@@ -580,7 +593,7 @@
       background: #232323;
       box-shadow: 0 12px 32px rgba(0,0,0,0.45);
       overflow: hidden;
-      z-index: 12;
+      z-index: 40;
       display: none;
     }
 
@@ -778,6 +791,29 @@
       height: 4px;
       border-radius: 99px;
       background: linear-gradient(90deg, var(--purple) 50%, rgba(255,255,255,0.16) 50%);
+    }
+
+    .slider-track[data-level="1"] { background: linear-gradient(90deg, var(--purple) 0%, rgba(255,255,255,0.16) 0%); }
+    .slider-track[data-level="2"] { background: linear-gradient(90deg, var(--purple) 25%, rgba(255,255,255,0.16) 25%); }
+    .slider-track[data-level="3"] { background: linear-gradient(90deg, var(--purple) 50%, rgba(255,255,255,0.16) 50%); }
+    .slider-track[data-level="4"] { background: linear-gradient(90deg, var(--purple) 75%, rgba(255,255,255,0.16) 75%); }
+    .slider-track[data-level="5"] { background: linear-gradient(90deg, var(--purple) 100%, rgba(255,255,255,0.16) 100%); }
+
+    .slider-control {
+      width: 100%;
+      accent-color: var(--purple);
+      cursor: pointer;
+    }
+
+    .mode-select {
+      width: 100%;
+      height: 30px;
+      border: 1px solid var(--border-strong);
+      border-radius: 5px;
+      color: var(--text-2);
+      background: #181818;
+      padding: 0 8px;
+      outline: none;
     }
 
     .switch-row {
@@ -1149,6 +1185,175 @@
       margin-top: 18px;
     }
 
+    .batch-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 24;
+      background: rgba(0,0,0,0.58);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .batch-backdrop.open {
+      display: flex;
+    }
+
+    .batch-modal {
+      width: min(1480px, calc(100vw - 40px));
+      height: min(900px, calc(100vh - 48px));
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: #202020;
+      box-shadow: 0 24px 72px rgba(0,0,0,0.56);
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      overflow: hidden;
+    }
+
+    .batch-head {
+      min-height: 58px;
+      padding: 16px 24px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .batch-head h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 650;
+    }
+
+    .batch-summary {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 18px;
+      padding: 14px 24px 18px;
+      color: var(--text-3);
+      font-size: 14px;
+    }
+
+    .batch-summary strong {
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    .batch-content {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 312px;
+      gap: 24px;
+      min-height: 0;
+      padding: 0 24px;
+      overflow: hidden;
+    }
+
+    .batch-preview {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .batch-preview h3,
+    .batch-settings h3 {
+      margin: 0 0 12px;
+      font-size: 14px;
+    }
+
+    .batch-preview h3 span {
+      margin-left: 8px;
+      color: var(--text-4);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .batch-table {
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #181818;
+    }
+
+    .batch-table table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+    }
+
+    .batch-table th,
+    .batch-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .batch-table th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #242424;
+      color: var(--text-3);
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .batch-row-meta {
+      margin-top: 4px;
+      color: var(--text-4);
+      font-size: 12px;
+    }
+
+    .batch-settings {
+      min-width: 0;
+      min-height: 0;
+      padding: 0 16px 0 24px;
+      border-left: 1px solid var(--border);
+      overflow: auto;
+    }
+
+    .batch-field {
+      margin-bottom: 24px;
+    }
+
+    .batch-field > label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text-2);
+      font-size: 13px;
+    }
+
+    .batch-range {
+      margin-top: 5px;
+      color: var(--text-4);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .batch-hint {
+      margin-top: 8px;
+      border: 1px solid rgba(250,204,21,0.28);
+      border-radius: 5px;
+      padding: 8px 10px;
+      color: #fde68a;
+      background: rgba(250,204,21,0.08);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .batch-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 12px 24px 16px;
+      border-top: 1px solid var(--border);
+    }
+
     .toast {
       position: fixed;
       left: 50%;
@@ -1221,6 +1426,7 @@
           <div class="toolbar-left">
             <span class="pill">第 05 集</span>
             <span class="pill">配音校对</span>
+            <button class="btn" id="batchEmotionBtn">批量处理 · 情感表达</button>
           </div>
           <div class="toolbar-right">
             <span class="pill">仅展示本能力相关控件</span>
@@ -1262,9 +1468,9 @@
                     <label>情绪强度</label>
                     <div class="slider-shell">
                       <span>-</span>
-                      <div class="slider-track"></div>
+                      <input class="slider-control" id="emotionStrengthInput" type="range" min="1" max="5" step="1" value="5" />
                       <span>+</span>
-                      <span>3</span>
+                      <span id="emotionStrengthValue">5</span>
                     </div>
                   </div>
                   <div class="field">
@@ -1438,8 +1644,8 @@
         <button class="star-btn on" data-star>★</button>
       </div>
       <div class="menu-section">基础情绪</div>
-      <div class="menu-option favorite" data-select="emotion" data-cn="开心" data-en="happy" data-origin="preset">
-        <span class="left">开心 <span class="en">· happy</span></span>
+      <div class="menu-option favorite" data-select="emotion" data-cn="开心" data-en="happy" data-origin="preset" data-strength="3">
+        <span class="left">开心 <span class="strength-mark">强度3</span><span class="en">· happy</span></span>
         <button class="star-btn on" data-star>★</button>
       </div>
       <div class="menu-option" data-select="emotion" data-cn="悲伤" data-en="sad">
@@ -1631,6 +1837,187 @@
     </div>
   </div>
 
+  <div class="dropdown wide" id="batchEmotionDropdown">
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input class="search" placeholder="搜索情感标签" />
+      </div>
+    </div>
+    <div class="menu-list">
+      <div class="menu-option" data-select="batchEmotion" data-cn="保持原值" data-en="">
+        <span class="left">保持原值</span>
+      </div>
+      <div class="menu-option" data-select="batchEmotion" data-cn="空" data-en="">
+        <span class="left">空</span>
+      </div>
+      <div class="menu-section">自定义收藏</div>
+      <div class="menu-option favorite" data-select="batchEmotion" data-cn="自信" data-en="confident">
+        <span class="left">自信</span>
+      </div>
+      <div class="menu-option favorite" data-select="batchEmotion" data-cn="克制" data-en="restrained">
+        <span class="left">克制</span>
+      </div>
+      <div class="menu-section">基础情绪</div>
+      <div class="menu-option favorite" data-select="batchEmotion" data-cn="开心" data-en="happy" data-origin="preset" data-strength="3">
+        <span class="left">开心 <span class="strength-mark">强度3</span><span class="en">· happy</span></span>
+      </div>
+      <div class="menu-option" data-select="batchEmotion" data-cn="悲伤" data-en="sad">
+        <span class="left">悲伤 <span class="en">· sad</span></span>
+      </div>
+      <div class="menu-option" data-select="batchEmotion" data-cn="愤怒" data-en="angry">
+        <span class="left">愤怒 <span class="en">· angry</span></span>
+      </div>
+      <div class="menu-section">进阶情绪</div>
+      <div class="menu-option" data-select="batchEmotion" data-cn="温柔" data-en="gentle">
+        <span class="left">温柔 <span class="en">· gentle</span></span>
+      </div>
+      <div class="menu-option" data-select="batchEmotion" data-cn="嘲讽" data-en="mocking">
+        <span class="left">嘲讽 <span class="en">· mocking</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dropdown" id="batchDeliveryDropdown">
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input class="search" placeholder="搜索声音表达" />
+      </div>
+    </div>
+    <div class="menu-list">
+      <div class="menu-option" data-select="batchDelivery" data-cn="保持原值" data-en="">
+        <span class="left">保持原值</span>
+      </div>
+      <div class="menu-option" data-select="batchDelivery" data-cn="空" data-en="">
+        <span class="left">空</span>
+      </div>
+      <div class="menu-section">自定义收藏</div>
+      <div class="menu-option favorite" data-select="batchDelivery" data-cn="克制低声" data-en="soft restrained">
+        <span class="left">克制低声</span>
+      </div>
+      <div class="menu-section">音量强弱</div>
+      <div class="menu-option favorite" data-select="batchDelivery" data-cn="轻柔" data-en="soft" data-origin="preset">
+        <span class="left">轻柔 <span class="en">· soft</span></span>
+      </div>
+      <div class="menu-option" data-select="batchDelivery" data-cn="正常" data-en="normal">
+        <span class="left">正常 <span class="en">· normal</span></span>
+      </div>
+      <div class="menu-option" data-select="batchDelivery" data-cn="安静" data-en="quiet">
+        <span class="left">安静 <span class="en">· quiet</span></span>
+      </div>
+      <div class="menu-section">声音质感</div>
+      <div class="menu-option" data-select="batchDelivery" data-cn="气声" data-en="breathy">
+        <span class="left">气声 <span class="en">· breathy</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="batch-backdrop" id="batchEmotionModal">
+    <section class="batch-modal" role="dialog" aria-modal="true" aria-labelledby="batchEmotionTitle">
+      <div class="batch-head">
+        <h2 id="batchEmotionTitle">情感表达</h2>
+        <button class="btn icon text" id="closeBatchEmotion">×</button>
+      </div>
+      <div class="batch-summary">
+        <span>第 05 集</span>
+        <span>已选择 <strong>3</strong> 段</span>
+        <span>2 位说话人</span>
+        <span>音色：ElevenLabs</span>
+      </div>
+      <div class="batch-content">
+        <section class="batch-preview" aria-label="所选译文当前设置">
+          <h3>所选译文 · 当前设置 <span>只读</span></h3>
+          <div class="batch-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>段落</th>
+                  <th>译文</th>
+                  <th>情感标签</th>
+                  <th>情绪强度</th>
+                  <th>声音表达</th>
+                  <th>语调稳定性</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>13</td>
+                  <td>You did really well this time.<div class="batch-row-meta">Kak · ElevenLabs</div></td>
+                  <td>平静 <span class="en">· serene</span></td>
+                  <td>5</td>
+                  <td>正常 <span class="en">· normal</span></td>
+                  <td>0.50</td>
+                </tr>
+                <tr>
+                  <td>14</td>
+                  <td>Don't be afraid. I'm right here.<div class="batch-row-meta">Kak · ElevenLabs</div></td>
+                  <td>AI判断</td>
+                  <td>3</td>
+                  <td>正常 <span class="en">· normal</span></td>
+                  <td>0.50</td>
+                </tr>
+                <tr>
+                  <td>15</td>
+                  <td>I'll take care of it.<div class="batch-row-meta">Mia · ElevenLabs</div></td>
+                  <td>自信</td>
+                  <td>4</td>
+                  <td>轻柔 <span class="en">· soft</span></td>
+                  <td>0.45</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class="batch-settings" aria-label="批量设置">
+          <h3>批量设置</h3>
+          <div class="batch-field">
+            <label>情感标签</label>
+            <button class="select-shell" data-dd="batchEmotionDropdown">
+              <span class="select-label" id="batchEmotionSelected">保持原值</span>
+              <span class="caret">⌄</span>
+            </button>
+            <div class="batch-range">下拉列表展示已收藏标签；批量窗口内不支持收藏或取消收藏。</div>
+          </div>
+          <div class="batch-field">
+            <label>情绪强度</label>
+            <select class="mode-select" aria-label="情绪强度修改方式">
+              <option>设置具体值</option>
+              <option>保持原值</option>
+            </select>
+            <div class="slider-shell" style="margin-top: 8px;">
+              <span>弱</span>
+              <input class="slider-control" id="batchEmotionStrengthInput" type="range" min="1" max="5" step="1" value="5" />
+              <span>强</span>
+              <span id="batchEmotionStrengthValue">5</span>
+            </div>
+            <div class="batch-range">3 / 3 段可应用</div>
+            <div class="batch-hint" id="batchEmotionHint">选择收藏的预设情感标签时，如该收藏项绑定固定强度，情绪强度会自动联动到对应值。</div>
+          </div>
+          <div class="batch-field">
+            <label>声音表达</label>
+            <button class="select-shell" data-dd="batchDeliveryDropdown">
+              <span class="select-label" id="batchDeliverySelected">保持原值</span>
+              <span class="caret">⌄</span>
+            </button>
+            <div class="batch-range">批量窗口同样展示声音表达收藏项，但不承载收藏管理。</div>
+          </div>
+          <div class="batch-field">
+            <label>语调稳定性</label>
+            <select class="mode-select" aria-label="语调稳定性修改方式">
+              <option>保持原值</option>
+              <option>设置具体值</option>
+            </select>
+          </div>
+        </section>
+      </div>
+      <div class="batch-footer">
+        <button class="btn" id="cancelBatchEmotion">取消</button>
+        <button class="btn primary">应用设置</button>
+      </div>
+    </section>
+  </div>
+
   <aside class="asset-drawer" id="assetDrawer">
     <div class="drawer-head">
       <div class="drawer-title">
@@ -1695,14 +2082,14 @@
     const assets = [
       { type: 'emotion', cn: '自信', value: 'confident', origin: 'custom', note: '用于替代 V4 下过度嘲讽的 sarcastic 效果。' },
       { type: 'emotion', cn: '克制', value: 'restrained', origin: 'custom', note: '普通克制表达，避免文本被 TTS 演过头。' },
-      { type: 'emotion', cn: '开心', value: 'happy', origin: 'preset', note: '从预设情感标签收藏，仍保留在基础情绪分组内。' },
+      { type: 'emotion', cn: '开心', value: 'happy', strength: 3, origin: 'preset', note: '从预设情感标签收藏，仅代表强度3对应的 happy 参数值。' },
       { type: 'delivery', cn: '克制低声', value: 'soft restrained', origin: 'custom', note: '替代直接 whispered，降低气音风险。' },
       { type: 'delivery', cn: '轻柔', value: 'soft', origin: 'preset', note: '从预设声音表达收藏，排序置于同分组上方。' },
       { type: 'reaction', cn: '压抑叹气', value: 'suppressed sigh', origin: 'custom', note: '适合短促压抑的叹气，不做夸张哭腔。' },
       { type: 'reaction', cn: '轻笑', value: 'chuckling', origin: 'preset', note: '从预设语气词收藏，避免每小句都追加笑声。' },
     ];
 
-    const typeName = { emotion: '情感标签', delivery: '声音表达', reaction: '语气词' };
+    const typeName = { emotion: '情感标签', delivery: '声音表达', reaction: '语气词', batchEmotion: '情感标签', batchDelivery: '声音表达' };
     const originName = { custom: '自定义标签', preset: '预设标签' };
     const toast = document.getElementById('toast');
     let toastTimer = null;
@@ -1710,6 +2097,8 @@
     let createAssetType = 'emotion';
     let pendingDeleteAsset = null;
     let editingAssetKey = null;
+    let boundEmotionStrength = null;
+    let boundBatchEmotionStrength = null;
 
     function showToast(text) {
       toast.textContent = text;
@@ -1730,7 +2119,7 @@
           <div class="asset-card-top">
             <div class="asset-name">
               <span>${item.cn}</span>
-              ${(item.origin || 'custom') === 'preset' ? `<span class="value">· ${item.value}</span>` : ''}
+              ${(item.origin || 'custom') === 'preset' ? `<span class="value">· ${item.strength ? `强度${item.strength} · ` : ''}${item.value}</span>` : ''}
             </div>
             <div class="asset-actions">
               <button class="asset-action" title="编辑" aria-label="编辑" data-edit-asset="${item.type}|${item.value}">✎</button>
@@ -1755,7 +2144,7 @@
 
       if (used) {
         used.innerHTML = assets.slice(0, 4).map(item => `
-          <span class="tag-chip favorite">${item.cn}${(item.origin || 'custom') === 'preset' ? `<span class="en">· ${item.value}</span>` : ''}</span>
+          <span class="tag-chip favorite">${item.cn}${(item.origin || 'custom') === 'preset' ? `<span class="en">· ${item.strength ? `强度${item.strength} · ` : ''}${item.value}</span>` : ''}</span>
         `).join('');
       }
     }
@@ -1791,6 +2180,55 @@
       panel.style.left = `${left}px`;
       panel.style.top = `${top}px`;
       panel.style.right = 'auto';
+    }
+
+    function optionLabel(cn, en, strength) {
+      const strengthHtml = strength ? `<span class="strength-mark">强度${strength}</span>` : '';
+      const enHtml = en ? `<span class="en">· ${en}</span>` : '';
+      return `${cn} ${strengthHtml}${enHtml}`;
+    }
+
+    function setRangeValue(inputId, valueId, value) {
+      const input = document.getElementById(inputId);
+      const output = document.getElementById(valueId);
+      if (!input || !output) return;
+      input.value = String(value);
+      output.textContent = String(value);
+    }
+
+    function applyBoundStrength(type, strength) {
+      if (!strength) {
+        if (type === 'emotion') boundEmotionStrength = null;
+        if (type === 'batchEmotion') boundBatchEmotionStrength = null;
+        return;
+      }
+      if (type === 'emotion') {
+        boundEmotionStrength = Number(strength);
+        setRangeValue('emotionStrengthInput', 'emotionStrengthValue', boundEmotionStrength);
+        showToast(`已选择固定强度收藏标签，情绪强度已调整为 ${boundEmotionStrength}`);
+      }
+      if (type === 'batchEmotion') {
+        boundBatchEmotionStrength = Number(strength);
+        setRangeValue('batchEmotionStrengthInput', 'batchEmotionStrengthValue', boundBatchEmotionStrength);
+        document.getElementById('batchEmotionHint').textContent = `当前收藏标签仅适用于强度${boundBatchEmotionStrength}，应用时将使用该强度对应的预设参数值。`;
+        showToast(`批量情绪强度已联动为 ${boundBatchEmotionStrength}`);
+      }
+    }
+
+    function clearBoundEmotion(type, reasonStrength) {
+      if (type === 'emotion') {
+        document.getElementById('emotionSelected').textContent = 'AI判断';
+        document.querySelectorAll('.menu-option[data-select="emotion"]').forEach(item => item.classList.remove('selected'));
+        boundEmotionStrength = null;
+        showToast(`已修改情感强度，原收藏标签仅适用于强度${reasonStrength}，已清空`);
+      }
+      if (type === 'batchEmotion') {
+        document.getElementById('batchEmotionSelected').textContent = '请选择情感标签';
+        document.querySelectorAll('.menu-option[data-select="batchEmotion"]').forEach(item => item.classList.remove('selected'));
+        boundBatchEmotionStrength = null;
+        document.getElementById('batchEmotionHint').textContent = `已修改情感强度，原收藏标签仅适用于强度${reasonStrength}，已清空情感标签。`;
+        showToast(`已修改情感强度，原收藏标签仅适用于强度${reasonStrength}，已清空`);
+      }
     }
 
     document.querySelectorAll('[data-dd]').forEach(btn => {
@@ -1829,7 +2267,17 @@
           renderCueFavorites();
         } else {
           const origin = option.dataset.origin || (option.classList.contains('favorite') ? 'custom' : 'preset');
-          assets.unshift({ type, cn, value, origin, note: origin === 'preset' ? '从预设标签收藏。' : '从编辑器下拉收藏。' });
+          const strength = option.dataset.strength ? Number(option.dataset.strength) : undefined;
+          assets.unshift({
+            type,
+            cn,
+            value,
+            strength,
+            origin,
+            note: origin === 'preset' && type === 'emotion' && strength
+              ? `从预设情感标签收藏，仅代表强度${strength}对应的 ${value} 参数值。`
+              : origin === 'preset' ? '从预设标签收藏。' : '从编辑器下拉收藏。',
+          });
           star.classList.add('on');
           star.textContent = '★';
           showToast(`已收藏：${cn}`);
@@ -1844,13 +2292,15 @@
       const type = option.dataset.select;
       const cn = option.dataset.cn;
       const en = option.dataset.en;
+      const strength = option.dataset.strength ? Number(option.dataset.strength) : undefined;
       const target = document.getElementById(type + 'Selected');
       if (target) {
-        target.innerHTML = en ? `${cn} <span class="en">· ${en}</span>` : cn;
+        target.innerHTML = optionLabel(cn, en, strength);
       }
       document.querySelectorAll(`.menu-option[data-select="${type}"]`).forEach(item => item.classList.remove('selected'));
       option.classList.add('selected');
-      showToast(`已应用${typeName[type] || '标签'}：${cn}`);
+      applyBoundStrength(type, strength);
+      showToast(`已应用${typeName[type] || '情感标签'}：${cn}${strength ? ` · 强度${strength}` : ''}`);
       if (type === 'reaction') {
         document.getElementById('cuePanel').classList.remove('open');
       } else {
@@ -1927,6 +2377,42 @@
 
     document.getElementById('saveEmotion').addEventListener('click', () => {
       showToast('情感配置已保存');
+    });
+
+    document.getElementById('emotionStrengthInput').addEventListener('input', event => {
+      const next = Number(event.target.value);
+      document.getElementById('emotionStrengthValue').textContent = String(next);
+      if (boundEmotionStrength && next !== boundEmotionStrength) {
+        clearBoundEmotion('emotion', boundEmotionStrength);
+      }
+    });
+
+    document.getElementById('batchEmotionStrengthInput').addEventListener('input', event => {
+      const next = Number(event.target.value);
+      document.getElementById('batchEmotionStrengthValue').textContent = String(next);
+      if (boundBatchEmotionStrength && next !== boundBatchEmotionStrength) {
+        clearBoundEmotion('batchEmotion', boundBatchEmotionStrength);
+      }
+    });
+
+    document.getElementById('batchEmotionBtn').addEventListener('click', () => {
+      document.getElementById('batchEmotionModal').classList.add('open');
+      document.getElementById('emotionPanel').classList.remove('open');
+      document.getElementById('cuePanel').classList.remove('open');
+      closeDropdowns();
+    });
+
+    ['closeBatchEmotion', 'cancelBatchEmotion'].forEach(id => {
+      document.getElementById(id).addEventListener('click', () => {
+        document.getElementById('batchEmotionModal').classList.remove('open');
+        closeDropdowns();
+      });
+    });
+
+    document.getElementById('batchEmotionModal').addEventListener('click', event => {
+      if (event.target.id !== 'batchEmotionModal') return;
+      document.getElementById('batchEmotionModal').classList.remove('open');
+      closeDropdowns();
     });
 
     ['assetBtn', 'assetBtn2'].forEach(id => {
