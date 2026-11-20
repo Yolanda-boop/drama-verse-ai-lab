@@ -957,6 +957,8 @@
     #dv-real-qc-prototype .editorContainer.qcCollapsed .qcRail { display: flex; }
     #dv-real-qc-prototype .qcPanelMain { min-height: 0; height: 100%; display: flex; flex-direction: column; }
     #dv-real-qc-prototype .qcPanelHeader { height: 41px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; background: var(--bg-container); border-bottom: 1px solid var(--border-color); }
+    #dv-real-qc-prototype .qcHeaderActions { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
+    #dv-real-qc-prototype .qcScanBtn { height: 26px; line-height: 24px; padding: 0 10px; font-size: 12px; white-space: nowrap; }
     #dv-real-qc-prototype .qcTitle { font-size: 14px; font-weight: 600; }
     #dv-real-qc-prototype .qcCount { color: #ff7875; font-size: 12px; font-weight: 600; margin-left: 6px; }
     #dv-real-qc-prototype .collapseBtn { width: 28px; height: 28px; padding: 0; border: 1px solid transparent; border-radius: 6px; background: transparent; color: var(--text-secondary); cursor: pointer; writing-mode: horizontal-tb; line-height: 26px; }
@@ -1161,9 +1163,12 @@
     #dv-real-qc-prototype .aiFeedbackDialog.readonly .aiFeedbackInput,
     #dv-real-qc-prototype .aiFeedbackDialog.readonly .aiFeedbackTextarea { color: var(--text-secondary); }
     #dv-real-qc-prototype .modalMask { position: absolute; inset: 0; background: rgba(0,0,0,.66); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 10; }
-    #dv-real-qc-prototype .modalBox { width: min(420px, 100%); background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 8px; padding: 18px; box-shadow: 0 8px 24px rgba(0,0,0,.6); }
+    #dv-real-qc-prototype .modalBox { width: min(420px, 100%); background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 8px; padding: 18px; box-shadow: 0 8px 24px rgba(0,0,0,.6); position: relative; }
+    #dv-real-qc-prototype .modalClose { display: none; position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: var(--text-tertiary); cursor: pointer; font-size: 18px; line-height: 26px; }
+    #dv-real-qc-prototype .modalBox.showClose .modalClose { display: inline-flex; align-items: center; justify-content: center; }
+    #dv-real-qc-prototype .modalClose:hover { color: var(--text-primary); background: rgba(255,255,255,.08); }
     #dv-real-qc-prototype .modalBox h3 { margin: 0 0 10px; font-size: 16px; font-weight: 600; }
-    #dv-real-qc-prototype .modalBox p { margin: 0 0 16px; color: var(--text-secondary); line-height: 1.5; }
+    #dv-real-qc-prototype .modalBox p { margin: 0 0 16px; color: var(--text-secondary); line-height: 1.5; white-space: pre-line; }
     #dv-real-qc-prototype .modalActions { display: flex; justify-content: flex-end; gap: 10px; }
     #dv-real-qc-prototype .ttsFailureMask { position: absolute; inset: 0; background: rgba(0,0,0,.68); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 30; }
     #dv-real-qc-prototype .ttsFailureDialog { width: min(920px, 96%); max-height: min(640px, 92%); display: flex; flex-direction: column; background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 16px 42px rgba(0,0,0,.62); overflow: hidden; }
@@ -1876,7 +1881,7 @@
     <aside class="qcPanel" aria-label="质检提醒面板">
       <div class="qcRail"><button type="button" class="collapseBtn" id="expandQc">‹</button><span>质检提醒</span><span class="qcCount" id="railCount">8处</span></div>
       <div class="qcPanelMain">
-        <div class="qcPanelHeader"><div><span class="qcTitle">质检提醒</span><span class="qcCount" id="totalCount">共 8 处</span></div><button type="button" class="collapseBtn" id="collapseQc">›</button></div>
+        <div class="qcPanelHeader"><div><span class="qcTitle">质检提醒</span><span class="qcCount" id="totalCount">共 8 处</span></div><div class="qcHeaderActions"><button type="button" class="btnPrimary qcScanBtn" id="qcScanAll">质检扫描</button><button type="button" class="collapseBtn" id="collapseQc">›</button></div></div>
         <div class="qcSummary"><div class="qcSummaryTop"><span>异常汇总</span><span>按数量倒序</span></div><div class="typeList" id="typeList"></div></div>
         <div class="qcBatch"><button type="button" class="btnGhost" id="batchAccept">批量采纳</button><button type="button" class="btnGhost" id="batchIgnore">批量忽略</button><button type="button" class="btnPrimary wide" id="acceptAll">该集全部采纳</button></div>
         <div class="qcList" id="qcList"></div>
@@ -2029,7 +2034,7 @@
         </div>
       </div>
     </div>
-    <div class="modalMask" id="modalMask" role="dialog" aria-modal="true"><div class="modalBox"><h3 id="modalTitle">确认操作</h3><p id="modalText"></p><div class="modalActions"><button type="button" class="btnGhost" id="modalCancel">返回确认</button><button type="button" class="btnPrimary" id="modalConfirm">确认</button></div></div></div>
+    <div class="modalMask" id="modalMask" role="dialog" aria-modal="true"><div class="modalBox"><button type="button" class="modalClose" id="modalClose" aria-label="关闭">×</button><h3 id="modalTitle">确认操作</h3><p id="modalText"></p><div class="modalActions"><button type="button" class="btnGhost" id="modalCancel">返回确认</button><button type="button" class="btnPrimary" id="modalConfirm">确认</button></div></div></div>
     <div class="ttsFailureMask" id="ttsFailureMask" role="dialog" aria-modal="true" aria-labelledby="ttsFailureTitle">
       <div class="ttsFailureDialog">
         <div class="ttsFailureHeader">
@@ -3777,7 +3782,7 @@
       }
       function jumpToIssue(id){ const item=qc.find(q=>q.id===id); if(!item) return; selectedGroup=item.group; activeIssue=item.id; activeSegment=item.seg; updateVideo(item.seg); render(); requestAnimationFrame(()=>{ const row=rowsEl.querySelector('[data-seg="'+item.seg+'"]'); if(row) row.scrollIntoView({block:'center'}); const card=listEl.querySelector('[data-qc="'+item.id+'"]'); if(card) card.scrollIntoView({block:'nearest'}); }); }
       function remove(ids, mode){ ids.forEach(id=>{ const item=qc.find(q=>q.id===id); if(mode==='accept'&&item){ const seg=segments.find(s=>s.id===item.seg); if(seg&&(seg.source===item.before||seg.source===item.current||item.status==='stale')) seg.source=item.after; }}); qc=qc.filter(q=>!ids.includes(q.id)); if(!qc.find(q=>q.id===activeIssue)) activeIssue=qc[0]?.id||''; if(activeIssue){ const item=qc.find(q=>q.id===activeIssue); selectedGroup=item.group; activeSegment=item.seg; } render(); showToast(mode==='accept'?'已采纳质检建议':'已忽略质检提醒'); }
-      function openModal(title,text,confirm,fn){ root.querySelector('#modalTitle').textContent=title; root.querySelector('#modalText').textContent=text; root.querySelector('#modalConfirm').textContent=confirm; pending=fn; modal.style.display='flex'; }
+      function openModal(title,text,confirm,fn){ root.querySelector('#modalTitle').textContent=title; root.querySelector('#modalText').textContent=text; root.querySelector('#modalConfirm').textContent=confirm; root.querySelector('.modalBox')?.classList.toggle('showClose', title==='确认质检扫描'); pending=fn; modal.style.display='flex'; }
       function closeModal(){ pending=null; modal.style.display='none'; }
       root.addEventListener('pointerdown', e=>{
         if(beginExportSubtitleDrag(e)) return;
@@ -4244,13 +4249,22 @@
         if(e.target.classList.contains('qcAccept')&&card){ remove([card.dataset.qc],'accept'); return; }
         if(e.target.classList.contains('qcIgnore')&&card){ remove([card.dataset.qc],'ignore'); return; }
         if(card && card.dataset.qc && !e.target.closest('button')){ jumpToIssue(card.dataset.qc); return; }
+        if(e.target.id==='qcScanAll'){
+          openModal(
+            '确认质检扫描',
+            '是否对全剧原字幕进行质检扫描？\n\n本次将检测：\n文本规范：大小写不规范、标点符号错误、空格不规范。\n原文错误：拼写错误、语法/词形错误。\n\n扫描不会自动修改字幕，完成后将在质检提醒面板展示结果。',
+            '扫描全剧',
+            ()=>showToast('已开始全剧质检扫描')
+          );
+          return;
+        }
         if(e.target.id==='batchAccept'){ remove(qc.filter(i=>i.checked).map(i=>i.id),'accept'); return; }
         if(e.target.id==='batchIgnore'){ const ids=qc.filter(i=>i.checked).map(i=>i.id); openModal('确认忽略','将忽略已选择的 '+ids.length+' 条质检提醒，忽略后本次不再展示。','确认忽略',()=>remove(ids,'ignore')); return; }
         if(e.target.id==='acceptAll'){ const ids=qc.map(i=>i.id); openModal('该集全部采纳','将采纳当前集全部 '+ids.length+' 条质检建议，并修改对应原字幕文本。请确认后继续。','确认采纳',()=>remove(ids,'accept')); return; }
         if(e.target.id==='collapseQc'){ container.classList.add('qcCollapsed'); return; }
         if(e.target.id==='expandQc'){ container.classList.remove('qcCollapsed'); return; }
       });
-      root.querySelector('#modalCancel').addEventListener('click',closeModal); root.querySelector('#modalConfirm').addEventListener('click',()=>{ const fn=pending; closeModal(); if(fn)fn(); }); updateVideo(activeSegment); updateTimelinePlayhead(currentTimelineMs); renderEpisodeNav(); render(); renderOriginalVoiceTrack(); loadWaveform();
+      root.querySelector('#modalCancel').addEventListener('click',closeModal); root.querySelector('#modalClose').addEventListener('click',closeModal); root.querySelector('#modalConfirm').addEventListener('click',()=>{ const fn=pending; closeModal(); if(fn)fn(); }); updateVideo(activeSegment); updateTimelinePlayhead(currentTimelineMs); renderEpisodeNav(); render(); renderOriginalVoiceTrack(); loadWaveform();
     })();
   </script>
 </div>
